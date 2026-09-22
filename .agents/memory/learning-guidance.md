@@ -3,11 +3,17 @@ name: Learning and guidance boundaries
 description: User-defined boundaries for assessment progression and teacher duties.
 ---
 
-Students may attempt a level assessment either after studying its content or directly to advance; study completion alone must not unlock the next level. Both oral and written components must be passed, not merely attempted. Oral assessment is word-level memorization only; written completion does not require diacritics. The user approved this recommendation on 2026-09-22. Pass scores and retake policies remain unspecified.
+Students may attempt a level assessment either after studying its content or directly to advance; study completion alone must not unlock the next level. Both oral and written components are required. Oral assessment is word-level memorization only; written completion does not require diacritics. The user specified 30 questions (15 oral, 15 written), 30 minutes total, success at 25 marks, and retry 24 hours after a failed test. Interpret marks as 25/30 with one mark per question; no separate section minimum has been authorized.
 
 **Why:** The user wants already-proficient students to avoid redundant study while retaining an assessment gate.
 
 **How to apply:** Keep direct assessment accessible, distinguish study progress from assessment outcome, and do not present invented pass thresholds as approved policy.
+
+The user requires reconnecting to restore the question and remaining time, and immediate recitation alerts.
+
+**Why:** Connectivity loss must not force restarting the exam or consume the saved remaining time.
+
+**How to apply:** Specify server-authoritative progress/time checkpoints and pause on detected disconnection, no answering while disconnected, reconnect to the same attempt, and audit repeated disconnects without automatically accusing the student. Immediate feedback applies to practice; do not reveal correct answers during assessment.
 
 Teachers answer assistant referrals and direct student questions. First-release communication is text only, and teachers can indicate available/unavailable for questions. Verified qualifications and ijazat help students choose a teacher.
 

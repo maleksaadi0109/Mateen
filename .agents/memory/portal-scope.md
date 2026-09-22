@@ -3,7 +3,7 @@ name: Approved portal scope
 description: Product scope approved for the full-project specification, not a claim of implemented features.
 ---
 
-On 2026-09-22 the user approved the discussed portal outline and its recommendations. Work is specification discussion first, not interface implementation; show the final summary for review before preparing master-project-spec.md. The earlier proposed technical architecture remains unapproved.
+On 2026-09-22 the user approved the discussed portal outline and its recommendations, and subsequently approved the proposed React/TypeScript/Vite frontend, Node.js/TypeScript/Express modular backend, PostgreSQL/Drizzle database, private object storage, REST and WebSocket architecture, with background workers and optional Python for specialized speech work. Work is specification discussion first, not interface implementation; show the final summary for review before preparing master-project-spec.md.
 
 **Why:** The user explicitly corrected an interpretation of “design” as building visual mockups; they meant defining screens for the specification.
 
@@ -19,4 +19,4 @@ Approved admin scope: activity and review priorities; users/permissions/account 
 
 **Why:** The user approved focused memorization and trustworthy guidance rather than importing unrelated LMS features.
 
-**How to apply:** Treat this as intended product scope, not evidence of completed functionality. Do not add video classes, assignment management or student certificate promises by default. Assessment thresholds, retake rules and detailed privacy policies still need discussion.
+**How to apply:** Treat this as intended product scope, not evidence of completed functionality. Do not add video classes, assignment management or student certificate promises by default. The user delegated selection of professional privacy/account policies and current Arabic-capable providers; provider accuracy must be validated on actual recitation, not assumed from generic Arabic support.
