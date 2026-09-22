@@ -1,43 +1,43 @@
-@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Kufam:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 
 :root {
-  --background: 42 35% 96%;
-  --foreground: 25 28% 15%;
-  --card: 42 43% 98%;
-  --card-foreground: 25 28% 15%;
-  --border: 36 24% 84%;
-  --primary: 151 58% 27%;
-  --primary-foreground: 42 35% 96%;
-  --secondary: 29 45% 35%;
-  --secondary-foreground: 42 35% 96%;
-  --muted: 39 25% 91%;
-  --muted-foreground: 27 15% 43%;
-  --accent: 32 74% 45%;
-  --accent-foreground: 25 28% 15%;
-  --input: 36 24% 84%;
-  --ring: 151 58% 27%;
-  --radius: 0.75rem;
+  --background: 40 67% 97%;
+  --foreground: 21 24% 18%;
+  --card: 39 42% 95%;
+  --card-foreground: 21 24% 18%;
+  --border: 30 18% 82%;
+  --primary: 17 28% 33%;
+  --primary-foreground: 40 67% 97%;
+  --secondary: 28 96% 31%;
+  --secondary-foreground: 40 67% 97%;
+  --muted: 36 22% 90%;
+  --muted-foreground: 24 12% 43%;
+  --accent: 45 100% 15%;
+  --accent-foreground: 40 67% 97%;
+  --input: 30 18% 82%;
+  --ring: 17 28% 33%;
+  --radius: 0.6rem;
   --app-font-sans: 'Cairo', sans-serif;
-  --app-font-serif: 'Amiri', serif;
+  --app-font-serif: 'Noto Naskh Arabic', serif;
   --app-font-mono: 'Cairo', sans-serif;
 }
 .dark {
-  --background: 224 28% 11%;
-  --foreground: 42 35% 92%;
-  --card: 224 24% 15%;
-  --card-foreground: 42 35% 92%;
-  --border: 224 17% 27%;
-  --primary: 152 54% 42%;
-  --primary-foreground: 224 28% 11%;
-  --secondary: 38 63% 53%;
-  --secondary-foreground: 224 28% 11%;
-  --muted: 224 20% 20%;
-  --muted-foreground: 220 15% 68%;
-  --accent: 39 72% 55%;
-  --accent-foreground: 224 28% 11%;
-  --input: 224 17% 27%;
-  --ring: 152 54% 42%;
+  --background: 24 15% 12%;
+  --foreground: 37 33% 91%;
+  --card: 23 14% 17%;
+  --card-foreground: 37 33% 91%;
+  --border: 23 13% 28%;
+  --primary: 20 29% 58%;
+  --primary-foreground: 24 15% 12%;
+  --secondary: 28 83% 43%;
+  --secondary-foreground: 24 15% 12%;
+  --muted: 25 12% 22%;
+  --muted-foreground: 33 17% 70%;
+  --accent: 43 68% 54%;
+  --accent-foreground: 24 15% 12%;
+  --input: 23 13% 28%;
+  --ring: 20 29% 58%;
 }
 @theme inline {
   --color-background: hsl(var(--background)); --color-foreground: hsl(var(--foreground));
@@ -51,9 +51,14 @@
 }
 * { border-color: hsl(var(--border)); }
 html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: var(--app-font-sans); }
-button, a, input, select { font: inherit; }
+body { margin: 0; min-width: 320px; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: var(--app-font-serif); }
+button, a, input, select { font-family: 'Cairo', sans-serif; }
 .font-arabic { font-family: var(--app-font-serif); }
+.font-display { font-family: 'Kufam', sans-serif; }
+.font-ui { font-family: 'Cairo', sans-serif; }
+h1, h2, h3 { font-family: 'Kufam', sans-serif; }
+.brand-logo { display: block; }
+.dark .brand-logo { filter: brightness(1.35) saturate(.82); }
 .ornament { background-image: radial-gradient(hsl(var(--primary) / .09) 1px, transparent 1px); background-size: 18px 18px; }
 .manuscript-lines { background-image: linear-gradient(hsl(var(--border) / .28) 1px, transparent 1px); background-size: 100% 2rem; }
 .grain::after { content:''; position:fixed; inset:0; pointer-events:none; opacity:.035; z-index:50; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E"); }
