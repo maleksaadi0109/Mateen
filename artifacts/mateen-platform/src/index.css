@@ -2,42 +2,42 @@
 @import 'tailwindcss';
 
 :root {
-  --background: 40 67% 97%;
-  --foreground: 21 24% 18%;
-  --card: 39 42% 95%;
-  --card-foreground: 21 24% 18%;
-  --border: 30 18% 82%;
-  --primary: 17 28% 33%;
-  --primary-foreground: 40 67% 97%;
-  --secondary: 28 96% 31%;
-  --secondary-foreground: 40 67% 97%;
-  --muted: 36 22% 90%;
-  --muted-foreground: 24 12% 43%;
-  --accent: 45 100% 15%;
-  --accent-foreground: 40 67% 97%;
-  --input: 30 18% 82%;
-  --ring: 17 28% 33%;
-  --radius: 0.6rem;
+  --background: 36 67% 97%; /* #FDF9F3 */
+  --foreground: 19 30% 15%; /* Dark Walnut */
+  --card: 36 50% 99%;
+  --card-foreground: 19 30% 15%;
+  --border: 24 20% 86%;
+  --primary: 19 28% 33%; /* #6D4C3D */
+  --primary-foreground: 36 67% 97%;
+  --secondary: 27 96% 31%; /* #994703 */
+  --secondary-foreground: 36 67% 97%;
+  --muted: 36 20% 92%;
+  --muted-foreground: 19 15% 45%;
+  --accent: 45 100% 15%; /* #4E3A00 */
+  --accent-foreground: 36 67% 97%;
+  --input: 24 20% 86%;
+  --ring: 19 28% 33%;
+  --radius: 1rem;
   --app-font-sans: 'Cairo', sans-serif;
   --app-font-serif: 'Noto Naskh Arabic', serif;
-  --app-font-mono: 'Cairo', sans-serif;
+  --app-font-display: 'Kufam', sans-serif;
 }
 .dark {
-  --background: 24 15% 12%;
-  --foreground: 37 33% 91%;
-  --card: 23 14% 17%;
-  --card-foreground: 37 33% 91%;
-  --border: 23 13% 28%;
-  --primary: 20 29% 58%;
-  --primary-foreground: 24 15% 12%;
-  --secondary: 28 83% 43%;
-  --secondary-foreground: 24 15% 12%;
-  --muted: 25 12% 22%;
-  --muted-foreground: 33 17% 70%;
-  --accent: 43 68% 54%;
-  --accent-foreground: 24 15% 12%;
-  --input: 23 13% 28%;
-  --ring: 20 29% 58%;
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+  --card: 222 47% 13%;
+  --card-foreground: 210 40% 98%;
+  --border: 215 28% 22%;
+  --primary: 38 92% 50%;
+  --primary-foreground: 222 47% 11%;
+  --secondary: 160 84% 39%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 215 28% 20%;
+  --muted-foreground: 215 20% 70%;
+  --accent: 38 92% 50%;
+  --accent-foreground: 222 47% 11%;
+  --input: 215 28% 22%;
+  --ring: 38 92% 50%;
 }
 @theme inline {
   --color-background: hsl(var(--background)); --color-foreground: hsl(var(--foreground));
@@ -46,25 +46,25 @@
   --color-secondary: hsl(var(--secondary)); --color-secondary-foreground: hsl(var(--secondary-foreground));
   --color-muted: hsl(var(--muted)); --color-muted-foreground: hsl(var(--muted-foreground));
   --color-accent: hsl(var(--accent)); --color-accent-foreground: hsl(var(--accent-foreground));
-  --font-sans: var(--app-font-sans); --font-serif: var(--app-font-serif); --font-mono: var(--app-font-mono);
+  --font-sans: var(--app-font-sans); --font-serif: var(--app-font-serif); --font-display: var(--app-font-display);
   --radius-lg: var(--radius); --radius-xl: calc(var(--radius) + 4px);
 }
 * { border-color: hsl(var(--border)); }
 html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: var(--app-font-serif); }
-button, a, input, select { font-family: 'Cairo', sans-serif; }
+button, a, input, select, textarea { font-family: var(--app-font-sans); }
 .font-arabic { font-family: var(--app-font-serif); }
-.font-display { font-family: 'Kufam', sans-serif; }
-.font-ui { font-family: 'Cairo', sans-serif; }
-h1, h2, h3 { font-family: 'Kufam', sans-serif; }
+.font-display { font-family: var(--app-font-display); }
+.font-ui { font-family: var(--app-font-sans); }
+h1, h2, h3, h4, h5, h6 { font-family: var(--app-font-display); }
 .brand-logo { display: block; }
-.dark .brand-logo { filter: brightness(1.35) saturate(.82); }
-.ornament { background-image: radial-gradient(hsl(var(--primary) / .09) 1px, transparent 1px); background-size: 18px 18px; }
-.manuscript-lines { background-image: linear-gradient(hsl(var(--border) / .28) 1px, transparent 1px); background-size: 100% 2rem; }
-.grain::after { content:''; position:fixed; inset:0; pointer-events:none; opacity:.035; z-index:50; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E"); }
-::selection { background: hsl(var(--accent) / .28); }
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
-@keyframes pulseLine { 0%,100%{transform:scaleY(.45)} 50%{transform:scaleY(1)} }
-.float { animation: float 5s ease-in-out infinite; }
-.wave span { animation: pulseLine 1.1s ease-in-out infinite; transform-origin: center; }
+.dark .brand-logo { filter: brightness(0) invert(1) opacity(0.9); }
+.ornament { background-image: radial-gradient(hsl(var(--primary) / .07) 1.5px, transparent 1.5px); background-size: 24px 24px; }
+.manuscript-lines { background-image: linear-gradient(hsl(var(--border) / .3) 1px, transparent 1px); background-size: 100% 2.75rem; }
+.grain::after { content:''; position:fixed; inset:0; pointer-events:none; opacity:.025; z-index:50; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E"); }
+::selection { background: hsl(var(--secondary) / .2); }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes pulseLine { 0%,100%{transform:scaleY(.4)} 50%{transform:scaleY(1)} }
+.float { animation: float 6s ease-in-out infinite; }
+.wave span { animation: pulseLine 1.2s ease-in-out infinite; transform-origin: center; }
 .wave span:nth-child(2n){animation-delay:.15s}.wave span:nth-child(3n){animation-delay:.3s}.wave span:nth-child(4n){animation-delay:.45s}
