@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "منصة مَتِين"
+description = "صفحة هبوط عربية متكاملة لمنصة مَتِين، تعرض المحاكي الصوتي الذكي ومسارات حفظ المتون ومزايا المنصة ومنهجية عملها، مع تجربة RTL وتبديل المظهر ونوافذ تسجيل تفاعلية."
+version = "1.0.0"
+id = "artifacts/mateen-platform"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24832
+
+[services.development]
+run = "pnpm --filter @workspace/mateen-platform run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/mateen-platform", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/mateen-platform/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24832"
+BASE_PATH = "/"
