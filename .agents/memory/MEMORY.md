@@ -1,0 +1,1 @@
+- [Recitation scope](recitation-scope.md) — Initial release detects word substitutions and omissions; pronunciation and diacritics assessment is deferred.
