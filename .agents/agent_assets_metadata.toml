@@ -14,3 +14,17 @@ mtime_ms = 1790099144686
 storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/180f253d-6c7b-4805-9b6a-f36e8a1e76fa/ffddb0f0-0c9d-43e5-ab29-b8ce5e0aa691"
 storage_version_token = "1790099166809347"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "nXrbm7lCPf8Lu-QWwe-si"
+uri = "file://master-project-spec.en.md"
+type = "text"
+title = "Mateen — Master Project Specification (English)"
+description = "Complete English translation of the approved specification, including all three portals, architecture, assessments, privacy, security, and acceptance criteria."
+logical_id = "996ddf76-82ce-4ca4-8f0b-a3d538aa928f"
+content_hash = "sha256:76b02c14581207901429ea1daff5be73a4cac3ed0a3266589d8e1bcfc1a6d80f"
+size = 37710
+mtime_ms = 1790099661863
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/996ddf76-82ce-4ca4-8f0b-a3d538aa928f/f2bad390-2bc5-479e-a5a4-11b79e3aca06"
+storage_version_token = "1790099672677003"
+content_type = "text/markdown"
