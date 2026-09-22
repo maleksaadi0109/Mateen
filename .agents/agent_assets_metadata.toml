@@ -1,0 +1,16 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "AsyBvOv0UX9Ix7_DQDRyb"
+uri = "file://master-project-spec.md"
+type = "text"
+title = "المواصفات الشاملة لمنصة مَتِين"
+description = "القرارات المعتمدة للبوابات الثلاث والمعمارية والتسميع والاختبارات والخصوصية والصلاحيات ومعايير القبول ومراحل التنفيذ."
+logical_id = "180f253d-6c7b-4805-9b6a-f36e8a1e76fa"
+content_hash = "sha256:fde4cf33ab59271a91daa8454553d6eef36e446fa2f4f9dc55f7a68be901291a"
+size = 49981
+mtime_ms = 1790099144686
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/180f253d-6c7b-4805-9b6a-f36e8a1e76fa/ffddb0f0-0c9d-43e5-ab29-b8ce5e0aa691"
+storage_version_token = "1790099166809347"
+content_type = "text/markdown"

@@ -3,7 +3,7 @@ name: Approved portal scope
 description: Product scope approved for the full-project specification, not a claim of implemented features.
 ---
 
-On 2026-09-22 the user approved the discussed portal outline and its recommendations, and subsequently approved the proposed React/TypeScript/Vite frontend, Node.js/TypeScript/Express modular backend, PostgreSQL/Drizzle database, private object storage, REST and WebSocket architecture, with background workers and optional Python for specialized speech work. Work is specification discussion first, not interface implementation; show the final summary for review before preparing master-project-spec.md.
+On 2026-09-22 the user approved the portal outline, architecture, and final privacy/account recommendations and explicitly authorized preparing master-project-spec.md. The specification is now the source of truth for detailed requirements. Creating the document does not authorize resuming interface implementation.
 
 **Why:** The user explicitly corrected an interpretation of “design” as building visual mockups; they meant defining screens for the specification.
 
