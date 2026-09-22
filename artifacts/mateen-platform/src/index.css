@@ -1,44 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Kufam:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Kufam:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 
 :root {
-  --background: 36 67% 97%; /* #FDF9F3 */
-  --foreground: 19 30% 15%; /* Dark Walnut */
-  --card: 36 50% 99%;
-  --card-foreground: 19 30% 15%;
-  --border: 24 20% 86%;
-  --primary: 19 28% 33%; /* #6D4C3D */
-  --primary-foreground: 36 67% 97%;
-  --secondary: 27 96% 31%; /* #994703 */
-  --secondary-foreground: 36 67% 97%;
-  --muted: 36 20% 92%;
-  --muted-foreground: 19 15% 45%;
-  --accent: 45 100% 15%; /* #4E3A00 */
-  --accent-foreground: 36 67% 97%;
-  --input: 24 20% 86%;
-  --ring: 19 28% 33%;
-  --radius: 1rem;
+  --background: 41 46% 96%;
+  --foreground: 22 28% 18%;
+  --card: 40 50% 99%;
+  --card-foreground: 22 28% 18%;
+  --border: 30 18% 87%;
+  --primary: 19 28% 33%;
+  --primary-foreground: 41 46% 96%;
+  --secondary: 27 96% 31%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 36 20% 90%;
+  --muted-foreground: 20 15% 45%;
+  --accent: 45 100% 15%;
+  --accent-foreground: 41 46% 96%;
+  --input: 30 18% 87%;
+  --ring: 27 96% 31%;
+  --radius: 1.25rem;
   --app-font-sans: 'Cairo', sans-serif;
   --app-font-serif: 'Noto Naskh Arabic', serif;
   --app-font-display: 'Kufam', sans-serif;
 }
+
 .dark {
-  --background: 222 47% 11%;
-  --foreground: 210 40% 98%;
-  --card: 222 47% 13%;
-  --card-foreground: 210 40% 98%;
-  --border: 215 28% 22%;
-  --primary: 38 92% 50%;
-  --primary-foreground: 222 47% 11%;
-  --secondary: 160 84% 39%;
-  --secondary-foreground: 222 47% 11%;
-  --muted: 215 28% 20%;
-  --muted-foreground: 215 20% 70%;
-  --accent: 38 92% 50%;
-  --accent-foreground: 222 47% 11%;
-  --input: 215 28% 22%;
-  --ring: 38 92% 50%;
+  --background: 24 15% 10%;
+  --foreground: 36 33% 92%;
+  --card: 24 12% 13%;
+  --card-foreground: 36 33% 92%;
+  --border: 24 10% 20%;
+  --primary: 28 35% 65%;
+  --primary-foreground: 24 15% 10%;
+  --secondary: 27 80% 45%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 24 12% 17%;
+  --muted-foreground: 36 20% 65%;
+  --accent: 40 60% 50%;
+  --accent-foreground: 24 15% 10%;
+  --input: 24 10% 20%;
+  --ring: 27 80% 45%;
 }
+
 @theme inline {
   --color-background: hsl(var(--background)); --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card)); --color-card-foreground: hsl(var(--card-foreground));
@@ -49,22 +51,38 @@
   --font-sans: var(--app-font-sans); --font-serif: var(--app-font-serif); --font-display: var(--app-font-display);
   --radius-lg: var(--radius); --radius-xl: calc(var(--radius) + 4px);
 }
+
 * { border-color: hsl(var(--border)); }
 html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: var(--app-font-serif); }
-button, a, input, select, textarea { font-family: var(--app-font-sans); }
+body { 
+  margin: 0; 
+  min-width: 320px; 
+  background: hsl(var(--background)); 
+  color: hsl(var(--foreground)); 
+  font-family: var(--app-font-sans); 
+}
 .font-arabic { font-family: var(--app-font-serif); }
 .font-display { font-family: var(--app-font-display); }
 .font-ui { font-family: var(--app-font-sans); }
 h1, h2, h3, h4, h5, h6 { font-family: var(--app-font-display); }
 .brand-logo { display: block; }
 .dark .brand-logo { filter: brightness(0) invert(1) opacity(0.9); }
-.ornament { background-image: radial-gradient(hsl(var(--primary) / .07) 1.5px, transparent 1.5px); background-size: 24px 24px; }
-.manuscript-lines { background-image: linear-gradient(hsl(var(--border) / .3) 1px, transparent 1px); background-size: 100% 2.75rem; }
-.grain::after { content:''; position:fixed; inset:0; pointer-events:none; opacity:.025; z-index:50; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E"); }
-::selection { background: hsl(var(--secondary) / .2); }
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-@keyframes pulseLine { 0%,100%{transform:scaleY(.4)} 50%{transform:scaleY(1)} }
-.float { animation: float 6s ease-in-out infinite; }
-.wave span { animation: pulseLine 1.2s ease-in-out infinite; transform-origin: center; }
-.wave span:nth-child(2n){animation-delay:.15s}.wave span:nth-child(3n){animation-delay:.3s}.wave span:nth-child(4n){animation-delay:.45s}
+.grain::after { 
+  content:''; 
+  position:fixed; 
+  inset:0; 
+  pointer-events:none; 
+  opacity:.035; 
+  z-index:50; 
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"); 
+}
+::selection { background: hsl(var(--secondary) / .25); }
+
+/* Bespoke utility patterns */
+.manuscript-pattern {
+  background-image: radial-gradient(hsl(var(--primary) / 0.08) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+.dark .manuscript-pattern {
+  background-image: radial-gradient(hsl(var(--primary) / 0.04) 1.5px, transparent 1.5px);
+}
