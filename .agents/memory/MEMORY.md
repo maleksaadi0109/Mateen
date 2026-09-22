@@ -1,1 +1,2 @@
 - [Recitation scope](recitation-scope.md) — Initial release detects word substitutions and omissions; pronunciation and diacritics assessment is deferred.
+- [Learning and guidance boundaries](learning-guidance.md) — Level assessments allow direct attempts; teachers provide text-only guidance in the first release.
