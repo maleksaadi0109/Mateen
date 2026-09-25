@@ -2,3 +2,4 @@
 - [Learning and guidance boundaries](learning-guidance.md) — Level assessments allow direct attempts; teachers provide text-only guidance in the first release.
 - [Approved portal scope](portal-scope.md) — Approved student, teacher, and admin scope; agree on specifications before implementation.
 - [Registration pitch framing](registration-pitch.md) — Pitch the concept and proposed plan, not implementation; preserve separate disclosure obligations.
+- [Presentation font validation](presentation-font-validation.md) — Verify fonts in exported PDFs; font files on disk do not prove the renderer uses them.
