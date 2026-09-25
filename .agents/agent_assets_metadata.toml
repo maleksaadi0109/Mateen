@@ -28,3 +28,31 @@ mtime_ms = 1790099661863
 storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/996ddf76-82ce-4ca4-8f0b-a3d538aa928f/f2bad390-2bc5-479e-a5a4-11b79e3aca06"
 storage_version_token = "1790099672677003"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "3jbLqj4PK0vbVlyzA-25S"
+uri = "file://deliverables/mateen-registration/mateen-registration.pptx"
+type = "slides"
+title = "مَتِين — عرض الفكرة للتسجيل"
+description = "١٠ شرائح عربية قابلة للتحرير، مع ملاحظات للمصادر ومنهجية الاستبيان."
+logical_id = "be540095-f30b-43a8-aeb7-5fd79b82b2d5"
+content_hash = "sha256:40ce302410a48dd4422e77898acfed2b4756aee15ce7bfd8ec8f2fec2d38b014"
+size = 68638
+mtime_ms = 1790314413422
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/be540095-f30b-43a8-aeb7-5fd79b82b2d5/0936947b-4a96-4774-85c6-7fed7913571e"
+storage_version_token = "1790314430763495"
+content_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+
+[[outputs]]
+id = "DHcPMco7HgGa37SJBMYr1"
+uri = "file://deliverables/mateen-registration/mateen-registration.pdf"
+type = "pdf"
+title = "مَتِين — نسخة PDF للمراجعة"
+description = "نسخة ثابتة المظهر لقراءة العرض ومشاركته."
+logical_id = "a521146c-f3e4-4b6f-87ae-9d91455efaae"
+content_hash = "sha256:b737bb6bc1f8de616099be44e9c222161ca1f5725964e9931e84f9038bfd342f"
+size = 199611
+mtime_ms = 1790314416868
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/a521146c-f3e4-4b6f-87ae-9d91455efaae/61f2c2c4-daf4-41a1-b79f-16c538597b6b"
+storage_version_token = "1790314431209616"
+content_type = "application/pdf"
