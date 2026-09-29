@@ -1,0 +1,129 @@
+You are an expert Presentation Designer, UI/UX Architect, and Python PowerPoint (python-pptx) / Slide Automation Specialist. 
+
+Your task is to generate a highly professional, pitch-deck quality PowerPoint presentation (.pptx) or slide structure for "متين" (Mateen Platform)—an AI-powered educational platform for Islamic texts and classical poems (المتون والمنظومات العلمية).
+
+The presentation must strictly adhere to the brand's identity, design system, original visual assets, and a precisely timed 5-minute pitch deck storyline (9 slides total).
+
+==================================================
+1. BRAND IDENTITY & DESIGN SYSTEM SPECIFICATIONS
+==================================================
+- Aesthetic Style: Modern, Minimalist UI/UX, Dark Neon Theme, Premium Islamic Tech Vibe (No living beings / No icons of faces/humans).
+- Color Palette (HEX Codes):
+  * Background Main: Rich Dark Charcoal / Navy (`#0F172A` / `#0B0F19`)
+  * Card / Container Background: Dark Slate (`#1E293B` with subtle border `#334155`)
+  * Primary Accent / Neon Highlights: Electric Neon Blue (`#00D2FF` or `#38BDF8`)
+  * Secondary Accent / Success Status: Emerald Green (`#10B981` or `#00E676`)
+  * Error / Correction Highlight: Soft Neon Red (`#EF4444`)
+  * Primary Text: Pure White (`#F8FAFC`)
+  * Secondary / Muted Text: Slate Gray (`#94A3B8`)
+- Typography (RTL - Right to Left Arabic Support):
+  * Primary Font: 'Cairo' or 'Tajawal' or 'IBM Plex Sans Arabic' (Clean, modern sans-serif).
+  * Slide Headers: Bold, 28pt - 36pt, Electric Neon Blue or White.
+  * Body Text: Regular/Medium, 14pt - 18pt, Off-White / Light Slate.
+  * Stat Callouts: Extra Bold, 44pt - 56pt, Electric Neon Blue or Emerald Green.
+- Logo Usage Instructions (CRITICAL):
+  * Always use the ORIGINAL OFFICIAL LOGO file (`logo.png` / `logo.svg`).
+  * Placement Rule: 
+    - Slide 1 (Cover): Centered prominently on top of the slide title.
+    - Slides 2 to 8: Positioned in the Top-Right corner (Header section) in high-resolution, maintaining aspect ratio.
+    - Slide 9 (Closing): Centered prominently above the contact & demo QR codes.
+  * Do NOT create or generate placeholder AI logos—use the exact provided brand logo file.
+
+==================================================
+2. SLIDE-BY-SLIDE CONTENT & VISUAL STRUCTURE
+==================================================
+
+--- SLIDE 1: COVER (Title & Brand Identity) ---
+- Slide Layout: Centered Hero Layout.
+- Logo: Original Logo placed prominently centered above title.
+- Header: منصة مَتِين (Mateen Platform)
+- Subtitle: بيئة ذكية متكاملة لحفظ وتسميع وفهم المتون والمنظومات العلمية بمرجعية موثوقة وإشراف بشري
+- Footer / Meta: تحدي الذكاء الاصطناعي في خدمة المحتوى الإسلامي — مؤسسة باذل الأهلية (2026م) | المسار الأول والثالث
+- Visual Elements: Dark gradient background (`#0B0F19`), neon blue subtle glow behind the logo, 3 feature pill badges at bottom: ["تسميع صوتي ذكي", "مساعد علمي موثوق", "إشراف بشري معتمد"].
+
+--- SLIDE 2: THE PROBLEM (Madaney Survey Insights) ---
+- Slide Layout: 3 Dark Card Containers side-by-side with large stat callouts.
+- Header: واقع طالب العلم بين صعوبة الحفظ وغموض الشروح
+- Subtitle: نتائج الدراسة الميدانية لشريحة المستفيدين (61 مستجيباً من طلاب الكليات الشرعية والجامعات)
+- Cards Content:
+  * Card 1: Stat "70.5%" (Red/Emerald Accent) | Title: أزمة التسميع والمتابعة | Text: يعانون من الملل وفقدان الحافز بسبب غياب التفاعل والتسميع الذاتي المستمر.
+  * Card 2: Stat "45.9%" (Blue Accent) | Title: ندرة الإشراف المباشر | Text: يواجهون صعوبة شديدة في إيجاد شيخ متفرغ للتسميع والمتابعة المباشرة.
+  * Card 3: Stat "36.1%" (Slate Accent) | Title: تشتت الشروحات | Text: يجدون الشروحات النصية المتاحة طويلة ومشتتة دون إجابة مباشرة على الأسئلة الدقيقة.
+- Visual Elements: Quote box at bottom: "الشروحات طويلة ومشتتة ولا أجد من يستمع لتسميعي..."
+
+--- SLIDE 3: THE SOLUTION (Mateen Core Value) ---
+- Slide Layout: 3 Columns / Pillars with UI Mockup Container.
+- Header: منصة "مَتِين" — منظومة تعلم ذكية متكاملة للمتون العلمية
+- Pillars:
+  1. Pillar 1: مُعرِب وتسميع صوتي ذكي (Audio Engine) -> معالجة التسميع الصوتي مقطعاً بمقطع واكتشاف أخطاء النقص والزيادة والترتيب فورياً.
+  2. Pillar 2: مُعين علمي موثوق (RAG Engine) -> مساعد ذكي يجيب عن استفسارات النصوص بالاستناد الحصري للشروحات المعتمدة مع ذكر المرجع والمصدر.
+  3. Pillar 3: جسر المشايخ (Human-in-the-Loop) -> إحالة التقييمات المعقدة والأسئلة المتقدمة لمعلم ومختص بشري معتمد.
+- Visual Elements: App UI screen mockup container in dark mode with neon borders.
+
+--- SLIDE 4: HOW IT WORKS (Audio Pipeline & Student Journey) ---
+- Slide Layout: Horizontal Process Flow (4 Sequential Steps).
+- Header: كيف تعمل منصة "مَتِين"؟ (مسار الحفظ والتسميع)
+- Flow Steps:
+  1. Step 01: اختيار المتن والمستوى (البيقونية، تحفة الأطفال، الأصول الثلاثة...).
+  2. Step 02: التسجيل الصوتي المقطعي (تسجيل قراءة أو تسميع الأبيات عبر الميكروفون).
+  3. Step 03: المطابقة النصية والتقييم (محرك التفريغ والتصحيح يقارن المنطوق بالمتن المحقق).
+  4. Step 04: التغذية الراجعة الفورية (تحديد الكلمات المفقودة أو الخاطئة ملونة بالأحمر والأخضر).
+- Visual Elements: Arrow connectors between steps, dark card styling, side visual of recitation feedback screen (Green text for correct, Red for missed words).
+
+--- SLIDE 5: SCIENTIFIC INTEGRITY & RELIABILITY (Guardrails) ---
+- Slide Layout: 2-Column Grid (RAG Rules vs Human Referral) with Safety Shield Badge.
+- Header: الضوابط العلمية والسلامة المنهجية في منصة مَتِين
+- Column 1: التوثيق الحصري والحماية العلمية
+  * البحث المعتمد على RAG: المساعد يجيب حصراً من كتب الشروح المحققة المعتمدة.
+  * ذكر المصادر المباشرة: إرفاق اسم الكتاب والباب ورقم الصفحة مع كل إجابة.
+  * حظر الإفتاء والتكهن: يمتنع النظام تماماً عن تقديم الفتاوى الشرعية أو الاجتهاد.
+- Column 2: نظام الترفع والإحالة البشرية (Human-in-the-Loop)
+  * تحويل تلقائي للمختص: عند خروج السؤال عن نطاق المصادر المعتمدة، يُحال الطلب لبوابة المشايخ.
+  * انضباط التسميع: اقتصار التسميع والتصحيح على ألفاظ المتون والمنظومات دون القرآن الكريم.
+- Visual Elements: Shield icon/badge ("درع الأمان العلمي"), High-contrast contrast cards.
+
+--- SLIDE 6: TECHNICAL ARCHITECTURE & STACK ---
+- Slide Layout: Full-width Styled Data Table & System Architecture Diagram.
+- Header: البنية التقنية والمعمارية الحديثة
+- Table Data:
+  * Layer: الواجهة الأمامية (Frontend) | Tech: React + TypeScript + Tailwind CSS | Role: واجهة سريعة ومتجاوبة بالكامل باللغة العربية (RTL).
+  * Layer: الخادم والبيانات (Backend & DB) | Tech: Node.js + Express + PostgreSQL + Drizzle ORM | Role: إدارة الطلبات وقواعد البيانات الموثقة بإنتاجية عالية.
+  * Layer: معالجة الصوت (Audio Engine) | Tech: STT Audio Chunk Alignment Engine | Role: تحليل وتقسيم المقاطع الصوتية ومطابقتها بالنصوص.
+  * Layer: المساعد العلمي (AI & RAG) | Tech: RAG / Vector Embeddings + Source Citation | Role: البحث الدلالي والإجابة المسندة بالمرجع والدليل.
+- Visual Elements: Modern clean dark table with glowing neon blue header and dark slate rows.
+
+--- SLIDE 7: FIELD VALIDATION & SURVEY RESULTS ---
+- Slide Layout: 3 Data Donut Charts / Stat Highlight Containers.
+- Header: مؤشرات التحقق الميداني وقبول المستفيدين
+- Stats Display:
+  * Stat 1: "78.7%" | Label: يفضلون شرط التوثيق بالمصدر | Text: يؤكدون أن ذكر المصدر الأصلي بوضوح هو معيار الثقة الأول في التطبيقات الإسلامية.
+  * Stat 2: "63.9%" | Label: يؤيدون نظام "المساعد + الشيخ" | Text: يصفون نموذج المساعد الذكي المدمج بإحالة المختص البشري بـ "الخيار الممتاز والمثالي".
+  * Stat 3: "57.4%" | Label: جاهزون لاستخدام التسميع الصوتي | Text: منحوا تقييم 4 و 5 من 5 للرغبة المباشرة في استخدام ميزة التسميع الصوتي الآلي.
+- Visual Elements: GitHub Repository Badge ("Code Ready on GitHub") & Live Demo Status Indicator ("Production Ready").
+
+--- SLIDE 8: ROADMAP & SUSTAINABILITY ---
+- Slide Layout: Horizontal Timeline Graph (Phase 1 -> Phase 2 -> Phase 3).
+- Header: خارطة الطريق والتوسع المستقبلي
+- Timeline Nodes:
+  * Phase 1 (الإطلاق الحالي - V1): متون التمهيدي والمستوى الأول (نواقض الإسلام، القواعد الأربع، تحفة الأطفال)، التسميع المقطعي، المساعد الموثق.
+  * Phase 2 (التوسع المنهجي): إضافة منظومات الفقه واللغة العربية، وتفعيل التقييم الآلي لمخارج الحروف بالتنسيق مع المتخصصين.
+  * Phase 3 (الشراكات المؤسسية): إتاحة المنصة للجمعيات العلمية والدور القرآنية والمعاهد الشرعية كبيئة تعليمية مدمجة.
+- Visual Elements: Glowing timeline line with step nodes and active status glow on Phase 1.
+
+--- SLIDE 9: CLOSING & LIVE DEMO CALL-TO-ACTION ---
+- Slide Layout: Centered Hero Layout with 2 Prominent QR Code Containers.
+- Logo: Original Logo centered prominently at the top.
+- Header: "مَتِين" — نحو تجربة ذكية لخدمة العلم الشرعي
+- Subtitle: نضع التقنية في خدمة المحتوى الإسلامي الأصيل بسلامة علمية وموثوقية عالية.
+- Actions / Links Boxes:
+  * Box 1: [QR Code 1 Placeholder] | Label: رابط التجربة المباشرة (Live Demo) | Text: https://mateen.live
+  * Box 2: [QR Code 2 Placeholder] | Label: مستودع الكود (GitHub Repo) | Text: github.com/org/mateen-platform
+- Visual Elements: Clean closing layout, team contact info footer.
+
+==================================================
+3. OUTPUT FORMAT REQUIREMENTS
+==================================================
+- Generate the slides ensuring RTL layout alignment (Right-to-Left for Arabic).
+- Ensure high contrast between text (`#F8FAFC`) and background (`#0F172A`).
+- Keep code clean, modular, and fully styled if generating via python-pptx code.
+- Embed image references for `logo.png` at top-right for internal slides and center for Slide 1 & Slide 9.

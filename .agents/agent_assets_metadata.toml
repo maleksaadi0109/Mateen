@@ -112,3 +112,31 @@ mtime_ms = 1790412220254
 storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/a3ea0fd5-15bd-4ea1-800b-9fddac149c81/f2e80b0e-b903-4efd-acff-c1db221004ab"
 storage_version_token = "1790412227684844"
 content_type = "image/png"
+
+[[outputs]]
+id = "1FWJcrQR_Pof9H62qgjbW"
+uri = "file://deliverables/mateen-registration/mateen-neon-pitch.pptx"
+type = "slides"
+title = "مَتِين — عرض ٩ شرائح قابل للتحرير"
+description = "نسخة داكنة بالشعار الرسمي وملاحظات حديث مدتها خمس دقائق، مع أرقام الاستبيان المصححة."
+logical_id = "5ee4bc2e-3099-42aa-a5ab-bae7f9c36716"
+content_hash = "sha256:548e95b2eebcaf3cd9e96047b6c5c0681666fdaa42953e0dbb3612f0c6627b9c"
+size = 261868
+mtime_ms = 1790704374231
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/5ee4bc2e-3099-42aa-a5ab-bae7f9c36716/b8440abd-5d37-4638-ba43-13b32a0252f3"
+storage_version_token = "1790704391471495"
+content_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+
+[[outputs]]
+id = "ocrsDe-64Op2Y2IRKAs6-"
+uri = "file://deliverables/mateen-registration/mateen-neon-pitch.pdf"
+type = "pdf"
+title = "مَتِين — نسخة PDF للمراجعة"
+description = "نسخة ثابتة المظهر للعرض المقترح، بخط عربي مضمن."
+logical_id = "5643790b-e1d9-4679-8052-c16934637b40"
+content_hash = "sha256:d6ab95eb95aa60c02e092f4d2e634934a5120853fe58598ec16e49cd7c8bc1a6"
+size = 445664
+mtime_ms = 1790704317247
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/5643790b-e1d9-4679-8052-c16934637b40/dd48e3a8-f2f8-4d42-b9b1-99e45cf15e76"
+storage_version_token = "1790704392003166"
+content_type = "application/pdf"
