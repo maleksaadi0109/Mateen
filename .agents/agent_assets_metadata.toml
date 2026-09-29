@@ -140,3 +140,31 @@ mtime_ms = 1790704317247
 storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/5643790b-e1d9-4679-8052-c16934637b40/dd48e3a8-f2f8-4d42-b9b1-99e45cf15e76"
 storage_version_token = "1790704392003166"
 content_type = "application/pdf"
+
+[[outputs]]
+id = "5fl0Jja0pmdwcxFf-FF4s"
+uri = "file://deliverables/mateen-registration/mateen-brand-pitch.pptx"
+type = "slides"
+title = "عرض مَتِين — هوية المشروع (PowerPoint)"
+description = "٩ شرائح قابلة للتحرير؛ ألوان الهوية، محاور الشريحة الثانية، صور الواجهة، وملاحظات عرض لخمس دقائق."
+logical_id = "982dc3ab-df91-4de0-86dc-f5ea9efd2e22"
+content_hash = "sha256:1e50af85fc0afad48888f3edae0e42fa67475393c887cda80d1753bdb40aaf8c"
+size = 411293
+mtime_ms = 1790705339355
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/982dc3ab-df91-4de0-86dc-f5ea9efd2e22/dceb8c9a-2002-448a-a7e7-bcfc8132dc29"
+storage_version_token = "1790705368059144"
+content_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+
+[[outputs]]
+id = "HJ5t2jUfBxv1UkgT8c-lJ"
+uri = "file://deliverables/mateen-registration/mateen-brand-pitch.pdf"
+type = "pdf"
+title = "عرض مَتِين — نسخة PDF"
+description = "نسخة مراجعة مطابقة للعرض بخطوط Kufam وCairo وNoto Naskh Arabic مضمنة."
+logical_id = "fd4ea8d5-88c8-4dee-98e0-66a49f8e78e8"
+content_hash = "sha256:6d62f4b0dbd83396ef4b2a70ea8ca2b5942a563ddee1d3a140f263233e225b5f"
+size = 830823
+mtime_ms = 1790705350747
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/fd4ea8d5-88c8-4dee-98e0-66a49f8e78e8/d59ead1e-1e91-4db0-8605-20d6612fdbdf"
+storage_version_token = "1790705368574191"
+content_type = "application/pdf"
