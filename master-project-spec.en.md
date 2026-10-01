@@ -1,63 +1,60 @@
-# Master Project Specification — Mateen Platform
+# Comprehensive Specification — Mateen Platform
 
-**File:** `master-project-spec.en.md`  
-**Source:** English translation of `master-project-spec.md`  
-**Decision approval date:** September 22, 2026  
-**Status:** Approved specification for phased implementation; not a statement that these features already exist.  
-**Product:** Mateen Platform — منصة مَتِين  
-**Product language:** Arabic, with a right-to-left interface.
-
-> This English document changes the language of the specification, not the language of the product. Arabic interface labels, scholarly text titles, brand assets, and the approved requirements remain unchanged.
+**File:** `master-project-spec.en.md`
+**Source:** `master-project-spec.md`
+**Decision approval date:** 2026-09-22
+**Status:** Approved specification for phased implementation; not a statement that the functions have been implemented.
+**Product:** Mateen Platform — منصة مَتِين
+**Product language:** Arabic, with an RTL direction.
 
 ## 0. How to Use This Document
 
-This specification guides development of the complete platform, including its interfaces, backend, data, AI services, and operations. Development teams and coding agents must use it to avoid inventing product rules or changing approved decisions.
+This document is the development reference for the entire platform, including interfaces, server, data, artificial intelligence, and operations. Development teams and coding agents use it to avoid inventing product rules or changing approved decisions.
 
-- Inspect the existing project before implementation. Reuse suitable work rather than rebuilding from scratch by default.
-- Creating this document does not authorize implementing the application or automatically resuming earlier interface mockups.
-- Distinguish demonstrations from production functionality. Do not present simulated AI results, messages, or approvals as real.
-- Where older requirements conflict with this specification, the newer decisions here take precedence, particularly recitation scope, assessments, and privacy.
-- The original landing-page specification governs its content and interactions; the design-system image governs visual identity. Do not copy wording from the inspirational reference website. Correct promises that exceed first-release capabilities.
-- Do not add payments, video classes, or certificate issuance merely because they are common in other platforms.
-- Items designated as launch conditions cannot be bypassed using demonstration data or silent assumptions.
+- Inspect the existing project before implementation; reuse what is suitable and do not rebuild it from scratch by default, except for the landing page, which must be built from scratch (see 5.1).
+- Creating this document does not authorize implementing the application or automatically continuing earlier interface mockups.
+- Do not confuse a demonstrative interface with production functionality. Do not present simulated AI results, messages, or approvals as real.
+- When older requirements conflict with this document, the newer decisions here take precedence, especially the limits on recitation, assessments, and privacy.
+- There is no approved ready-made landing page that serves as a design source. The development agent must build the landing page from scratch: highly attractive, highly professional, in an Arabic style, and consistent with the approved identity. Do not copy wording from the inspirational website, and do not make promises that exceed first-release capabilities.
+- Do not add payments, video classes, or certificate issuance merely because they are common on other platforms.
+- Items designated as a “launch condition” must not be bypassed using test data or silent assumptions.
 
 ### Local References
 
-- Landing-page specification: `attached_assets/landing-page-updates_1790089998529.md`.
-- Design-system image: `attached_assets/Design_System_1790090535602.png`.
+- Brand-identity image: `attached_assets/Design_System_1790090535602.png`.
 - Official logo: `attached_assets/MateeeeeeeeenLOGO_1790090010886.png`.
-- Existing frontend: `artifacts/mateen-platform`.
-- Existing backend: `artifacts/api-server`.
-- Any prototypes in `artifacts/mockup-sandbox` are not approved production portals.
+- Existing interface: `artifacts/mateen-platform`; its existing landing page is not a design reference, and the landing page must be built from scratch according to 5.1.
+- Existing project server: `artifacts/api-server`.
+- Any mockups in `artifacts/mockup-sandbox`, if present, are not approved production portals.
 
 ---
 
 ## 1. Product Vision and Scope
 
-Mateen is an interactive educational platform for memorizing, reciting, and understanding classical Islamic scholarly texts and didactic poems. It connects students with approved source texts, verified commentaries, and trustworthy human guidance.
+Mateen is an interactive educational platform for memorizing, reciting, and understanding Islamic scholarly texts and didactic poems. It connects students with approved texts, verified commentaries, and trustworthy human guidance.
 
 ### 1.1 In Scope
 
-- Studying texts in Islamic creed, Hadith, Tajwid, and Qira’at.
-- Word-level recitation and memorization assessment.
+- Studying scholarly texts; in the first release, only “The Forty Hadith of al-Nawawi” (الأربعون النووية) is available (Hadith track — preparatory level). All other proposed tracks, levels, and texts appear closed with a “Coming soon” label (see 6.2).
+- Word-level recitation and memorization verification.
 - Spaced review and analysis of progress and mistakes.
 - Oral and written level assessments.
 - A scholarly assistant restricted to approved sources.
-- Direct questions and assistant referrals to approved teachers through text messages.
-- Reviewing teachers’ qualifications and ijazat before allowing them to receive questions.
+- Referral of complex questions or questions outside the sources by the scholarly assistant to approved teachers through text messages. Students do not ask teachers directly.
+- Reviewing teachers’ qualifications and ijazat before allowing them to receive referrals.
 
 ### 1.2 Mandatory Constraints
 
-- The platform does not provide memorization of the Qur’an itself. The Tajwid and Qira’at track covers scholarly poems such as Tuhfat al-Atfal.
-- Do not use images or icons depicting people, animals, or living creatures, including default human avatars or person-shaped icons.
-- Do not promise automatic student certificates.
+- The platform does not include memorizing the Qur’an itself; the Tajwid and Qira’at track is for scholarly poems such as Tuhfat al-Atfal (تحفة الأطفال).
+- Do not use images or icons of people, animals, or living beings, including default account images and human-shaped icons.
+- Do not promise students automatic certificates.
 - Do not advertise diacritic or pronunciation correction as available in the first release.
-- The assistant must not issue independent fatwas or be described as infallible.
-- Do not display fabricated success figures, approvals, or statistics.
+- The assistant must not issue its own fatwas or be described as infallible.
+- Do not display success figures, approvals, or statistics that are not based on actual data.
 
 ### 1.3 Outside the First Release
 
-Assessment of diacritics, shaddah, sukun, elongation, or articulation points; audio/video calls; class and assignment management; conversation attachments; student certificate issuance; SMS and browser push notifications; and commerce or subscriptions not defined in this agreement.
+Assessment of diacritics, shaddah, sukun, elongations, and articulation points; audio and video calls; class and assignment management; conversation attachments; issuance of student certificates; SMS and browser notifications; and commerce and subscriptions not specified in this agreement.
 
 ---
 
@@ -68,40 +65,40 @@ Assessment of diacritics, shaddah, sukun, elongation, or articulation points; au
 | Layer | Choice |
 |---|---|
 | Frontend | React + TypeScript + Vite |
-| Styling | Tailwind CSS, RTL, Mateen visual identity |
-| Routing | Retain the existing Wouter setup while it meets requirements |
-| Frontend server state | TanStack Query |
+| Styling | Tailwind CSS, RTL, Mateen identity |
+| Routing | Retain the existing Wouter as long as it meets requirements |
+| Frontend server data | TanStack Query |
 | Forms | React Hook Form + Zod |
-| Global UI state | Context for themes and interface settings, not as a replacement for server-state management |
-| Animation | Framer Motion, respecting reduced-motion preferences |
-| Backend | Node.js + TypeScript + Express |
-| Database | PostgreSQL + Drizzle ORM with versioned migrations |
-| Scholarly search | Lexical and semantic search; pgvector where supported |
+| Global state | Context for theme and interface settings, not as a replacement for server-data state |
+| Animation | Framer Motion, respecting reduced motion |
+| Server | Node.js + TypeScript + Express |
+| Database | PostgreSQL + Drizzle ORM and versioned migrations |
+| Scholarly search | Lexical and semantic search; pgvector where supported by the environment |
 | Files | Private object storage, not binary files inside PostgreSQL |
 | Communication | REST + WebSocket |
-| Heavy processing | Background jobs with retries and status tracking |
-| Specialized processing | Python when genuinely needed, not a mandatory separate service from the outset |
-| Service contracts | OpenAPI and shared/generated types |
+| Heavy operations | Background jobs with retries and status tracking |
+| Specialized processing | Python when genuinely needed, not a mandatory service from the outset |
+| Service contract definitions | OpenAPI and shared/generated types |
 
-### 2.2 Architectural Approach
+### 2.2 Architecture Approach
 
-Start with a modular monolith: identity, content, study, recitation, assessments, assistant, referrals, messaging, teacher approval, and administration. Do not begin with distributed microservices without a demonstrated need.
+A unified application divided into logically independent modules: identity, content, study, recitation, assessments, assistant, referrals, messaging, teacher approval, and administration. Do not start with a distributed microservices system without a demonstrated need.
 
-Separate audio processing and book indexing from ordinary requests when they require long-running work or specialized resources. Put speech and language-model services behind replaceable provider interfaces rather than scattering provider calls throughout the frontend.
+Separate audio processing and book indexing from ordinary requests when they require long-running tasks or specialized resources. Put speech and model services behind replaceable provider interfaces rather than scattering calls throughout the frontend.
 
 ### 2.3 Mandatory Implementation Principles
 
-- Enforce permissions, ownership, and level progression on the server.
-- Never expose service secrets or API keys to the browser.
-- Store file paths and metadata in the database, not file bytes.
-- Follow the existing project’s service and artifact routing conventions. Do not hardcode localhost in browser code.
-- Mutations must return real data and visibly update the interface, including after reload.
-- Use database transactions and idempotency keys for sensitive actions such as assessment submission and teacher approval.
-- Provide explicit loading, empty, and error states. Never replace an error with demonstration success data.
+- Apply permissions, ownership, and level-transition validation on the server.
+- Secrets and service keys must not reach the browser.
+- The database stores file paths and metadata, not binary contents.
+- Use the existing project’s routing conventions for service URLs and interface paths; do not hardcode localhost in browser code.
+- Mutating requests must return actual data, and their results must be reflected in the interface and after reloading.
+- Use database transactions and idempotency keys for sensitive events such as assessment submission and teacher approval.
+- Services must provide clear loading, empty, and failure states; do not replace errors with demonstration success data.
 
 ---
 
-## 3. Visual Identity and User Experience
+## 3. Identity and User Experience
 
 ### 3.1 Visual Identity
 
@@ -109,27 +106,25 @@ Separate audio processing and book indexing from ordinary requests when they req
 |---|---|
 | Primary color | `#6D4C3D` |
 | Secondary color | `#994703` |
-| Tertiary color | `#4E3A00` |
+| Third color | `#4E3A00` |
 | Neutral | `#FDF9F3` |
-| Headlines | Kufam |
+| Headings | Kufam |
 | Body text | Noto Naskh Arabic |
-| Labels and UI | Cairo |
+| Labels and controls | Cairo |
 
-- Light theme: “Natural Parchment” — القرطاس الطبيعي.
-- Dark theme: “Night Manuscripts” — المخطوطات الليلية.
-- Use the official logo rather than an improvised text substitute when the asset is available.
-- The reference website and video inspire composition and motion, not copied content.
-- Do not use emojis.
+- The light theme is “Natural Parchment” (القرطاس الطبيعي), and the dark theme is “Night Manuscripts” (المخطوطات الليلية). The theme-switching button appears after login, within the dashboards for students, teachers, moderators, and the site administrator. The landing page uses the light “Natural Parchment” theme, as it is a professional landing page intended to attract users.
+- Use the official logo; do not substitute an improvised text logo when the official logo is available.
+- Do not use emoji.
 
 ### 3.2 Accessibility and Responsiveness
 
-- Support mobile, tablet, and desktop layouts.
-- Implement genuine RTL behavior, including correct treatment of numbers, citations, and mixed-direction text.
+- Interfaces must suit mobile, tablet, and desktop.
+- Implement genuine RTL direction, with correct handling of numbers, references, and mixed-direction text.
 - Target WCAG 2.2 AA and verify it before claiming compliance.
-- Support keyboard navigation, visible focus, meaningful control names, and dialog focus management.
-- Do not communicate success or errors through color alone.
-- Persist theme preference and respect reduced motion.
-- Confirm destructive actions. Explain why an action is unavailable rather than showing an unexplained disabled button.
+- Support keyboard navigation, a clear focus indicator, meaningful button names, and dialog focus management.
+- Do not communicate error or success through color alone.
+- Save the theme preference and respect reduced motion.
+- Destructive buttons require confirmation. Explain why an action cannot be performed instead of showing an unexplained disabled button.
 
 ---
 
@@ -137,33 +132,33 @@ Separate audio processing and book indexing from ordinary requests when they req
 
 ### 4.1 Approved Roles
 
-| Role | Access Boundary |
+| Role | Access Boundaries |
 |---|---|
-| Guest | Public pages and the informational landing assistant |
+| Guest | Public pages and the informational assistant |
 | Student | Their own learning data, assessments, conversations, and the public scholar directory |
-| Teacher pending review | Their account, application, and documents; cannot receive student questions |
-| Approved teacher | Their scholarly profile, conversations, referrals, and availability |
-| Scholarly content moderator | Content, sources, and scientific review explicitly assigned to them |
-| Administrator | Platform administration through explicit, audited permissions |
+| Teacher under review | Their account, application, and documents; cannot receive student-question referrals |
+| Approved teacher | Their scholarly profile, conversations, referrals, and availability status |
+| Scholarly content moderator | Content, sources, and scholarly review specifically authorized for them |
+| Administrator | Platform administration under explicit, recorded permissions |
 
-A content moderator does not automatically receive access to private teacher documents. A teacher cannot view another teacher’s conversations or all students’ data.
+A content moderator does not automatically have permission to read private teacher documents. A teacher cannot see another teacher’s conversations or all student data.
 
 ### 4.2 Identity and Authentication
 
-- Use a reliable managed identity provider; do not build password storage from scratch.
-- Require verified email and secure account recovery.
-- Support passkeys where the selected provider permits.
-- Require two-factor authentication for administrators and teachers; make it optional for students.
-- Provide session/device visibility and session revocation.
-- Rate-limit authentication attempts and protect against abuse.
-- Check account status on the server for every sensitive operation.
-- Selecting the actual identity provider and verifying its capabilities is an implementation prerequisite. Do not advertise features that the integration does not support.
+- Use a trusted managed identity provider; do not build local password storage from scratch.
+- Verified email and secure account recovery.
+- Support passkeys where available from the selected provider.
+- Two-step verification is mandatory for administrators and teachers, and optional for students.
+- Show sessions/devices and provide the ability to terminate them.
+- Rate-limit attempts and protect against abuse.
+- Verify account status on the server for every sensitive operation.
+- Selecting the actual identity provider and confirming that its features are available is an implementation prerequisite; the interface must not claim to provide a feature that the integration does not support.
 
 ### 4.3 Teacher Approval
 
-Account creation → email verification and account security → profile and document submission → administrative review → approval, request for additional information, or rejection with a reason.
+Create an account → verify and secure the email → submit the profile and documents → administrative review → approve, request additional information, or reject with a reason.
 
-Uploading a document does not approve it. Teachers cannot assign their own verification badge. Newly updated documents remain under review until accepted.
+Uploading a document is not the same as approving it. A teacher cannot change their own approval badge, and newly updated documents remain under review until the administration accepts them.
 
 ---
 
@@ -171,87 +166,181 @@ Uploading a document does not approve it. Teachers cannot assign their own verif
 
 ### 5.1 Landing Page
 
-Retain the content and interactions from the local landing specification, correcting any promises that conflict with first-release capabilities:
+Build the landing page from scratch; no previous landing page or landing-page specification is to be used as its design source. It must be highly attractive and highly professional, in an Arabic style, and consistent with the identity approved in 3.1: colors `#6D4C3D`, `#994703`, `#4E3A00`, and `#FDF9F3`; Kufam for headings, Noto Naskh Arabic for body text, and Cairo for labels and controls; and the light “Natural Parchment” theme. It must not include promises that exceed first-release capabilities. It includes:
 
-- Sticky header, logo, theme switching, and unified login.
-- Links to About, Smart Simulator, Features, Tracks, Methodology, and FAQ.
+- A sticky header, logo, and unified login.
+- Links to About the Platform, the Smart Simulator, Features, Tracks, Methodology, and Frequently Asked Questions.
 - No level-assessment button in the navigation bar.
-- Student and teacher registration buttons open the correct account context.
-- The simulator is for scholarly texts and must not include Surah Al-Fatiha.
-- Clearly label a demonstrative simulator as such. Do not present fake recording controls as a real service.
-- Include platform features, the Hadith with its source and copy/share controls, tracks, methodology, FAQ, and student CTA.
+- Student or teacher registration opens the correct context.
+- The simulator is for scholarly texts and shows samples only from texts currently available on the platform; it must not show or assume samples from outside the platform.
+- In the first release, simulator samples must be from “The Forty Hadith of al-Nawawi” (الأربعون النووية) only.
+- If the simulator is demonstrative, label it clearly; do not show fake audio-recording buttons as a real service.
+- Platform features, a Hadith and its source with copy and share controls, tracks, methodology, FAQ, and a student CTA.
 - No certificate promises in track cards.
-- Old wording about free or paid services does not create unapproved payment requirements.
+- Track cards show the Hadith track as available with “The Forty Hadith of al-Nawawi” (الأربعون النووية); all other tracks and texts are closed and labeled “Coming soon.”
+- The page must not promise that users can ask teachers directly; access to a teacher is by referral from the scholarly assistant.
+- Claims about free or paid services in old text do not create unapproved payment requirements.
 
-### 5.2 About Page
+### 5.2 About the Platform Page
 
-Route `/about`; display “قريباً” (“Coming soon”) and a home-return button according to the current specification until additional content is approved.
+Route `/about`; the following content is displayed with a professional design in an Arabic style:
+
+**“About the Platform”**
+
+**About the Mateen Platform**
+
+**Platform Overview**
+
+**“Mateen”**
+
+It is an integrated intelligent learning environment dedicated to serving Islamic scholarly texts and didactic poems. We combine the latest audio-processing and artificial-intelligence technologies with an approved scholarly methodology to give students of knowledge an interactive experience that makes it easier to memorize scholarly texts, master their wording, and understand their meanings with high accuracy and reliability.
+
+**Vision and Mission**
+
+**Our Vision**
+
+For the “Mateen” platform to become the world’s leading digital reference environment for facilitating mastery and understanding of scholarly texts, and a pioneering model for employing artificial intelligence grounded in scholarly integrity and human oversight.
+
+**Our Mission**
+
+To empower students of Islamic knowledge and educational institutions with advanced technological tools that combine accurate audio processing of scholarly texts, exclusive documentation from verified references, and intelligent referrals from the scholarly assistant to approved teachers and scholars.
+
+**Core Values:**
+
+**Authenticity and Authority:**
+
+Exclusive reliance on approved and verified commentary books, with the source and page included in every answer.
+
+**Scholarly Integrity:**
+
+Complete abstention from issuing fatwas or speculation, and adherence to the bounds of scholarly texts and their Islamic legal principles.
+
+**Responsible Innovation:**
+
+Harnessing artificial intelligence and audio-processing technologies to serve the content without compromising its dignity and rigor.
+
+**Human Partnership:**
+
+Belief that technology is an aid, not a replacement for an approved scholar and teacher.
+
+**The Platform’s Pillars (What Do We Offer?)**
+
+1. **Intelligent Audio Recitation:**
+
+   A segment-based processing engine that listens to the student’s recitation and level of memorization of the text, and immediately detects omissions, additions, and ordering errors.
+
+2. **Documented Scholarly Assistant (RAG):**
+
+   An answer engine limited to approved commentary books, providing precise answers supported by book titles and page numbers.
+
+3. **Scholars’ Bridge:**
+
+   An intelligent referral system that connects students with approved teachers and specialists when advanced evaluation is needed or questions fall outside the sources.
+
+**Scholarly Safeguards and Integrity**
+
+We place scholarly integrity at the forefront of our priorities through strict technical governance rules:
+
+**No Fatwas or Independent Legal Reasoning:**
+
+The assistant’s role is limited to explaining the wording of scholarly texts based only on the registered commentary books.
+
+**Recitation Limited to Scholarly Texts:**
+
+The audio-correction engine is limited to scholarly texts and didactic poems, and does not handle the Noble Qur’anic text.
+
+**Referral to Specialists:**
+
+Any inquiry outside the scope of approved references is automatically referred to the portal for approved scholars.
+
+**Validation and Field Impact**
+
+Mateen was not built as a theoretical idea; it began with a field study that included
+
+**61 respondents**
+
+from students of Islamic knowledge at the Islamic University of Madinah and students of Islamic universities in Libya:
+
+**78.7%**
+
+confirmed that clearly documenting the original source was their foremost condition for trust.
+
+**63.9%**
+
+agreed that the “scholarly assistant integrated with scholar referral” model was the ideal and most suitable solution for their learning journey.
+
+**Call to Action**
+
+**Begin your journey to mastering scholarly texts today**
+
+[ Try live recitation ] — [ Explore available texts ]
 
 ### 5.3 Account Modal
 
-A unified modal with student and teacher tabs and login/register modes. Successful authentication must reflect the real account and role, not merely close the modal.
+A unified modal with student and teacher tabs, and a switch between login and account creation. Success must be tied to the account data and its actual role, not merely to closing the modal.
 
 ### 5.4 Informational Assistant
 
-Answer platform-information questions only, using the approved landing-page responses. For personalized questions, invite the visitor to sign in and provide a login action. This is not a general scholarly assistant for anonymous visitors.
+Answers questions about the platform only, according to the platform information approved in this document. For personalized questions, it invites the user to log in and provides an option to open the login modal. It does not act as a general scholarly assistant for visitors.
 
 ---
 
 ## 6. Student Portal
 
-The following routes are implementation guidance. They may be adapted to the existing routing structure without changing their functions.
+The following routes are suggested implementation organization and may be adapted to the project’s conventions without changing their functions.
 
 | Page | Suggested Route | Purpose |
 |---|---|---|
-| Home | `/student` | Welcome, resume study, performance overview |
-| Tracks | `/student/tracks` | Available learning tracks |
-| Track details | `/student/tracks/:trackId` | Levels and their states |
-| Study | `/student/study/:textId` | Source text, recitation, and commentary |
+| Home | `/student` | Welcome, follow-up, and performance summary |
+| Tracks | `/student/tracks` | Available tracks |
+| Track details | `/student/tracks/:trackId` | Levels and their status |
+| Study | `/student/study/:textId` | Text, recitation, and commentaries |
 | Reviews | `/student/reviews` | Due and spaced reviews |
 | Assessments | `/student/exams` | Eligibility, attempts, and results |
-| Assessment attempt | `/student/exams/:attemptId` | Both sections, timing, and resumption |
+| Assessment attempt | `/student/exams/:attemptId` | Both sections, time, and resumption |
 | Scholars | `/student/scholars` | Specialties and availability |
-| Scholar profile | `/student/scholars/:teacherId` | Public scholarly information and ijazat |
-| Messages | `/student/messages` | Direct questions and referrals |
+| Scholar profile | `/student/scholars/:teacherId` | Public information and ijazat |
+| Messages | `/student/messages` | Conversations referred from the scholarly assistant to teachers |
 | Settings | `/student/settings` | Account, privacy, and notifications |
 
 ### 6.1 Home
 
-Show a personal welcome, the last studied text and saved position, a resume action, memorization progress, recitation results, recurring word mistakes, due reviews, and the next assessment. Provide an honest new-student state rather than fabricated progress.
+Welcome the student; show the last text and saved position, a continue button, memorization progress, recitation results, frequently mistaken words, due reviews, and the next assessment. Show a new student’s starting state without fabricating progress.
 
-### 6.2 Initial Tracks and Content
+### 6.2 Tracks and Initial Content
 
-| Track | Level | Text |
-|---|---|---|
-| Creed — العقيدة | Preparatory — التمهيدي | Nawaqid al-Islam — نواقض الإسلام |
-| Creed — العقيدة | Level One — الأول | Al-Qawa‘id al-Arba‘ — القواعد الأربع |
-| Hadith — الحديث | Preparatory — التمهيدي | The Forty Nawawi Hadith — الأربعون النووية |
-| Tajwid and Qira’at — التجويد والقراءات | Preparatory — التمهيدي | Tuhfat al-Atfal — تحفة الأطفال |
+| Track | Level | Text | First-Release Status |
+|---|---|---|---|
+| Creed | Preparatory | Nullifiers of Islam (نواقض الإسلام) | Coming soon |
+| Creed | Level One | The Four Principles (القواعد الأربع) | Coming soon |
+| Hadith | Preparatory | The Forty Hadith of al-Nawawi (الأربعون النووية) | Available |
+| Tajwid and Qira’at | Preparatory | Tuhfat al-Atfal (تحفة الأطفال) | Coming soon |
 
-- This is the only initially available catalog.
-- Do not present additional levels or texts as published.
-- Level states: available, locked, in progress, passed.
-- The preparatory level is initially accessible. A subsequent level requires passing its predecessor.
-- Students may directly attempt the assessment for an accessible level without completing its study. This does not provide access to the assessment of a later locked level.
-- When no subsequent published level exists, show completion of the available content rather than inventing another level.
+- This is the only initial content catalog. All texts and tracks are closed and labeled “Coming soon,” and nobody can access them, except for the Hadith track and the text “The Forty Hadith of al-Nawawi” (الأربعون النووية), which will be the only text available at the platform’s first launch.
+- Do not add later levels or other texts as if they were published.
+- Level statuses: available, locked, in progress, passed, Coming soon (unpublished and inaccessible).
+- The preparatory level is available initially; the next level requires passing the preceding level. In the first release, only the preparatory level in the Hadith track is opened. Anything labeled “Coming soon” cannot be opened by passing another level and cannot be studied or assessed until published.
+- A student may directly take the assessment for an available level without completing its study; this does not unlock the assessment for a later locked level.
+- If no subsequent level has been published, show completion of the available content rather than inventing a new level.
 
 ### 6.3 Study and Review
 
-- Display the approved, vocalized source text and save the study position.
-- Support word-level recitation comparison.
-- Provide access to commentary, the scholarly assistant, and referrals.
-- Save memorization mistakes and progress without requiring permanent audio storage.
-- Schedule spaced reviews using actual performance; show and update review dates.
-- Document and test the scheduling algorithm during implementation. Do not claim scientific diagnosis that the system does not provide.
+- The approved text, with diacritics, for reading, with the stopping position saved.
+- Word-level recitation and comparison.
+- Access to commentary, the scholarly assistant, and referrals when needed.
+- Save memorization mistakes and progress without requiring audio storage.
+- Schedule spaced reviews based on actual performance, show the review date, and update it after the review is completed.
+- Document the scheduling algorithm during implementation and make it testable; do not claim a scientific diagnosis that does not exist.
 
 ### 6.4 Scholars and Messages
 
 - Filter scholars by specialty and availability.
-- Show scholarly information, approved ijazat, and authorized redacted public document copies.
-- Start a question with an approved, available teacher. Recheck availability when sending, not only when displaying the card.
-- Text-only conversations: no files, images, recordings, or video.
-- Referrals include the studied text, student question, and why the assistant could not answer.
-- Display a message after server confirmation. Provide explicit failure and retry handling without duplicates.
+- Show scholarly information, approved ijazat, and authorized redacted display copies.
+- The scholar directory and profiles are for information only; a student cannot start a question to a teacher from them.
+- A conversation with a teacher can be created only through a referral from the scholarly assistant. Verify the teacher’s approval and availability when creating the referral, not only when displaying the card.
+- Text-only conversations; no files, images, recordings, or video.
+- The referral carries the text being studied, the student’s question, and the reason the assistant could not answer.
+- A message appears in the conversation only after server confirmation; show sending failures and allow retries without duplication.
 
 ---
 
@@ -259,50 +348,50 @@ Show a personal welcome, the last studied text and saved position, a resume acti
 
 ### 7.1 What Is Assessed
 
-Word correctness and sequence, substitutions, and omissions/skipped words. Diacritics and pronunciation quality are outside the first release.
+Word correctness and order, substitutions, and skipped/omitted words. Diacritics and pronunciation quality are not assessed in the first release.
 
-Silence alone is not an omission. Confirm a skipped word when the student proceeds beyond it. Unclear audio must not become a confirmed memorization error.
+Silence alone does not count as an omission; confirm a skipped word only after the student moves on to the next word. Unclear audio must not be turned into a confirmed memorization error.
 
-### 7.2 Processing Flow
+### 7.2 Workflow
 
 1. Select the approved text and passage.
 2. Obtain microphone permission and check service connectivity.
-3. Send numbered audio chunks.
-4. Transcribe audio and align it against the reference text through an independent matching service.
-5. Show provisional results, then confirm findings once stable.
-6. Save performance summaries and progress; clean up audio according to retention policy.
+3. Send audio in numbered chunks.
+4. Transcribe the audio and match it against the text in an independent service.
+5. Show incremental results, then finalize the judgment once it has stabilized.
+6. Save the performance summary and progress, and clean up the audio according to the retention policy.
 
 ### 7.3 Feedback
 
-- Practice: immediately highlight an error once confirmed, with information beyond color alone.
-- Allow uninterrupted continuation rather than mandatory stopping, then show a session summary.
-- Provisional results may change and must not immediately become grades or permanent mistakes.
-- Assessment: show recording and connectivity status without revealing answers or coaching corrections during the attempt.
-- Failure: request repetition or show service unavailability. Never invent success or failure.
+- During practice: immediately highlight a confirmed error, using a description that does not rely on color alone.
+- The student continues without being forced to stop, then sees a summary after the session.
+- Provisional results may be updated and must not immediately become grades or a final mistake record.
+- During an assessment: show recording and connection status without revealing answers or providing corrective coaching during the attempt.
+- If unavailable: ask the student to repeat the passage or show that the service is unavailable; do not show fabricated success or failure.
 
 ### 7.4 Speech Provider Selection
 
-The initial evaluation candidate is OpenAI, based on documentation reviewed during the agreement:
+Initial evaluation candidate: OpenAI, according to the documentation reviewed during the agreement:
 
 - `gpt-live-transcribe` for live audio.
 - `gpt-transcribe` for completed recordings.
-- Comparison candidate: an ElevenLabs Scribe version supporting the required Arabic workflow at implementation time.
+- Alternative for comparison: an ElevenLabs Scribe version that supports the use case and Arabic at implementation time.
 
-This is an initial evaluation choice, not proof of superior Arabic accuracy. Revalidate model names, availability, regions, and terms during implementation.
+This is an initial evaluation choice, not proof that it is best for Arabic. Recheck model names, availability, regions, and terms at implementation time.
 
-According to the reviewed documentation, the named live model does not provide word-level timestamps or confidence scores. Do not fabricate them. Implement word alignment within the platform and select an alternative if the results do not meet recitation requirements.
+According to the reviewed documentation, the mentioned real-time model does not provide word-level timestamps or confidence scores; these must not be fabricated. Implement word matching within the platform and select an alternative if the results do not meet recitation requirements.
 
-### 7.5 Speech Launch Condition
+### 7.5 Audio Launch Condition
 
-Compare providers using recordings authorized for this purpose. Include target vocabulary, varied speakers, background noise, pauses, and deliberate substitutions and omissions. Measure:
+Compare providers using recordings authorized for use, including text vocabulary, diverse speakers, noise and pauses, and deliberate omissions and substitutions. Measure:
 
-- Transcript accuracy and true-error detection.
-- False positives, especially correct recitation marked as wrong.
-- The model’s tendency to silently repair incorrect words.
-- Feedback latency and transcript stability.
-- Cost, availability, and retention terms.
+- Text accuracy and detection of actual errors.
+- False errors, especially marking a correct response as wrong.
+- The model’s tendency to automatically repair an incorrect word.
+- Time to deliver feedback and transcription stability.
+- Cost, service availability, and retention terms.
 
-Do not supply the full assessment answer as a transcription hint in a way that encourages the model to complete words the student did not say. Finalize the provider using documented measurements rather than marketing claims.
+Do not pass the complete assessment answer as a hint to the model in a way that encourages it to complete what the student did not say. Confirm the provider decision based on measured results before launch, not on marketing claims.
 
 ---
 
@@ -310,70 +399,70 @@ Do not supply the full assessment answer as a transcription hint in a way that e
 
 ### 8.1 Approved Settings
 
-| Setting | Value |
+| Item | Value |
 |---|---|
-| Total questions | 30 |
+| Number of questions | 30 |
 | Written | 15 |
 | Oral | 15 |
 | Total duration | 30 minutes of active time |
 | Question weight | 1 mark |
-| Total marks | 30 |
-| Passing score | At least 25/30 |
-| Separate minimum per section | None |
-| Retry after failure | 24 hours after the failed attempt ends |
-| Studying the level first | Not required |
-| Progression | Complete both sections and achieve the passing total |
+| Total | 30 |
+| Passing | 25/30 or more |
+| Separate minimum for each section | None |
+| Retake after failure | After 24 hours from the end of the failed attempt |
+| Study the level before the assessment | Not required |
+| Progression | Complete both sections and achieve a passing score |
 
-“Passing both sections” means taking both components and achieving the approved overall total, not imposing unapproved separate section thresholds. Unanswered questions at time expiry score zero; not every response needs to be correct.
+“Passing both sections” means completing both components within the assessment and achieving the approved total; it does not mean a separate passing requirement that has not been approved. Unanswered questions when time expires score zero; not all answers need to be correct.
 
 ### 8.2 Question Construction
 
-- Randomly select completion passages from a published, approved version of the current level’s texts.
-- Oral: the student hears or sees an approved starting passage and recites the required continuation without seeing the answer.
-- Written: the student completes text without needing diacritics.
-- Freeze the question set, order, source version, and grading rules when the attempt is created.
-- Do not rerandomize after reconnection or page reload.
-- Validate the question pool even for short texts. Do not invent material to reach the required number.
-- Keep answer keys on the server; do not send them to the browser during an attempt.
+- Randomly select completion passages from a published, approved version of texts at the same level.
+- Oral: the student hears/sees an approved beginning and completes the required continuation aloud without being shown the answer.
+- Written: the student completes text in writing without being required to add diacritics.
+- Freeze the question set, order, text version, and grading rules when the attempt is created.
+- Do not randomize again after reconnection or page refresh.
+- Validate the question pool for short texts too; do not invent material to reach the required number.
+- Keep the reference answers on the server; do not send them to the browser during the attempt.
 
 ### 8.3 Grading
 
-- Award one mark for an answer matching the required passage and zero otherwise. No fractional marks or negative marking without an approved policy change.
-- Ignore diacritics, tatweel, and nonsemantic whitespace/punctuation differences in written responses.
-- Do not accept a synonym in place of a memorized word; this is a textual memorization assessment.
+- Award one mark for an answer matching the required passage and zero otherwise; no fractional marks or negative marking without an approved policy change.
+- Ignore diacritics, tatweel, and nonsemantic differences in spacing and punctuation in written responses.
+- Do not accept a synonym in place of a word; this is a textual memorization assessment.
 - Do not erase meaningful letter differences through broad, unreviewed normalization.
-- Grade oral responses using finalized transcription. Unevaluable audio is a technical condition requiring repetition/review, not an automatic zero due to service failure.
-- A language model must not be the sole authority for a grade.
-- Reveal results and mistake review after submission, not beforehand.
+- Compare oral responses against the final transcription. Audio that cannot be evaluated is a technical condition requiring repetition/review, not an automatic zero caused by a service failure.
+- A language model must not be the sole authority for the grade: “Rely on a deterministic text-matching engine (Deterministic Matching Engine) to calculate the final score (0 or 1), with the language model (LLM) limited to phrasing feedback and explaining mistakes, without participating in the pass/fail decision.”
+- Show results and mistake review after the assessment is submitted, not before.
 
 ### 8.4 Attempt States
 
 `created → in_progress → paused_connection → in_progress → submitted → grading → passed | failed`
 
-Use `technical_review` where an issue prevents fair grading. Do not automatically treat a technical problem as an academic failure that imposes the retry waiting period.
+`technical_review` may be used when a problem prevents fair grading. Do not automatically treat a technical failure as an academic failure that imposes the waiting period.
 
 ### 8.5 Timing, Disconnection, and Resumption
 
-- The server is authoritative for elapsed time, remaining time, and the current question.
-- Save confirmed answers, question position, and periodic time checkpoints.
-- Use server-side heartbeats and disconnect detection. Do not trust a client-supplied pause action or time value.
-- On confirmed disconnection, freeze the attempt at the last trusted checkpoint, disable answering, and hide question content while paused.
-- Reconnect to the same attempt, questions, position, and saved remaining time; do not grant a new duration.
-- Restore a local draft when possible, but do not count an answer until the server confirms it. Clearly communicate loss of unconfirmed data.
-- Number and acknowledge audio chunks. Do not grade an incomplete recording as complete.
+- The server is the source of truth for elapsed time, remaining time, and question status.
+- Save confirmed answers, the question position, and periodic time checkpoints.
+- Use server-side heartbeats and disconnection detection; the server must not trust a client “pause” button or client-supplied time.
+- On a confirmed disconnection: freeze the attempt at the last trusted checkpoint, disable answers, and hide question content while paused.
+- After reconnection: restore the same attempt, questions, current question, and saved time; do not grant a new duration.
+- Restore a local draft where possible, but do not count an answer without server confirmation. Clearly explain any loss of data that was not confirmed as saved.
+- Number audio chunks and acknowledge receipt; do not grade a truncated recording as complete.
 - Prevent conflicting simultaneous active sessions for the same attempt.
-- Duplicate requests or reconnects must not duplicate answers, time deductions, or marks.
-- Log repeated disconnects for review; do not automatically interpret them as cheating.
-- The actual cause of an internet disconnection cannot be proven absolutely. This is a recovery mechanism, not comprehensive exam proctoring.
+- Duplicate submissions or reconnects must not duplicate answers, time deductions, or marks.
+- Log repeated disconnections for review; do not automatically interpret them as cheating.
+- The actual cause of an internet disconnection cannot be proven absolutely. This is a recovery mechanism, not a comprehensive exam-proctoring system.
 - Automatically submit saved answers when 30 active minutes have elapsed.
 
-### 8.6 Retry and Progression
+### 8.6 Retake and Progression
 
-- Calculate `retryAvailableAt` on the server as 24 hours after the failed attempt ends.
+- Calculate `retryAvailableAt` on the server, 24 hours after the failed attempt ends.
 - Show the student the availability time and remaining wait.
-- Do not create another attempt when a resumable attempt exists for that level.
-- Record success and unlock the next level consistently in the database, safely handling repeated requests.
-- Later policy edits must not silently alter ongoing attempts or historical results.
+- Do not start a new attempt if the student has a resumable attempt for the same level.
+- Record a pass and unlock the next level consistently in the database, safely handling repeated requests.
+- Later changes to the assessment policy must not silently alter ongoing attempts or historical results.
 
 ---
 
@@ -381,29 +470,29 @@ Use `technical_review` where an issue prevents fair grading. Do not automaticall
 
 ### 9.1 Knowledge Preparation
 
-Use legally authorized sources with book, author, edition, volume, and page metadata. Review extracted text before indexing. Distinguish PDF file-page numbers from printed page numbers.
+Use legally authorized sources, with book, author, edition, volume, and page metadata, and review extracted text before indexing. Distinguish PDF file page numbers from printed page numbers.
 
 Associate every passage with a source version and approval status. Draft or withdrawn sources must not support new answers.
 
-### 9.2 Answering Flow
+### 9.2 Answering Workflow
 
-1. Identify the question’s scope, studied text, and context.
-2. Perform lexical and semantic search over approved sources only.
+1. Identify the scope of the question, the text being studied, and the context.
+2. Perform lexical and semantic searches over approved sources only.
 3. Retrieve sufficient passages linked to references.
 4. Produce a bounded explanation or a clearly identified quotation grounded in those passages.
-5. Verify that every citation exists and corresponds to its source text.
+5. Verify that every citation exists and corresponds to the source text.
 6. Answer, or abstain and offer a referral.
 
-Do not claim that RAG eliminates hallucinations. Evaluate Arabic quality, source adherence, and abstention. Pin the chosen model version in configuration and update it only after evaluation.
+Do not claim that RAG completely prevents hallucinations. Evaluate Arabic quality, adherence to sources, and abstention. Pin the selected model version in configuration and update it only after evaluation.
 
 ### 9.3 Referrals
 
-- Refer when sources do not cover the question, evidence is insufficient, or human guidance is needed.
+- Refer when the question falls outside the sources, evidence is insufficient, or human guidance is needed.
 - Show the student the context that will be shared with the teacher.
-- Transfer the studied text, question, and referral reason without unnecessary private information.
-- Select an approved, available teacher or show an honest waiting state; never invent availability.
-- Students can ask teachers directly without first using the assistant.
-- Treat source text and messages as untrusted data rather than system instructions to resist prompt injection.
+- Transfer the text being studied, the question, and the reason for referral without copying unnecessary private information.
+- Select an approved, available teacher, or show an honest wait-for-availability state if none is available; do not fabricate teacher availability.
+- Students cannot ask teachers directly; the scholarly assistant is the sole entry point for student questions and refers complex questions or questions outside the sources to a teacher. This preserves the role of artificial intelligence and prevents the platform from becoming a conventional messaging platform.
+- Treat source text and messages as untrusted data with respect to system instructions, to prevent prompt injection.
 
 ---
 
@@ -411,26 +500,26 @@ Do not claim that RAG eliminates hallucinations. Evaluate Arabic quality, source
 
 | Page | Functions |
 |---|---|
-| Home | Pending questions, referrals, recent conversations, response activity |
-| Questions and messages | Direct/referral filters, response status, question context, text replies |
+| Home | Pending referrals, recent conversations, response activity |
+| Referrals and messages | Filter referrals by response status, view question context and referral reason, send text replies |
 | Scholarly profile | Biography, specialties, teachers, ijazat, and review status |
 | Settings | Account and notifications |
 
 ### 10.1 Availability
 
-- Provide a clear “Available for questions / Unavailable” control.
-- Unavailable teachers do not receive new questions or referrals.
-- They retain existing conversations and can reply.
-- Follow-up in an existing conversation remains possible; do not open a new case inside it to bypass availability.
-- Administrative suspension or approval withdrawal is distinct from voluntary unavailability and restricts permissions according to the administrative decision.
+- Clear control: Available for referrals / Unavailable.
+- Unavailable teachers do not receive new referrals.
+- They retain existing conversations and can reply to them.
+- Follow-ups in an existing conversation are allowed; do not create a new case within it to bypass availability.
+- Administrative suspension or withdrawal of approval is distinct from unavailability; it restricts permissions according to the administrative decision.
 
-### 10.2 Questions
+### 10.2 Referrals
 
-Use states such as Awaiting Reply and Answered. Changing a state does not delete conversation history. Search and filters must not reveal unauthorized conversations.
+Use statuses such as Awaiting Reply and Answered. Changing a status does not delete the conversation history. Search and filters must not reveal unauthorized conversations.
 
 ### 10.3 Boundaries
 
-Teachers provide guidance and answers in this release. Do not add video-class dashboards, assignment management, certificate issuance, or permission to change student grades merely because the account is a teacher.
+In this release, the teacher provides guidance and answers. Do not add video-class dashboards, assignment management, certificate issuance, or permission to change student grades merely because the account belongs to a teacher.
 
 ---
 
@@ -438,31 +527,31 @@ Teachers provide guidance and answers in this release. Do not add video-class da
 
 ### 11.1 Home
 
-Show platform activity, learning metrics, review queues, delayed referrals, and significant service issues. Calculate statistics from real data.
+Show platform activity, learning metrics, items awaiting review, delayed referrals, and significant service failures. Calculate statistics from actual data.
 
 ### 11.2 Users
 
-Search and filter by role and account status, display authorized details, and change status/permissions through explicit, audited actions.
+Search and filter by roles and account statuses, display authorized details, and change status/permissions through explicit, recorded actions.
 
 ### 11.3 Teacher Approval
 
-Review profiles and original documents under restricted permissions, then approve, request more information, or reject with a reason. Record reviewer, time, and changes without placing sensitive document contents in general logs.
+Review profiles and original documents under restricted permissions, then approve, request additional information, or reject with a reason. Record who reviewed, when, and what changed, without placing sensitive document contents in general logs.
 
 ### 11.4 Tracks and Content
 
-Support drafting, editing, review, publishing, and archiving of tracks, levels, texts, and ordering. Do not delete a version used by a historical assessment in a way that breaks result references.
+Support drafting, editing, review, publishing, and archiving tracks, levels, texts, and their order. Do not delete a version used in a historical assessment in a way that breaks result references.
 
 ### 11.5 Assessments
 
-Manage passage-selection rules, policies, results, and technical reviews. Section 8 contains the binding defaults; coding agents must not arbitrarily change them.
+Manage passage-generation rules, policies, results, and technical reviews. The binding defaults are in Section 8; coding agents must not change them arbitrarily.
 
 ### 11.6 Sources and Assistant
 
-Approve and index commentaries, investigate answer/citation/referral issues, and withdraw defective sources from new answers.
+Approve and index commentaries, monitor problems with answers, citations, and referrals, and disable a defective source for new answers.
 
 ### 11.7 Reports and Audit
 
-Manage reports, record sensitive administrative actions, confirm destructive operations, and retain the reason, actor, and date.
+Manage reports, record sensitive administrative decisions, confirm destructive operations, and show the reason, actor, and date.
 
 ---
 
@@ -472,52 +561,52 @@ These are functional entities, not mandatory literal table names.
 
 | Domain | Entities and Relationships |
 |---|---|
-| Identity | User, roles/permissions, account status, identity-provider ID, preferences |
-| Teacher | Scholarly profile, specialties, availability, approval application, documents, review decisions, redacted public copies |
+| Identity | User, roles and permissions, account status, identity-provider ID, preferences |
+| Teacher | Scholarly profile, specialties, availability, approval application, documents, review decisions, redacted public copy |
 | Content | Track → ordered levels → texts → approved versions → passages |
-| Study | Track enrollment, progress, saved position, recitation session, word mistakes, scheduled review |
-| Assessment | Versioned policy, attempt, frozen questions, answers, temporary recordings, time checkpoints, result |
+| Study | Student enrollment in a track, progress, saved position, recitation session, word mistakes, scheduled review |
+| Assessment | Versioned policy, attempt, questions frozen for the attempt, answers, temporary recordings, time checkpoints, result |
 | Knowledge | Book/edition, cited passages, approval status, semantic index |
 | Assistant | Question, answer, citations, abstention decision, referral |
-| Messaging | Conversation, authorized participants, direct/referral type, messages, question status |
+| Messaging | Conversation, authorized participants, assistant-referral source, messages, inquiry status |
 | Operations | Notification, preferences, report, audit record, background job, deletion/export request |
 
 ### Data Invariants
 
-- Progress and assessment passages reference a specific text version.
-- Results retain the grading policy used.
-- Clients cannot assign ownership, roles, grades, or approval status.
+- Progress and assessment passages refer to a specific text version.
+- Results retain the grading policy applied to them.
+- Clients cannot assign record ownership, roles, grades, or approval status.
 - Account deletion handles related records, files, and backups according to the published policy.
-- Store timestamps consistently on the server and display them in the relevant time zone.
-- Give messages, answers, and administrative operations identifiers that prevent duplicate processing.
+- Store times consistently on the server and display them in the relevant time zone.
+- Messages, answers, and administrative operations have identifiers that prevent duplicate processing.
 
 ---
 
 ## 13. Service Contracts and Events
 
-Define contracts in OpenAPI before wiring the interface. Validate inputs and regenerate types after contract changes.
+Define contracts in OpenAPI before connecting the interface, validate inputs, and regenerate types when contracts change.
 
 ### 13.1 REST Domains
 
 - Current account, preferences, and authorized sessions.
-- Published tracks, levels, and source texts.
+- Published tracks, levels, and texts.
 - Study progress, reviews, and recitation sessions.
 - Assessment eligibility, attempt creation/resumption/saving/submission, and results.
 - Public scholars and redacted profiles.
 - Conversations, messages, and referrals.
 - Teacher profile, documents, and availability.
-- User, approval, content, source, policy, and report administration.
+- Administration of users, approvals, content, sources, policies, and reports.
 - Notifications and export/deletion requests.
 
 ### 13.2 Realtime Events
 
-Semantic examples: session started, audio chunk, receipt acknowledgement, provisional/final transcript, confirmed word mistake, service status, assessment checkpoint, disconnect/resume, new message, and question-status update.
+Semantic examples: session started, audio chunk, receipt acknowledgment, provisional/final transcription, confirmed word mistake, service status, assessment checkpoint, disconnection/resumption, new message, and question-status change.
 
-Authenticate every connection and verify session ownership. Number chunks, resist duplicates, and handle reconnection. Define audio/message size limits and timeouts during implementation.
+Authenticate every connection and verify session ownership. Number chunks, prevent duplicates, and handle reconnection. Define audio/message size limits and timeouts during implementation.
 
 ### 13.3 Explicit Errors
 
-Distinguish unauthenticated access, forbidden access, missing resources, attempt-state conflicts, expired time, retry cooldown, provider failure, and invalid inputs. Do not expose stack traces or secrets to users.
+Distinguish unauthenticated access, forbidden access, missing resources, attempt-state conflicts, time expiration, assessment-retry cooldown, provider failure, and invalid inputs. Do not expose stack traces or secrets to users.
 
 ---
 
@@ -525,29 +614,29 @@ Distinguish unauthenticated access, forbidden access, missing resources, attempt
 
 ### 14.1 Principles
 
-Collect only necessary data, obtain clear microphone consent, explain processing purposes, and require separate consent for using data to improve models.
+Collect the minimum necessary data, obtain clear microphone consent, explain the purpose of processing, and do not use data to improve models without separate consent.
 
 ### 14.2 Approved Policy
 
 | Data | Policy |
 |---|---|
-| Practice audio | Temporary processing; delete after processing by default, retaining performance results |
-| Assessment audio | Retain for 30 days for review and appeals, then automatically delete |
-| Original teacher documents | Private storage accessible only to authorized qualification reviewers |
-| Public ijazat | Teacher-authorized redacted copies with sensitive information hidden |
+| Practice audio | Temporary processing; delete after processing by default while retaining performance results |
+| Assessment audio | Retain for 30 days for review and appeal, then delete automatically |
+| Original teacher documents | Private storage, accessible only to approval reviewers |
+| Public-profile ijazat | Teacher-authorized redacted copy for publication, with sensitive information hidden |
 | Backups | Daily, retained for 30 days, with restoration testing |
-| Account export/deletion | Identity-verified request, tracked execution, and user notification |
+| Account export/deletion | Identity-verified request, execution tracking, and notification to the requester |
 
-- Explain assessment-audio retention before the attempt begins.
-- Do not copy temporary audio into backups that silently extend retention.
-- Explain how long deleted data may remain in backups. Reapply deletion records after restoration.
-- Do not claim provider-side deletion beyond the provider’s actual capabilities and terms. Review audio/model provider retention and processing regions before launch.
-- Specify remaining retention periods for messages, rejected teacher applications, and audit records in the launch privacy policy. Do not invent indefinite retention.
-- Encrypt transit and storage, use short-lived signed links for private files, and never store signed links as permanent database references.
+- Explain the assessment-audio policy before the assessment starts.
+- Do not copy temporary audio files into backups that extend retention without disclosure.
+- Tell the user how long deleted data remains in backups; after restoring a backup, reapply deletion records.
+- Do not claim that data has been deleted from a provider except in accordance with its actual capabilities and terms. Review the retention requirements of the audio and model providers and their processing regions before launch.
+- Set detailed retention periods for messages, documents from rejected approval applications, and audit logs in the legal launch policy; the developer must not invent permanent retention periods.
+- Encrypt data in transit and at rest, use short-lived signed file URLs, and do not store permanent signed URLs in the database.
 
 ### 14.3 Legal Launch Condition
 
-Determine operating jurisdiction, intended age groups, legal basis, required consent, and cross-border transfers. This document is not a legal compliance certification. Do not assume minors may register without guardian consent in every jurisdiction.
+Determine the operating country, age groups, legal basis, required consents, and cross-border data transfers. This document is not a legal-compliance certificate. Do not assume that accepting minors without guardian consent is permitted in every country.
 
 ---
 
@@ -555,36 +644,36 @@ Determine operating jurisdiction, intended age groups, legal basis, required con
 
 ### 15.1 Security
 
-- Check permissions for every request and event subscription.
-- Prevent access to another user’s attempts, conversations, or documents by changing IDs.
-- Validate uploaded files, types, and sizes and scan them before making them available to reviewers.
-- Protect sessions; handle CSRF when using cookies, XSS, SQL injection, and request-rate abuse.
-- Separate document-review permissions from content-management permissions.
-- Do not place audio, documents, or private message contents in general operational logs.
-- Audit administrative actions and protect records from ordinary modification.
-- Treat prompts and sources as untrusted inputs; never execute instructions extracted from them.
+- Check permissions on every request and every event subscription.
+- Prevent access to another user’s attempts, conversations, and documents by changing an identifier.
+- Validate uploaded files, their type and size, and scan them before making them available to a reviewer.
+- Protect sessions and use CSRF protection with cookies, as well as protection against XSS, SQL injection, and request-rate abuse.
+- Separate document-review permissions from content-administration permissions.
+- Do not log audio, documents, or private message text in general operational logs.
+- Record administrative operations and protect the log from ordinary modification.
+- Treat prompts and sources as untrusted inputs; do not execute instructions extracted from them.
 
 ### 15.2 Notifications
 
-- In-app: replies, referrals, results, reviews, and approval states.
-- Email: important and security-related events.
-- User controls for learning and message notifications.
-- Do not include private questions or document contents in email.
-- No SMS or browser push in the first release.
-- Send through background jobs with safe retries and deduplication.
+- In-platform: replies, referrals, results, reviews, and approval statuses.
+- Email for important and security-related events.
+- User control over learning and message notifications.
+- Do not put private question content or documents in email.
+- No SMS or browser notifications in the first release.
+- Send notifications through background jobs, with safe retries that do not produce duplicate messages.
 
 ---
 
 ## 16. Operations and Quality
 
-- Monitor backend/provider errors, latency, and failed jobs.
-- Separate development and production environments and data.
-- Use reviewable database migrations and backups before sensitive changes.
-- Automate expired-file cleanup and verify actual deletion.
-- Monitor speech/model costs and usage limits without silent overruns.
-- On provider failure, explain the issue and protect progress; do not substitute fabricated success.
-- Provider failover during a session must preserve chunks and avoid duplicate results and must be tested before activation.
-- Document required configuration without committing secrets.
+- Monitor server errors, speech providers, response time, and job failures.
+- Separate development and production environments and their data.
+- Use reviewable database migrations and take a backup before sensitive changes.
+- Provide automatic cleanup jobs for expired files, and test that deletion actually occurred.
+- Monitor audio and model costs and usage limits without silent overages.
+- When a provider fails, show its status and protect student progress; do not change grading to fabricated success.
+- Switching to an alternative provider during a session must not lose chunks or duplicate results, and must be tested before use.
+- Document required settings without putting secrets in the repository.
 
 ---
 
@@ -592,792 +681,102 @@ Determine operating jurisdiction, intended age groups, legal basis, required con
 
 ### Accounts and Permissions
 
-- Registration tabs select the intended role; new teachers cannot receive questions before approval.
-- Students cannot access another student’s data; teachers cannot access unrelated conversations.
-- Content moderators cannot read original ijazat without explicit authorization.
-- Teachers and administrators must complete two-factor authentication before using privileged functions.
+- The registration tab determines the requested role, and a new teacher cannot receive referrals before approval.
+- A student cannot access another student’s data, and a teacher cannot access a conversation that is not theirs.
+- A content moderator cannot read original ijazat documents without permission.
+- Two-step verification is enforced for teachers and administrators before they use their permissions.
 
 ### Study and Tracks
 
-- Display only the three tracks and four texts in the approved catalog.
-- Restore the student’s study position after login/reload.
-- Study completion alone does not unlock the next level.
-- An accessible level’s assessment can be attempted without prior study.
+- Only “The Forty Hadith of al-Nawawi” (الأربعون النووية) is opened. The other tracks and texts appear in the table with a “Coming soon” label and cannot be accessed, studied, or assessed; the server rejects such access as well.
+- The student returns to their saved position after logging in or refreshing.
+- Completing study alone does not open the next level.
+- The assessment for an available level can be taken without prior study.
 
 ### Recitation
 
-- Technical evaluation distinguishes correct words, substitutions, and omissions.
-- Pauses do not automatically become omissions.
-- Practice displays stable errors immediately without forcing a stop.
-- Do not reveal assessment answers during an attempt.
-- Do not grade diacritic errors in the first release.
+- The technical test distinguishes correct words, substitutions, and skipped words.
+- A pause does not automatically become an omission.
+- Practice immediately shows a stable error and does not force the student to stop.
+- Assessment answers are not revealed during the attempt.
+- Diacritic errors are not counted in the first release.
 
 ### Assessments
 
-- Every attempt has 15 written and 15 oral questions.
-- Total active time is 30 minutes and total marks are 30.
-- 24/30 fails; 25/30 passes. There is no hidden separate section threshold.
-- Correct written answers without diacritics are accepted.
-- Block retry before 24 hours and allow it afterward.
-- Reconnection restores questions, current position, and saved time without rerandomization.
-- Reloading or changing device time does not grant additional time.
-- Duplicate submission does not duplicate results or level unlocking.
-- Time expiry submits saved answers and scores unanswered questions as zero.
-- Audio service failure does not automatically fail the student without technical handling.
+- Each attempt consists of 15 written and 15 oral questions.
+- Total active time is 30 minutes, and the total score is 30.
+- 24/30 is a fail and 25/30 is a pass; there is no hidden additional minimum for either section.
+- A correct written answer without diacritics is accepted.
+- Retaking after failure is prohibited until 24 hours have elapsed and is allowed afterward.
+- Reconnection restores the same questions, current question, and saved time; it does not randomize again.
+- Refreshing the page or a difference in the device clock does not grant extra time.
+- Repeated submission does not duplicate the result or level unlock.
+- When time expires, saved answers are submitted and unanswered questions score zero.
+- A speech-service failure does not cause automatic failure without technical handling.
 
 ### Scholars and Messaging
 
-- Unavailable teachers receive no new questions but retain existing conversations.
-- Public profiles do not expose sensitive original documents.
-- Sent text persists after server confirmation and reload.
-- No attachments or calls are available.
-- Referrals share their context and reason only with authorized participants.
+- A student can start a conversation with a teacher only through a referral from the scholarly assistant; the server rejects any other attempt.
+- An unavailable teacher does not receive a new referral and retains existing conversations.
+- The public profile does not reveal sensitive original documents.
+- Sent text appears after it is saved and remains after reloading.
+- Attachments and calls are not available.
+- A referral transfers the question context and its reason only to the authorized party.
 
 ### Assistant and Administration
 
-- Citations refer to existing approved passages and sources.
-- Questions lacking evidence result in abstention/referral, not fabricated references.
-- Requests for additional qualification information are visible to the teacher; approval/rejection updates account status.
-- Assessment-policy edits do not silently regrade historical attempts.
-- Editing published content does not break historical assessment references.
+- A citation points to an existing, approved passage and source.
+- A question without supporting evidence leads to abstention/referral, not an invented source.
+- A request for additional information during approval is shown to the teacher, and acceptance/rejection is reflected in the account status.
+- Changing an assessment policy does not silently regrade past attempts.
+- Editing published content does not break references in historical assessments.
 
 ### Privacy and Accessibility
 
-- Practice and assessment audio cleanup follows policy.
-- Public document copies are redacted and authorized.
-- Export, deletion, and identity verification work.
-- Verify keyboard navigation, mobile layouts, and dark mode.
-- No living-creature icons or automatic-certificate promises appear.
+- Practice and assessment audio cleanup conforms to the policy.
+- Public copies of documents are redacted and authorized for publication.
+- Export, deletion, and identity verification are usable.
+- Keyboard navigation, mobile layout, and dark theme are tested.
+- There are no icons depicting living beings or promises of automatic certificates.
 
 ---
 
-## 18. Implementation Phases When Build Work Is Requested
+## 18. Implementation Phases When Build Is Requested
 
-1. **Audit the existing project:** distinguish actual and demonstrative functionality; align landing-page claims with capabilities.
-2. **Foundation:** identity, permissions, database, approved content, and private storage.
-3. **Early speech feasibility evaluation:** compare providers on the target texts before tying academic outcomes to them.
-4. **Student portal:** study, progress, reviews, and scholar directory.
-5. **Teacher and administration portals:** approval, availability, questions, messaging, and content management.
-6. **Scholarly assistant:** prepare sources, retrieval, citations, abstention, and referrals.
-7. **Assessments:** passage generation, grading, timing, resumption, and progression.
-8. **Launch readiness:** privacy, deletion, backups, security, accessibility, and acceptance testing.
+1. **Current-state audit:** Identify what is real and demonstrative, and build the landing page from scratch according to the approved identity and first-release capabilities.
+2. **Foundation:** Identity, permissions, database, approved content, and private storage.
+3. **Early audio feasibility proof:** Compare services on the scholarly texts before tying academic success to them.
+4. **Student portal:** Study, progress, reviews, and scholar directory.
+5. **Teacher and administration:** Approval, availability, referrals, messaging, and content management.
+6. **Scholarly assistant:** Prepare sources, retrieval, citations, abstention, and referrals.
+7. **Assessments:** Passage generation, grading, timing, resumption, and progression.
+8. **Launch readiness:** Privacy, deletion, backups, security, accessibility, and acceptance testing.
 
-Independent work may proceed in parallel. Do not launch automatically graded oral assessments before validating the speech service, or a scholarly assistant before approving its sources.
+Work may proceed in parallel where it does not conflict, but do not launch automatically graded oral assessments before validating the speech service, or a scholarly assistant before approving its sources.
 
 ---
 
-## 19. Launch Decisions That Must Not Be Falsely Marked Complete
+## 19. Launch Decisions Whose Completion Must Not Be Falsified
 
-The product and its primary rules are approved. The following are implementation verification requirements, not permission to change scope:
+The product and its main rules have been approved. The following implementation verification steps remain; they are not grounds for changing scope:
 
-- Demonstrate the chosen model’s availability and suitability for Arabic and the target texts, and pin its operational version.
-- Select the identity provider and verify required security capabilities.
-- Obtain approved, authorized versions of texts, commentaries, and recordings.
-- Review privacy law, processing jurisdiction, and age groups.
-- Calibrate speech quality and document acceptance standards with scholarly reviewers.
-- Define remaining retention periods before launch.
+- Prove the selected model’s availability and performance with Arabic and scholarly texts, and identify the production version.
+- Select an identity provider and verify that it supports the required security features.
+- Obtain approved copies, authorized for use, of the scholarly texts, commentaries, and recordings.
+- Review legal privacy requirements, the processing country, and age groups.
+- Calibrate audio quality and document the acceptance criterion with the scholarly team.
+- Determine the remaining retention periods in the privacy policy before launch.
 
-Do not repeatedly ask the project owner about values already approved here. Ask only about a consequential new decision outside the delegated scope or a conflict that changes the outcome.
+There is no need to ask the project owner again about values approved here. Ask only when a significant new decision cannot be resolved within the authorization, or when a conflict would change the outcome.
 
 ---
 
 ## 20. External Service References
 
-These references were reviewed during the agreement. Services change, so verify them again before implementation:
+These references were reviewed during the agreement; services change, so review them again before implementation:
 
 - OpenAI transcription: https://developers.openai.com/api/docs/guides/transcription
 - OpenAI realtime transcription: https://developers.openai.com/api/docs/guides/realtime-transcription
 - ElevenLabs speech to text: https://elevenlabs.io/docs/overview/capabilities/speech-to-text
 
-**End of specification — the approved requirements translated into English, not automatic authorization to begin implementation.**# Master Project Specification — Mateen Platform
-
-**File:** `master-project-spec.en.md`  
-**Source:** English translation of `master-project-spec.md`  
-**Decision approval date:** September 22, 2026  
-**Status:** Approved specification for phased implementation; not a statement that these features already exist.  
-**Product:** Mateen Platform — منصة مَتِين  
-**Product language:** Arabic, with a right-to-left interface.
-
-> This English document changes the language of the specification, not the language of the product. Arabic interface labels, scholarly text titles, brand assets, and the approved requirements remain unchanged.
-
-## 0. How to Use This Document
-
-This specification guides development of the complete platform, including its interfaces, backend, data, AI services, and operations. Development teams and coding agents must use it to avoid inventing product rules or changing approved decisions.
-
-- Inspect the existing project before implementation. Reuse suitable work rather than rebuilding from scratch by default.
-- Creating this document does not authorize implementing the application or automatically resuming earlier interface mockups.
-- Distinguish demonstrations from production functionality. Do not present simulated AI results, messages, or approvals as real.
-- Where older requirements conflict with this specification, the newer decisions here take precedence, particularly recitation scope, assessments, and privacy.
-- The original landing-page specification governs its content and interactions; the design-system image governs visual identity. Do not copy wording from the inspirational reference website. Correct promises that exceed first-release capabilities.
-- Do not add payments, video classes, or certificate issuance merely because they are common in other platforms.
-- Items designated as launch conditions cannot be bypassed using demonstration data or silent assumptions.
-
-### Local References
-
-- Landing-page specification: `attached_assets/landing-page-updates_1790089998529.md`.
-- Design-system image: `attached_assets/Design_System_1790090535602.png`.
-- Official logo: `attached_assets/MateeeeeeeeenLOGO_1790090010886.png`.
-- Existing frontend: `artifacts/mateen-platform`.
-- Existing backend: `artifacts/api-server`.
-- Any prototypes in `artifacts/mockup-sandbox` are not approved production portals.
-
----
-
-## 1. Product Vision and Scope
-
-Mateen is an interactive educational platform for memorizing, reciting, and understanding classical Islamic scholarly texts and didactic poems. It connects students with approved source texts, verified commentaries, and trustworthy human guidance.
-
-### 1.1 In Scope
-
-- Studying texts in Islamic creed, Hadith, Tajwid, and Qira’at.
-- Word-level recitation and memorization assessment.
-- Spaced review and analysis of progress and mistakes.
-- Oral and written level assessments.
-- A scholarly assistant restricted to approved sources.
-- Direct questions and assistant referrals to approved teachers through text messages.
-- Reviewing teachers’ qualifications and ijazat before allowing them to receive questions.
-
-### 1.2 Mandatory Constraints
-
-- The platform does not provide memorization of the Qur’an itself. The Tajwid and Qira’at track covers scholarly poems such as Tuhfat al-Atfal.
-- Do not use images or icons depicting people, animals, or living creatures, including default human avatars or person-shaped icons.
-- Do not promise automatic student certificates.
-- Do not advertise diacritic or pronunciation correction as available in the first release.
-- The assistant must not issue independent fatwas or be described as infallible.
-- Do not display fabricated success figures, approvals, or statistics.
-
-### 1.3 Outside the First Release
-
-Assessment of diacritics, shaddah, sukun, elongation, or articulation points; audio/video calls; class and assignment management; conversation attachments; student certificate issuance; SMS and browser push notifications; and commerce or subscriptions not defined in this agreement.
-
----
-
-## 2. Technology and Architecture
-
-### 2.1 Approved Choices
-
-| Layer | Choice |
-|---|---|
-| Frontend | React + TypeScript + Vite |
-| Styling | Tailwind CSS, RTL, Mateen visual identity |
-| Routing | Retain the existing Wouter setup while it meets requirements |
-| Frontend server state | TanStack Query |
-| Forms | React Hook Form + Zod |
-| Global UI state | Context for themes and interface settings, not as a replacement for server-state management |
-| Animation | Framer Motion, respecting reduced-motion preferences |
-| Backend | Node.js + TypeScript + Express |
-| Database | PostgreSQL + Drizzle ORM with versioned migrations |
-| Scholarly search | Lexical and semantic search; pgvector where supported |
-| Files | Private object storage, not binary files inside PostgreSQL |
-| Communication | REST + WebSocket |
-| Heavy processing | Background jobs with retries and status tracking |
-| Specialized processing | Python when genuinely needed, not a mandatory separate service from the outset |
-| Service contracts | OpenAPI and shared/generated types |
-
-### 2.2 Architectural Approach
-
-Start with a modular monolith: identity, content, study, recitation, assessments, assistant, referrals, messaging, teacher approval, and administration. Do not begin with distributed microservices without a demonstrated need.
-
-Separate audio processing and book indexing from ordinary requests when they require long-running work or specialized resources. Put speech and language-model services behind replaceable provider interfaces rather than scattering provider calls throughout the frontend.
-
-### 2.3 Mandatory Implementation Principles
-
-- Enforce permissions, ownership, and level progression on the server.
-- Never expose service secrets or API keys to the browser.
-- Store file paths and metadata in the database, not file bytes.
-- Follow the existing project’s service and artifact routing conventions. Do not hardcode localhost in browser code.
-- Mutations must return real data and visibly update the interface, including after reload.
-- Use database transactions and idempotency keys for sensitive actions such as assessment submission and teacher approval.
-- Provide explicit loading, empty, and error states. Never replace an error with demonstration success data.
-
----
-
-## 3. Visual Identity and User Experience
-
-### 3.1 Visual Identity
-
-| Role | Approved Value |
-|---|---|
-| Primary color | `#6D4C3D` |
-| Secondary color | `#994703` |
-| Tertiary color | `#4E3A00` |
-| Neutral | `#FDF9F3` |
-| Headlines | Kufam |
-| Body text | Noto Naskh Arabic |
-| Labels and UI | Cairo |
-
-- Light theme: “Natural Parchment” — القرطاس الطبيعي.
-- Dark theme: “Night Manuscripts” — المخطوطات الليلية.
-- Use the official logo rather than an improvised text substitute when the asset is available.
-- The reference website and video inspire composition and motion, not copied content.
-- Do not use emojis.
-
-### 3.2 Accessibility and Responsiveness
-
-- Support mobile, tablet, and desktop layouts.
-- Implement genuine RTL behavior, including correct treatment of numbers, citations, and mixed-direction text.
-- Target WCAG 2.2 AA and verify it before claiming compliance.
-- Support keyboard navigation, visible focus, meaningful control names, and dialog focus management.
-- Do not communicate success or errors through color alone.
-- Persist theme preference and respect reduced motion.
-- Confirm destructive actions. Explain why an action is unavailable rather than showing an unexplained disabled button.
-
----
-
-## 4. Roles and Accounts
-
-### 4.1 Approved Roles
-
-| Role | Access Boundary |
-|---|---|
-| Guest | Public pages and the informational landing assistant |
-| Student | Their own learning data, assessments, conversations, and the public scholar directory |
-| Teacher pending review | Their account, application, and documents; cannot receive student questions |
-| Approved teacher | Their scholarly profile, conversations, referrals, and availability |
-| Scholarly content moderator | Content, sources, and scientific review explicitly assigned to them |
-| Administrator | Platform administration through explicit, audited permissions |
-
-A content moderator does not automatically receive access to private teacher documents. A teacher cannot view another teacher’s conversations or all students’ data.
-
-### 4.2 Identity and Authentication
-
-- Use a reliable managed identity provider; do not build password storage from scratch.
-- Require verified email and secure account recovery.
-- Support passkeys where the selected provider permits.
-- Require two-factor authentication for administrators and teachers; make it optional for students.
-- Provide session/device visibility and session revocation.
-- Rate-limit authentication attempts and protect against abuse.
-- Check account status on the server for every sensitive operation.
-- Selecting the actual identity provider and verifying its capabilities is an implementation prerequisite. Do not advertise features that the integration does not support.
-
-### 4.3 Teacher Approval
-
-Account creation → email verification and account security → profile and document submission → administrative review → approval, request for additional information, or rejection with a reason.
-
-Uploading a document does not approve it. Teachers cannot assign their own verification badge. Newly updated documents remain under review until accepted.
-
----
-
-## 5. Public Interfaces
-
-### 5.1 Landing Page
-
-Retain the content and interactions from the local landing specification, correcting any promises that conflict with first-release capabilities:
-
-- Sticky header, logo, theme switching, and unified login.
-- Links to About, Smart Simulator, Features, Tracks, Methodology, and FAQ.
-- No level-assessment button in the navigation bar.
-- Student and teacher registration buttons open the correct account context.
-- The simulator is for scholarly texts and must not include Surah Al-Fatiha.
-- Clearly label a demonstrative simulator as such. Do not present fake recording controls as a real service.
-- Include platform features, the Hadith with its source and copy/share controls, tracks, methodology, FAQ, and student CTA.
-- No certificate promises in track cards.
-- Old wording about free or paid services does not create unapproved payment requirements.
-
-### 5.2 About Page
-
-Route `/about`; display “قريباً” (“Coming soon”) and a home-return button according to the current specification until additional content is approved.
-
-### 5.3 Account Modal
-
-A unified modal with student and teacher tabs and login/register modes. Successful authentication must reflect the real account and role, not merely close the modal.
-
-### 5.4 Informational Assistant
-
-Answer platform-information questions only, using the approved landing-page responses. For personalized questions, invite the visitor to sign in and provide a login action. This is not a general scholarly assistant for anonymous visitors.
-
----
-
-## 6. Student Portal
-
-The following routes are implementation guidance. They may be adapted to the existing routing structure without changing their functions.
-
-| Page | Suggested Route | Purpose |
-|---|---|---|
-| Home | `/student` | Welcome, resume study, performance overview |
-| Tracks | `/student/tracks` | Available learning tracks |
-| Track details | `/student/tracks/:trackId` | Levels and their states |
-| Study | `/student/study/:textId` | Source text, recitation, and commentary |
-| Reviews | `/student/reviews` | Due and spaced reviews |
-| Assessments | `/student/exams` | Eligibility, attempts, and results |
-| Assessment attempt | `/student/exams/:attemptId` | Both sections, timing, and resumption |
-| Scholars | `/student/scholars` | Specialties and availability |
-| Scholar profile | `/student/scholars/:teacherId` | Public scholarly information and ijazat |
-| Messages | `/student/messages` | Direct questions and referrals |
-| Settings | `/student/settings` | Account, privacy, and notifications |
-
-### 6.1 Home
-
-Show a personal welcome, the last studied text and saved position, a resume action, memorization progress, recitation results, recurring word mistakes, due reviews, and the next assessment. Provide an honest new-student state rather than fabricated progress.
-
-### 6.2 Initial Tracks and Content
-
-| Track | Level | Text |
-|---|---|---|
-| Creed — العقيدة | Preparatory — التمهيدي | Nawaqid al-Islam — نواقض الإسلام |
-| Creed — العقيدة | Level One — الأول | Al-Qawa‘id al-Arba‘ — القواعد الأربع |
-| Hadith — الحديث | Preparatory — التمهيدي | The Forty Nawawi Hadith — الأربعون النووية |
-| Tajwid and Qira’at — التجويد والقراءات | Preparatory — التمهيدي | Tuhfat al-Atfal — تحفة الأطفال |
-
-- This is the only initially available catalog.
-- Do not present additional levels or texts as published.
-- Level states: available, locked, in progress, passed.
-- The preparatory level is initially accessible. A subsequent level requires passing its predecessor.
-- Students may directly attempt the assessment for an accessible level without completing its study. This does not provide access to the assessment of a later locked level.
-- When no subsequent published level exists, show completion of the available content rather than inventing another level.
-
-### 6.3 Study and Review
-
-- Display the approved, vocalized source text and save the study position.
-- Support word-level recitation comparison.
-- Provide access to commentary, the scholarly assistant, and referrals.
-- Save memorization mistakes and progress without requiring permanent audio storage.
-- Schedule spaced reviews using actual performance; show and update review dates.
-- Document and test the scheduling algorithm during implementation. Do not claim scientific diagnosis that the system does not provide.
-
-### 6.4 Scholars and Messages
-
-- Filter scholars by specialty and availability.
-- Show scholarly information, approved ijazat, and authorized redacted public document copies.
-- Start a question with an approved, available teacher. Recheck availability when sending, not only when displaying the card.
-- Text-only conversations: no files, images, recordings, or video.
-- Referrals include the studied text, student question, and why the assistant could not answer.
-- Display a message after server confirmation. Provide explicit failure and retry handling without duplicates.
-
----
-
-## 7. Audio Recitation and Feedback
-
-### 7.1 What Is Assessed
-
-Word correctness and sequence, substitutions, and omissions/skipped words. Diacritics and pronunciation quality are outside the first release.
-
-Silence alone is not an omission. Confirm a skipped word when the student proceeds beyond it. Unclear audio must not become a confirmed memorization error.
-
-### 7.2 Processing Flow
-
-1. Select the approved text and passage.
-2. Obtain microphone permission and check service connectivity.
-3. Send numbered audio chunks.
-4. Transcribe audio and align it against the reference text through an independent matching service.
-5. Show provisional results, then confirm findings once stable.
-6. Save performance summaries and progress; clean up audio according to retention policy.
-
-### 7.3 Feedback
-
-- Practice: immediately highlight an error once confirmed, with information beyond color alone.
-- Allow uninterrupted continuation rather than mandatory stopping, then show a session summary.
-- Provisional results may change and must not immediately become grades or permanent mistakes.
-- Assessment: show recording and connectivity status without revealing answers or coaching corrections during the attempt.
-- Failure: request repetition or show service unavailability. Never invent success or failure.
-
-### 7.4 Speech Provider Selection
-
-The initial evaluation candidate is OpenAI, based on documentation reviewed during the agreement:
-
-- `gpt-live-transcribe` for live audio.
-- `gpt-transcribe` for completed recordings.
-- Comparison candidate: an ElevenLabs Scribe version supporting the required Arabic workflow at implementation time.
-
-This is an initial evaluation choice, not proof of superior Arabic accuracy. Revalidate model names, availability, regions, and terms during implementation.
-
-According to the reviewed documentation, the named live model does not provide word-level timestamps or confidence scores. Do not fabricate them. Implement word alignment within the platform and select an alternative if the results do not meet recitation requirements.
-
-### 7.5 Speech Launch Condition
-
-Compare providers using recordings authorized for this purpose. Include target vocabulary, varied speakers, background noise, pauses, and deliberate substitutions and omissions. Measure:
-
-- Transcript accuracy and true-error detection.
-- False positives, especially correct recitation marked as wrong.
-- The model’s tendency to silently repair incorrect words.
-- Feedback latency and transcript stability.
-- Cost, availability, and retention terms.
-
-Do not supply the full assessment answer as a transcription hint in a way that encourages the model to complete words the student did not say. Finalize the provider using documented measurements rather than marketing claims.
-
----
-
-## 8. Assessments and Progression Rules
-
-### 8.1 Approved Settings
-
-| Setting | Value |
-|---|---|
-| Total questions | 30 |
-| Written | 15 |
-| Oral | 15 |
-| Total duration | 30 minutes of active time |
-| Question weight | 1 mark |
-| Total marks | 30 |
-| Passing score | At least 25/30 |
-| Separate minimum per section | None |
-| Retry after failure | 24 hours after the failed attempt ends |
-| Studying the level first | Not required |
-| Progression | Complete both sections and achieve the passing total |
-
-“Passing both sections” means taking both components and achieving the approved overall total, not imposing unapproved separate section thresholds. Unanswered questions at time expiry score zero; not every response needs to be correct.
-
-### 8.2 Question Construction
-
-- Randomly select completion passages from a published, approved version of the current level’s texts.
-- Oral: the student hears or sees an approved starting passage and recites the required continuation without seeing the answer.
-- Written: the student completes text without needing diacritics.
-- Freeze the question set, order, source version, and grading rules when the attempt is created.
-- Do not rerandomize after reconnection or page reload.
-- Validate the question pool even for short texts. Do not invent material to reach the required number.
-- Keep answer keys on the server; do not send them to the browser during an attempt.
-
-### 8.3 Grading
-
-- Award one mark for an answer matching the required passage and zero otherwise. No fractional marks or negative marking without an approved policy change.
-- Ignore diacritics, tatweel, and nonsemantic whitespace/punctuation differences in written responses.
-- Do not accept a synonym in place of a memorized word; this is a textual memorization assessment.
-- Do not erase meaningful letter differences through broad, unreviewed normalization.
-- Grade oral responses using finalized transcription. Unevaluable audio is a technical condition requiring repetition/review, not an automatic zero due to service failure.
-- A language model must not be the sole authority for a grade.
-- Reveal results and mistake review after submission, not beforehand.
-
-### 8.4 Attempt States
-
-`created → in_progress → paused_connection → in_progress → submitted → grading → passed | failed`
-
-Use `technical_review` where an issue prevents fair grading. Do not automatically treat a technical problem as an academic failure that imposes the retry waiting period.
-
-### 8.5 Timing, Disconnection, and Resumption
-
-- The server is authoritative for elapsed time, remaining time, and the current question.
-- Save confirmed answers, question position, and periodic time checkpoints.
-- Use server-side heartbeats and disconnect detection. Do not trust a client-supplied pause action or time value.
-- On confirmed disconnection, freeze the attempt at the last trusted checkpoint, disable answering, and hide question content while paused.
-- Reconnect to the same attempt, questions, position, and saved remaining time; do not grant a new duration.
-- Restore a local draft when possible, but do not count an answer until the server confirms it. Clearly communicate loss of unconfirmed data.
-- Number and acknowledge audio chunks. Do not grade an incomplete recording as complete.
-- Prevent conflicting simultaneous active sessions for the same attempt.
-- Duplicate requests or reconnects must not duplicate answers, time deductions, or marks.
-- Log repeated disconnects for review; do not automatically interpret them as cheating.
-- The actual cause of an internet disconnection cannot be proven absolutely. This is a recovery mechanism, not comprehensive exam proctoring.
-- Automatically submit saved answers when 30 active minutes have elapsed.
-
-### 8.6 Retry and Progression
-
-- Calculate `retryAvailableAt` on the server as 24 hours after the failed attempt ends.
-- Show the student the availability time and remaining wait.
-- Do not create another attempt when a resumable attempt exists for that level.
-- Record success and unlock the next level consistently in the database, safely handling repeated requests.
-- Later policy edits must not silently alter ongoing attempts or historical results.
-
----
-
-## 9. Scholarly Assistant and Sources
-
-### 9.1 Knowledge Preparation
-
-Use legally authorized sources with book, author, edition, volume, and page metadata. Review extracted text before indexing. Distinguish PDF file-page numbers from printed page numbers.
-
-Associate every passage with a source version and approval status. Draft or withdrawn sources must not support new answers.
-
-### 9.2 Answering Flow
-
-1. Identify the question’s scope, studied text, and context.
-2. Perform lexical and semantic search over approved sources only.
-3. Retrieve sufficient passages linked to references.
-4. Produce a bounded explanation or a clearly identified quotation grounded in those passages.
-5. Verify that every citation exists and corresponds to its source text.
-6. Answer, or abstain and offer a referral.
-
-Do not claim that RAG eliminates hallucinations. Evaluate Arabic quality, source adherence, and abstention. Pin the chosen model version in configuration and update it only after evaluation.
-
-### 9.3 Referrals
-
-- Refer when sources do not cover the question, evidence is insufficient, or human guidance is needed.
-- Show the student the context that will be shared with the teacher.
-- Transfer the studied text, question, and referral reason without unnecessary private information.
-- Select an approved, available teacher or show an honest waiting state; never invent availability.
-- Students can ask teachers directly without first using the assistant.
-- Treat source text and messages as untrusted data rather than system instructions to resist prompt injection.
-
----
-
-## 10. Teacher Portal
-
-| Page | Functions |
-|---|---|
-| Home | Pending questions, referrals, recent conversations, response activity |
-| Questions and messages | Direct/referral filters, response status, question context, text replies |
-| Scholarly profile | Biography, specialties, teachers, ijazat, and review status |
-| Settings | Account and notifications |
-
-### 10.1 Availability
-
-- Provide a clear “Available for questions / Unavailable” control.
-- Unavailable teachers do not receive new questions or referrals.
-- They retain existing conversations and can reply.
-- Follow-up in an existing conversation remains possible; do not open a new case inside it to bypass availability.
-- Administrative suspension or approval withdrawal is distinct from voluntary unavailability and restricts permissions according to the administrative decision.
-
-### 10.2 Questions
-
-Use states such as Awaiting Reply and Answered. Changing a state does not delete conversation history. Search and filters must not reveal unauthorized conversations.
-
-### 10.3 Boundaries
-
-Teachers provide guidance and answers in this release. Do not add video-class dashboards, assignment management, certificate issuance, or permission to change student grades merely because the account is a teacher.
-
----
-
-## 11. Administration Portal
-
-### 11.1 Home
-
-Show platform activity, learning metrics, review queues, delayed referrals, and significant service issues. Calculate statistics from real data.
-
-### 11.2 Users
-
-Search and filter by role and account status, display authorized details, and change status/permissions through explicit, audited actions.
-
-### 11.3 Teacher Approval
-
-Review profiles and original documents under restricted permissions, then approve, request more information, or reject with a reason. Record reviewer, time, and changes without placing sensitive document contents in general logs.
-
-### 11.4 Tracks and Content
-
-Support drafting, editing, review, publishing, and archiving of tracks, levels, texts, and ordering. Do not delete a version used by a historical assessment in a way that breaks result references.
-
-### 11.5 Assessments
-
-Manage passage-selection rules, policies, results, and technical reviews. Section 8 contains the binding defaults; coding agents must not arbitrarily change them.
-
-### 11.6 Sources and Assistant
-
-Approve and index commentaries, investigate answer/citation/referral issues, and withdraw defective sources from new answers.
-
-### 11.7 Reports and Audit
-
-Manage reports, record sensitive administrative actions, confirm destructive operations, and retain the reason, actor, and date.
-
----
-
-## 12. Logical Data Model
-
-These are functional entities, not mandatory literal table names.
-
-| Domain | Entities and Relationships |
-|---|---|
-| Identity | User, roles/permissions, account status, identity-provider ID, preferences |
-| Teacher | Scholarly profile, specialties, availability, approval application, documents, review decisions, redacted public copies |
-| Content | Track → ordered levels → texts → approved versions → passages |
-| Study | Track enrollment, progress, saved position, recitation session, word mistakes, scheduled review |
-| Assessment | Versioned policy, attempt, frozen questions, answers, temporary recordings, time checkpoints, result |
-| Knowledge | Book/edition, cited passages, approval status, semantic index |
-| Assistant | Question, answer, citations, abstention decision, referral |
-| Messaging | Conversation, authorized participants, direct/referral type, messages, question status |
-| Operations | Notification, preferences, report, audit record, background job, deletion/export request |
-
-### Data Invariants
-
-- Progress and assessment passages reference a specific text version.
-- Results retain the grading policy used.
-- Clients cannot assign ownership, roles, grades, or approval status.
-- Account deletion handles related records, files, and backups according to the published policy.
-- Store timestamps consistently on the server and display them in the relevant time zone.
-- Give messages, answers, and administrative operations identifiers that prevent duplicate processing.
-
----
-
-## 13. Service Contracts and Events
-
-Define contracts in OpenAPI before wiring the interface. Validate inputs and regenerate types after contract changes.
-
-### 13.1 REST Domains
-
-- Current account, preferences, and authorized sessions.
-- Published tracks, levels, and source texts.
-- Study progress, reviews, and recitation sessions.
-- Assessment eligibility, attempt creation/resumption/saving/submission, and results.
-- Public scholars and redacted profiles.
-- Conversations, messages, and referrals.
-- Teacher profile, documents, and availability.
-- User, approval, content, source, policy, and report administration.
-- Notifications and export/deletion requests.
-
-### 13.2 Realtime Events
-
-Semantic examples: session started, audio chunk, receipt acknowledgement, provisional/final transcript, confirmed word mistake, service status, assessment checkpoint, disconnect/resume, new message, and question-status update.
-
-Authenticate every connection and verify session ownership. Number chunks, resist duplicates, and handle reconnection. Define audio/message size limits and timeouts during implementation.
-
-### 13.3 Explicit Errors
-
-Distinguish unauthenticated access, forbidden access, missing resources, attempt-state conflicts, expired time, retry cooldown, provider failure, and invalid inputs. Do not expose stack traces or secrets to users.
-
----
-
-## 14. Privacy and Retention
-
-### 14.1 Principles
-
-Collect only necessary data, obtain clear microphone consent, explain processing purposes, and require separate consent for using data to improve models.
-
-### 14.2 Approved Policy
-
-| Data | Policy |
-|---|---|
-| Practice audio | Temporary processing; delete after processing by default, retaining performance results |
-| Assessment audio | Retain for 30 days for review and appeals, then automatically delete |
-| Original teacher documents | Private storage accessible only to authorized qualification reviewers |
-| Public ijazat | Teacher-authorized redacted copies with sensitive information hidden |
-| Backups | Daily, retained for 30 days, with restoration testing |
-| Account export/deletion | Identity-verified request, tracked execution, and user notification |
-
-- Explain assessment-audio retention before the attempt begins.
-- Do not copy temporary audio into backups that silently extend retention.
-- Explain how long deleted data may remain in backups. Reapply deletion records after restoration.
-- Do not claim provider-side deletion beyond the provider’s actual capabilities and terms. Review audio/model provider retention and processing regions before launch.
-- Specify remaining retention periods for messages, rejected teacher applications, and audit records in the launch privacy policy. Do not invent indefinite retention.
-- Encrypt transit and storage, use short-lived signed links for private files, and never store signed links as permanent database references.
-
-### 14.3 Legal Launch Condition
-
-Determine operating jurisdiction, intended age groups, legal basis, required consent, and cross-border transfers. This document is not a legal compliance certification. Do not assume minors may register without guardian consent in every jurisdiction.
-
----
-
-## 15. Security and Notifications
-
-### 15.1 Security
-
-- Check permissions for every request and event subscription.
-- Prevent access to another user’s attempts, conversations, or documents by changing IDs.
-- Validate uploaded files, types, and sizes and scan them before making them available to reviewers.
-- Protect sessions; handle CSRF when using cookies, XSS, SQL injection, and request-rate abuse.
-- Separate document-review permissions from content-management permissions.
-- Do not place audio, documents, or private message contents in general operational logs.
-- Audit administrative actions and protect records from ordinary modification.
-- Treat prompts and sources as untrusted inputs; never execute instructions extracted from them.
-
-### 15.2 Notifications
-
-- In-app: replies, referrals, results, reviews, and approval states.
-- Email: important and security-related events.
-- User controls for learning and message notifications.
-- Do not include private questions or document contents in email.
-- No SMS or browser push in the first release.
-- Send through background jobs with safe retries and deduplication.
-
----
-
-## 16. Operations and Quality
-
-- Monitor backend/provider errors, latency, and failed jobs.
-- Separate development and production environments and data.
-- Use reviewable database migrations and backups before sensitive changes.
-- Automate expired-file cleanup and verify actual deletion.
-- Monitor speech/model costs and usage limits without silent overruns.
-- On provider failure, explain the issue and protect progress; do not substitute fabricated success.
-- Provider failover during a session must preserve chunks and avoid duplicate results and must be tested before activation.
-- Document required configuration without committing secrets.
-
----
-
-## 17. Acceptance Criteria
-
-### Accounts and Permissions
-
-- Registration tabs select the intended role; new teachers cannot receive questions before approval.
-- Students cannot access another student’s data; teachers cannot access unrelated conversations.
-- Content moderators cannot read original ijazat without explicit authorization.
-- Teachers and administrators must complete two-factor authentication before using privileged functions.
-
-### Study and Tracks
-
-- Display only the three tracks and four texts in the approved catalog.
-- Restore the student’s study position after login/reload.
-- Study completion alone does not unlock the next level.
-- An accessible level’s assessment can be attempted without prior study.
-
-### Recitation
-
-- Technical evaluation distinguishes correct words, substitutions, and omissions.
-- Pauses do not automatically become omissions.
-- Practice displays stable errors immediately without forcing a stop.
-- Do not reveal assessment answers during an attempt.
-- Do not grade diacritic errors in the first release.
-
-### Assessments
-
-- Every attempt has 15 written and 15 oral questions.
-- Total active time is 30 minutes and total marks are 30.
-- 24/30 fails; 25/30 passes. There is no hidden separate section threshold.
-- Correct written answers without diacritics are accepted.
-- Block retry before 24 hours and allow it afterward.
-- Reconnection restores questions, current position, and saved time without rerandomization.
-- Reloading or changing device time does not grant additional time.
-- Duplicate submission does not duplicate results or level unlocking.
-- Time expiry submits saved answers and scores unanswered questions as zero.
-- Audio service failure does not automatically fail the student without technical handling.
-
-### Scholars and Messaging
-
-- Unavailable teachers receive no new questions but retain existing conversations.
-- Public profiles do not expose sensitive original documents.
-- Sent text persists after server confirmation and reload.
-- No attachments or calls are available.
-- Referrals share their context and reason only with authorized participants.
-
-### Assistant and Administration
-
-- Citations refer to existing approved passages and sources.
-- Questions lacking evidence result in abstention/referral, not fabricated references.
-- Requests for additional qualification information are visible to the teacher; approval/rejection updates account status.
-- Assessment-policy edits do not silently regrade historical attempts.
-- Editing published content does not break historical assessment references.
-
-### Privacy and Accessibility
-
-- Practice and assessment audio cleanup follows policy.
-- Public document copies are redacted and authorized.
-- Export, deletion, and identity verification work.
-- Verify keyboard navigation, mobile layouts, and dark mode.
-- No living-creature icons or automatic-certificate promises appear.
-
----
-
-## 18. Implementation Phases When Build Work Is Requested
-
-1. **Audit the existing project:** distinguish actual and demonstrative functionality; align landing-page claims with capabilities.
-2. **Foundation:** identity, permissions, database, approved content, and private storage.
-3. **Early speech feasibility evaluation:** compare providers on the target texts before tying academic outcomes to them.
-4. **Student portal:** study, progress, reviews, and scholar directory.
-5. **Teacher and administration portals:** approval, availability, questions, messaging, and content management.
-6. **Scholarly assistant:** prepare sources, retrieval, citations, abstention, and referrals.
-7. **Assessments:** passage generation, grading, timing, resumption, and progression.
-8. **Launch readiness:** privacy, deletion, backups, security, accessibility, and acceptance testing.
-
-Independent work may proceed in parallel. Do not launch automatically graded oral assessments before validating the speech service, or a scholarly assistant before approving its sources.
-
----
-
-## 19. Launch Decisions That Must Not Be Falsely Marked Complete
-
-The product and its primary rules are approved. The following are implementation verification requirements, not permission to change scope:
-
-- Demonstrate the chosen model’s availability and suitability for Arabic and the target texts, and pin its operational version.
-- Select the identity provider and verify required security capabilities.
-- Obtain approved, authorized versions of texts, commentaries, and recordings.
-- Review privacy law, processing jurisdiction, and age groups.
-- Calibrate speech quality and document acceptance standards with scholarly reviewers.
-- Define remaining retention periods before launch.
-
-Do not repeatedly ask the project owner about values already approved here. Ask only about a consequential new decision outside the delegated scope or a conflict that changes the outcome.
-
----
-
-## 20. External Service References
-
-These references were reviewed during the agreement. Services change, so verify them again before implementation:
-
-- OpenAI transcription: https://developers.openai.com/api/docs/guides/transcription
-- OpenAI realtime transcription: https://developers.openai.com/api/docs/guides/realtime-transcription
-- ElevenLabs speech to text: https://elevenlabs.io/docs/overview/capabilities/speech-to-text
-
-**End of specification — the approved requirements translated into English, not automatic authorization to begin implementation.**
+**End of document — the source of truth for approved decisions, not automatic authorization to begin implementation.**

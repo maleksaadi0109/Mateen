@@ -19,14 +19,14 @@ content_type = "text/markdown"
 id = "nXrbm7lCPf8Lu-QWwe-si"
 uri = "file://master-project-spec.en.md"
 type = "text"
-title = "Mateen — Master Project Specification (English)"
-description = "Complete English translation of the approved specification, including all three portals, architecture, assessments, privacy, security, and acceptance criteria."
+title = "Mateen Project Specification — English"
+description = "Complete English Markdown translation of the latest Arabic specification, including all three approved changes."
 logical_id = "996ddf76-82ce-4ca4-8f0b-a3d538aa928f"
-content_hash = "sha256:76b02c14581207901429ea1daff5be73a4cac3ed0a3266589d8e1bcfc1a6d80f"
-size = 37710
-mtime_ms = 1790099661863
-storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/996ddf76-82ce-4ca4-8f0b-a3d538aa928f/f2bad390-2bc5-479e-a5a4-11b79e3aca06"
-storage_version_token = "1790099672677003"
+content_hash = "sha256:30bc0128b28816e9c37f6b7bf19e1f49d4b84a4252f0447e23bba708b5e63bf5"
+size = 46054
+mtime_ms = 1790861622741
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/996ddf76-82ce-4ca4-8f0b-a3d538aa928f/d347402f-118b-48d4-b962-d03ec0f7778d"
+storage_version_token = "1790861650300640"
 content_type = "text/markdown"
 
 [[outputs]]
@@ -70,34 +70,6 @@ mtime_ms = 1790315633594
 storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/a440b709-c1fc-46ab-b55f-9cf573bddf8c/09d84465-9b85-4603-b528-9b0f40c37784"
 storage_version_token = "1790315647452520"
 content_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-
-[[outputs]]
-id = "GFqovJGgIYoYGGFDlimxZ"
-uri = "file://deliverables/acm-logo/acm-logo-dark.png"
-type = "image"
-title = "ACM logo — dark mode"
-description = "Deep navy background with brighter gold lettering and light blue braces."
-logical_id = "1e85b6d5-0d95-4a92-b658-8769e633ab2f"
-content_hash = "sha256:c96cd35fc8f3d655bb4edc1a7b1d935789c05147c417d8f29ce28141e1c773fa"
-size = 124603
-mtime_ms = 1790412220178
-storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/1e85b6d5-0d95-4a92-b658-8769e633ab2f/c0579a9b-94fd-46ba-9737-7ad277faae26"
-storage_version_token = "1790412227228623"
-content_type = "image/png"
-
-[[outputs]]
-id = "vE8t8bs8xYBh8UUIKfFsU"
-uri = "file://deliverables/acm-logo/acm-logo-transparent.png"
-type = "image"
-title = "ACM logo — transparent version"
-description = "Lightened logo artwork for placing over other dark backgrounds."
-logical_id = "a3ea0fd5-15bd-4ea1-800b-9fddac149c81"
-content_hash = "sha256:513bcb4c6ade1fab0a17806f36142a2f6dc89b7bde9587a58268c8f2ec3d28fd"
-size = 193248
-mtime_ms = 1790412220254
-storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/a3ea0fd5-15bd-4ea1-800b-9fddac149c81/f2e80b0e-b903-4efd-acff-c1db221004ab"
-storage_version_token = "1790412227684844"
-content_type = "image/png"
 
 [[outputs]]
 id = "1FWJcrQR_Pof9H62qgjbW"
