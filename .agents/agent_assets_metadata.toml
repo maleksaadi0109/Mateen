@@ -5,14 +5,14 @@ generated = []
 id = "AsyBvOv0UX9Ix7_DQDRyb"
 uri = "file://master-project-spec.md"
 type = "text"
-title = "المواصفات الشاملة لمنصة مَتِين"
-description = "القرارات المعتمدة للبوابات الثلاث والمعمارية والتسميع والاختبارات والخصوصية والصلاحيات ومعايير القبول ومراحل التنفيذ."
+title = "مواصفات منصة مَتِين — النسخة المعدّلة"
+description = "ملف Markdown يتضمن التعديلات الثلاثة المطلوبة."
 logical_id = "180f253d-6c7b-4805-9b6a-f36e8a1e76fa"
-content_hash = "sha256:fde4cf33ab59271a91daa8454553d6eef36e446fa2f4f9dc55f7a68be901291a"
-size = 49981
-mtime_ms = 1790099144686
-storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/180f253d-6c7b-4805-9b6a-f36e8a1e76fa/ffddb0f0-0c9d-43e5-ab29-b8ce5e0aa691"
-storage_version_token = "1790099166809347"
+content_hash = "sha256:f3b7d29f58a579a05f8af1ff3f4cd0e428959e7cb292258c8d172d6756c01784"
+size = 58626
+mtime_ms = 1790851580123
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/180f253d-6c7b-4805-9b6a-f36e8a1e76fa/45ad1347-f2ee-4742-a7fb-39d450c58c9c"
+storage_version_token = "1790854218789931"
 content_type = "text/markdown"
 
 [[outputs]]
@@ -28,20 +28,6 @@ mtime_ms = 1790099661863
 storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/996ddf76-82ce-4ca4-8f0b-a3d538aa928f/f2bad390-2bc5-479e-a5a4-11b79e3aca06"
 storage_version_token = "1790099672677003"
 content_type = "text/markdown"
-
-[[outputs]]
-id = "3jbLqj4PK0vbVlyzA-25S"
-uri = "file://deliverables/mateen-registration/mateen-registration.pptx"
-type = "slides"
-title = "مَتِين — عرض الفكرة للتسجيل"
-description = "١٠ شرائح عربية قابلة للتحرير، مع ملاحظات للمصادر ومنهجية الاستبيان."
-logical_id = "be540095-f30b-43a8-aeb7-5fd79b82b2d5"
-content_hash = "sha256:40ce302410a48dd4422e77898acfed2b4756aee15ce7bfd8ec8f2fec2d38b014"
-size = 68638
-mtime_ms = 1790314413422
-storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/be540095-f30b-43a8-aeb7-5fd79b82b2d5/0936947b-4a96-4774-85c6-7fed7913571e"
-storage_version_token = "1790314430763495"
-content_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
 
 [[outputs]]
 id = "DHcPMco7HgGa37SJBMYr1"
