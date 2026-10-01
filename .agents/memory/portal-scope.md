@@ -9,11 +9,13 @@ On 2026-09-22 the user approved the portal outline, architecture, and final priv
 
 **How to apply:** Do not resume stopped visual implementation without a new explicit request. Distinguish approved product requirements from proposed architecture and implemented capabilities.
 
-Approved student scope: home with welcome, resume last text, performance/mistakes, due reviews and next assessment; tracks with levels and study/recitation; assessments; available scholars directory and scholarly profiles with approved ijazat; text-only conversations including direct questions and assistant referrals.
+Approved student scope: home with welcome, resume last text, performance/mistakes, due reviews and next assessment; tracks with levels and study/recitation; assessments; available scholars directory and scholarly profiles with approved ijazat; text-only conversations that originate only from assistant referrals (no direct student-to-teacher questions; decided 2026-10-01 so the platform keeps AI as the entry point rather than becoming a traditional messaging platform).
 
-Initial catalog is limited to: العقيدة — التمهيدي: نواقض الإسلام، الأول: القواعد الأربع; الحديث — التمهيدي: الأربعون النووية; التجويد والقراءات — التمهيدي: تحفة الأطفال.
+Proposed catalog: العقيدة — التمهيدي: نواقض الإسلام، الأول: القواعد الأربع; الحديث — التمهيدي: الأربعون النووية; التجويد والقراءات — التمهيدي: تحفة الأطفال. In the first release only الأربعون النووية is open; everything else is shown closed with «قريباً».
 
-Approved teacher scope: overview of pending questions/referrals/recent conversations; unified inbox filterable by direct question versus assistant referral and response status; scholarly profile with biography, specialties, teachers and ijazat review status; account/notification settings; accessible availability control.
+The landing page is built from scratch per the brand identity (Arabic style, light theme); neither the existing landing page nor the old landing-page spec is a design source.
+
+Approved teacher scope: overview of pending questions/referrals/recent conversations; unified referral inbox filterable by response status; scholarly profile with biography, specialties, teachers and ijazat review status; account/notification settings; accessible availability control.
 
 Approved admin scope: activity and review priorities; users/permissions/account states; teacher qualification review with accept/request information/reject and reason; tracks/levels/approved texts/order; assessment generation/pass/retake policy management and results; approved commentary sources, assistant answer issues and referrals; reports and administrative audit trail.
 

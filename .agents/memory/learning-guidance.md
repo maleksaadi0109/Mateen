@@ -15,13 +15,13 @@ The user requires reconnecting to restore the question and remaining time, and i
 
 **How to apply:** Specify server-authoritative progress/time checkpoints and pause on detected disconnection, no answering while disconnected, reconnect to the same attempt, and audit repeated disconnects without automatically accusing the student. Immediate feedback applies to practice; do not reveal correct answers during assessment.
 
-Teachers answer assistant referrals and direct student questions. First-release communication is text only, and teachers can indicate available/unavailable for questions. Verified qualifications and ijazat help students choose a teacher.
+Teachers answer assistant referrals only; students cannot message teachers directly. First-release communication is text only, and teachers can indicate available/unavailable for questions. Verified qualifications and ijazat build trust in the referred teacher.
 
 **Why:** The user defined guidance, rather than scheduled teaching or certification, as the teacher's initial purpose.
 
 **How to apply:** Prioritize question queues, contextual replies, availability, and trust information; do not expand into video lessons or student certificate issuance by default.
 
-Unavailable teachers do not receive new questions but retain access to previous conversations and can reply. Assistant referrals carry the text being studied, student question, and reason for referral.
+Unavailable teachers do not receive new referrals but retain access to previous conversations and can reply. Assistant referrals carry the text being studied, student question, and reason for referral.
 
 **Why:** The user approved these recommendations to respect teacher availability and avoid making students repeat context.
 
