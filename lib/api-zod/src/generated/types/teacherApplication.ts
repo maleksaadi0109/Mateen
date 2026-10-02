@@ -5,6 +5,8 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { QualificationDocument } from './qualificationDocument';
+import type { ReviewAudit } from './reviewAudit';
 import type { TeacherApplicationStatus } from './teacherApplicationStatus';
 
 export interface TeacherApplication {
@@ -12,4 +14,10 @@ export interface TeacherApplication {
   specialties: string;
   available: boolean;
   status: TeacherApplicationStatus;
+  revision?: number;
+  reason?: string;
+  /** @nullable */
+  submittedAt?: string | null;
+  documents?: QualificationDocument[];
+  history?: ReviewAudit[];
 }

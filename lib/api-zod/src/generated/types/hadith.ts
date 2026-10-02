@@ -5,6 +5,7 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { HadithReviewStatus } from './hadithReviewStatus';
 
 export interface Hadith {
   id: number;
@@ -13,4 +14,7 @@ export interface Hadith {
   text: string;
   sourceUrl: string;
   sourcePage: number;
+  sourceVersionId?: string;
+  reviewStatus?: HadithReviewStatus;
+  viewerPage?: number;
 }

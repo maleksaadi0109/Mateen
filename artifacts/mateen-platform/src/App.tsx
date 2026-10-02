@@ -20,6 +20,10 @@ import MessagesPage from '@/pages/student/messages';
 import { AssistantPage, ExamsPage } from '@/pages/student/unavailable';
 import SettingsPage from '@/pages/settings';
 import TeacherHome from '@/pages/teacher/home';
+import AdminHome from '@/pages/admin';
+import AdminTeachers from '@/pages/admin/teachers';
+import AdminSources from '@/pages/admin/sources';
+import AdminAudit from '@/pages/admin/audit';
 import HomeGate from '@/pages/home-gate';
 
 const clerkPubKey = publishableKeyFromHost(window.location.hostname, import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
@@ -153,6 +157,10 @@ function Routes() {
           <Route path="/teacher"><Portal role="teacher"><TeacherHome /></Portal></Route>
           <Route path="/teacher/messages"><Portal role="teacher"><MessagesPage teacher /></Portal></Route>
           <Route path="/teacher/settings"><Portal role="teacher"><SettingsPage /></Portal></Route>
+          <Route path="/admin" component={AdminHome} />
+          <Route path="/admin/teachers" component={AdminTeachers} />
+          <Route path="/admin/sources" component={AdminSources} />
+          <Route path="/admin/audit" component={AdminAudit} />
           <Route component={NotFound} />
         </Switch>
         <Toaster />

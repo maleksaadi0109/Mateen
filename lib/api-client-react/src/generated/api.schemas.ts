@@ -23,6 +23,16 @@ export interface CatalogText {
   hadithCount: number;
 }
 
+export type HadithReviewStatus = typeof HadithReviewStatus[keyof typeof HadithReviewStatus];
+
+
+export const HadithReviewStatus = {
+  pending_review: 'pending_review',
+  approved: 'approved',
+  rejected: 'rejected',
+  withdrawn: 'withdrawn',
+} as const;
+
 export interface Hadith {
   id: number;
   number: number;
@@ -30,6 +40,9 @@ export interface Hadith {
   text: string;
   sourceUrl: string;
   sourcePage: number;
+  sourceVersionId?: string;
+  reviewStatus?: HadithReviewStatus;
+  viewerPage?: number;
 }
 
 export type StudyTextSourceStatus = typeof StudyTextSourceStatus[keyof typeof StudyTextSourceStatus];
@@ -37,6 +50,7 @@ export type StudyTextSourceStatus = typeof StudyTextSourceStatus[keyof typeof St
 
 export const StudyTextSourceStatus = {
   retrieved_pending_review: 'retrieved_pending_review',
+  approved: 'approved',
   unavailable: 'unavailable',
 } as const;
 
@@ -149,13 +163,242 @@ export const TeacherApplicationStatus = {
   draft: 'draft',
   pending_review: 'pending_review',
   approved: 'approved',
+  needs_information: 'needs_information',
+  rejected: 'rejected',
 } as const;
+
+export type QualificationDocumentKind = typeof QualificationDocumentKind[keyof typeof QualificationDocumentKind];
+
+
+export const QualificationDocumentKind = {
+  qualification: 'qualification',
+  ijaza: 'ijaza',
+} as const;
+
+export type QualificationDocumentStatus = typeof QualificationDocumentStatus[keyof typeof QualificationDocumentStatus];
+
+
+export const QualificationDocumentStatus = {
+  uploading: 'uploading',
+  clean: 'clean',
+  rejected: 'rejected',
+} as const;
+
+export interface QualificationDocument {
+  id: string;
+  name: string;
+  kind: QualificationDocumentKind;
+  size: number;
+  contentType: string;
+  status: QualificationDocumentStatus;
+  uploadedAt: string;
+}
+
+export interface ReviewAudit {
+  id: string;
+  actorId: string;
+  action: string;
+  targetId: string;
+  reason: string;
+  createdAt: string;
+}
 
 export interface TeacherApplication {
   biography: string;
   specialties: string;
   available: boolean;
   status: TeacherApplicationStatus;
+  revision?: number;
+  reason?: string;
+  /** @nullable */
+  submittedAt?: string | null;
+  documents?: QualificationDocument[];
+  history?: ReviewAudit[];
+}
+
+export interface ReviewAccess {
+  contentReviewer: boolean;
+  qualificationReviewer: boolean;
+  verifiedEmail: boolean;
+  mfaEnabled: boolean;
+  secureSession: boolean;
+}
+
+export interface RevisionInput {
+  /** @minimum 0 */
+  revision: number;
+}
+
+export type QualificationUploadInputContentType = typeof QualificationUploadInputContentType[keyof typeof QualificationUploadInputContentType];
+
+
+export const QualificationUploadInputContentType = {
+  'application/pdf': 'application/pdf',
+  'image/jpeg': 'image/jpeg',
+  'image/png': 'image/png',
+} as const;
+
+export type QualificationUploadInputKind = typeof QualificationUploadInputKind[keyof typeof QualificationUploadInputKind];
+
+
+export const QualificationUploadInputKind = {
+  qualification: 'qualification',
+  ijaza: 'ijaza',
+} as const;
+
+export interface QualificationUploadInput {
+  /**
+     * @minLength 1
+     * @maxLength 180
+     */
+  name: string;
+  /**
+     * @minimum 1
+     * @maximum 10485760
+     */
+  size: number;
+  contentType: QualificationUploadInputContentType;
+  kind: QualificationUploadInputKind;
+}
+
+export interface QualificationUpload {
+  documentId: string;
+  uploadURL: string;
+}
+
+export type ReviewDecisionInputDecision = typeof ReviewDecisionInputDecision[keyof typeof ReviewDecisionInputDecision];
+
+
+export const ReviewDecisionInputDecision = {
+  approved: 'approved',
+  needs_information: 'needs_information',
+  rejected: 'rejected',
+} as const;
+
+export interface ReviewDecisionInput {
+  /** @minimum 0 */
+  revision: number;
+  decision: ReviewDecisionInputDecision;
+  /**
+     * @minLength 5
+     * @maxLength 2000
+     */
+  reason: string;
+}
+
+export type TeacherReview = TeacherApplication & {
+  userId: string;
+  name: string;
+};
+
+export interface SourceVersionInput {
+  /**
+     * @minimum 1
+     * @maximum 42
+     */
+  hadithNumber: number;
+  /**
+     * @minLength 10
+     * @maxLength 12000
+     */
+  text: string;
+  /** @minimum 1 */
+  printedPage: number;
+  /** @minimum 1 */
+  viewerPage: number;
+  /** @maxLength 1000 */
+  viewerUrl: string;
+  /**
+     * @minLength 3
+     * @maxLength 1000
+     */
+  edition: string;
+  /**
+     * @minLength 5
+     * @maxLength 2000
+     */
+  changeReason: string;
+  /** @maxLength 4000 */
+  rightsEvidence: string;
+  /** @maxLength 1000 */
+  rightsUrl: string;
+}
+
+export type SourceVersionStatus = typeof SourceVersionStatus[keyof typeof SourceVersionStatus];
+
+
+export const SourceVersionStatus = {
+  pending_review: 'pending_review',
+  approved: 'approved',
+  rejected: 'rejected',
+  withdrawn: 'withdrawn',
+} as const;
+
+export type SourceVersionScientificStatus = typeof SourceVersionScientificStatus[keyof typeof SourceVersionScientificStatus];
+
+
+export const SourceVersionScientificStatus = {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected',
+} as const;
+
+export type SourceVersionRightsStatus = typeof SourceVersionRightsStatus[keyof typeof SourceVersionRightsStatus];
+
+
+export const SourceVersionRightsStatus = {
+  pending: 'pending',
+  cleared: 'cleared',
+  rejected: 'rejected',
+} as const;
+
+export type SourceVersion = SourceVersionInput & {
+  id: string;
+  version: number;
+  status: SourceVersionStatus;
+  scientificStatus: SourceVersionScientificStatus;
+  rightsStatus: SourceVersionRightsStatus;
+  createdAt: string;
+  createdBy: string;
+  history: ReviewAudit[];
+};
+
+export type SourceDecisionInputDecision = typeof SourceDecisionInputDecision[keyof typeof SourceDecisionInputDecision];
+
+
+export const SourceDecisionInputDecision = {
+  approved: 'approved',
+  rejected: 'rejected',
+  withdrawn: 'withdrawn',
+} as const;
+
+export type SourceDecisionInputScientificStatus = typeof SourceDecisionInputScientificStatus[keyof typeof SourceDecisionInputScientificStatus];
+
+
+export const SourceDecisionInputScientificStatus = {
+  approved: 'approved',
+  rejected: 'rejected',
+  pending: 'pending',
+} as const;
+
+export type SourceDecisionInputRightsStatus = typeof SourceDecisionInputRightsStatus[keyof typeof SourceDecisionInputRightsStatus];
+
+
+export const SourceDecisionInputRightsStatus = {
+  cleared: 'cleared',
+  rejected: 'rejected',
+  pending: 'pending',
+} as const;
+
+export interface SourceDecisionInput {
+  decision: SourceDecisionInputDecision;
+  scientificStatus: SourceDecisionInputScientificStatus;
+  rightsStatus: SourceDecisionInputRightsStatus;
+  /**
+     * @minLength 5
+     * @maxLength 2000
+     */
+  reason: string;
 }
 
 export interface Capabilities {

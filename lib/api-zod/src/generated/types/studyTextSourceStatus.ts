@@ -11,5 +11,6 @@ export type StudyTextSourceStatus = typeof StudyTextSourceStatus[keyof typeof St
 
 export const StudyTextSourceStatus = {
   retrieved_pending_review: 'retrieved_pending_review',
+  approved: 'approved',
   unavailable: 'unavailable',
 } as const;

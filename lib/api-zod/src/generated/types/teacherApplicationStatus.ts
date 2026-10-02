@@ -13,4 +13,6 @@ export const TeacherApplicationStatus = {
   draft: 'draft',
   pending_review: 'pending_review',
   approved: 'approved',
+  needs_information: 'needs_information',
+  rejected: 'rejected',
 } as const;

@@ -6,26 +6,22 @@ import {
   GetProfileResponse,
   GetProgressResponse,
   GetReferralsResponse,
-  GetScholarsResponse,
   GetStudyTextResponse,
-  GetTeacherResponse,
   SaveProfileBody,
   SaveProfileResponse,
   SaveProgressBody,
   SaveProgressParams,
   SaveProgressResponse,
-  SaveTeacherBody,
-  SaveTeacherResponse,
 } from "@workspace/api-zod";
 import {
   db,
   profilesTable,
   studyProgressTable,
-  teacherApplicationsTable,
 } from "@workspace/db";
-import { and, desc, eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { Router, type NextFunction, type Request, type Response } from "express";
 import nawawiRecords from "../data/nawawi.json";
+import { getNawawiStudyRecords } from "../lib/source-review";
 
 const router = Router();
 
@@ -232,7 +228,7 @@ router.get("/mateen/catalog", (_req, res) => {
   res.json(catalog);
 });
 
-router.get("/mateen/texts/:textId", (req, res) => {
+router.get("/mateen/texts/:textId", async (req, res) => {
   const textId = req.params.textId;
   if (!validTextId(textId)) {
     res.status(400).json({ error: "Invalid text identifier" });
@@ -244,13 +240,14 @@ router.get("/mateen/texts/:textId", (req, res) => {
       .json({ error: catalogIds.has(textId) ? "This text is not available yet" : "Text not found" });
     return;
   }
+  const reviewedSource = await getNawawiStudyRecords();
   const result = GetStudyTextResponse.parse({
     id: "nawawi",
     title: "الأربعون النووية",
     author: sourceAuthor,
     sourceUrl,
-    sourceStatus: validHadiths.length > 0 ? "retrieved_pending_review" : "unavailable",
-    hadiths: validHadiths,
+    sourceStatus: reviewedSource.sourceStatus,
+    hadiths: reviewedSource.hadiths,
   });
   res.json(result);
 });
@@ -451,29 +448,6 @@ router.get(
   },
 );
 
-router.get("/mateen/scholars", async (_req, res) => {
-  const teachers = await db
-    .select({
-      id: profilesTable.clerkId,
-      name: profilesTable.name,
-      biography: teacherApplicationsTable.biography,
-      specialties: teacherApplicationsTable.specialties,
-      available: teacherApplicationsTable.available,
-    })
-    .from(teacherApplicationsTable)
-    .innerJoin(
-      profilesTable,
-      eq(teacherApplicationsTable.userId, profilesTable.clerkId),
-    )
-    .where(
-      and(
-        eq(teacherApplicationsTable.status, "approved"),
-        eq(profilesTable.role, "teacher"),
-      ),
-    );
-  res.json(GetScholarsResponse.parse(teachers));
-});
-
 router.get(
   "/mateen/referrals",
   authenticationRequired,
@@ -498,92 +472,18 @@ router.post(
   },
 );
 
-router.get(
-  "/mateen/teacher",
-  authenticationRequired,
-  async (req: AuthedRequest, res) => {
-    const profile = await requireProfile(req, res, "teacher");
-    if (!profile) return;
-    const [application] = await db
-      .select()
-      .from(teacherApplicationsTable)
-      .where(eq(teacherApplicationsTable.userId, req.mateenUserId!))
-      .limit(1);
-    res.json(
-      GetTeacherResponse.parse({
-        biography: application?.biography ?? "",
-        specialties: application?.specialties ?? "",
-        available: application?.available ?? false,
-        status: application?.status ?? "draft",
-      }),
-    );
-  },
-);
-
-router.put(
-  "/mateen/teacher",
-  mutationOriginProtection,
-  rateLimit(20, 60_000),
-  authenticationRequired,
-  async (req: AuthedRequest, res) => {
-    const profile = await requireProfile(req, res, "teacher");
-    if (!profile) return;
-    if (
-      !hasOnlyKeys(req.body, ["biography", "specialties", "available"]) ||
-      !SaveTeacherBody.safeParse(req.body).success
-    ) {
-      res.status(400).json({ error: "Invalid teacher application payload" });
-      return;
-    }
-    const input = SaveTeacherBody.parse(req.body);
-    const [existing] = await db
-      .select()
-      .from(teacherApplicationsTable)
-      .where(eq(teacherApplicationsTable.userId, req.mateenUserId!))
-      .limit(1);
-    // Saving a draft is not a submission: qualification documents and the
-    // administrative review workflow have not been implemented yet.
-    const status = existing?.status ?? "draft";
-    const [application] = await db
-      .insert(teacherApplicationsTable)
-      .values({
-        userId: req.mateenUserId!,
-        biography: input.biography,
-        specialties: input.specialties,
-        status,
-        available: status === "approved" && input.available,
-      })
-      .onConflictDoUpdate({
-        target: teacherApplicationsTable.userId,
-        set: {
-          biography: input.biography,
-          specialties: input.specialties,
-          status,
-          available: status === "approved" && input.available,
-        },
-      })
-      .returning();
-    res.json(
-      SaveTeacherResponse.parse({
-        biography: application.biography,
-        specialties: application.specialties,
-        available: application.available,
-        status: application.status,
-      }),
-    );
-  },
-);
-
-router.get("/mateen/capabilities", (_req, res) => {
+router.get("/mateen/capabilities", async (_req, res) => {
+  const reviewedSource = await getNawawiStudyRecords();
   res.json(
     GetCapabilitiesResponse.parse({
       voiceReady: false,
       assistantReady: false,
       examsReady: false,
-      sourceStatus:
-        validHadiths.length > 0 ? "retrieved_pending_review" : "unavailable",
+      sourceStatus: reviewedSource.sourceStatus,
       notice:
-        "الخدمات الصوتية والمساعد والاختبارات غير متاحة حاليًا. النص المسترجع ينتظر المراجعة العلمية، وحقوق نسخ هذه الطبعة غير محسومة.",
+        reviewedSource.sourceStatus === "approved"
+          ? "اعتمدت النسخ الحالية علميًا ووثّقت حقوق استخدامها. الخدمات الصوتية والمساعد والاختبارات غير متاحة حاليًا."
+          : "الخدمات الصوتية والمساعد والاختبارات غير متاحة حاليًا. لا تستخدم النسخ غير المعتمدة في التقييم؛ النص ينتظر المراجعة العلمية وتوثيق حقوق الاستخدام.",
     }),
   );
 });

@@ -8,6 +8,390 @@
 import * as zod from 'zod';
 
 
+export const GetReviewAccessResponse = zod.object({
+  "contentReviewer": zod.boolean(),
+  "qualificationReviewer": zod.boolean(),
+  "verifiedEmail": zod.boolean(),
+  "mfaEnabled": zod.boolean(),
+  "secureSession": zod.boolean()
+})
+
+
+export const requestQualificationUploadBodyNameMax = 180;
+
+export const requestQualificationUploadBodySizeMax = 10485760;
+
+
+
+export const RequestQualificationUploadBody = zod.object({
+  "name": zod.string().min(1).max(requestQualificationUploadBodyNameMax),
+  "size": zod.number().int().min(1).max(requestQualificationUploadBodySizeMax),
+  "contentType": zod.enum(['application/pdf', 'image/jpeg', 'image/png']),
+  "kind": zod.enum(['qualification', 'ijaza'])
+})
+
+export const RequestQualificationUploadResponse = zod.object({
+  "documentId": zod.string(),
+  "uploadURL": zod.string()
+})
+
+
+export const CompleteQualificationUploadParams = zod.object({
+  "documentId": zod.coerce.string()
+})
+
+export const CompleteQualificationUploadResponse = zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "kind": zod.enum(['qualification', 'ijaza']),
+  "size": zod.number().int(),
+  "contentType": zod.string(),
+  "status": zod.enum(['uploading', 'clean', 'rejected']),
+  "uploadedAt": zod.string()
+})
+
+
+export const RemoveQualificationDocumentParams = zod.object({
+  "documentId": zod.coerce.string()
+})
+
+export const RemoveQualificationDocumentResponse = zod.void()
+
+
+export const DownloadQualificationDocumentParams = zod.object({
+  "documentId": zod.coerce.string()
+})
+
+export const DownloadQualificationDocumentResponse = zod.unknown()
+
+
+export const submitTeacherApplicationBodyRevisionMin = 0;
+
+
+
+export const SubmitTeacherApplicationBody = zod.object({
+  "revision": zod.number().int().min(submitTeacherApplicationBodyRevisionMin)
+})
+
+export const SubmitTeacherApplicationResponse = zod.object({
+  "biography": zod.string(),
+  "specialties": zod.string(),
+  "available": zod.boolean(),
+  "status": zod.enum(['draft', 'pending_review', 'approved', 'needs_information', 'rejected']),
+  "revision": zod.number().int().optional(),
+  "reason": zod.string().optional(),
+  "submittedAt": zod.string().nullish(),
+  "documents": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "kind": zod.enum(['qualification', 'ijaza']),
+  "size": zod.number().int(),
+  "contentType": zod.string(),
+  "status": zod.enum(['uploading', 'clean', 'rejected']),
+  "uploadedAt": zod.string()
+})).optional(),
+  "history": zod.array(zod.object({
+  "id": zod.string(),
+  "actorId": zod.string(),
+  "action": zod.string(),
+  "targetId": zod.string(),
+  "reason": zod.string(),
+  "createdAt": zod.string()
+})).optional()
+})
+
+
+export const GetTeacherReviewsResponseItem = zod.object({
+  "biography": zod.string(),
+  "specialties": zod.string(),
+  "available": zod.boolean(),
+  "status": zod.enum(['draft', 'pending_review', 'approved', 'needs_information', 'rejected']),
+  "revision": zod.number().int().optional(),
+  "reason": zod.string().optional(),
+  "submittedAt": zod.string().nullish(),
+  "documents": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "kind": zod.enum(['qualification', 'ijaza']),
+  "size": zod.number().int(),
+  "contentType": zod.string(),
+  "status": zod.enum(['uploading', 'clean', 'rejected']),
+  "uploadedAt": zod.string()
+})).optional(),
+  "history": zod.array(zod.object({
+  "id": zod.string(),
+  "actorId": zod.string(),
+  "action": zod.string(),
+  "targetId": zod.string(),
+  "reason": zod.string(),
+  "createdAt": zod.string()
+})).optional()
+}).and(zod.object({
+  "userId": zod.string(),
+  "name": zod.string()
+}))
+export const GetTeacherReviewsResponse = zod.array(GetTeacherReviewsResponseItem)
+
+
+export const DecideTeacherApplicationParams = zod.object({
+  "userId": zod.coerce.string()
+})
+
+export const decideTeacherApplicationBodyRevisionMin = 0;
+
+export const decideTeacherApplicationBodyReasonMin = 5;
+export const decideTeacherApplicationBodyReasonMax = 2000;
+
+
+
+export const DecideTeacherApplicationBody = zod.object({
+  "revision": zod.number().int().min(decideTeacherApplicationBodyRevisionMin),
+  "decision": zod.enum(['approved', 'needs_information', 'rejected']),
+  "reason": zod.string().min(decideTeacherApplicationBodyReasonMin).max(decideTeacherApplicationBodyReasonMax)
+})
+
+export const DecideTeacherApplicationResponse = zod.object({
+  "biography": zod.string(),
+  "specialties": zod.string(),
+  "available": zod.boolean(),
+  "status": zod.enum(['draft', 'pending_review', 'approved', 'needs_information', 'rejected']),
+  "revision": zod.number().int().optional(),
+  "reason": zod.string().optional(),
+  "submittedAt": zod.string().nullish(),
+  "documents": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "kind": zod.enum(['qualification', 'ijaza']),
+  "size": zod.number().int(),
+  "contentType": zod.string(),
+  "status": zod.enum(['uploading', 'clean', 'rejected']),
+  "uploadedAt": zod.string()
+})).optional(),
+  "history": zod.array(zod.object({
+  "id": zod.string(),
+  "actorId": zod.string(),
+  "action": zod.string(),
+  "targetId": zod.string(),
+  "reason": zod.string(),
+  "createdAt": zod.string()
+})).optional()
+}).and(zod.object({
+  "userId": zod.string(),
+  "name": zod.string()
+}))
+
+
+export const getSourceReviewsResponseOneHadithNumberMax = 42;
+
+export const getSourceReviewsResponseOneTextMin = 10;
+export const getSourceReviewsResponseOneTextMax = 12000;
+
+
+
+export const getSourceReviewsResponseOneViewerUrlMax = 1000;
+
+export const getSourceReviewsResponseOneEditionMin = 3;
+export const getSourceReviewsResponseOneEditionMax = 1000;
+
+export const getSourceReviewsResponseOneChangeReasonMin = 5;
+export const getSourceReviewsResponseOneChangeReasonMax = 2000;
+
+export const getSourceReviewsResponseOneRightsEvidenceMax = 4000;
+
+export const getSourceReviewsResponseOneRightsUrlMax = 1000;
+
+
+
+export const GetSourceReviewsResponseItem = zod.object({
+  "hadithNumber": zod.number().int().min(1).max(getSourceReviewsResponseOneHadithNumberMax),
+  "text": zod.string().min(getSourceReviewsResponseOneTextMin).max(getSourceReviewsResponseOneTextMax),
+  "printedPage": zod.number().int().min(1),
+  "viewerPage": zod.number().int().min(1),
+  "viewerUrl": zod.string().url().max(getSourceReviewsResponseOneViewerUrlMax),
+  "edition": zod.string().min(getSourceReviewsResponseOneEditionMin).max(getSourceReviewsResponseOneEditionMax),
+  "changeReason": zod.string().min(getSourceReviewsResponseOneChangeReasonMin).max(getSourceReviewsResponseOneChangeReasonMax),
+  "rightsEvidence": zod.string().max(getSourceReviewsResponseOneRightsEvidenceMax),
+  "rightsUrl": zod.string().max(getSourceReviewsResponseOneRightsUrlMax)
+}).and(zod.object({
+  "id": zod.string(),
+  "version": zod.number().int(),
+  "status": zod.enum(['pending_review', 'approved', 'rejected', 'withdrawn']),
+  "scientificStatus": zod.enum(['pending', 'approved', 'rejected']),
+  "rightsStatus": zod.enum(['pending', 'cleared', 'rejected']),
+  "createdAt": zod.string(),
+  "createdBy": zod.string(),
+  "history": zod.array(zod.object({
+  "id": zod.string(),
+  "actorId": zod.string(),
+  "action": zod.string(),
+  "targetId": zod.string(),
+  "reason": zod.string(),
+  "createdAt": zod.string()
+}))
+}))
+export const GetSourceReviewsResponse = zod.array(GetSourceReviewsResponseItem)
+
+
+export const createSourceVersionBodyHadithNumberMax = 42;
+
+export const createSourceVersionBodyTextMin = 10;
+export const createSourceVersionBodyTextMax = 12000;
+
+
+
+export const createSourceVersionBodyViewerUrlMax = 1000;
+
+export const createSourceVersionBodyEditionMin = 3;
+export const createSourceVersionBodyEditionMax = 1000;
+
+export const createSourceVersionBodyChangeReasonMin = 5;
+export const createSourceVersionBodyChangeReasonMax = 2000;
+
+export const createSourceVersionBodyRightsEvidenceMax = 4000;
+
+export const createSourceVersionBodyRightsUrlMax = 1000;
+
+
+
+export const CreateSourceVersionBody = zod.object({
+  "hadithNumber": zod.number().int().min(1).max(createSourceVersionBodyHadithNumberMax),
+  "text": zod.string().min(createSourceVersionBodyTextMin).max(createSourceVersionBodyTextMax),
+  "printedPage": zod.number().int().min(1),
+  "viewerPage": zod.number().int().min(1),
+  "viewerUrl": zod.string().url().max(createSourceVersionBodyViewerUrlMax),
+  "edition": zod.string().min(createSourceVersionBodyEditionMin).max(createSourceVersionBodyEditionMax),
+  "changeReason": zod.string().min(createSourceVersionBodyChangeReasonMin).max(createSourceVersionBodyChangeReasonMax),
+  "rightsEvidence": zod.string().max(createSourceVersionBodyRightsEvidenceMax),
+  "rightsUrl": zod.string().max(createSourceVersionBodyRightsUrlMax)
+})
+
+export const createSourceVersionResponseOneHadithNumberMax = 42;
+
+export const createSourceVersionResponseOneTextMin = 10;
+export const createSourceVersionResponseOneTextMax = 12000;
+
+
+
+export const createSourceVersionResponseOneViewerUrlMax = 1000;
+
+export const createSourceVersionResponseOneEditionMin = 3;
+export const createSourceVersionResponseOneEditionMax = 1000;
+
+export const createSourceVersionResponseOneChangeReasonMin = 5;
+export const createSourceVersionResponseOneChangeReasonMax = 2000;
+
+export const createSourceVersionResponseOneRightsEvidenceMax = 4000;
+
+export const createSourceVersionResponseOneRightsUrlMax = 1000;
+
+
+
+export const CreateSourceVersionResponse = zod.object({
+  "hadithNumber": zod.number().int().min(1).max(createSourceVersionResponseOneHadithNumberMax),
+  "text": zod.string().min(createSourceVersionResponseOneTextMin).max(createSourceVersionResponseOneTextMax),
+  "printedPage": zod.number().int().min(1),
+  "viewerPage": zod.number().int().min(1),
+  "viewerUrl": zod.string().url().max(createSourceVersionResponseOneViewerUrlMax),
+  "edition": zod.string().min(createSourceVersionResponseOneEditionMin).max(createSourceVersionResponseOneEditionMax),
+  "changeReason": zod.string().min(createSourceVersionResponseOneChangeReasonMin).max(createSourceVersionResponseOneChangeReasonMax),
+  "rightsEvidence": zod.string().max(createSourceVersionResponseOneRightsEvidenceMax),
+  "rightsUrl": zod.string().max(createSourceVersionResponseOneRightsUrlMax)
+}).and(zod.object({
+  "id": zod.string(),
+  "version": zod.number().int(),
+  "status": zod.enum(['pending_review', 'approved', 'rejected', 'withdrawn']),
+  "scientificStatus": zod.enum(['pending', 'approved', 'rejected']),
+  "rightsStatus": zod.enum(['pending', 'cleared', 'rejected']),
+  "createdAt": zod.string(),
+  "createdBy": zod.string(),
+  "history": zod.array(zod.object({
+  "id": zod.string(),
+  "actorId": zod.string(),
+  "action": zod.string(),
+  "targetId": zod.string(),
+  "reason": zod.string(),
+  "createdAt": zod.string()
+}))
+}))
+
+
+export const DecideSourceVersionParams = zod.object({
+  "versionId": zod.coerce.string()
+})
+
+export const decideSourceVersionBodyReasonMin = 5;
+export const decideSourceVersionBodyReasonMax = 2000;
+
+
+
+export const DecideSourceVersionBody = zod.object({
+  "decision": zod.enum(['approved', 'rejected', 'withdrawn']),
+  "scientificStatus": zod.enum(['approved', 'rejected', 'pending']),
+  "rightsStatus": zod.enum(['cleared', 'rejected', 'pending']),
+  "reason": zod.string().min(decideSourceVersionBodyReasonMin).max(decideSourceVersionBodyReasonMax)
+})
+
+export const decideSourceVersionResponseOneHadithNumberMax = 42;
+
+export const decideSourceVersionResponseOneTextMin = 10;
+export const decideSourceVersionResponseOneTextMax = 12000;
+
+
+
+export const decideSourceVersionResponseOneViewerUrlMax = 1000;
+
+export const decideSourceVersionResponseOneEditionMin = 3;
+export const decideSourceVersionResponseOneEditionMax = 1000;
+
+export const decideSourceVersionResponseOneChangeReasonMin = 5;
+export const decideSourceVersionResponseOneChangeReasonMax = 2000;
+
+export const decideSourceVersionResponseOneRightsEvidenceMax = 4000;
+
+export const decideSourceVersionResponseOneRightsUrlMax = 1000;
+
+
+
+export const DecideSourceVersionResponse = zod.object({
+  "hadithNumber": zod.number().int().min(1).max(decideSourceVersionResponseOneHadithNumberMax),
+  "text": zod.string().min(decideSourceVersionResponseOneTextMin).max(decideSourceVersionResponseOneTextMax),
+  "printedPage": zod.number().int().min(1),
+  "viewerPage": zod.number().int().min(1),
+  "viewerUrl": zod.string().url().max(decideSourceVersionResponseOneViewerUrlMax),
+  "edition": zod.string().min(decideSourceVersionResponseOneEditionMin).max(decideSourceVersionResponseOneEditionMax),
+  "changeReason": zod.string().min(decideSourceVersionResponseOneChangeReasonMin).max(decideSourceVersionResponseOneChangeReasonMax),
+  "rightsEvidence": zod.string().max(decideSourceVersionResponseOneRightsEvidenceMax),
+  "rightsUrl": zod.string().max(decideSourceVersionResponseOneRightsUrlMax)
+}).and(zod.object({
+  "id": zod.string(),
+  "version": zod.number().int(),
+  "status": zod.enum(['pending_review', 'approved', 'rejected', 'withdrawn']),
+  "scientificStatus": zod.enum(['pending', 'approved', 'rejected']),
+  "rightsStatus": zod.enum(['pending', 'cleared', 'rejected']),
+  "createdAt": zod.string(),
+  "createdBy": zod.string(),
+  "history": zod.array(zod.object({
+  "id": zod.string(),
+  "actorId": zod.string(),
+  "action": zod.string(),
+  "targetId": zod.string(),
+  "reason": zod.string(),
+  "createdAt": zod.string()
+}))
+}))
+
+
+export const GetReviewAuditResponseItem = zod.object({
+  "id": zod.string(),
+  "actorId": zod.string(),
+  "action": zod.string(),
+  "targetId": zod.string(),
+  "reason": zod.string(),
+  "createdAt": zod.string()
+})
+export const GetReviewAuditResponse = zod.array(GetReviewAuditResponseItem)
+
+
 export const GetCatalogResponseItem = zod.object({
   "id": zod.string(),
   "title": zod.string(),
@@ -29,14 +413,17 @@ export const GetStudyTextResponse = zod.object({
   "title": zod.string(),
   "author": zod.string(),
   "sourceUrl": zod.string(),
-  "sourceStatus": zod.enum(['retrieved_pending_review', 'unavailable']),
+  "sourceStatus": zod.enum(['retrieved_pending_review', 'approved', 'unavailable']),
   "hadiths": zod.array(zod.object({
   "id": zod.number().int(),
   "number": zod.number().int(),
   "title": zod.string(),
   "text": zod.string(),
   "sourceUrl": zod.string(),
-  "sourcePage": zod.number().int()
+  "sourcePage": zod.number().int(),
+  "sourceVersionId": zod.string().optional(),
+  "reviewStatus": zod.enum(['pending_review', 'approved', 'rejected', 'withdrawn']).optional(),
+  "viewerPage": zod.number().int().optional()
 }))
 })
 
@@ -141,7 +528,27 @@ export const GetTeacherResponse = zod.object({
   "biography": zod.string(),
   "specialties": zod.string(),
   "available": zod.boolean(),
-  "status": zod.enum(['draft', 'pending_review', 'approved'])
+  "status": zod.enum(['draft', 'pending_review', 'approved', 'needs_information', 'rejected']),
+  "revision": zod.number().int().optional(),
+  "reason": zod.string().optional(),
+  "submittedAt": zod.string().nullish(),
+  "documents": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "kind": zod.enum(['qualification', 'ijaza']),
+  "size": zod.number().int(),
+  "contentType": zod.string(),
+  "status": zod.enum(['uploading', 'clean', 'rejected']),
+  "uploadedAt": zod.string()
+})).optional(),
+  "history": zod.array(zod.object({
+  "id": zod.string(),
+  "actorId": zod.string(),
+  "action": zod.string(),
+  "targetId": zod.string(),
+  "reason": zod.string(),
+  "createdAt": zod.string()
+})).optional()
 })
 
 
@@ -161,7 +568,27 @@ export const SaveTeacherResponse = zod.object({
   "biography": zod.string(),
   "specialties": zod.string(),
   "available": zod.boolean(),
-  "status": zod.enum(['draft', 'pending_review', 'approved'])
+  "status": zod.enum(['draft', 'pending_review', 'approved', 'needs_information', 'rejected']),
+  "revision": zod.number().int().optional(),
+  "reason": zod.string().optional(),
+  "submittedAt": zod.string().nullish(),
+  "documents": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "kind": zod.enum(['qualification', 'ijaza']),
+  "size": zod.number().int(),
+  "contentType": zod.string(),
+  "status": zod.enum(['uploading', 'clean', 'rejected']),
+  "uploadedAt": zod.string()
+})).optional(),
+  "history": zod.array(zod.object({
+  "id": zod.string(),
+  "actorId": zod.string(),
+  "action": zod.string(),
+  "targetId": zod.string(),
+  "reason": zod.string(),
+  "createdAt": zod.string()
+})).optional()
 })
 
 

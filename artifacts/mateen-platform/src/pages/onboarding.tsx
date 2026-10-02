@@ -49,7 +49,7 @@ export default function OnboardingPage() {
 
   const roles = [
     { v: 'student' as const, t: 'طالب علم', d: 'أدرس المتون المتاحة وأتابع موضع توقفي وعلاماتي.', I: BookOpen },
-    { v: 'teacher' as const, t: 'معلم', d: 'أقدّم ملفي العلمي مسودةً للمراجعة. لا أستقبل إحالات قبل الاعتماد.', I: ScrollText },
+    { v: 'teacher' as const, t: 'معلم', d: 'أقدّم ملفي ووثائقي الخاصة للمراجعة. لا أستقبل إحالات قبل الاعتماد.', I: ScrollText },
   ];
 
   return (

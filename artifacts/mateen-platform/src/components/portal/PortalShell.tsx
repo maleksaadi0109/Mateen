@@ -2,9 +2,9 @@ import { type ReactNode, createContext, useContext, useEffect, useState } from '
 import { Link, Redirect, useLocation } from 'wouter';
 import { useClerk } from '@clerk/react';
 import {
-  LayoutDashboard, Library, BookOpen, Bookmark, ClipboardCheck, ScrollText, MessageSquare, Sparkles, Settings, LogOut, Moon, Sun, FileText,
+  LayoutDashboard, Library, BookOpen, Bookmark, ClipboardCheck, ScrollText, MessageSquare, Sparkles, Settings, LogOut, Moon, Sun, FileText, ShieldCheck,
 } from 'lucide-react';
-import { getGetProfileQueryKey, useGetProfile } from '@workspace/api-client-react';
+import { getGetProfileQueryKey, getGetReviewAccessQueryKey, useGetProfile, useGetReviewAccess } from '@workspace/api-client-react';
 import { Logo, ErrorState, SkeletonBlock } from '@/components/mateen/bits';
 import { useAuthReady } from '@/lib/mateen';
 import { cn } from '@/lib/utils';
@@ -61,10 +61,15 @@ export function PortalGate({ role, children }: { role: 'student' | 'teacher'; ch
   );
 }
 
-function Shell({ nav, name, role, children }: { nav: typeof studentNav; name: string; role: string; children: ReactNode }) {
+function Shell({ nav: navProp, name, role, children }: { nav: typeof studentNav; name: string; role: string; children: ReactNode }) {
+  let nav = navProp;
   const [loc] = useLocation();
   const { signOut } = useClerk();
   const { theme, setTheme } = usePortalTheme();
+  const access = useGetReviewAccess({ query: { enabled: true, queryKey: getGetReviewAccessQueryKey() } });
+  if (access.data && (access.data.contentReviewer || access.data.qualificationReviewer) && !nav.some((x) => x.href === '/admin')) {
+    nav = [...nav, { href: '/admin', label: 'مركز المراجعة', icon: ShieldCheck }];
+  }
   const active = (n: (typeof nav)[number]) => (n.exact ? loc === n.href : loc.startsWith(n.href));
   const base = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
 

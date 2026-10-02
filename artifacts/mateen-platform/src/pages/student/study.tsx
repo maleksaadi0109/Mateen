@@ -142,8 +142,13 @@ export default function StudyPage() {
             <h2 className="mt-4 font-display text-2xl font-bold">{h.title}</h2>
             <p className="hadith-text mt-6" style={{ fontSize: fontSize, lineHeight: 2.2 }} data-testid="text-hadith">{h.text}</p>
             <a href={h.sourceUrl} target="_blank" rel="noreferrer" className="mt-6 inline-flex items-center gap-2 font-ui text-sm text-muted-foreground underline underline-offset-4 hover:text-secondary" data-testid="link-source">
-              المصدر: {t.title}، صفحة {num(h.sourcePage)} <ExternalLink size={13} />
+              المصدر: {t.title}، الصفحة المطبوعة {num(h.sourcePage)}
+              {h.viewerPage && <> · صفحة العارض {num(h.viewerPage)}</>} <ExternalLink size={13} />
             </a>
+            {h.reviewStatus && <p className="mt-2 font-ui text-xs text-muted-foreground" data-testid="hadith-review-status">
+              {h.reviewStatus === 'approved' ? 'نسخة معتمدة علميًا ومصرّح باستخدامها' : 'نسخة غير معتمدة للتقييم'}
+              {h.sourceVersionId && <> · {h.sourceVersionId}</>}
+            </p>}
             <div className="mt-8 flex flex-wrap gap-3">
               <button onClick={() => persist({ ...snap, completed: toggle(snap.completed, h.id) }, snap)} aria-pressed={studied} disabled={save.isPending}
                 className={cn('inline-flex items-center gap-2 rounded-full px-6 py-3 font-ui text-sm font-bold transition', studied ? 'bg-secondary text-secondary-foreground' : 'border-2 border-secondary text-secondary hover:bg-secondary/10')} data-testid="button-studied">

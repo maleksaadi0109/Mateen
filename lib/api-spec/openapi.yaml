@@ -11,6 +11,144 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /mateen/review-access:
+    get:
+      operationId: getReviewAccess
+      responses:
+        "200":
+          description: Server verified permissions and account protections
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ReviewAccess" }
+  /mateen/teacher/documents/upload:
+    post:
+      operationId: requestQualificationUpload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/QualificationUploadInput" }
+      responses:
+        "200":
+          description: Short lived direct private upload
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/QualificationUpload" }
+  /mateen/teacher/documents/{documentId}/complete:
+    post:
+      operationId: completeQualificationUpload
+      parameters:
+        - { in: path, name: documentId, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: Validated document
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/QualificationDocument" }
+  /mateen/teacher/documents/{documentId}:
+    delete:
+      operationId: removeQualificationDocument
+      parameters:
+        - { in: path, name: documentId, required: true, schema: { type: string } }
+      responses:
+        "204": { description: Removed from next submission }
+  /mateen/documents/{documentId}/download:
+    get:
+      operationId: downloadQualificationDocument
+      parameters:
+        - { in: path, name: documentId, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: Protected attachment bytes, never public
+          content:
+            application/octet-stream:
+              schema: { type: string, format: binary }
+  /mateen/teacher/submit:
+    post:
+      operationId: submitTeacherApplication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RevisionInput" }
+      responses:
+        "200":
+          description: Submitted application
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TeacherApplication" }
+  /mateen/admin/teachers:
+    get:
+      operationId: getTeacherReviews
+      responses:
+        "200":
+          description: Qualification reviewer queue
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/TeacherReview" } }
+  /mateen/admin/teachers/{userId}/decision:
+    post:
+      operationId: decideTeacherApplication
+      parameters:
+        - { in: path, name: userId, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ReviewDecisionInput" }
+      responses:
+        "200":
+          description: Recorded decision
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TeacherReview" }
+  /mateen/admin/sources:
+    get:
+      operationId: getSourceReviews
+      responses:
+        "200":
+          description: Versioned Nawawi source review queue
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/SourceVersion" } }
+    post:
+      operationId: createSourceVersion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SourceVersionInput" }
+      responses:
+        "201":
+          description: New unapproved immutable version
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SourceVersion" }
+  /mateen/admin/sources/{versionId}/decision:
+    post:
+      operationId: decideSourceVersion
+      parameters:
+        - { in: path, name: versionId, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SourceDecisionInput" }
+      responses:
+        "200":
+          description: Scientific and rights decision on exact version
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SourceVersion" }
+  /mateen/admin/audit:
+    get:
+      operationId: getReviewAudit
+      responses:
+        "200":
+          description: Authorized append only review history
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/ReviewAudit" } }
   /mateen/catalog:
     get:
       operationId: getCatalog
@@ -186,6 +324,9 @@ components:
         text: { type: string }
         sourceUrl: { type: string }
         sourcePage: { type: integer }
+        sourceVersionId: { type: string }
+        reviewStatus: { type: string, enum: [pending_review, approved, rejected, withdrawn] }
+        viewerPage: { type: integer }
     StudyText:
       type: object
       required: [id, title, author, sourceUrl, sourceStatus, hadiths]
@@ -194,7 +335,7 @@ components:
         title: { type: string }
         author: { type: string }
         sourceUrl: { type: string }
-        sourceStatus: { type: string, enum: [retrieved_pending_review, unavailable] }
+        sourceStatus: { type: string, enum: [retrieved_pending_review, approved, unavailable] }
         hadiths:
           type: array
           items: { $ref: "#/components/schemas/Hadith" }
@@ -279,7 +420,116 @@ components:
         biography: { type: string }
         specialties: { type: string }
         available: { type: boolean }
-        status: { type: string, enum: [draft, pending_review, approved] }
+        status: { type: string, enum: [draft, pending_review, approved, needs_information, rejected] }
+        revision: { type: integer }
+        reason: { type: string }
+        submittedAt: { type: ["string", "null"] }
+        documents: { type: array, items: { $ref: "#/components/schemas/QualificationDocument" } }
+        history: { type: array, items: { $ref: "#/components/schemas/ReviewAudit" } }
+    ReviewAccess:
+      type: object
+      required: [contentReviewer, qualificationReviewer, verifiedEmail, mfaEnabled, secureSession]
+      properties:
+        contentReviewer: { type: boolean }
+        qualificationReviewer: { type: boolean }
+        verifiedEmail: { type: boolean }
+        mfaEnabled: { type: boolean }
+        secureSession: { type: boolean }
+    RevisionInput:
+      type: object
+      additionalProperties: false
+      required: [revision]
+      properties:
+        revision: { type: integer, minimum: 0 }
+    QualificationUploadInput:
+      type: object
+      additionalProperties: false
+      required: [name, size, contentType, kind]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 180 }
+        size: { type: integer, minimum: 1, maximum: 10485760 }
+        contentType: { type: string, enum: [application/pdf, image/jpeg, image/png] }
+        kind: { type: string, enum: [qualification, ijaza] }
+    QualificationUpload:
+      type: object
+      required: [documentId, uploadURL]
+      properties:
+        documentId: { type: string }
+        uploadURL: { type: string }
+    QualificationDocument:
+      type: object
+      required: [id, name, kind, size, contentType, status, uploadedAt]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        kind: { type: string, enum: [qualification, ijaza] }
+        size: { type: integer }
+        contentType: { type: string }
+        status: { type: string, enum: [uploading, clean, rejected] }
+        uploadedAt: { type: string }
+    ReviewDecisionInput:
+      type: object
+      additionalProperties: false
+      required: [revision, decision, reason]
+      properties:
+        revision: { type: integer, minimum: 0 }
+        decision: { type: string, enum: [approved, needs_information, rejected] }
+        reason: { type: string, minLength: 5, maxLength: 2000 }
+    TeacherReview:
+      allOf:
+        - { $ref: "#/components/schemas/TeacherApplication" }
+        - type: object
+          required: [userId, name]
+          properties:
+            userId: { type: string }
+            name: { type: string }
+    SourceVersionInput:
+      type: object
+      additionalProperties: false
+      required: [hadithNumber, text, printedPage, viewerPage, viewerUrl, edition, changeReason, rightsEvidence, rightsUrl]
+      properties:
+        hadithNumber: { type: integer, minimum: 1, maximum: 42 }
+        text: { type: string, minLength: 10, maxLength: 12000 }
+        printedPage: { type: integer, minimum: 1 }
+        viewerPage: { type: integer, minimum: 1 }
+        viewerUrl: { type: string, format: uri, maxLength: 1000 }
+        edition: { type: string, minLength: 3, maxLength: 1000 }
+        changeReason: { type: string, minLength: 5, maxLength: 2000 }
+        rightsEvidence: { type: string, maxLength: 4000 }
+        rightsUrl: { type: string, maxLength: 1000 }
+    SourceVersion:
+      allOf:
+        - { $ref: "#/components/schemas/SourceVersionInput" }
+        - type: object
+          required: [id, version, status, scientificStatus, rightsStatus, createdAt, createdBy, history]
+          properties:
+            id: { type: string }
+            version: { type: integer }
+            status: { type: string, enum: [pending_review, approved, rejected, withdrawn] }
+            scientificStatus: { type: string, enum: [pending, approved, rejected] }
+            rightsStatus: { type: string, enum: [pending, cleared, rejected] }
+            createdAt: { type: string }
+            createdBy: { type: string }
+            history: { type: array, items: { $ref: "#/components/schemas/ReviewAudit" } }
+    SourceDecisionInput:
+      type: object
+      additionalProperties: false
+      required: [decision, scientificStatus, rightsStatus, reason]
+      properties:
+        decision: { type: string, enum: [approved, rejected, withdrawn] }
+        scientificStatus: { type: string, enum: [approved, rejected, pending] }
+        rightsStatus: { type: string, enum: [cleared, rejected, pending] }
+        reason: { type: string, minLength: 5, maxLength: 2000 }
+    ReviewAudit:
+      type: object
+      required: [id, actorId, action, targetId, reason, createdAt]
+      properties:
+        id: { type: string }
+        actorId: { type: string }
+        action: { type: string }
+        targetId: { type: string }
+        reason: { type: string }
+        createdAt: { type: string }
     Capabilities:
       type: object
       required: [voiceReady, assistantReady, examsReady, sourceStatus, notice]
