@@ -4,3 +4,4 @@
 - [Registration pitch framing](registration-pitch.md) — Pitch the concept and proposed plan, not implementation; preserve separate disclosure obligations.
 - [Presentation font validation](presentation-font-validation.md) — Verify fonts in exported PDFs; font files on disk do not prove the renderer uses them.
 - [Mateen presentation identity](mateen-presentation-identity.md) — Use the project's warm brand system over generic pitch styles; keep the accepted centered cover composition.
+- [Turath source boundaries](turath-source-boundaries.md) — Review matn versus editorial content; viewer and printed pages differ; public access is not reuse permission.

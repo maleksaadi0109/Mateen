@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Kufam:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+@layer theme, base, clerk, components, utilities;
 @import 'tailwindcss';
+@custom-variant dark (&:is(.dark *));
 
 :root {
   --background: 41 46% 96%;
@@ -85,4 +87,27 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--app-font-display); }
 }
 .dark .manuscript-pattern {
   background-image: radial-gradient(hsl(var(--primary) / 0.04) 1.5px, transparent 1.5px);
+}
+
+html { direction: rtl; }
+body { font-family: var(--app-font-sans); -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 2px solid hsl(var(--secondary)); outline-offset: 3px; border-radius: 6px; }
+.star-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23994703' stroke-opacity='.22' stroke-width='1'%3E%3Cpath d='M36 6l7.5 12.5L58 14l-4.5 14.5L66 36l-12.5 7.5L58 58l-14.5-4.5L36 66l-7.5-12.5L14 58l4.5-14.5L6 36l12.5-7.5L14 14l14.5 4.5z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 72px 72px;
+}
+.paper-card { background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 1.25rem; box-shadow: 0 1px 0 hsl(var(--border)), 0 18px 40px -28px hsl(var(--primary) / .45); }
+.ornament { display:flex; align-items:center; gap:.75rem; color: hsl(var(--secondary)); }
+.ornament::before,.ornament::after { content:''; height:1px; flex:1; background: linear-gradient(to left, transparent, hsl(var(--secondary) / .5)); }
+.ornament::after { background: linear-gradient(to right, transparent, hsl(var(--secondary) / .5)); }
+.hadith-text { font-family: var(--app-font-serif); line-height: 2.3; }
+.spin-slow { animation: spin 90s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.floaty { animation: floaty 7s ease-in-out infinite; }
+@keyframes shimmer { 0% { opacity:.5 } 50% { opacity:1 } 100% { opacity:.5 } }
+.skel { background: hsl(var(--muted)); border-radius: .75rem; animation: shimmer 1.6s ease-in-out infinite; }
+.no-scrollbar::-webkit-scrollbar { display:none; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }

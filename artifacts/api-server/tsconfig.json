@@ -3,6 +3,7 @@
   "compilerOptions": {
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo",
+    "resolveJsonModule": true,
     "outDir": "dist",
     "rootDir": "src",
     "types": ["node"]

@@ -11,6 +11,145 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /mateen/catalog:
+    get:
+      operationId: getCatalog
+      responses:
+        "200":
+          description: First-release catalogue
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/CatalogText" }
+  /mateen/texts/{textId}:
+    get:
+      operationId: getStudyText
+      parameters:
+        - in: path
+          name: textId
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Available text and source records
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StudyText" }
+  /mateen/profile:
+    get:
+      operationId: getProfile
+      responses:
+        "200":
+          description: Current authenticated profile
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Profile" }
+    put:
+      operationId: saveProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProfileInput" }
+      responses:
+        "200":
+          description: Saved profile
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Profile" }
+  /mateen/progress:
+    get:
+      operationId: getProgress
+      responses:
+        "200":
+          description: Own study progress
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/StudyProgress" }
+  /mateen/progress/{textId}:
+    put:
+      operationId: saveProgress
+      parameters:
+        - in: path
+          name: textId
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProgressInput" }
+      responses:
+        "200":
+          description: Saved progress, not an assessment result
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StudyProgress" }
+  /mateen/dashboard:
+    get:
+      operationId: getDashboard
+      responses:
+        "200":
+          description: Actual study summary
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Dashboard" }
+  /mateen/scholars:
+    get:
+      operationId: getScholars
+      responses:
+        "200":
+          description: Approved public teachers only
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Scholar" }
+  /mateen/referrals:
+    get:
+      operationId: getReferrals
+      responses:
+        "200":
+          description: Own referrals only
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Referral" }
+  /mateen/teacher:
+    get:
+      operationId: getTeacher
+      responses:
+        "200":
+          description: Own teacher application
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TeacherApplication" }
+    put:
+      operationId: saveTeacher
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TeacherInput" }
+      responses:
+        "200":
+          description: Saved application; approval cannot be self-assigned
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TeacherApplication" }
+  /mateen/capabilities:
+    get:
+      operationId: getCapabilities
+      responses:
+        "200":
+          description: Honest release readiness
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Capabilities" }
   /healthz:
     get:
       operationId: healthCheck
@@ -26,6 +165,130 @@ paths:
                 $ref: "#/components/schemas/HealthStatus"
 components:
   schemas:
+    CatalogText:
+      type: object
+      required: [id, title, track, level, status, description, hadithCount]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        track: { type: string }
+        level: { type: string }
+        status: { type: string, enum: [available, coming_soon] }
+        description: { type: string }
+        hadithCount: { type: integer }
+    Hadith:
+      type: object
+      required: [id, number, title, text, sourceUrl, sourcePage]
+      properties:
+        id: { type: integer }
+        number: { type: integer }
+        title: { type: string }
+        text: { type: string }
+        sourceUrl: { type: string }
+        sourcePage: { type: integer }
+    StudyText:
+      type: object
+      required: [id, title, author, sourceUrl, sourceStatus, hadiths]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        author: { type: string }
+        sourceUrl: { type: string }
+        sourceStatus: { type: string, enum: [retrieved_pending_review, unavailable] }
+        hadiths:
+          type: array
+          items: { $ref: "#/components/schemas/Hadith" }
+    Profile:
+      type: object
+      required: [id, name, role, onboarded]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        role: { type: string, enum: [student, teacher] }
+        onboarded: { type: boolean }
+    ProfileInput:
+      type: object
+      required: [name, role]
+      properties:
+        name: { type: string, minLength: 2, maxLength: 100 }
+        role: { type: string, enum: [student, teacher] }
+    ProgressInput:
+      type: object
+      required: [currentHadith, completedIds, bookmarkedIds]
+      properties:
+        currentHadith: { type: integer, minimum: 1, maximum: 42 }
+        completedIds:
+          type: array
+          maxItems: 42
+          items: { type: integer, minimum: 1, maximum: 42 }
+        bookmarkedIds:
+          type: array
+          maxItems: 42
+          items: { type: integer, minimum: 1, maximum: 42 }
+    StudyProgress:
+      type: object
+      required: [textId, currentHadith, completedIds, bookmarkedIds, updatedAt]
+      properties:
+        textId: { type: string }
+        currentHadith: { type: integer }
+        completedIds:
+          type: array
+          items: { type: integer }
+        bookmarkedIds:
+          type: array
+          items: { type: integer }
+        updatedAt: { type: string }
+    Dashboard:
+      type: object
+      required: [studiedCount, totalCount, bookmarkedCount, lastHadith, lastStudiedAt]
+      properties:
+        studiedCount: { type: integer }
+        totalCount: { type: integer }
+        bookmarkedCount: { type: integer }
+        lastHadith: { type: integer }
+        lastStudiedAt: { type: [string, "null"] }
+    Scholar:
+      type: object
+      required: [id, name, biography, specialties, available]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        biography: { type: string }
+        specialties: { type: string }
+        available: { type: boolean }
+    Referral:
+      type: object
+      required: [id, question, reason, status, createdAt]
+      properties:
+        id: { type: string }
+        question: { type: string }
+        reason: { type: string }
+        status: { type: string }
+        createdAt: { type: string }
+    TeacherInput:
+      type: object
+      required: [biography, specialties, available]
+      properties:
+        biography: { type: string, maxLength: 2000 }
+        specialties: { type: string, maxLength: 300 }
+        available: { type: boolean }
+    TeacherApplication:
+      type: object
+      required: [biography, specialties, available, status]
+      properties:
+        biography: { type: string }
+        specialties: { type: string }
+        available: { type: boolean }
+        status: { type: string, enum: [draft, pending_review, approved] }
+    Capabilities:
+      type: object
+      required: [voiceReady, assistantReady, examsReady, sourceStatus, notice]
+      properties:
+        voiceReady: { type: boolean }
+        assistantReady: { type: boolean }
+        examsReady: { type: boolean }
+        sourceStatus: { type: string }
+        notice: { type: string }
     HealthStatus:
       type: object
       properties:

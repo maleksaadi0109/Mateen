@@ -1,44 +1,56 @@
-# [Project name]
+# مَتِين — Mateen
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Arabic RTL platform for studying Islamic scholarly texts. The approved full product requirements are in `master-project-spec.md`; `master-project-spec.en.md` is its English translation.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- Managed workflows: `artifacts/mateen-platform: web` and `artifacts/api-server: API Server`.
+- `pnpm --filter @workspace/mateen-platform run dev` — frontend, artifact-managed `PORT` and `BASE_PATH`.
+- `pnpm --filter @workspace/api-server run dev` — API, artifact-managed port 8080.
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
 - `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- For a manual frontend build, supply the artifact's non-secret runtime settings: `PORT=24832 BASE_PATH=/ pnpm --filter @workspace/mateen-platform run build`.
+- PostgreSQL and Clerk use workspace-managed secrets. Never log credentials or session cookies.
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
+- Frontend: React + Vite, Wouter, TanStack Query, Tailwind, Arabic typography
+- Authentication: Replit-managed Clerk, same-origin session cookies
+- API: Express 5 at `/api`
 - DB: PostgreSQL + Drizzle ORM
 - Validation: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- API build: esbuild (ESM bundle)
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/mateen-platform` — landing, sign-in/onboarding, student reader/dashboard, teacher draft profile.
+- `artifacts/api-server` — Clerk proxy, authenticated Mateen routes, canonical source JSON.
+- `lib/db/src/schema` — user profiles, per-user progress, teacher draft applications.
+- `lib/api-spec/openapi.yaml` — contracts; regenerate clients and Zod schemas rather than hand-editing generated files.
+- `attached_assets/turath-nawawi-source.json` — source metadata and original page responses for text review.
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Browser authentication uses cookies, not bearer tokens. Mount Clerk's canonical proxy before parsers; retain host-based publishable-key resolution.
+- A self-reported study marker is not a memorization grade, passed assessment, or certification.
+- Student-to-teacher conversations must originate through assistant referrals, never direct student initiation.
+- Saving a teacher profile is only saving a draft, not submitting qualifications or receiving approval.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+The current foundation supports real sign-in, student/teacher onboarding, persistent reading position, study markers, bookmarks, text search, name editing, and teacher draft profiles. Only الأربعون النووية under الحديث / التمهيدي is open; other texts are locked with «قريباً».
 
-## User preferences
-
-_Populate as you build — explicit user instructions worth remembering across sessions._
+Voice grading, scholarly AI, assessments, spaced-review scheduling, referral conversations, qualification uploads, approval, and administrative workflows are not implemented. Do not advertise them as operational.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- The imported Nawawi transcription is pending scientific review; modern edition reuse rights remain unclear. Preserve source attribution, separate printed page numbers from viewer indexes, and do not use unreviewed text for graded assessments.
+- No production readiness claim until source review, remaining launch gates, and production authentication configuration are addressed.
+- Use the approved warm brand, official logo, and Arabic RTL layout. The public landing stays light; portals may use a dark theme.
 
 ## Pointers
 
