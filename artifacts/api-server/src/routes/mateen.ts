@@ -17,11 +17,15 @@ import {
   db,
   profilesTable,
   studyProgressTable,
+  teacherApplicationsTable,
+  scholarlyReferralsTable,
+  scholarlyQuestionsTable,
 } from "@workspace/db";
 import { desc, eq } from "drizzle-orm";
 import { Router, type NextFunction, type Request, type Response } from "express";
 import nawawiRecords from "../data/nawawi.json";
 import { getNawawiStudyRecords } from "../lib/source-review";
+import { getMateenScholarlyReadiness } from "./scholarly";
 
 const router = Router();
 
@@ -454,7 +458,27 @@ router.get(
   async (req: AuthedRequest, res) => {
     const profile = await requireProfile(req, res, undefined);
     if (!profile) return;
-    res.json(GetReferralsResponse.parse([]));
+    if (profile.role === "teacher") {
+      const [application] = await db.select().from(teacherApplicationsTable)
+        .where(eq(teacherApplicationsTable.userId, profile.clerkId)).limit(1);
+      if (application?.status !== "approved") {
+        res.status(403).json({ error: "Only approved teachers can view referrals" });
+        return;
+      }
+    }
+    const rows = await db.select({
+      id: scholarlyReferralsTable.id,
+      question: scholarlyQuestionsTable.question,
+      reason: scholarlyQuestionsTable.reason,
+      status: scholarlyReferralsTable.status,
+      createdAt: scholarlyReferralsTable.createdAt,
+    }).from(scholarlyReferralsTable)
+      .innerJoin(scholarlyQuestionsTable, eq(scholarlyReferralsTable.questionId, scholarlyQuestionsTable.id))
+      .where(profile.role === "student"
+        ? eq(scholarlyQuestionsTable.studentId, profile.clerkId)
+        : eq(scholarlyReferralsTable.teacherId, profile.clerkId))
+      .orderBy(desc(scholarlyReferralsTable.createdAt)).limit(100);
+    res.json(GetReferralsResponse.parse(rows.map((row) => ({ ...row, createdAt: row.createdAt.toISOString() }))));
   },
 );
 
@@ -467,23 +491,28 @@ router.post(
     const profile = await requireProfile(req, res, "student");
     if (!profile) return;
     res.status(403).json({
-      error: "Teacher referrals can only be initiated through the assistant; assistant referrals are not available yet.",
+      error: "Direct teacher questions are not allowed. Use the consented referral of a saved abstained assistant question.",
     });
   },
 );
 
 router.get("/mateen/capabilities", async (_req, res) => {
   const reviewedSource = await getNawawiStudyRecords();
+  const scholarly = await getMateenScholarlyReadiness();
   res.json(
     GetCapabilitiesResponse.parse({
       voiceReady: false,
-      assistantReady: false,
+      assistantReady: scholarly.assistantEnabled,
       examsReady: false,
       sourceStatus: reviewedSource.sourceStatus,
       notice:
-        reviewedSource.sourceStatus === "approved"
-          ? "اعتمدت النسخ الحالية علميًا ووثّقت حقوق استخدامها. الخدمات الصوتية والمساعد والاختبارات غير متاحة حاليًا."
-          : "الخدمات الصوتية والمساعد والاختبارات غير متاحة حاليًا. لا تستخدم النسخ غير المعتمدة في التقييم؛ النص ينتظر المراجعة العلمية وتوثيق حقوق الاستخدام.",
+        (reviewedSource.sourceStatus === "approved"
+          ? "اعتمدت النسخ الحالية علميًا ووثّقت حقوق استخدامها."
+          : "لا تستخدم النسخ غير المعتمدة في التقييم؛ النص ينتظر المراجعة العلمية وتوثيق حقوق الاستخدام.") +
+        (scholarly.assistantEnabled
+          ? " المساعد العلمي يستشهد بالشروح المعتمدة فقط، ولا يصدر فتاوى."
+          : " الإجابات العلمية غير مفعّلة حتى اكتمال اعتماد الشروح وتهيئة النموذج واجتياز تقييم العربية والاستشهاد والامتناع.") +
+        " الخدمات الصوتية والاختبارات غير متاحة حاليًا.",
     }),
   );
 });
@@ -502,7 +531,7 @@ router.post(
   mutationOriginProtection,
   rateLimit(20, 60_000),
   authenticationRequired,
-  featureUnavailable("assistant"),
+  (_req, res) => res.redirect(307, "/api/mateen/assistant/questions"),
 );
 router.post(
   "/mateen/recitation",

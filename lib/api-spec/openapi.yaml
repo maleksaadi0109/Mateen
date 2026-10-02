@@ -288,6 +288,437 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Capabilities" }
+  /mateen/assistant/questions:
+    get:
+      operationId: getMateenAssistantQuestions
+      responses:
+        "200":
+          description: Current student's persisted assistant questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/AssistantQuestion" }
+    post:
+      operationId: askMateenAssistant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AssistantQuestionInput" }
+      responses:
+        "201":
+          description: Persisted grounded answer or abstention
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AssistantQuestion" }
+        "503": { description: Assistant disabled or not ready }
+  /mateen/assistant/readiness:
+    get:
+      operationId: getMateenAssistantReadiness
+      responses:
+        "200":
+          description: Assistant provider, source and evaluation gate
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlyConfig" }
+  /mateen/assistant/questions/{questionId}/referral-preview:
+    get:
+      operationId: getMateenReferralPreview
+      parameters:
+        - in: path
+          name: questionId
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Explicit share preview and available approved teachers; nothing is shared
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ReferralPreview" }
+        "404": { description: Own persisted abstained assistant question not found }
+  /mateen/assistant/questions/{questionId}/referral:
+    post:
+      operationId: referMateenAssistantQuestion
+      parameters:
+        - in: path
+          name: questionId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ReferralConsentInput" }
+      responses:
+        "201":
+          description: Referral created after explicit consent and transactional teacher revalidation
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TeacherReferralSummary" }
+        "409": { description: Teacher unavailable or referral already exists }
+  /mateen/conversations:
+    get:
+      operationId: getMateenConversations
+      responses:
+        "200":
+          description: Conversations visible to current participant
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ScholarlyConversation" }
+  /mateen/conversations/{conversationId}/messages:
+    get:
+      operationId: getMateenConversationMessages
+      parameters:
+        - in: path
+          name: conversationId
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Owned conversation messages and citations
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ScholarlyMessage" }
+        "404": { description: Conversation not found }
+    post:
+      operationId: sendMateenFollowUp
+      parameters:
+        - in: path
+          name: conversationId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ConversationMessageInput" }
+      responses:
+        "201":
+          description: Persisted participant message and assistant response
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AssistantQuestion" }
+        "404": { description: Conversation not found }
+  /mateen/conversations/{conversationId}/status:
+    get:
+      operationId: getMateenConversationStatus
+      parameters:
+        - in: path
+          name: conversationId
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Conversation and referral polling state
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ConversationStatus" }
+        "404": { description: Conversation not found }
+  /mateen/teacher/referrals:
+    get:
+      operationId: getMateenTeacherReferrals
+      parameters:
+        - in: query
+          name: status
+          schema: { type: string, enum: [open, answered, closed] }
+        - in: query
+          name: q
+          schema: { type: string, maxLength: 200 }
+      responses:
+        "200":
+          description: Referrals assigned to current approved teacher
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/TeacherReferral" }
+  /mateen/teacher/referrals/{referralId}/status:
+    patch:
+      operationId: updateMateenReferralStatus
+      parameters:
+        - in: path
+          name: referralId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ReferralStatusInput" }
+      responses:
+        "200":
+          description: Referral status changed without deleting history
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TeacherReferral" }
+        "404": { description: Referral not found }
+  /mateen/teacher/referrals/{referralId}/messages:
+    post:
+      operationId: replyMateenReferral
+      parameters:
+        - in: path
+          name: referralId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ConversationMessageInput" }
+      responses:
+        "201":
+          description: Teacher text reply
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlyMessage" }
+        "404": { description: Referral not found }
+  /mateen/notifications:
+    get:
+      operationId: getMateenNotifications
+      responses:
+        "200":
+          description: Current user's scholarly notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ScholarlyNotification" }
+  /mateen/notifications/state:
+    get:
+      operationId: getMateenNotificationState
+      responses:
+        "200":
+          description: Notification polling cursor
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/NotificationState" }
+  /mateen/notifications/{notificationId}/read:
+    patch:
+      operationId: markMateenNotificationRead
+      parameters:
+        - in: path
+          name: notificationId
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Own notification marked as read; returns refreshed polling state
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/NotificationState" }
+        "404": { description: Notification not found }
+  /mateen/admin/scholarly/sources:
+    get:
+      operationId: listScholarlySources
+      responses:
+        "200":
+          description: Admin source/version inventory
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ScholarlySource" }
+    post:
+      operationId: createScholarlySource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ScholarlySourceInput" }
+      responses:
+        "201":
+          description: New source version
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlySource" }
+  /mateen/admin/scholarly/sources/{sourceId}/passages:
+    get:
+      operationId: listScholarlyPassages
+      parameters:
+        - in: path
+          name: sourceId
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Admin-only source passage text and distinct printed/PDF pages for review
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ScholarlyPassage" }
+        "404": { description: Source not found }
+    post:
+      operationId: createScholarlyPassage
+      parameters:
+        - in: path
+          name: sourceId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ScholarlyPassagesInput" }
+      responses:
+        "201": { description: Passages staged for review }
+  /mateen/admin/scholarly/sources/{sourceId}/review:
+    post:
+      operationId: reviewScholarlySource
+      parameters:
+        - in: path
+          name: sourceId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ScholarlyReviewInput" }
+      responses:
+        "200":
+          description: Review result and index readiness
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlySource" }
+  /mateen/admin/scholarly/sources/{sourceId}/index:
+    post:
+      operationId: indexScholarlySource
+      parameters:
+        - in: path
+          name: sourceId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ScholarlyIndexInput" }
+      responses:
+        "200":
+          description: Reviewed passages indexed; corpus change invalidates evaluations
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlySource" }
+  /mateen/admin/scholarly/sources/{sourceId}/withdraw:
+    post:
+      operationId: withdrawScholarlySource
+      parameters:
+        - in: path
+          name: sourceId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ScholarlyWithdrawalInput" }
+      responses:
+        "200":
+          description: Source withdrawn from future retrieval
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlySource" }
+  /mateen/assistant/issues:
+    post:
+      operationId: reportScholarlyIssue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ScholarlyIssueInput" }
+      responses:
+        "201":
+          description: Persisted own answer issue report
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlyIssue" }
+  /mateen/admin/scholarly/issues:
+    get:
+      operationId: listScholarlyIssues
+      parameters:
+        - in: query
+          name: status
+          schema: { type: string, enum: [open, reviewed, resolved] }
+      responses:
+        "200":
+          description: Reported answer and citation issues
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ScholarlyIssue" }
+  /mateen/admin/scholarly/issues/{issueId}:
+    patch:
+      operationId: moderateScholarlyIssue
+      parameters:
+        - in: path
+          name: issueId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ScholarlyIssueModerationInput" }
+      responses:
+        "200":
+          description: Moderation action recorded
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlyIssue" }
+  /mateen/admin/scholarly/config:
+    get:
+      operationId: getScholarlyConfig
+      responses:
+        "200":
+          description: Model pin, provider readiness and evaluation gate
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlyConfig" }
+    put:
+      operationId: updateScholarlyConfig
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ScholarlyConfigInput" }
+      responses:
+        "200":
+          description: Audited model configuration update
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlyConfig" }
+  /mateen/admin/scholarly/evaluations:
+    post:
+      operationId: recordScholarlyEvaluation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ScholarlyEvaluationInput" }
+      responses:
+        "201":
+          description: Evaluation record; positive evaluation enables assistant gate
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlyConfig" }
+  /mateen/admin/scholarly/audit:
+    get:
+      operationId: listScholarlyAudit
+      responses:
+        "200":
+          description: Sensitive decisions with actor, reason and date
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ScholarlyAuditEvent" }
   /healthz:
     get:
       operationId: healthCheck
@@ -546,4 +977,272 @@ components:
           type: string
       required:
         - status
-
+    AssistantQuestionInput:
+      type: object
+      required: [question]
+      properties:
+        question: { type: string, minLength: 1, maxLength: 8000 }
+        textContext: { type: ["string", "null"], maxLength: 3000 }
+        textId: { type: ["string", "null"], maxLength: 64 }
+    ConversationMessageInput:
+      type: object
+      required: [text]
+      properties:
+        text: { type: string, minLength: 1, maxLength: 8000 }
+        requestId: { type: string, format: uuid, description: "Stable message identifier retained when retrying a failed send." }
+    Citation:
+      type: object
+      required: [passageId, sourceId, sourceTitle, author, edition, volume, printedPage, pdfPage, quote]
+      properties:
+        passageId: { type: string, format: uuid }
+        sourceId: { type: string, format: uuid }
+        sourceTitle: { type: string }
+        author: { type: string }
+        edition: { type: string }
+        volume: { type: ["integer", "null"] }
+        printedPage: { type: ["string", "null"] }
+        pdfPage: { type: ["integer", "null"] }
+        quote: { type: string }
+    AssistantQuestion:
+      type: object
+      required: [conversationId, questionId, question, textContext, createdAt, reason, status, answer, citations, referral, model]
+      properties:
+        conversationId: { type: string, format: uuid }
+        questionId: { type: string, format: uuid }
+        question: { type: string }
+        textContext: { type: ["string", "null"] }
+        createdAt: { type: string, format: date-time }
+        reason: { type: string }
+        status: { type: string, enum: [answered, abstained, waiting_for_teacher, referred] }
+        answer: { type: ["string", "null"] }
+        citations:
+          type: array
+          items: { $ref: "#/components/schemas/Citation" }
+        referral: { $ref: "#/components/schemas/TeacherReferralSummary" }
+        model: { type: string }
+    TeacherReferralSummary:
+      type: object
+      required: [status, teacherName]
+      properties:
+        status: { type: string, enum: [not_referred, awaiting_reply, waiting_for_teacher, answered] }
+        teacherName: { type: ["string", "null"] }
+    ReferralPreview:
+      type: object
+      required: [questionId, question, textContext, reason, shares, teachers]
+      properties:
+        questionId: { type: string, format: uuid }
+        question: { type: string }
+        textContext: { type: ["string", "null"] }
+        reason: { type: string }
+        shares:
+          type: array
+          items: { type: string }
+        teachers:
+          type: array
+          items: { $ref: "#/components/schemas/AvailableTeacher" }
+    AvailableTeacher:
+      type: object
+      required: [id, name, specialties]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        specialties: { type: string }
+    ReferralConsentInput:
+      type: object
+      required: [consent, teacherId]
+      properties:
+        consent: { type: boolean, const: true }
+        teacherId: { type: ["string", "null"] }
+    ReferralStatusInput:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string, enum: [open, answered, closed] }
+    ScholarlyConversation:
+      type: object
+      required: [id, topic, status, updatedAt]
+      properties:
+        id: { type: string, format: uuid }
+        topic: { type: string }
+        status: { type: string }
+        updatedAt: { type: string, format: date-time }
+    ScholarlyMessage:
+      type: object
+      required: [id, role, text, createdAt, citations]
+      properties:
+        id: { type: string, format: uuid }
+        role: { type: string, enum: [student, assistant, teacher] }
+        text: { type: string }
+        createdAt: { type: string, format: date-time }
+        citations:
+          type: array
+          items: { $ref: "#/components/schemas/Citation" }
+    ConversationStatus:
+      type: object
+      required: [conversationId, status, referral, updatedAt]
+      properties:
+        conversationId: { type: string, format: uuid }
+        status: { type: string }
+        referral: { $ref: "#/components/schemas/TeacherReferralSummary" }
+        updatedAt: { type: string, format: date-time }
+    TeacherReferral:
+      type: object
+      required: [id, conversationId, question, context, reason, status, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        conversationId: { type: string, format: uuid }
+        question: { type: string }
+        context: { type: ["string", "null"] }
+        reason: { type: string }
+        status: { type: string, enum: [open, answered, closed] }
+        createdAt: { type: string, format: date-time }
+    ScholarlyNotification:
+      type: object
+      required: [id, type, conversationId, text, createdAt, readAt]
+      properties:
+        id: { type: string, format: uuid }
+        type: { type: string }
+        conversationId: { type: string, format: uuid }
+        text: { type: string }
+        createdAt: { type: string, format: date-time }
+        readAt: { type: ["string", "null"], format: date-time }
+    NotificationState:
+      type: object
+      required: [unreadCount, latestAt]
+      properties:
+        unreadCount: { type: integer }
+        latestAt: { type: ["string", "null"], format: date-time }
+    ScholarlySourceInput:
+      type: object
+      required: [title, author, edition, legalAuthorization, authorizationReference, version]
+      properties:
+        title: { type: string, minLength: 1, maxLength: 500 }
+        author: { type: string, minLength: 1, maxLength: 300 }
+        edition: { type: string, minLength: 1, maxLength: 300 }
+        publisher: { type: ["string", "null"], maxLength: 300 }
+        legalAuthorization: { type: string, enum: [public_domain, licensed, permission_granted] }
+        authorizationReference: { type: string, minLength: 1, maxLength: 1000 }
+        version: { type: string, minLength: 1, maxLength: 100 }
+    ScholarlySource:
+      type: object
+      required: [id, title, author, edition, publisher, legalAuthorization, authorizationReference, version, status, passageCount, reviewedAt, indexedAt]
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        author: { type: string }
+        edition: { type: string }
+        publisher: { type: ["string", "null"] }
+        legalAuthorization: { type: string }
+        authorizationReference: { type: string }
+        version: { type: string }
+        status: { type: string, enum: [draft, reviewed, indexed, withdrawn] }
+        passageCount: { type: integer }
+        reviewedAt: { type: ["string", "null"], format: date-time }
+        indexedAt: { type: ["string", "null"], format: date-time }
+    ScholarlyPassagesInput:
+      type: object
+      required: [passages]
+      properties:
+        passages:
+          type: array
+          minItems: 1
+          maxItems: 500
+          items:
+            type: object
+            required: [text]
+            properties:
+              text: { type: string, minLength: 1, maxLength: 12000 }
+              volume: { type: ["integer", "null"], minimum: 1 }
+              printedPage: { type: ["string", "null"], maxLength: 50 }
+              pdfPage: { type: ["integer", "null"], minimum: 1 }
+    ScholarlyPassage:
+      type: object
+      required: [id, sourceId, text, volume, printedPage, pdfPage, indexed]
+      properties:
+        id: { type: string, format: uuid }
+        sourceId: { type: string, format: uuid }
+        text: { type: string }
+        volume: { type: ["integer", "null"] }
+        printedPage: { type: ["string", "null"] }
+        pdfPage: { type: ["integer", "null"] }
+        indexed: { type: boolean }
+    ScholarlyIndexInput:
+      type: object
+      required: [confirmReviewed]
+      properties:
+        confirmReviewed: { type: boolean, const: true }
+    ScholarlyReviewInput:
+      type: object
+      required: [decision, note]
+      properties:
+        decision: { type: string, enum: [approve, reject] }
+        note: { type: string, minLength: 3, maxLength: 2000 }
+    ScholarlyWithdrawalInput:
+      type: object
+      required: [reason]
+      properties:
+        reason: { type: string, minLength: 3, maxLength: 2000 }
+    ScholarlyIssueInput:
+      type: object
+      required: [questionId, category, description]
+      properties:
+        questionId: { type: string, format: uuid }
+        category: { type: string, enum: [citation, unsupported_claim, safety, other] }
+        description: { type: string, minLength: 3, maxLength: 3000 }
+    ScholarlyAuditEvent:
+      type: object
+      required: [id, actorId, action, targetType, targetId, reason, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        actorId: { type: string }
+        action: { type: string }
+        targetType: { type: string }
+        targetId: { type: ["string", "null"] }
+        reason: { type: string }
+        createdAt: { type: string, format: date-time }
+    ScholarlyIssue:
+      type: object
+      required: [id, questionId, reporterId, question, answer, citations, category, description, status, moderationNote, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        questionId: { type: string, format: uuid }
+        reporterId: { type: string }
+        question: { type: string }
+        answer: { type: ["string", "null"] }
+        citations:
+          type: array
+          items: { $ref: "#/components/schemas/Citation" }
+        category: { type: string }
+        description: { type: string }
+        status: { type: string, enum: [open, reviewed, resolved] }
+        moderationNote: { type: ["string", "null"] }
+        createdAt: { type: string, format: date-time }
+    ScholarlyIssueModerationInput:
+      type: object
+      required: [status, note]
+      properties:
+        status: { type: string, enum: [reviewed, resolved] }
+        note: { type: string, minLength: 3, maxLength: 2000 }
+    ScholarlyConfig:
+      type: object
+      required: [model, providerConfigured, evaluationPassed, reviewedSourceCount, assistantEnabled]
+      properties:
+        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4] }
+        providerConfigured: { type: boolean }
+        evaluationPassed: { type: boolean }
+        reviewedSourceCount: { type: integer }
+        assistantEnabled: { type: boolean }
+    ScholarlyConfigInput:
+      type: object
+      required: [model]
+      properties:
+        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4] }
+    ScholarlyEvaluationInput:
+      type: object
+      required: [model, arabicQualityPassed, groundingPassed, abstentionPassed, note]
+      properties:
+        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4] }
+        arabicQualityPassed: { type: boolean }
+        groundingPassed: { type: boolean }
+        abstentionPassed: { type: boolean }
+        note: { type: string, minLength: 3, maxLength: 3000 }

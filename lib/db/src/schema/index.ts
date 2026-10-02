@@ -22,3 +22,4 @@ export * from "./study-progress";
 export * from "./teacher-applications";
 export * from "./reviews";
 export * from "./source-versions";
+export * from "./scholarly";

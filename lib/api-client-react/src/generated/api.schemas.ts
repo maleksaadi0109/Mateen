@@ -413,3 +413,486 @@ export interface HealthStatus {
   status: string;
 }
 
+export interface AssistantQuestionInput {
+  /**
+     * @minLength 1
+     * @maxLength 8000
+     */
+  question: string;
+  /**
+     * @maxLength 3000
+     * @nullable
+     */
+  textContext?: string | null;
+  /**
+     * @maxLength 64
+     * @nullable
+     */
+  textId?: string | null;
+}
+
+export interface ConversationMessageInput {
+  /**
+     * @minLength 1
+     * @maxLength 8000
+     */
+  text: string;
+  /** Stable message identifier retained when retrying a failed send. */
+  requestId?: string;
+}
+
+export interface Citation {
+  passageId: string;
+  sourceId: string;
+  sourceTitle: string;
+  author: string;
+  edition: string;
+  /** @nullable */
+  volume: number | null;
+  /** @nullable */
+  printedPage: string | null;
+  /** @nullable */
+  pdfPage: number | null;
+  quote: string;
+}
+
+export type AssistantQuestionStatus = typeof AssistantQuestionStatus[keyof typeof AssistantQuestionStatus];
+
+
+export const AssistantQuestionStatus = {
+  answered: 'answered',
+  abstained: 'abstained',
+  waiting_for_teacher: 'waiting_for_teacher',
+  referred: 'referred',
+} as const;
+
+export type TeacherReferralSummaryStatus = typeof TeacherReferralSummaryStatus[keyof typeof TeacherReferralSummaryStatus];
+
+
+export const TeacherReferralSummaryStatus = {
+  not_referred: 'not_referred',
+  awaiting_reply: 'awaiting_reply',
+  waiting_for_teacher: 'waiting_for_teacher',
+  answered: 'answered',
+} as const;
+
+export interface TeacherReferralSummary {
+  status: TeacherReferralSummaryStatus;
+  /** @nullable */
+  teacherName: string | null;
+}
+
+export interface AssistantQuestion {
+  conversationId: string;
+  questionId: string;
+  question: string;
+  /** @nullable */
+  textContext: string | null;
+  createdAt: string;
+  reason: string;
+  status: AssistantQuestionStatus;
+  /** @nullable */
+  answer: string | null;
+  citations: Citation[];
+  referral: TeacherReferralSummary;
+  model: string;
+}
+
+export interface AvailableTeacher {
+  id: string;
+  name: string;
+  specialties: string;
+}
+
+export interface ReferralPreview {
+  questionId: string;
+  question: string;
+  /** @nullable */
+  textContext: string | null;
+  reason: string;
+  shares: string[];
+  teachers: AvailableTeacher[];
+}
+
+export interface ReferralConsentInput {
+  consent: true;
+  /** @nullable */
+  teacherId: string | null;
+}
+
+export type ReferralStatusInputStatus = typeof ReferralStatusInputStatus[keyof typeof ReferralStatusInputStatus];
+
+
+export const ReferralStatusInputStatus = {
+  open: 'open',
+  answered: 'answered',
+  closed: 'closed',
+} as const;
+
+export interface ReferralStatusInput {
+  status: ReferralStatusInputStatus;
+}
+
+export interface ScholarlyConversation {
+  id: string;
+  topic: string;
+  status: string;
+  updatedAt: string;
+}
+
+export type ScholarlyMessageRole = typeof ScholarlyMessageRole[keyof typeof ScholarlyMessageRole];
+
+
+export const ScholarlyMessageRole = {
+  student: 'student',
+  assistant: 'assistant',
+  teacher: 'teacher',
+} as const;
+
+export interface ScholarlyMessage {
+  id: string;
+  role: ScholarlyMessageRole;
+  text: string;
+  createdAt: string;
+  citations: Citation[];
+}
+
+export interface ConversationStatus {
+  conversationId: string;
+  status: string;
+  referral: TeacherReferralSummary;
+  updatedAt: string;
+}
+
+export type TeacherReferralStatus = typeof TeacherReferralStatus[keyof typeof TeacherReferralStatus];
+
+
+export const TeacherReferralStatus = {
+  open: 'open',
+  answered: 'answered',
+  closed: 'closed',
+} as const;
+
+export interface TeacherReferral {
+  id: string;
+  conversationId: string;
+  question: string;
+  /** @nullable */
+  context: string | null;
+  reason: string;
+  status: TeacherReferralStatus;
+  createdAt: string;
+}
+
+export interface ScholarlyNotification {
+  id: string;
+  type: string;
+  conversationId: string;
+  text: string;
+  createdAt: string;
+  /** @nullable */
+  readAt: string | null;
+}
+
+export interface NotificationState {
+  unreadCount: number;
+  /** @nullable */
+  latestAt: string | null;
+}
+
+export type ScholarlySourceInputLegalAuthorization = typeof ScholarlySourceInputLegalAuthorization[keyof typeof ScholarlySourceInputLegalAuthorization];
+
+
+export const ScholarlySourceInputLegalAuthorization = {
+  public_domain: 'public_domain',
+  licensed: 'licensed',
+  permission_granted: 'permission_granted',
+} as const;
+
+export interface ScholarlySourceInput {
+  /**
+     * @minLength 1
+     * @maxLength 500
+     */
+  title: string;
+  /**
+     * @minLength 1
+     * @maxLength 300
+     */
+  author: string;
+  /**
+     * @minLength 1
+     * @maxLength 300
+     */
+  edition: string;
+  /**
+     * @maxLength 300
+     * @nullable
+     */
+  publisher?: string | null;
+  legalAuthorization: ScholarlySourceInputLegalAuthorization;
+  /**
+     * @minLength 1
+     * @maxLength 1000
+     */
+  authorizationReference: string;
+  /**
+     * @minLength 1
+     * @maxLength 100
+     */
+  version: string;
+}
+
+export type ScholarlySourceStatus = typeof ScholarlySourceStatus[keyof typeof ScholarlySourceStatus];
+
+
+export const ScholarlySourceStatus = {
+  draft: 'draft',
+  reviewed: 'reviewed',
+  indexed: 'indexed',
+  withdrawn: 'withdrawn',
+} as const;
+
+export interface ScholarlySource {
+  id: string;
+  title: string;
+  author: string;
+  edition: string;
+  /** @nullable */
+  publisher: string | null;
+  legalAuthorization: string;
+  authorizationReference: string;
+  version: string;
+  status: ScholarlySourceStatus;
+  passageCount: number;
+  /** @nullable */
+  reviewedAt: string | null;
+  /** @nullable */
+  indexedAt: string | null;
+}
+
+export type ScholarlyPassagesInputPassagesItem = {
+  /**
+     * @minLength 1
+     * @maxLength 12000
+     */
+  text: string;
+  /**
+     * @minimum 1
+     * @nullable
+     */
+  volume?: number | null;
+  /**
+     * @maxLength 50
+     * @nullable
+     */
+  printedPage?: string | null;
+  /**
+     * @minimum 1
+     * @nullable
+     */
+  pdfPage?: number | null;
+};
+
+export interface ScholarlyPassagesInput {
+  /**
+     * @minItems 1
+     * @maxItems 500
+     */
+  passages: ScholarlyPassagesInputPassagesItem[];
+}
+
+export interface ScholarlyPassage {
+  id: string;
+  sourceId: string;
+  text: string;
+  /** @nullable */
+  volume: number | null;
+  /** @nullable */
+  printedPage: string | null;
+  /** @nullable */
+  pdfPage: number | null;
+  indexed: boolean;
+}
+
+export const ScholarlyIndexInputValue = {
+  confirmReviewed: true,
+} as const;
+export type ScholarlyIndexInput = typeof ScholarlyIndexInputValue;
+
+export type ScholarlyReviewInputDecision = typeof ScholarlyReviewInputDecision[keyof typeof ScholarlyReviewInputDecision];
+
+
+export const ScholarlyReviewInputDecision = {
+  approve: 'approve',
+  reject: 'reject',
+} as const;
+
+export interface ScholarlyReviewInput {
+  decision: ScholarlyReviewInputDecision;
+  /**
+     * @minLength 3
+     * @maxLength 2000
+     */
+  note: string;
+}
+
+export interface ScholarlyWithdrawalInput {
+  /**
+     * @minLength 3
+     * @maxLength 2000
+     */
+  reason: string;
+}
+
+export type ScholarlyIssueInputCategory = typeof ScholarlyIssueInputCategory[keyof typeof ScholarlyIssueInputCategory];
+
+
+export const ScholarlyIssueInputCategory = {
+  citation: 'citation',
+  unsupported_claim: 'unsupported_claim',
+  safety: 'safety',
+  other: 'other',
+} as const;
+
+export interface ScholarlyIssueInput {
+  questionId: string;
+  category: ScholarlyIssueInputCategory;
+  /**
+     * @minLength 3
+     * @maxLength 3000
+     */
+  description: string;
+}
+
+export interface ScholarlyAuditEvent {
+  id: string;
+  actorId: string;
+  action: string;
+  targetType: string;
+  /** @nullable */
+  targetId: string | null;
+  reason: string;
+  createdAt: string;
+}
+
+export type ScholarlyIssueStatus = typeof ScholarlyIssueStatus[keyof typeof ScholarlyIssueStatus];
+
+
+export const ScholarlyIssueStatus = {
+  open: 'open',
+  reviewed: 'reviewed',
+  resolved: 'resolved',
+} as const;
+
+export interface ScholarlyIssue {
+  id: string;
+  questionId: string;
+  reporterId: string;
+  question: string;
+  /** @nullable */
+  answer: string | null;
+  citations: Citation[];
+  category: string;
+  description: string;
+  status: ScholarlyIssueStatus;
+  /** @nullable */
+  moderationNote: string | null;
+  createdAt: string;
+}
+
+export type ScholarlyIssueModerationInputStatus = typeof ScholarlyIssueModerationInputStatus[keyof typeof ScholarlyIssueModerationInputStatus];
+
+
+export const ScholarlyIssueModerationInputStatus = {
+  reviewed: 'reviewed',
+  resolved: 'resolved',
+} as const;
+
+export interface ScholarlyIssueModerationInput {
+  status: ScholarlyIssueModerationInputStatus;
+  /**
+     * @minLength 3
+     * @maxLength 2000
+     */
+  note: string;
+}
+
+export type ScholarlyConfigModel = typeof ScholarlyConfigModel[keyof typeof ScholarlyConfigModel];
+
+
+export const ScholarlyConfigModel = {
+  'gpt-54-mini': 'gpt-5.4-mini',
+  'gpt-54': 'gpt-5.4',
+} as const;
+
+export interface ScholarlyConfig {
+  model: ScholarlyConfigModel;
+  providerConfigured: boolean;
+  evaluationPassed: boolean;
+  reviewedSourceCount: number;
+  assistantEnabled: boolean;
+}
+
+export type ScholarlyConfigInputModel = typeof ScholarlyConfigInputModel[keyof typeof ScholarlyConfigInputModel];
+
+
+export const ScholarlyConfigInputModel = {
+  'gpt-54-mini': 'gpt-5.4-mini',
+  'gpt-54': 'gpt-5.4',
+} as const;
+
+export interface ScholarlyConfigInput {
+  model: ScholarlyConfigInputModel;
+}
+
+export type ScholarlyEvaluationInputModel = typeof ScholarlyEvaluationInputModel[keyof typeof ScholarlyEvaluationInputModel];
+
+
+export const ScholarlyEvaluationInputModel = {
+  'gpt-54-mini': 'gpt-5.4-mini',
+  'gpt-54': 'gpt-5.4',
+} as const;
+
+export interface ScholarlyEvaluationInput {
+  model: ScholarlyEvaluationInputModel;
+  arabicQualityPassed: boolean;
+  groundingPassed: boolean;
+  abstentionPassed: boolean;
+  /**
+     * @minLength 3
+     * @maxLength 3000
+     */
+  note: string;
+}
+
+export type GetMateenTeacherReferralsParams = {
+status?: GetMateenTeacherReferralsStatus;
+/**
+ * @maxLength 200
+ */
+q?: string;
+};
+
+export type GetMateenTeacherReferralsStatus = typeof GetMateenTeacherReferralsStatus[keyof typeof GetMateenTeacherReferralsStatus];
+
+
+export const GetMateenTeacherReferralsStatus = {
+  open: 'open',
+  answered: 'answered',
+  closed: 'closed',
+} as const;
+
+export type ListScholarlyIssuesParams = {
+status?: ListScholarlyIssuesStatus;
+};
+
+export type ListScholarlyIssuesStatus = typeof ListScholarlyIssuesStatus[keyof typeof ListScholarlyIssuesStatus];
+
+
+export const ListScholarlyIssuesStatus = {
+  open: 'open',
+  reviewed: 'reviewed',
+  resolved: 'resolved',
+} as const;
+

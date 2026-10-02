@@ -27,6 +27,7 @@ export function AdminGate({ need = 'any', children }: { need?: Need; children: (
     { href: '/admin', label: 'نظرة عامة', I: LayoutDashboard, show: !!a && isReviewer(a), exact: true },
     { href: '/admin/teachers', label: 'طلبات المعلمين', I: Users, show: !!a?.qualificationReviewer },
     { href: '/admin/sources', label: 'مصادر النصوص', I: BookMarked, show: !!a?.contentReviewer },
+    { href: '/admin/scholarly', label: 'المساعد والشروح', I: BookMarked, show: !!a?.contentReviewer },
     { href: '/admin/audit', label: 'سجل المراجعة', I: HistoryIcon, show: !!a && isReviewer(a) },
   ].filter((t) => t.show);
 

@@ -8,6 +8,7 @@ import { getGetProfileQueryKey, getGetReviewAccessQueryKey, useGetProfile, useGe
 import { Logo, ErrorState, SkeletonBlock } from '@/components/mateen/bits';
 import { useAuthReady } from '@/lib/mateen';
 import { cn } from '@/lib/utils';
+import { PortalNotifications } from './PortalNotifications';
 
 type Theme = 'light' | 'dark';
 const ThemeCtx = createContext<{ theme: Theme; setTheme: (t: Theme) => void }>({ theme: 'light', setTheme: () => {} });
@@ -25,6 +26,7 @@ const studentNav = [
   { href: '/student/settings', label: 'الإعدادات', icon: Settings },
 ];
 const teacherNav = [
+  { href: '/teacher/overview', label: 'نشاط الإحالات', icon: LayoutDashboard, exact: true },
   { href: '/teacher', label: 'الملف والطلب', icon: FileText, exact: true },
   { href: '/teacher/messages', label: 'الرسائل', icon: MessageSquare },
   { href: '/teacher/settings', label: 'الإعدادات', icon: Settings },
@@ -114,7 +116,10 @@ function Shell({ nav: navProp, name, role, children }: { nav: typeof studentNav;
             ))}
           </nav>
         </div>
-        <main className="mx-auto max-w-5xl px-5 py-8 md:px-10 md:py-12">{children}</main>
+        <main className="mx-auto max-w-5xl px-5 py-8 md:px-10 md:py-12">
+          <PortalNotifications teacher={role === 'teacher'} />
+          {children}
+        </main>
       </div>
     </div>
   );

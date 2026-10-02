@@ -17,7 +17,10 @@ import StudyPage from '@/pages/student/study';
 import ReviewsPage from '@/pages/student/reviews';
 import ScholarsPage from '@/pages/student/scholars';
 import MessagesPage from '@/pages/student/messages';
-import { AssistantPage, ExamsPage } from '@/pages/student/unavailable';
+import { ExamsPage } from '@/pages/student/unavailable';
+import AssistantPage from '@/pages/student/assistant';
+import ScholarlyAdminPage from '@/pages/admin/scholarly';
+import TeacherOverview from '@/components/scholarly/TeacherOverview';
 import SettingsPage from '@/pages/settings';
 import TeacherHome from '@/pages/teacher/home';
 import AdminHome from '@/pages/admin';
@@ -155,12 +158,14 @@ function Routes() {
           <Route path="/student/exams"><Portal role="student"><ExamsPage /></Portal></Route>
           <Route path="/student/settings"><Portal role="student"><SettingsPage /></Portal></Route>
           <Route path="/teacher"><Portal role="teacher"><TeacherHome /></Portal></Route>
+          <Route path="/teacher/overview"><Portal role="teacher"><TeacherOverview /></Portal></Route>
           <Route path="/teacher/messages"><Portal role="teacher"><MessagesPage teacher /></Portal></Route>
           <Route path="/teacher/settings"><Portal role="teacher"><SettingsPage /></Portal></Route>
           <Route path="/admin" component={AdminHome} />
           <Route path="/admin/teachers" component={AdminTeachers} />
           <Route path="/admin/sources" component={AdminSources} />
           <Route path="/admin/audit" component={AdminAudit} />
+          <Route path="/admin/scholarly" component={ScholarlyAdminPage} />
           <Route component={NotFound} />
         </Switch>
         <Toaster />

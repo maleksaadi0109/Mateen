@@ -44,7 +44,7 @@ Arabic RTL platform for studying Islamic scholarly texts. The approved full prod
 
 The current foundation supports real sign-in, student/teacher onboarding, persistent reading position, study markers, bookmarks, text search, name editing, and teacher draft profiles. Only الأربعون النووية under الحديث / التمهيدي is open; other texts are locked with «قريباً».
 
-Voice grading, scholarly AI, assessments, spaced-review scheduling, referral conversations, qualification uploads, approval, and administrative workflows are not implemented. Do not advertise them as operational.
+Voice grading, assessments and spaced-review scheduling remain separate implementation stages. Qualification uploads, independent source/teacher review, scholarly question intake, private history, consented referrals, text conversations, commentary administration and audit/moderation are implemented. Generated scholarly answers remain gated on a configured provider, authorized reviewed commentary and a passing model/corpus evaluation. See `docs/scholarly-assistant-operations.md`; do not advertise gated services as operational.
 
 ## Gotchas
 

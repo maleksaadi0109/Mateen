@@ -601,6 +601,650 @@ export const GetCapabilitiesResponse = zod.object({
 })
 
 
+export const GetMateenAssistantQuestionsResponseItem = zod.object({
+  "conversationId": zod.string().uuid(),
+  "questionId": zod.string().uuid(),
+  "question": zod.string(),
+  "textContext": zod.string().nullable(),
+  "createdAt": zod.coerce.date(),
+  "reason": zod.string(),
+  "status": zod.enum(['answered', 'abstained', 'waiting_for_teacher', 'referred']),
+  "answer": zod.string().nullable(),
+  "citations": zod.array(zod.object({
+  "passageId": zod.string().uuid(),
+  "sourceId": zod.string().uuid(),
+  "sourceTitle": zod.string(),
+  "author": zod.string(),
+  "edition": zod.string(),
+  "volume": zod.number().int().nullable(),
+  "printedPage": zod.string().nullable(),
+  "pdfPage": zod.number().int().nullable(),
+  "quote": zod.string()
+})),
+  "referral": zod.object({
+  "status": zod.enum(['not_referred', 'awaiting_reply', 'waiting_for_teacher', 'answered']),
+  "teacherName": zod.string().nullable()
+}),
+  "model": zod.string()
+})
+export const GetMateenAssistantQuestionsResponse = zod.array(GetMateenAssistantQuestionsResponseItem)
+
+
+export const askMateenAssistantBodyQuestionMax = 8000;
+
+export const askMateenAssistantBodyTextContextMax = 3000;
+
+export const askMateenAssistantBodyTextIdMax = 64;
+
+
+
+export const AskMateenAssistantBody = zod.object({
+  "question": zod.string().min(1).max(askMateenAssistantBodyQuestionMax),
+  "textContext": zod.string().max(askMateenAssistantBodyTextContextMax).nullish(),
+  "textId": zod.string().max(askMateenAssistantBodyTextIdMax).nullish()
+})
+
+export const AskMateenAssistantResponse = zod.object({
+  "conversationId": zod.string().uuid(),
+  "questionId": zod.string().uuid(),
+  "question": zod.string(),
+  "textContext": zod.string().nullable(),
+  "createdAt": zod.coerce.date(),
+  "reason": zod.string(),
+  "status": zod.enum(['answered', 'abstained', 'waiting_for_teacher', 'referred']),
+  "answer": zod.string().nullable(),
+  "citations": zod.array(zod.object({
+  "passageId": zod.string().uuid(),
+  "sourceId": zod.string().uuid(),
+  "sourceTitle": zod.string(),
+  "author": zod.string(),
+  "edition": zod.string(),
+  "volume": zod.number().int().nullable(),
+  "printedPage": zod.string().nullable(),
+  "pdfPage": zod.number().int().nullable(),
+  "quote": zod.string()
+})),
+  "referral": zod.object({
+  "status": zod.enum(['not_referred', 'awaiting_reply', 'waiting_for_teacher', 'answered']),
+  "teacherName": zod.string().nullable()
+}),
+  "model": zod.string()
+})
+
+
+export const GetMateenAssistantReadinessResponse = zod.object({
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4']),
+  "providerConfigured": zod.boolean(),
+  "evaluationPassed": zod.boolean(),
+  "reviewedSourceCount": zod.number().int(),
+  "assistantEnabled": zod.boolean()
+})
+
+
+export const GetMateenReferralPreviewParams = zod.object({
+  "questionId": zod.coerce.string().uuid()
+})
+
+export const GetMateenReferralPreviewResponse = zod.object({
+  "questionId": zod.string().uuid(),
+  "question": zod.string(),
+  "textContext": zod.string().nullable(),
+  "reason": zod.string(),
+  "shares": zod.array(zod.string()),
+  "teachers": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "specialties": zod.string()
+}))
+})
+
+
+export const ReferMateenAssistantQuestionParams = zod.object({
+  "questionId": zod.coerce.string().uuid()
+})
+
+export const ReferMateenAssistantQuestionBody = zod.object({
+  "consent": zod.literal(true),
+  "teacherId": zod.string().nullable()
+})
+
+export const ReferMateenAssistantQuestionResponse = zod.object({
+  "status": zod.enum(['not_referred', 'awaiting_reply', 'waiting_for_teacher', 'answered']),
+  "teacherName": zod.string().nullable()
+})
+
+
+export const GetMateenConversationsResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "topic": zod.string(),
+  "status": zod.string(),
+  "updatedAt": zod.coerce.date()
+})
+export const GetMateenConversationsResponse = zod.array(GetMateenConversationsResponseItem)
+
+
+export const GetMateenConversationMessagesParams = zod.object({
+  "conversationId": zod.coerce.string().uuid()
+})
+
+export const GetMateenConversationMessagesResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "role": zod.enum(['student', 'assistant', 'teacher']),
+  "text": zod.string(),
+  "createdAt": zod.coerce.date(),
+  "citations": zod.array(zod.object({
+  "passageId": zod.string().uuid(),
+  "sourceId": zod.string().uuid(),
+  "sourceTitle": zod.string(),
+  "author": zod.string(),
+  "edition": zod.string(),
+  "volume": zod.number().int().nullable(),
+  "printedPage": zod.string().nullable(),
+  "pdfPage": zod.number().int().nullable(),
+  "quote": zod.string()
+}))
+})
+export const GetMateenConversationMessagesResponse = zod.array(GetMateenConversationMessagesResponseItem)
+
+
+export const SendMateenFollowUpParams = zod.object({
+  "conversationId": zod.coerce.string().uuid()
+})
+
+export const sendMateenFollowUpBodyTextMax = 8000;
+
+
+
+export const SendMateenFollowUpBody = zod.object({
+  "text": zod.string().min(1).max(sendMateenFollowUpBodyTextMax),
+  "requestId": zod.string().uuid().optional().describe('Stable message identifier retained when retrying a failed send.')
+})
+
+export const SendMateenFollowUpResponse = zod.object({
+  "conversationId": zod.string().uuid(),
+  "questionId": zod.string().uuid(),
+  "question": zod.string(),
+  "textContext": zod.string().nullable(),
+  "createdAt": zod.coerce.date(),
+  "reason": zod.string(),
+  "status": zod.enum(['answered', 'abstained', 'waiting_for_teacher', 'referred']),
+  "answer": zod.string().nullable(),
+  "citations": zod.array(zod.object({
+  "passageId": zod.string().uuid(),
+  "sourceId": zod.string().uuid(),
+  "sourceTitle": zod.string(),
+  "author": zod.string(),
+  "edition": zod.string(),
+  "volume": zod.number().int().nullable(),
+  "printedPage": zod.string().nullable(),
+  "pdfPage": zod.number().int().nullable(),
+  "quote": zod.string()
+})),
+  "referral": zod.object({
+  "status": zod.enum(['not_referred', 'awaiting_reply', 'waiting_for_teacher', 'answered']),
+  "teacherName": zod.string().nullable()
+}),
+  "model": zod.string()
+})
+
+
+export const GetMateenConversationStatusParams = zod.object({
+  "conversationId": zod.coerce.string().uuid()
+})
+
+export const GetMateenConversationStatusResponse = zod.object({
+  "conversationId": zod.string().uuid(),
+  "status": zod.string(),
+  "referral": zod.object({
+  "status": zod.enum(['not_referred', 'awaiting_reply', 'waiting_for_teacher', 'answered']),
+  "teacherName": zod.string().nullable()
+}),
+  "updatedAt": zod.coerce.date()
+})
+
+
+export const getMateenTeacherReferralsQueryQMax = 200;
+
+
+
+export const GetMateenTeacherReferralsQueryParams = zod.object({
+  "status": zod.enum(['open', 'answered', 'closed']).optional(),
+  "q": zod.coerce.string().max(getMateenTeacherReferralsQueryQMax).optional()
+})
+
+export const GetMateenTeacherReferralsResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "conversationId": zod.string().uuid(),
+  "question": zod.string(),
+  "context": zod.string().nullable(),
+  "reason": zod.string(),
+  "status": zod.enum(['open', 'answered', 'closed']),
+  "createdAt": zod.coerce.date()
+})
+export const GetMateenTeacherReferralsResponse = zod.array(GetMateenTeacherReferralsResponseItem)
+
+
+export const UpdateMateenReferralStatusParams = zod.object({
+  "referralId": zod.coerce.string().uuid()
+})
+
+export const UpdateMateenReferralStatusBody = zod.object({
+  "status": zod.enum(['open', 'answered', 'closed'])
+})
+
+export const UpdateMateenReferralStatusResponse = zod.object({
+  "id": zod.string().uuid(),
+  "conversationId": zod.string().uuid(),
+  "question": zod.string(),
+  "context": zod.string().nullable(),
+  "reason": zod.string(),
+  "status": zod.enum(['open', 'answered', 'closed']),
+  "createdAt": zod.coerce.date()
+})
+
+
+export const ReplyMateenReferralParams = zod.object({
+  "referralId": zod.coerce.string().uuid()
+})
+
+export const replyMateenReferralBodyTextMax = 8000;
+
+
+
+export const ReplyMateenReferralBody = zod.object({
+  "text": zod.string().min(1).max(replyMateenReferralBodyTextMax),
+  "requestId": zod.string().uuid().optional().describe('Stable message identifier retained when retrying a failed send.')
+})
+
+export const ReplyMateenReferralResponse = zod.object({
+  "id": zod.string().uuid(),
+  "role": zod.enum(['student', 'assistant', 'teacher']),
+  "text": zod.string(),
+  "createdAt": zod.coerce.date(),
+  "citations": zod.array(zod.object({
+  "passageId": zod.string().uuid(),
+  "sourceId": zod.string().uuid(),
+  "sourceTitle": zod.string(),
+  "author": zod.string(),
+  "edition": zod.string(),
+  "volume": zod.number().int().nullable(),
+  "printedPage": zod.string().nullable(),
+  "pdfPage": zod.number().int().nullable(),
+  "quote": zod.string()
+}))
+})
+
+
+export const GetMateenNotificationsResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "type": zod.string(),
+  "conversationId": zod.string().uuid(),
+  "text": zod.string(),
+  "createdAt": zod.coerce.date(),
+  "readAt": zod.coerce.date().nullable()
+})
+export const GetMateenNotificationsResponse = zod.array(GetMateenNotificationsResponseItem)
+
+
+export const GetMateenNotificationStateResponse = zod.object({
+  "unreadCount": zod.number().int(),
+  "latestAt": zod.coerce.date().nullable()
+})
+
+
+export const MarkMateenNotificationReadParams = zod.object({
+  "notificationId": zod.coerce.string().uuid()
+})
+
+export const MarkMateenNotificationReadResponse = zod.object({
+  "unreadCount": zod.number().int(),
+  "latestAt": zod.coerce.date().nullable()
+})
+
+
+export const ListScholarlySourcesResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "title": zod.string(),
+  "author": zod.string(),
+  "edition": zod.string(),
+  "publisher": zod.string().nullable(),
+  "legalAuthorization": zod.string(),
+  "authorizationReference": zod.string(),
+  "version": zod.string(),
+  "status": zod.enum(['draft', 'reviewed', 'indexed', 'withdrawn']),
+  "passageCount": zod.number().int(),
+  "reviewedAt": zod.coerce.date().nullable(),
+  "indexedAt": zod.coerce.date().nullable()
+})
+export const ListScholarlySourcesResponse = zod.array(ListScholarlySourcesResponseItem)
+
+
+export const createScholarlySourceBodyTitleMax = 500;
+
+export const createScholarlySourceBodyAuthorMax = 300;
+
+export const createScholarlySourceBodyEditionMax = 300;
+
+export const createScholarlySourceBodyPublisherMax = 300;
+
+export const createScholarlySourceBodyAuthorizationReferenceMax = 1000;
+
+export const createScholarlySourceBodyVersionMax = 100;
+
+
+
+export const CreateScholarlySourceBody = zod.object({
+  "title": zod.string().min(1).max(createScholarlySourceBodyTitleMax),
+  "author": zod.string().min(1).max(createScholarlySourceBodyAuthorMax),
+  "edition": zod.string().min(1).max(createScholarlySourceBodyEditionMax),
+  "publisher": zod.string().max(createScholarlySourceBodyPublisherMax).nullish(),
+  "legalAuthorization": zod.enum(['public_domain', 'licensed', 'permission_granted']),
+  "authorizationReference": zod.string().min(1).max(createScholarlySourceBodyAuthorizationReferenceMax),
+  "version": zod.string().min(1).max(createScholarlySourceBodyVersionMax)
+})
+
+export const CreateScholarlySourceResponse = zod.object({
+  "id": zod.string().uuid(),
+  "title": zod.string(),
+  "author": zod.string(),
+  "edition": zod.string(),
+  "publisher": zod.string().nullable(),
+  "legalAuthorization": zod.string(),
+  "authorizationReference": zod.string(),
+  "version": zod.string(),
+  "status": zod.enum(['draft', 'reviewed', 'indexed', 'withdrawn']),
+  "passageCount": zod.number().int(),
+  "reviewedAt": zod.coerce.date().nullable(),
+  "indexedAt": zod.coerce.date().nullable()
+})
+
+
+export const ListScholarlyPassagesParams = zod.object({
+  "sourceId": zod.coerce.string().uuid()
+})
+
+export const ListScholarlyPassagesResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "sourceId": zod.string().uuid(),
+  "text": zod.string(),
+  "volume": zod.number().int().nullable(),
+  "printedPage": zod.string().nullable(),
+  "pdfPage": zod.number().int().nullable(),
+  "indexed": zod.boolean()
+})
+export const ListScholarlyPassagesResponse = zod.array(ListScholarlyPassagesResponseItem)
+
+
+export const CreateScholarlyPassageParams = zod.object({
+  "sourceId": zod.coerce.string().uuid()
+})
+
+export const createScholarlyPassageBodyPassagesItemTextMax = 12000;
+
+
+export const createScholarlyPassageBodyPassagesItemPrintedPageMax = 50;
+
+
+export const createScholarlyPassageBodyPassagesMax = 500;
+
+
+
+export const CreateScholarlyPassageBody = zod.object({
+  "passages": zod.array(zod.object({
+  "text": zod.string().min(1).max(createScholarlyPassageBodyPassagesItemTextMax),
+  "volume": zod.number().int().min(1).nullish(),
+  "printedPage": zod.string().max(createScholarlyPassageBodyPassagesItemPrintedPageMax).nullish(),
+  "pdfPage": zod.number().int().min(1).nullish()
+})).min(1).max(createScholarlyPassageBodyPassagesMax)
+})
+
+export const CreateScholarlyPassageResponse = zod.void()
+
+
+export const ReviewScholarlySourceParams = zod.object({
+  "sourceId": zod.coerce.string().uuid()
+})
+
+export const reviewScholarlySourceBodyNoteMin = 3;
+export const reviewScholarlySourceBodyNoteMax = 2000;
+
+
+
+export const ReviewScholarlySourceBody = zod.object({
+  "decision": zod.enum(['approve', 'reject']),
+  "note": zod.string().min(reviewScholarlySourceBodyNoteMin).max(reviewScholarlySourceBodyNoteMax)
+})
+
+export const ReviewScholarlySourceResponse = zod.object({
+  "id": zod.string().uuid(),
+  "title": zod.string(),
+  "author": zod.string(),
+  "edition": zod.string(),
+  "publisher": zod.string().nullable(),
+  "legalAuthorization": zod.string(),
+  "authorizationReference": zod.string(),
+  "version": zod.string(),
+  "status": zod.enum(['draft', 'reviewed', 'indexed', 'withdrawn']),
+  "passageCount": zod.number().int(),
+  "reviewedAt": zod.coerce.date().nullable(),
+  "indexedAt": zod.coerce.date().nullable()
+})
+
+
+export const IndexScholarlySourceParams = zod.object({
+  "sourceId": zod.coerce.string().uuid()
+})
+
+export const IndexScholarlySourceBody = zod.object({
+  "confirmReviewed": zod.literal(true)
+})
+
+export const IndexScholarlySourceResponse = zod.object({
+  "id": zod.string().uuid(),
+  "title": zod.string(),
+  "author": zod.string(),
+  "edition": zod.string(),
+  "publisher": zod.string().nullable(),
+  "legalAuthorization": zod.string(),
+  "authorizationReference": zod.string(),
+  "version": zod.string(),
+  "status": zod.enum(['draft', 'reviewed', 'indexed', 'withdrawn']),
+  "passageCount": zod.number().int(),
+  "reviewedAt": zod.coerce.date().nullable(),
+  "indexedAt": zod.coerce.date().nullable()
+})
+
+
+export const WithdrawScholarlySourceParams = zod.object({
+  "sourceId": zod.coerce.string().uuid()
+})
+
+export const withdrawScholarlySourceBodyReasonMin = 3;
+export const withdrawScholarlySourceBodyReasonMax = 2000;
+
+
+
+export const WithdrawScholarlySourceBody = zod.object({
+  "reason": zod.string().min(withdrawScholarlySourceBodyReasonMin).max(withdrawScholarlySourceBodyReasonMax)
+})
+
+export const WithdrawScholarlySourceResponse = zod.object({
+  "id": zod.string().uuid(),
+  "title": zod.string(),
+  "author": zod.string(),
+  "edition": zod.string(),
+  "publisher": zod.string().nullable(),
+  "legalAuthorization": zod.string(),
+  "authorizationReference": zod.string(),
+  "version": zod.string(),
+  "status": zod.enum(['draft', 'reviewed', 'indexed', 'withdrawn']),
+  "passageCount": zod.number().int(),
+  "reviewedAt": zod.coerce.date().nullable(),
+  "indexedAt": zod.coerce.date().nullable()
+})
+
+
+export const reportScholarlyIssueBodyDescriptionMin = 3;
+export const reportScholarlyIssueBodyDescriptionMax = 3000;
+
+
+
+export const ReportScholarlyIssueBody = zod.object({
+  "questionId": zod.string().uuid(),
+  "category": zod.enum(['citation', 'unsupported_claim', 'safety', 'other']),
+  "description": zod.string().min(reportScholarlyIssueBodyDescriptionMin).max(reportScholarlyIssueBodyDescriptionMax)
+})
+
+export const ReportScholarlyIssueResponse = zod.object({
+  "id": zod.string().uuid(),
+  "questionId": zod.string().uuid(),
+  "reporterId": zod.string(),
+  "question": zod.string(),
+  "answer": zod.string().nullable(),
+  "citations": zod.array(zod.object({
+  "passageId": zod.string().uuid(),
+  "sourceId": zod.string().uuid(),
+  "sourceTitle": zod.string(),
+  "author": zod.string(),
+  "edition": zod.string(),
+  "volume": zod.number().int().nullable(),
+  "printedPage": zod.string().nullable(),
+  "pdfPage": zod.number().int().nullable(),
+  "quote": zod.string()
+})),
+  "category": zod.string(),
+  "description": zod.string(),
+  "status": zod.enum(['open', 'reviewed', 'resolved']),
+  "moderationNote": zod.string().nullable(),
+  "createdAt": zod.coerce.date()
+})
+
+
+export const ListScholarlyIssuesQueryParams = zod.object({
+  "status": zod.enum(['open', 'reviewed', 'resolved']).optional()
+})
+
+export const ListScholarlyIssuesResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "questionId": zod.string().uuid(),
+  "reporterId": zod.string(),
+  "question": zod.string(),
+  "answer": zod.string().nullable(),
+  "citations": zod.array(zod.object({
+  "passageId": zod.string().uuid(),
+  "sourceId": zod.string().uuid(),
+  "sourceTitle": zod.string(),
+  "author": zod.string(),
+  "edition": zod.string(),
+  "volume": zod.number().int().nullable(),
+  "printedPage": zod.string().nullable(),
+  "pdfPage": zod.number().int().nullable(),
+  "quote": zod.string()
+})),
+  "category": zod.string(),
+  "description": zod.string(),
+  "status": zod.enum(['open', 'reviewed', 'resolved']),
+  "moderationNote": zod.string().nullable(),
+  "createdAt": zod.coerce.date()
+})
+export const ListScholarlyIssuesResponse = zod.array(ListScholarlyIssuesResponseItem)
+
+
+export const ModerateScholarlyIssueParams = zod.object({
+  "issueId": zod.coerce.string().uuid()
+})
+
+export const moderateScholarlyIssueBodyNoteMin = 3;
+export const moderateScholarlyIssueBodyNoteMax = 2000;
+
+
+
+export const ModerateScholarlyIssueBody = zod.object({
+  "status": zod.enum(['reviewed', 'resolved']),
+  "note": zod.string().min(moderateScholarlyIssueBodyNoteMin).max(moderateScholarlyIssueBodyNoteMax)
+})
+
+export const ModerateScholarlyIssueResponse = zod.object({
+  "id": zod.string().uuid(),
+  "questionId": zod.string().uuid(),
+  "reporterId": zod.string(),
+  "question": zod.string(),
+  "answer": zod.string().nullable(),
+  "citations": zod.array(zod.object({
+  "passageId": zod.string().uuid(),
+  "sourceId": zod.string().uuid(),
+  "sourceTitle": zod.string(),
+  "author": zod.string(),
+  "edition": zod.string(),
+  "volume": zod.number().int().nullable(),
+  "printedPage": zod.string().nullable(),
+  "pdfPage": zod.number().int().nullable(),
+  "quote": zod.string()
+})),
+  "category": zod.string(),
+  "description": zod.string(),
+  "status": zod.enum(['open', 'reviewed', 'resolved']),
+  "moderationNote": zod.string().nullable(),
+  "createdAt": zod.coerce.date()
+})
+
+
+export const GetScholarlyConfigResponse = zod.object({
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4']),
+  "providerConfigured": zod.boolean(),
+  "evaluationPassed": zod.boolean(),
+  "reviewedSourceCount": zod.number().int(),
+  "assistantEnabled": zod.boolean()
+})
+
+
+export const UpdateScholarlyConfigBody = zod.object({
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4'])
+})
+
+export const UpdateScholarlyConfigResponse = zod.object({
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4']),
+  "providerConfigured": zod.boolean(),
+  "evaluationPassed": zod.boolean(),
+  "reviewedSourceCount": zod.number().int(),
+  "assistantEnabled": zod.boolean()
+})
+
+
+export const recordScholarlyEvaluationBodyNoteMin = 3;
+export const recordScholarlyEvaluationBodyNoteMax = 3000;
+
+
+
+export const RecordScholarlyEvaluationBody = zod.object({
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4']),
+  "arabicQualityPassed": zod.boolean(),
+  "groundingPassed": zod.boolean(),
+  "abstentionPassed": zod.boolean(),
+  "note": zod.string().min(recordScholarlyEvaluationBodyNoteMin).max(recordScholarlyEvaluationBodyNoteMax)
+})
+
+export const RecordScholarlyEvaluationResponse = zod.object({
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4']),
+  "providerConfigured": zod.boolean(),
+  "evaluationPassed": zod.boolean(),
+  "reviewedSourceCount": zod.number().int(),
+  "assistantEnabled": zod.boolean()
+})
+
+
+export const ListScholarlyAuditResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "actorId": zod.string(),
+  "action": zod.string(),
+  "targetType": zod.string(),
+  "targetId": zod.string().nullable(),
+  "reason": zod.string(),
+  "createdAt": zod.coerce.date()
+})
+export const ListScholarlyAuditResponse = zod.array(ListScholarlyAuditResponseItem)
+
+
 /**
  * Returns server health status
  * @summary Health check

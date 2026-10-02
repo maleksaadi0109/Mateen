@@ -20,10 +20,17 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AssistantQuestion,
+  AssistantQuestionInput,
   Capabilities,
   CatalogText,
+  ConversationMessageInput,
+  ConversationStatus,
   Dashboard,
+  GetMateenTeacherReferralsParams,
   HealthStatus,
+  ListScholarlyIssuesParams,
+  NotificationState,
   Profile,
   ProfileInput,
   ProgressInput,
@@ -31,11 +38,31 @@ import type {
   QualificationUpload,
   QualificationUploadInput,
   Referral,
+  ReferralConsentInput,
+  ReferralPreview,
+  ReferralStatusInput,
   ReviewAccess,
   ReviewAudit,
   ReviewDecisionInput,
   RevisionInput,
   Scholar,
+  ScholarlyAuditEvent,
+  ScholarlyConfig,
+  ScholarlyConfigInput,
+  ScholarlyConversation,
+  ScholarlyEvaluationInput,
+  ScholarlyIndexInput,
+  ScholarlyIssue,
+  ScholarlyIssueInput,
+  ScholarlyIssueModerationInput,
+  ScholarlyMessage,
+  ScholarlyNotification,
+  ScholarlyPassage,
+  ScholarlyPassagesInput,
+  ScholarlyReviewInput,
+  ScholarlySource,
+  ScholarlySourceInput,
+  ScholarlyWithdrawalInput,
   SourceDecisionInput,
   SourceVersion,
   SourceVersionInput,
@@ -43,6 +70,8 @@ import type {
   StudyText,
   TeacherApplication,
   TeacherInput,
+  TeacherReferral,
+  TeacherReferralSummary,
   TeacherReview
 } from './api.schemas';
 
@@ -1850,6 +1879,2239 @@ export function useGetCapabilities<TData = Awaited<ReturnType<typeof getCapabili
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getGetCapabilitiesQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetMateenAssistantQuestionsUrl = () => {
+
+
+
+
+  return `/api/mateen/assistant/questions`
+}
+
+export const getMateenAssistantQuestions = async ( options?: Parameters<typeof customFetch>[1]): Promise<AssistantQuestion[]> => {
+
+  return customFetch<AssistantQuestion[]>(getGetMateenAssistantQuestionsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetMateenAssistantQuestionsQueryKey = () => {
+    return [
+    `/api/mateen/assistant/questions`
+    ] as const;
+    }
+
+
+export const getGetMateenAssistantQuestionsQueryOptions = <TData = Awaited<ReturnType<typeof getMateenAssistantQuestions>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenAssistantQuestions>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMateenAssistantQuestionsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMateenAssistantQuestions>>> = ({ signal }) => getMateenAssistantQuestions({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMateenAssistantQuestions>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetMateenAssistantQuestionsQueryResult = NonNullable<Awaited<ReturnType<typeof getMateenAssistantQuestions>>>
+export type GetMateenAssistantQuestionsQueryError = ErrorType<unknown>
+
+
+
+export function useGetMateenAssistantQuestions<TData = Awaited<ReturnType<typeof getMateenAssistantQuestions>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenAssistantQuestions>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetMateenAssistantQuestionsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getAskMateenAssistantUrl = () => {
+
+
+
+
+  return `/api/mateen/assistant/questions`
+}
+
+export const askMateenAssistant = async (assistantQuestionInput: AssistantQuestionInput, options?: Parameters<typeof customFetch>[1]): Promise<AssistantQuestion> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<AssistantQuestion>(getAskMateenAssistantUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(assistantQuestionInput)
+  }
+);}
+
+
+
+
+
+export const getAskMateenAssistantMutationKey = () => ['askMateenAssistant'] as const;
+
+export const getAskMateenAssistantMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof askMateenAssistant>>, TError,AskMateenAssistantMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof askMateenAssistant>>, TError,AskMateenAssistantMutationVariables, TContext> => {
+
+const mutationKey = getAskMateenAssistantMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof askMateenAssistant>>, AskMateenAssistantMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  askMateenAssistant(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AskMateenAssistantMutationResult = NonNullable<Awaited<ReturnType<typeof askMateenAssistant>>>
+    export type AskMateenAssistantMutationBody = BodyType<AssistantQuestionInput>
+    export type AskMateenAssistantMutationError = ErrorType<void>
+    export type AskMateenAssistantMutationVariables = {data: BodyType<AssistantQuestionInput>}
+
+    export const useAskMateenAssistant = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof askMateenAssistant>>, TError,AskMateenAssistantMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof askMateenAssistant>>,
+        TError,
+        AskMateenAssistantMutationVariables,
+        TContext
+      > => {
+      return useMutation(getAskMateenAssistantMutationOptions(options));
+    }
+
+export const getGetMateenAssistantReadinessUrl = () => {
+
+
+
+
+  return `/api/mateen/assistant/readiness`
+}
+
+export const getMateenAssistantReadiness = async ( options?: Parameters<typeof customFetch>[1]): Promise<ScholarlyConfig> => {
+
+  return customFetch<ScholarlyConfig>(getGetMateenAssistantReadinessUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetMateenAssistantReadinessQueryKey = () => {
+    return [
+    `/api/mateen/assistant/readiness`
+    ] as const;
+    }
+
+
+export const getGetMateenAssistantReadinessQueryOptions = <TData = Awaited<ReturnType<typeof getMateenAssistantReadiness>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenAssistantReadiness>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMateenAssistantReadinessQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMateenAssistantReadiness>>> = ({ signal }) => getMateenAssistantReadiness({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMateenAssistantReadiness>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetMateenAssistantReadinessQueryResult = NonNullable<Awaited<ReturnType<typeof getMateenAssistantReadiness>>>
+export type GetMateenAssistantReadinessQueryError = ErrorType<unknown>
+
+
+
+export function useGetMateenAssistantReadiness<TData = Awaited<ReturnType<typeof getMateenAssistantReadiness>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenAssistantReadiness>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetMateenAssistantReadinessQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetMateenReferralPreviewUrl = (questionId: string,) => {
+
+
+
+
+  return `/api/mateen/assistant/questions/${questionId}/referral-preview`
+}
+
+export const getMateenReferralPreview = async (questionId: string, options?: Parameters<typeof customFetch>[1]): Promise<ReferralPreview> => {
+
+  return customFetch<ReferralPreview>(getGetMateenReferralPreviewUrl(questionId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetMateenReferralPreviewQueryKey = (questionId: string,) => {
+    return [
+    `/api/mateen/assistant/questions/${questionId}/referral-preview`
+    ] as const;
+    }
+
+
+export const getGetMateenReferralPreviewQueryOptions = <TData = Awaited<ReturnType<typeof getMateenReferralPreview>>, TError = ErrorType<void>>(questionId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenReferralPreview>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMateenReferralPreviewQueryKey(questionId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMateenReferralPreview>>> = ({ signal }) => getMateenReferralPreview(questionId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: questionId !== null && questionId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMateenReferralPreview>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetMateenReferralPreviewQueryResult = NonNullable<Awaited<ReturnType<typeof getMateenReferralPreview>>>
+export type GetMateenReferralPreviewQueryError = ErrorType<void>
+
+
+
+export function useGetMateenReferralPreview<TData = Awaited<ReturnType<typeof getMateenReferralPreview>>, TError = ErrorType<void>>(
+ questionId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenReferralPreview>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetMateenReferralPreviewQueryOptions(questionId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getReferMateenAssistantQuestionUrl = (questionId: string,) => {
+
+
+
+
+  return `/api/mateen/assistant/questions/${questionId}/referral`
+}
+
+export const referMateenAssistantQuestion = async (questionId: string,
+    referralConsentInput: ReferralConsentInput, options?: Parameters<typeof customFetch>[1]): Promise<TeacherReferralSummary> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<TeacherReferralSummary>(getReferMateenAssistantQuestionUrl(questionId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(referralConsentInput)
+  }
+);}
+
+
+
+
+
+export const getReferMateenAssistantQuestionMutationKey = () => ['referMateenAssistantQuestion'] as const;
+
+export const getReferMateenAssistantQuestionMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof referMateenAssistantQuestion>>, TError,ReferMateenAssistantQuestionMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof referMateenAssistantQuestion>>, TError,ReferMateenAssistantQuestionMutationVariables, TContext> => {
+
+const mutationKey = getReferMateenAssistantQuestionMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof referMateenAssistantQuestion>>, ReferMateenAssistantQuestionMutationVariables> = (props) => {
+          const {questionId,data} = props ?? {};
+
+          return  referMateenAssistantQuestion(questionId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReferMateenAssistantQuestionMutationResult = NonNullable<Awaited<ReturnType<typeof referMateenAssistantQuestion>>>
+    export type ReferMateenAssistantQuestionMutationBody = BodyType<ReferralConsentInput>
+    export type ReferMateenAssistantQuestionMutationError = ErrorType<void>
+    export type ReferMateenAssistantQuestionMutationVariables = {questionId: string;data: BodyType<ReferralConsentInput>}
+
+    export const useReferMateenAssistantQuestion = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof referMateenAssistantQuestion>>, TError,ReferMateenAssistantQuestionMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof referMateenAssistantQuestion>>,
+        TError,
+        ReferMateenAssistantQuestionMutationVariables,
+        TContext
+      > => {
+      return useMutation(getReferMateenAssistantQuestionMutationOptions(options));
+    }
+
+export const getGetMateenConversationsUrl = () => {
+
+
+
+
+  return `/api/mateen/conversations`
+}
+
+export const getMateenConversations = async ( options?: Parameters<typeof customFetch>[1]): Promise<ScholarlyConversation[]> => {
+
+  return customFetch<ScholarlyConversation[]>(getGetMateenConversationsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetMateenConversationsQueryKey = () => {
+    return [
+    `/api/mateen/conversations`
+    ] as const;
+    }
+
+
+export const getGetMateenConversationsQueryOptions = <TData = Awaited<ReturnType<typeof getMateenConversations>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenConversations>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMateenConversationsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMateenConversations>>> = ({ signal }) => getMateenConversations({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMateenConversations>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetMateenConversationsQueryResult = NonNullable<Awaited<ReturnType<typeof getMateenConversations>>>
+export type GetMateenConversationsQueryError = ErrorType<unknown>
+
+
+
+export function useGetMateenConversations<TData = Awaited<ReturnType<typeof getMateenConversations>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenConversations>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetMateenConversationsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetMateenConversationMessagesUrl = (conversationId: string,) => {
+
+
+
+
+  return `/api/mateen/conversations/${conversationId}/messages`
+}
+
+export const getMateenConversationMessages = async (conversationId: string, options?: Parameters<typeof customFetch>[1]): Promise<ScholarlyMessage[]> => {
+
+  return customFetch<ScholarlyMessage[]>(getGetMateenConversationMessagesUrl(conversationId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetMateenConversationMessagesQueryKey = (conversationId: string,) => {
+    return [
+    `/api/mateen/conversations/${conversationId}/messages`
+    ] as const;
+    }
+
+
+export const getGetMateenConversationMessagesQueryOptions = <TData = Awaited<ReturnType<typeof getMateenConversationMessages>>, TError = ErrorType<void>>(conversationId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenConversationMessages>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMateenConversationMessagesQueryKey(conversationId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMateenConversationMessages>>> = ({ signal }) => getMateenConversationMessages(conversationId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: conversationId !== null && conversationId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMateenConversationMessages>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetMateenConversationMessagesQueryResult = NonNullable<Awaited<ReturnType<typeof getMateenConversationMessages>>>
+export type GetMateenConversationMessagesQueryError = ErrorType<void>
+
+
+
+export function useGetMateenConversationMessages<TData = Awaited<ReturnType<typeof getMateenConversationMessages>>, TError = ErrorType<void>>(
+ conversationId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenConversationMessages>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetMateenConversationMessagesQueryOptions(conversationId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getSendMateenFollowUpUrl = (conversationId: string,) => {
+
+
+
+
+  return `/api/mateen/conversations/${conversationId}/messages`
+}
+
+export const sendMateenFollowUp = async (conversationId: string,
+    conversationMessageInput: ConversationMessageInput, options?: Parameters<typeof customFetch>[1]): Promise<AssistantQuestion> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<AssistantQuestion>(getSendMateenFollowUpUrl(conversationId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(conversationMessageInput)
+  }
+);}
+
+
+
+
+
+export const getSendMateenFollowUpMutationKey = () => ['sendMateenFollowUp'] as const;
+
+export const getSendMateenFollowUpMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sendMateenFollowUp>>, TError,SendMateenFollowUpMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof sendMateenFollowUp>>, TError,SendMateenFollowUpMutationVariables, TContext> => {
+
+const mutationKey = getSendMateenFollowUpMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof sendMateenFollowUp>>, SendMateenFollowUpMutationVariables> = (props) => {
+          const {conversationId,data} = props ?? {};
+
+          return  sendMateenFollowUp(conversationId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SendMateenFollowUpMutationResult = NonNullable<Awaited<ReturnType<typeof sendMateenFollowUp>>>
+    export type SendMateenFollowUpMutationBody = BodyType<ConversationMessageInput>
+    export type SendMateenFollowUpMutationError = ErrorType<void>
+    export type SendMateenFollowUpMutationVariables = {conversationId: string;data: BodyType<ConversationMessageInput>}
+
+    export const useSendMateenFollowUp = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sendMateenFollowUp>>, TError,SendMateenFollowUpMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof sendMateenFollowUp>>,
+        TError,
+        SendMateenFollowUpMutationVariables,
+        TContext
+      > => {
+      return useMutation(getSendMateenFollowUpMutationOptions(options));
+    }
+
+export const getGetMateenConversationStatusUrl = (conversationId: string,) => {
+
+
+
+
+  return `/api/mateen/conversations/${conversationId}/status`
+}
+
+export const getMateenConversationStatus = async (conversationId: string, options?: Parameters<typeof customFetch>[1]): Promise<ConversationStatus> => {
+
+  return customFetch<ConversationStatus>(getGetMateenConversationStatusUrl(conversationId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetMateenConversationStatusQueryKey = (conversationId: string,) => {
+    return [
+    `/api/mateen/conversations/${conversationId}/status`
+    ] as const;
+    }
+
+
+export const getGetMateenConversationStatusQueryOptions = <TData = Awaited<ReturnType<typeof getMateenConversationStatus>>, TError = ErrorType<void>>(conversationId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenConversationStatus>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMateenConversationStatusQueryKey(conversationId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMateenConversationStatus>>> = ({ signal }) => getMateenConversationStatus(conversationId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: conversationId !== null && conversationId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMateenConversationStatus>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetMateenConversationStatusQueryResult = NonNullable<Awaited<ReturnType<typeof getMateenConversationStatus>>>
+export type GetMateenConversationStatusQueryError = ErrorType<void>
+
+
+
+export function useGetMateenConversationStatus<TData = Awaited<ReturnType<typeof getMateenConversationStatus>>, TError = ErrorType<void>>(
+ conversationId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenConversationStatus>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetMateenConversationStatusQueryOptions(conversationId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetMateenTeacherReferralsUrl = (params?: GetMateenTeacherReferralsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/mateen/teacher/referrals?${stringifiedParams}` : `/api/mateen/teacher/referrals`
+}
+
+export const getMateenTeacherReferrals = async (params?: GetMateenTeacherReferralsParams, options?: Parameters<typeof customFetch>[1]): Promise<TeacherReferral[]> => {
+
+  return customFetch<TeacherReferral[]>(getGetMateenTeacherReferralsUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetMateenTeacherReferralsQueryKey = (params?: GetMateenTeacherReferralsParams,) => {
+    return [
+    `/api/mateen/teacher/referrals`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetMateenTeacherReferralsQueryOptions = <TData = Awaited<ReturnType<typeof getMateenTeacherReferrals>>, TError = ErrorType<unknown>>(params?: GetMateenTeacherReferralsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenTeacherReferrals>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMateenTeacherReferralsQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMateenTeacherReferrals>>> = ({ signal }) => getMateenTeacherReferrals(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMateenTeacherReferrals>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetMateenTeacherReferralsQueryResult = NonNullable<Awaited<ReturnType<typeof getMateenTeacherReferrals>>>
+export type GetMateenTeacherReferralsQueryError = ErrorType<unknown>
+
+
+
+export function useGetMateenTeacherReferrals<TData = Awaited<ReturnType<typeof getMateenTeacherReferrals>>, TError = ErrorType<unknown>>(
+ params?: GetMateenTeacherReferralsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenTeacherReferrals>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetMateenTeacherReferralsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getUpdateMateenReferralStatusUrl = (referralId: string,) => {
+
+
+
+
+  return `/api/mateen/teacher/referrals/${referralId}/status`
+}
+
+export const updateMateenReferralStatus = async (referralId: string,
+    referralStatusInput: ReferralStatusInput, options?: Parameters<typeof customFetch>[1]): Promise<TeacherReferral> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<TeacherReferral>(getUpdateMateenReferralStatusUrl(referralId),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(referralStatusInput)
+  }
+);}
+
+
+
+
+
+export const getUpdateMateenReferralStatusMutationKey = () => ['updateMateenReferralStatus'] as const;
+
+export const getUpdateMateenReferralStatusMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateMateenReferralStatus>>, TError,UpdateMateenReferralStatusMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateMateenReferralStatus>>, TError,UpdateMateenReferralStatusMutationVariables, TContext> => {
+
+const mutationKey = getUpdateMateenReferralStatusMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateMateenReferralStatus>>, UpdateMateenReferralStatusMutationVariables> = (props) => {
+          const {referralId,data} = props ?? {};
+
+          return  updateMateenReferralStatus(referralId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateMateenReferralStatusMutationResult = NonNullable<Awaited<ReturnType<typeof updateMateenReferralStatus>>>
+    export type UpdateMateenReferralStatusMutationBody = BodyType<ReferralStatusInput>
+    export type UpdateMateenReferralStatusMutationError = ErrorType<void>
+    export type UpdateMateenReferralStatusMutationVariables = {referralId: string;data: BodyType<ReferralStatusInput>}
+
+    export const useUpdateMateenReferralStatus = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateMateenReferralStatus>>, TError,UpdateMateenReferralStatusMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateMateenReferralStatus>>,
+        TError,
+        UpdateMateenReferralStatusMutationVariables,
+        TContext
+      > => {
+      return useMutation(getUpdateMateenReferralStatusMutationOptions(options));
+    }
+
+export const getReplyMateenReferralUrl = (referralId: string,) => {
+
+
+
+
+  return `/api/mateen/teacher/referrals/${referralId}/messages`
+}
+
+export const replyMateenReferral = async (referralId: string,
+    conversationMessageInput: ConversationMessageInput, options?: Parameters<typeof customFetch>[1]): Promise<ScholarlyMessage> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<ScholarlyMessage>(getReplyMateenReferralUrl(referralId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(conversationMessageInput)
+  }
+);}
+
+
+
+
+
+export const getReplyMateenReferralMutationKey = () => ['replyMateenReferral'] as const;
+
+export const getReplyMateenReferralMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof replyMateenReferral>>, TError,ReplyMateenReferralMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof replyMateenReferral>>, TError,ReplyMateenReferralMutationVariables, TContext> => {
+
+const mutationKey = getReplyMateenReferralMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof replyMateenReferral>>, ReplyMateenReferralMutationVariables> = (props) => {
+          const {referralId,data} = props ?? {};
+
+          return  replyMateenReferral(referralId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReplyMateenReferralMutationResult = NonNullable<Awaited<ReturnType<typeof replyMateenReferral>>>
+    export type ReplyMateenReferralMutationBody = BodyType<ConversationMessageInput>
+    export type ReplyMateenReferralMutationError = ErrorType<void>
+    export type ReplyMateenReferralMutationVariables = {referralId: string;data: BodyType<ConversationMessageInput>}
+
+    export const useReplyMateenReferral = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof replyMateenReferral>>, TError,ReplyMateenReferralMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof replyMateenReferral>>,
+        TError,
+        ReplyMateenReferralMutationVariables,
+        TContext
+      > => {
+      return useMutation(getReplyMateenReferralMutationOptions(options));
+    }
+
+export const getGetMateenNotificationsUrl = () => {
+
+
+
+
+  return `/api/mateen/notifications`
+}
+
+export const getMateenNotifications = async ( options?: Parameters<typeof customFetch>[1]): Promise<ScholarlyNotification[]> => {
+
+  return customFetch<ScholarlyNotification[]>(getGetMateenNotificationsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetMateenNotificationsQueryKey = () => {
+    return [
+    `/api/mateen/notifications`
+    ] as const;
+    }
+
+
+export const getGetMateenNotificationsQueryOptions = <TData = Awaited<ReturnType<typeof getMateenNotifications>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenNotifications>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMateenNotificationsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMateenNotifications>>> = ({ signal }) => getMateenNotifications({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMateenNotifications>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetMateenNotificationsQueryResult = NonNullable<Awaited<ReturnType<typeof getMateenNotifications>>>
+export type GetMateenNotificationsQueryError = ErrorType<unknown>
+
+
+
+export function useGetMateenNotifications<TData = Awaited<ReturnType<typeof getMateenNotifications>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenNotifications>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetMateenNotificationsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetMateenNotificationStateUrl = () => {
+
+
+
+
+  return `/api/mateen/notifications/state`
+}
+
+export const getMateenNotificationState = async ( options?: Parameters<typeof customFetch>[1]): Promise<NotificationState> => {
+
+  return customFetch<NotificationState>(getGetMateenNotificationStateUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetMateenNotificationStateQueryKey = () => {
+    return [
+    `/api/mateen/notifications/state`
+    ] as const;
+    }
+
+
+export const getGetMateenNotificationStateQueryOptions = <TData = Awaited<ReturnType<typeof getMateenNotificationState>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenNotificationState>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMateenNotificationStateQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMateenNotificationState>>> = ({ signal }) => getMateenNotificationState({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMateenNotificationState>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetMateenNotificationStateQueryResult = NonNullable<Awaited<ReturnType<typeof getMateenNotificationState>>>
+export type GetMateenNotificationStateQueryError = ErrorType<unknown>
+
+
+
+export function useGetMateenNotificationState<TData = Awaited<ReturnType<typeof getMateenNotificationState>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMateenNotificationState>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetMateenNotificationStateQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getMarkMateenNotificationReadUrl = (notificationId: string,) => {
+
+
+
+
+  return `/api/mateen/notifications/${notificationId}/read`
+}
+
+export const markMateenNotificationRead = async (notificationId: string, options?: Parameters<typeof customFetch>[1]): Promise<NotificationState> => {
+
+  return customFetch<NotificationState>(getMarkMateenNotificationReadUrl(notificationId),
+  {
+    ...options,
+    method: 'PATCH'
+
+
+  }
+);}
+
+
+
+
+
+export const getMarkMateenNotificationReadMutationKey = () => ['markMateenNotificationRead'] as const;
+
+export const getMarkMateenNotificationReadMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof markMateenNotificationRead>>, TError,MarkMateenNotificationReadMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof markMateenNotificationRead>>, TError,MarkMateenNotificationReadMutationVariables, TContext> => {
+
+const mutationKey = getMarkMateenNotificationReadMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof markMateenNotificationRead>>, MarkMateenNotificationReadMutationVariables> = (props) => {
+          const {notificationId} = props ?? {};
+
+          return  markMateenNotificationRead(notificationId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type MarkMateenNotificationReadMutationResult = NonNullable<Awaited<ReturnType<typeof markMateenNotificationRead>>>
+
+    export type MarkMateenNotificationReadMutationError = ErrorType<void>
+    export type MarkMateenNotificationReadMutationVariables = {notificationId: string}
+
+    export const useMarkMateenNotificationRead = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof markMateenNotificationRead>>, TError,MarkMateenNotificationReadMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof markMateenNotificationRead>>,
+        TError,
+        MarkMateenNotificationReadMutationVariables,
+        TContext
+      > => {
+      return useMutation(getMarkMateenNotificationReadMutationOptions(options));
+    }
+
+export const getListScholarlySourcesUrl = () => {
+
+
+
+
+  return `/api/mateen/admin/scholarly/sources`
+}
+
+export const listScholarlySources = async ( options?: Parameters<typeof customFetch>[1]): Promise<ScholarlySource[]> => {
+
+  return customFetch<ScholarlySource[]>(getListScholarlySourcesUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListScholarlySourcesQueryKey = () => {
+    return [
+    `/api/mateen/admin/scholarly/sources`
+    ] as const;
+    }
+
+
+export const getListScholarlySourcesQueryOptions = <TData = Awaited<ReturnType<typeof listScholarlySources>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listScholarlySources>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListScholarlySourcesQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listScholarlySources>>> = ({ signal }) => listScholarlySources({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listScholarlySources>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListScholarlySourcesQueryResult = NonNullable<Awaited<ReturnType<typeof listScholarlySources>>>
+export type ListScholarlySourcesQueryError = ErrorType<unknown>
+
+
+
+export function useListScholarlySources<TData = Awaited<ReturnType<typeof listScholarlySources>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listScholarlySources>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListScholarlySourcesQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getCreateScholarlySourceUrl = () => {
+
+
+
+
+  return `/api/mateen/admin/scholarly/sources`
+}
+
+export const createScholarlySource = async (scholarlySourceInput: ScholarlySourceInput, options?: Parameters<typeof customFetch>[1]): Promise<ScholarlySource> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<ScholarlySource>(getCreateScholarlySourceUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(scholarlySourceInput)
+  }
+);}
+
+
+
+
+
+export const getCreateScholarlySourceMutationKey = () => ['createScholarlySource'] as const;
+
+export const getCreateScholarlySourceMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createScholarlySource>>, TError,CreateScholarlySourceMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createScholarlySource>>, TError,CreateScholarlySourceMutationVariables, TContext> => {
+
+const mutationKey = getCreateScholarlySourceMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createScholarlySource>>, CreateScholarlySourceMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  createScholarlySource(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateScholarlySourceMutationResult = NonNullable<Awaited<ReturnType<typeof createScholarlySource>>>
+    export type CreateScholarlySourceMutationBody = BodyType<ScholarlySourceInput>
+    export type CreateScholarlySourceMutationError = ErrorType<unknown>
+    export type CreateScholarlySourceMutationVariables = {data: BodyType<ScholarlySourceInput>}
+
+    export const useCreateScholarlySource = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createScholarlySource>>, TError,CreateScholarlySourceMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createScholarlySource>>,
+        TError,
+        CreateScholarlySourceMutationVariables,
+        TContext
+      > => {
+      return useMutation(getCreateScholarlySourceMutationOptions(options));
+    }
+
+export const getListScholarlyPassagesUrl = (sourceId: string,) => {
+
+
+
+
+  return `/api/mateen/admin/scholarly/sources/${sourceId}/passages`
+}
+
+export const listScholarlyPassages = async (sourceId: string, options?: Parameters<typeof customFetch>[1]): Promise<ScholarlyPassage[]> => {
+
+  return customFetch<ScholarlyPassage[]>(getListScholarlyPassagesUrl(sourceId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListScholarlyPassagesQueryKey = (sourceId: string,) => {
+    return [
+    `/api/mateen/admin/scholarly/sources/${sourceId}/passages`
+    ] as const;
+    }
+
+
+export const getListScholarlyPassagesQueryOptions = <TData = Awaited<ReturnType<typeof listScholarlyPassages>>, TError = ErrorType<void>>(sourceId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listScholarlyPassages>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListScholarlyPassagesQueryKey(sourceId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listScholarlyPassages>>> = ({ signal }) => listScholarlyPassages(sourceId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: sourceId !== null && sourceId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listScholarlyPassages>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListScholarlyPassagesQueryResult = NonNullable<Awaited<ReturnType<typeof listScholarlyPassages>>>
+export type ListScholarlyPassagesQueryError = ErrorType<void>
+
+
+
+export function useListScholarlyPassages<TData = Awaited<ReturnType<typeof listScholarlyPassages>>, TError = ErrorType<void>>(
+ sourceId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listScholarlyPassages>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListScholarlyPassagesQueryOptions(sourceId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getCreateScholarlyPassageUrl = (sourceId: string,) => {
+
+
+
+
+  return `/api/mateen/admin/scholarly/sources/${sourceId}/passages`
+}
+
+export const createScholarlyPassage = async (sourceId: string,
+    scholarlyPassagesInput: ScholarlyPassagesInput, options?: Parameters<typeof customFetch>[1]): Promise<void> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<void>(getCreateScholarlyPassageUrl(sourceId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(scholarlyPassagesInput)
+  }
+);}
+
+
+
+
+
+export const getCreateScholarlyPassageMutationKey = () => ['createScholarlyPassage'] as const;
+
+export const getCreateScholarlyPassageMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createScholarlyPassage>>, TError,CreateScholarlyPassageMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createScholarlyPassage>>, TError,CreateScholarlyPassageMutationVariables, TContext> => {
+
+const mutationKey = getCreateScholarlyPassageMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createScholarlyPassage>>, CreateScholarlyPassageMutationVariables> = (props) => {
+          const {sourceId,data} = props ?? {};
+
+          return  createScholarlyPassage(sourceId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateScholarlyPassageMutationResult = NonNullable<Awaited<ReturnType<typeof createScholarlyPassage>>>
+    export type CreateScholarlyPassageMutationBody = BodyType<ScholarlyPassagesInput>
+    export type CreateScholarlyPassageMutationError = ErrorType<unknown>
+    export type CreateScholarlyPassageMutationVariables = {sourceId: string;data: BodyType<ScholarlyPassagesInput>}
+
+    export const useCreateScholarlyPassage = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createScholarlyPassage>>, TError,CreateScholarlyPassageMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createScholarlyPassage>>,
+        TError,
+        CreateScholarlyPassageMutationVariables,
+        TContext
+      > => {
+      return useMutation(getCreateScholarlyPassageMutationOptions(options));
+    }
+
+export const getReviewScholarlySourceUrl = (sourceId: string,) => {
+
+
+
+
+  return `/api/mateen/admin/scholarly/sources/${sourceId}/review`
+}
+
+export const reviewScholarlySource = async (sourceId: string,
+    scholarlyReviewInput: ScholarlyReviewInput, options?: Parameters<typeof customFetch>[1]): Promise<ScholarlySource> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<ScholarlySource>(getReviewScholarlySourceUrl(sourceId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(scholarlyReviewInput)
+  }
+);}
+
+
+
+
+
+export const getReviewScholarlySourceMutationKey = () => ['reviewScholarlySource'] as const;
+
+export const getReviewScholarlySourceMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reviewScholarlySource>>, TError,ReviewScholarlySourceMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof reviewScholarlySource>>, TError,ReviewScholarlySourceMutationVariables, TContext> => {
+
+const mutationKey = getReviewScholarlySourceMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reviewScholarlySource>>, ReviewScholarlySourceMutationVariables> = (props) => {
+          const {sourceId,data} = props ?? {};
+
+          return  reviewScholarlySource(sourceId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReviewScholarlySourceMutationResult = NonNullable<Awaited<ReturnType<typeof reviewScholarlySource>>>
+    export type ReviewScholarlySourceMutationBody = BodyType<ScholarlyReviewInput>
+    export type ReviewScholarlySourceMutationError = ErrorType<unknown>
+    export type ReviewScholarlySourceMutationVariables = {sourceId: string;data: BodyType<ScholarlyReviewInput>}
+
+    export const useReviewScholarlySource = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reviewScholarlySource>>, TError,ReviewScholarlySourceMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof reviewScholarlySource>>,
+        TError,
+        ReviewScholarlySourceMutationVariables,
+        TContext
+      > => {
+      return useMutation(getReviewScholarlySourceMutationOptions(options));
+    }
+
+export const getIndexScholarlySourceUrl = (sourceId: string,) => {
+
+
+
+
+  return `/api/mateen/admin/scholarly/sources/${sourceId}/index`
+}
+
+export const indexScholarlySource = async (sourceId: string,
+    scholarlyIndexInput: ScholarlyIndexInput, options?: Parameters<typeof customFetch>[1]): Promise<ScholarlySource> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<ScholarlySource>(getIndexScholarlySourceUrl(sourceId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(scholarlyIndexInput)
+  }
+);}
+
+
+
+
+
+export const getIndexScholarlySourceMutationKey = () => ['indexScholarlySource'] as const;
+
+export const getIndexScholarlySourceMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof indexScholarlySource>>, TError,IndexScholarlySourceMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof indexScholarlySource>>, TError,IndexScholarlySourceMutationVariables, TContext> => {
+
+const mutationKey = getIndexScholarlySourceMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof indexScholarlySource>>, IndexScholarlySourceMutationVariables> = (props) => {
+          const {sourceId,data} = props ?? {};
+
+          return  indexScholarlySource(sourceId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type IndexScholarlySourceMutationResult = NonNullable<Awaited<ReturnType<typeof indexScholarlySource>>>
+    export type IndexScholarlySourceMutationBody = BodyType<ScholarlyIndexInput>
+    export type IndexScholarlySourceMutationError = ErrorType<unknown>
+    export type IndexScholarlySourceMutationVariables = {sourceId: string;data: BodyType<ScholarlyIndexInput>}
+
+    export const useIndexScholarlySource = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof indexScholarlySource>>, TError,IndexScholarlySourceMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof indexScholarlySource>>,
+        TError,
+        IndexScholarlySourceMutationVariables,
+        TContext
+      > => {
+      return useMutation(getIndexScholarlySourceMutationOptions(options));
+    }
+
+export const getWithdrawScholarlySourceUrl = (sourceId: string,) => {
+
+
+
+
+  return `/api/mateen/admin/scholarly/sources/${sourceId}/withdraw`
+}
+
+export const withdrawScholarlySource = async (sourceId: string,
+    scholarlyWithdrawalInput: ScholarlyWithdrawalInput, options?: Parameters<typeof customFetch>[1]): Promise<ScholarlySource> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<ScholarlySource>(getWithdrawScholarlySourceUrl(sourceId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(scholarlyWithdrawalInput)
+  }
+);}
+
+
+
+
+
+export const getWithdrawScholarlySourceMutationKey = () => ['withdrawScholarlySource'] as const;
+
+export const getWithdrawScholarlySourceMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof withdrawScholarlySource>>, TError,WithdrawScholarlySourceMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof withdrawScholarlySource>>, TError,WithdrawScholarlySourceMutationVariables, TContext> => {
+
+const mutationKey = getWithdrawScholarlySourceMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof withdrawScholarlySource>>, WithdrawScholarlySourceMutationVariables> = (props) => {
+          const {sourceId,data} = props ?? {};
+
+          return  withdrawScholarlySource(sourceId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type WithdrawScholarlySourceMutationResult = NonNullable<Awaited<ReturnType<typeof withdrawScholarlySource>>>
+    export type WithdrawScholarlySourceMutationBody = BodyType<ScholarlyWithdrawalInput>
+    export type WithdrawScholarlySourceMutationError = ErrorType<unknown>
+    export type WithdrawScholarlySourceMutationVariables = {sourceId: string;data: BodyType<ScholarlyWithdrawalInput>}
+
+    export const useWithdrawScholarlySource = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof withdrawScholarlySource>>, TError,WithdrawScholarlySourceMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof withdrawScholarlySource>>,
+        TError,
+        WithdrawScholarlySourceMutationVariables,
+        TContext
+      > => {
+      return useMutation(getWithdrawScholarlySourceMutationOptions(options));
+    }
+
+export const getReportScholarlyIssueUrl = () => {
+
+
+
+
+  return `/api/mateen/assistant/issues`
+}
+
+export const reportScholarlyIssue = async (scholarlyIssueInput: ScholarlyIssueInput, options?: Parameters<typeof customFetch>[1]): Promise<ScholarlyIssue> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<ScholarlyIssue>(getReportScholarlyIssueUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(scholarlyIssueInput)
+  }
+);}
+
+
+
+
+
+export const getReportScholarlyIssueMutationKey = () => ['reportScholarlyIssue'] as const;
+
+export const getReportScholarlyIssueMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportScholarlyIssue>>, TError,ReportScholarlyIssueMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof reportScholarlyIssue>>, TError,ReportScholarlyIssueMutationVariables, TContext> => {
+
+const mutationKey = getReportScholarlyIssueMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reportScholarlyIssue>>, ReportScholarlyIssueMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  reportScholarlyIssue(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReportScholarlyIssueMutationResult = NonNullable<Awaited<ReturnType<typeof reportScholarlyIssue>>>
+    export type ReportScholarlyIssueMutationBody = BodyType<ScholarlyIssueInput>
+    export type ReportScholarlyIssueMutationError = ErrorType<unknown>
+    export type ReportScholarlyIssueMutationVariables = {data: BodyType<ScholarlyIssueInput>}
+
+    export const useReportScholarlyIssue = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reportScholarlyIssue>>, TError,ReportScholarlyIssueMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof reportScholarlyIssue>>,
+        TError,
+        ReportScholarlyIssueMutationVariables,
+        TContext
+      > => {
+      return useMutation(getReportScholarlyIssueMutationOptions(options));
+    }
+
+export const getListScholarlyIssuesUrl = (params?: ListScholarlyIssuesParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/mateen/admin/scholarly/issues?${stringifiedParams}` : `/api/mateen/admin/scholarly/issues`
+}
+
+export const listScholarlyIssues = async (params?: ListScholarlyIssuesParams, options?: Parameters<typeof customFetch>[1]): Promise<ScholarlyIssue[]> => {
+
+  return customFetch<ScholarlyIssue[]>(getListScholarlyIssuesUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListScholarlyIssuesQueryKey = (params?: ListScholarlyIssuesParams,) => {
+    return [
+    `/api/mateen/admin/scholarly/issues`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getListScholarlyIssuesQueryOptions = <TData = Awaited<ReturnType<typeof listScholarlyIssues>>, TError = ErrorType<unknown>>(params?: ListScholarlyIssuesParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listScholarlyIssues>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListScholarlyIssuesQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listScholarlyIssues>>> = ({ signal }) => listScholarlyIssues(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listScholarlyIssues>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListScholarlyIssuesQueryResult = NonNullable<Awaited<ReturnType<typeof listScholarlyIssues>>>
+export type ListScholarlyIssuesQueryError = ErrorType<unknown>
+
+
+
+export function useListScholarlyIssues<TData = Awaited<ReturnType<typeof listScholarlyIssues>>, TError = ErrorType<unknown>>(
+ params?: ListScholarlyIssuesParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listScholarlyIssues>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListScholarlyIssuesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getModerateScholarlyIssueUrl = (issueId: string,) => {
+
+
+
+
+  return `/api/mateen/admin/scholarly/issues/${issueId}`
+}
+
+export const moderateScholarlyIssue = async (issueId: string,
+    scholarlyIssueModerationInput: ScholarlyIssueModerationInput, options?: Parameters<typeof customFetch>[1]): Promise<ScholarlyIssue> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<ScholarlyIssue>(getModerateScholarlyIssueUrl(issueId),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(scholarlyIssueModerationInput)
+  }
+);}
+
+
+
+
+
+export const getModerateScholarlyIssueMutationKey = () => ['moderateScholarlyIssue'] as const;
+
+export const getModerateScholarlyIssueMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof moderateScholarlyIssue>>, TError,ModerateScholarlyIssueMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof moderateScholarlyIssue>>, TError,ModerateScholarlyIssueMutationVariables, TContext> => {
+
+const mutationKey = getModerateScholarlyIssueMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof moderateScholarlyIssue>>, ModerateScholarlyIssueMutationVariables> = (props) => {
+          const {issueId,data} = props ?? {};
+
+          return  moderateScholarlyIssue(issueId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ModerateScholarlyIssueMutationResult = NonNullable<Awaited<ReturnType<typeof moderateScholarlyIssue>>>
+    export type ModerateScholarlyIssueMutationBody = BodyType<ScholarlyIssueModerationInput>
+    export type ModerateScholarlyIssueMutationError = ErrorType<unknown>
+    export type ModerateScholarlyIssueMutationVariables = {issueId: string;data: BodyType<ScholarlyIssueModerationInput>}
+
+    export const useModerateScholarlyIssue = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof moderateScholarlyIssue>>, TError,ModerateScholarlyIssueMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof moderateScholarlyIssue>>,
+        TError,
+        ModerateScholarlyIssueMutationVariables,
+        TContext
+      > => {
+      return useMutation(getModerateScholarlyIssueMutationOptions(options));
+    }
+
+export const getGetScholarlyConfigUrl = () => {
+
+
+
+
+  return `/api/mateen/admin/scholarly/config`
+}
+
+export const getScholarlyConfig = async ( options?: Parameters<typeof customFetch>[1]): Promise<ScholarlyConfig> => {
+
+  return customFetch<ScholarlyConfig>(getGetScholarlyConfigUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetScholarlyConfigQueryKey = () => {
+    return [
+    `/api/mateen/admin/scholarly/config`
+    ] as const;
+    }
+
+
+export const getGetScholarlyConfigQueryOptions = <TData = Awaited<ReturnType<typeof getScholarlyConfig>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getScholarlyConfig>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetScholarlyConfigQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getScholarlyConfig>>> = ({ signal }) => getScholarlyConfig({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getScholarlyConfig>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetScholarlyConfigQueryResult = NonNullable<Awaited<ReturnType<typeof getScholarlyConfig>>>
+export type GetScholarlyConfigQueryError = ErrorType<unknown>
+
+
+
+export function useGetScholarlyConfig<TData = Awaited<ReturnType<typeof getScholarlyConfig>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getScholarlyConfig>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetScholarlyConfigQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getUpdateScholarlyConfigUrl = () => {
+
+
+
+
+  return `/api/mateen/admin/scholarly/config`
+}
+
+export const updateScholarlyConfig = async (scholarlyConfigInput: ScholarlyConfigInput, options?: Parameters<typeof customFetch>[1]): Promise<ScholarlyConfig> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<ScholarlyConfig>(getUpdateScholarlyConfigUrl(),
+  {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(scholarlyConfigInput)
+  }
+);}
+
+
+
+
+
+export const getUpdateScholarlyConfigMutationKey = () => ['updateScholarlyConfig'] as const;
+
+export const getUpdateScholarlyConfigMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateScholarlyConfig>>, TError,UpdateScholarlyConfigMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateScholarlyConfig>>, TError,UpdateScholarlyConfigMutationVariables, TContext> => {
+
+const mutationKey = getUpdateScholarlyConfigMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateScholarlyConfig>>, UpdateScholarlyConfigMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  updateScholarlyConfig(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateScholarlyConfigMutationResult = NonNullable<Awaited<ReturnType<typeof updateScholarlyConfig>>>
+    export type UpdateScholarlyConfigMutationBody = BodyType<ScholarlyConfigInput>
+    export type UpdateScholarlyConfigMutationError = ErrorType<unknown>
+    export type UpdateScholarlyConfigMutationVariables = {data: BodyType<ScholarlyConfigInput>}
+
+    export const useUpdateScholarlyConfig = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateScholarlyConfig>>, TError,UpdateScholarlyConfigMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateScholarlyConfig>>,
+        TError,
+        UpdateScholarlyConfigMutationVariables,
+        TContext
+      > => {
+      return useMutation(getUpdateScholarlyConfigMutationOptions(options));
+    }
+
+export const getRecordScholarlyEvaluationUrl = () => {
+
+
+
+
+  return `/api/mateen/admin/scholarly/evaluations`
+}
+
+export const recordScholarlyEvaluation = async (scholarlyEvaluationInput: ScholarlyEvaluationInput, options?: Parameters<typeof customFetch>[1]): Promise<ScholarlyConfig> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<ScholarlyConfig>(getRecordScholarlyEvaluationUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(scholarlyEvaluationInput)
+  }
+);}
+
+
+
+
+
+export const getRecordScholarlyEvaluationMutationKey = () => ['recordScholarlyEvaluation'] as const;
+
+export const getRecordScholarlyEvaluationMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof recordScholarlyEvaluation>>, TError,RecordScholarlyEvaluationMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof recordScholarlyEvaluation>>, TError,RecordScholarlyEvaluationMutationVariables, TContext> => {
+
+const mutationKey = getRecordScholarlyEvaluationMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof recordScholarlyEvaluation>>, RecordScholarlyEvaluationMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  recordScholarlyEvaluation(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RecordScholarlyEvaluationMutationResult = NonNullable<Awaited<ReturnType<typeof recordScholarlyEvaluation>>>
+    export type RecordScholarlyEvaluationMutationBody = BodyType<ScholarlyEvaluationInput>
+    export type RecordScholarlyEvaluationMutationError = ErrorType<unknown>
+    export type RecordScholarlyEvaluationMutationVariables = {data: BodyType<ScholarlyEvaluationInput>}
+
+    export const useRecordScholarlyEvaluation = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof recordScholarlyEvaluation>>, TError,RecordScholarlyEvaluationMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof recordScholarlyEvaluation>>,
+        TError,
+        RecordScholarlyEvaluationMutationVariables,
+        TContext
+      > => {
+      return useMutation(getRecordScholarlyEvaluationMutationOptions(options));
+    }
+
+export const getListScholarlyAuditUrl = () => {
+
+
+
+
+  return `/api/mateen/admin/scholarly/audit`
+}
+
+export const listScholarlyAudit = async ( options?: Parameters<typeof customFetch>[1]): Promise<ScholarlyAuditEvent[]> => {
+
+  return customFetch<ScholarlyAuditEvent[]>(getListScholarlyAuditUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListScholarlyAuditQueryKey = () => {
+    return [
+    `/api/mateen/admin/scholarly/audit`
+    ] as const;
+    }
+
+
+export const getListScholarlyAuditQueryOptions = <TData = Awaited<ReturnType<typeof listScholarlyAudit>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listScholarlyAudit>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListScholarlyAuditQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listScholarlyAudit>>> = ({ signal }) => listScholarlyAudit({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listScholarlyAudit>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListScholarlyAuditQueryResult = NonNullable<Awaited<ReturnType<typeof listScholarlyAudit>>>
+export type ListScholarlyAuditQueryError = ErrorType<unknown>
+
+
+
+export function useListScholarlyAudit<TData = Awaited<ReturnType<typeof listScholarlyAudit>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listScholarlyAudit>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListScholarlyAuditQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
