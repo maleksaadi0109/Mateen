@@ -7,8 +7,9 @@
     "dev": "export NODE_ENV=development && pnpm run build && pnpm run start",
     "build": "node ./build.mjs",
     "start": "node --enable-source-maps ./dist/index.mjs",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test:scholarly": "node ./test-scholarly.mjs"
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.tests.json --noEmit",
+    "test:scholarly": "node ./test-scholarly.mjs && node ./test-scholarly-http.mjs",
+    "test:scholarly:http": "node ./test-scholarly-http.mjs"
   },
   "dependencies": {
     "@clerk/express": "^2.1.74",

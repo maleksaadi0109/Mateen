@@ -14,3 +14,9 @@ Preserve the exact bytes checked by the malware scanner, not a later copy of a p
 **Why:** A PUT URL may remain valid after scanning, allowing the staging object to change before a copy.
 
 **How to apply:** Promote scanned bytes into an immutable protected object; tests and later upload work should retain this trust boundary.
+
+Participant-boundary regression tests may use synthetic approvals only in disposable databases. Replacing external identity/model calls for deterministic tests does not validate real Clerk authentication, independent review, or model grounding.
+
+**Why:** Automated privacy tests need repeatable identities and timing without granting real reviewer authority or publishing fictitious approval evidence.
+
+**How to apply:** Keep synthetic authority out of application databases and production code. Retain separate trusted-account review and real-model evaluation gates.
