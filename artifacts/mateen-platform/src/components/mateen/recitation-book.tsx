@@ -9,6 +9,7 @@ import { num } from '@/lib/mateen';
 import { cn } from '@/lib/utils';
 import { useRecitationHistory, useArabicSpeech, RecitationHistory } from './recitation-history';
 import { RecitationReport, type ReportSnapshot } from './recitation-report';
+import { AccountRecitationHistory, useAccountReports, reportInput } from './account-recitation-history';
 
 type BookHadith = { id: number; number: number; title: string; text: string; sourceUrl: string; sourcePage: number; reviewStatus?: string };
 type BookProps = { hadiths: BookHadith[]; initialHadith?: number; sourceStatus?: string; navigationPending?: boolean; onNavigate?: (number: number) => void; onModeChange?: (m: 'read' | 'recite') => void };
@@ -28,6 +29,7 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
   const { user, isLoaded: userLoaded } = useUser();
   const userId = userLoaded && user ? user.id : null;
   const history = useRecitationHistory(userId);
+  const account = useAccountReports(userId);
   const newAttemptId = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
   const [attemptId, setAttemptId] = useState(newAttemptId);
   const stopMicRef = useRef<() => void>(() => {});
@@ -128,7 +130,8 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
 
   if (report) {
     return (
-      <RecitationReport report={report} onClose={discardReport} canSave={!!userId && !manual && !!report.attempted} alreadySaved={reportSaved} speech={speech}
+      <RecitationReport report={report} onClose={discardReport} canSave={!report.accountReportId && !!userId && !manual && !!report.attempted} alreadySaved={reportSaved} speech={speech}
+        userId={userId} onAccountSave={async () => { await account.save(reportInput(report)); }}
         onSave={() => history.save({ attemptId: report.attemptId, matched: report.matched, attempted: report.attempted,
           issues: stored.map(({ index, expected, heard, kind }) => ({ index, expected, heard, kind })),
           analyses: report.analyses.map(({ issues: _issues, ...summary }) => summary) })} />
@@ -259,6 +262,7 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
         {pending && <p className="font-bold text-secondary" data-testid="text-book-pending">النص قيد المراجعة العلمية، فالتسميع تجريبي.</p>}
       </footer>
 
+      {userId && <AccountRecitationHistory account={account} local={history.entries} onOpen={snapshot => { r.stop(); speech.cancel(); setReport(snapshot); }} />}
       <RecitationHistory entries={history.entries} onClear={history.clear} signedIn={!!userId} speech={speech} />
       {r.finishing && <p role="status" className="text-center font-ui text-sm">جارٍ انتظار آخر كلمات الميكروفون قبل إعداد المراجعة…</p>}
 

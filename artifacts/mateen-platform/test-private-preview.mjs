@@ -51,7 +51,7 @@ try {
   await build({
     entryPoints: [join(root, "tests/recitation-book-view.test.tsx")],
     bundle: true, platform: "node", format: "esm", outfile: bookTextFile, jsx: "automatic",
-    external: ["react", "react/*", "react-dom", "react-dom/*", "lucide-react", "@radix-ui/react-dialog"],
+    external: ["react", "react/*", "react-dom", "react-dom/*", "lucide-react", "@radix-ui/react-dialog", "@tanstack/react-query"],
     plugins: [{name:"book-test-auth",setup(builder) {
       builder.onResolve({filter:/^@clerk\/react$/},() => ({path:join(root,"tests/doubles/preview-auth.ts")}));
     }}],

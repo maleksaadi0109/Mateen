@@ -1,3 +1,8 @@
+export const listPracticeReports = async () => ({ reports: [], hasMore: false });
+export const getPracticeReportWords = async () => ({ issues: [], total: 0, hasMore: false });
+export const savePracticeReport = async () => { throw new Error('Unexpected report write in study progress test'); };
+export const getPracticeReport = async () => { throw new Error('Unexpected report read in study progress test'); };
+export const deletePracticeReport = async () => { throw new Error('Unexpected report delete in study progress test'); };
 import { useMutation, useQuery } from '@tanstack/react-query';
 import hadiths from '../../../api-server/src/data/nawawi.json';
 

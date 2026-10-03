@@ -3,12 +3,13 @@ import { ArrowRight, Check, Save } from 'lucide-react';
 import { num } from '@/lib/mateen';
 import type { HadithAnalysis } from '@/lib/recitation-analysis';
 import { normalizeWord, PronounceButton, SpeechError, HISTORY_CAP, MAX_ISSUES, type RecitationIssue, type useArabicSpeech } from './recitation-history';
+import { SavedReportWords } from './saved-report-words';
 
-export type ReportSnapshot = { attemptId: string; priorCounts: Map<string, number>; matched: number; attempted: number; issues: RecitationIssue[]; analyses: HadithAnalysis[] };
+export type ReportSnapshot = { attemptId: string; priorCounts: Map<string, number>; matched: number; attempted: number; issues: RecitationIssue[]; analyses: HadithAnalysis[]; accountReportId?: string; complete?: boolean; issueCount?: number };
 const KIND: Record<RecitationIssue['kind'], string> = { substitution: 'استُبدلت', omission: 'لم تُلتقط', extra: 'كلمة زائدة مسموعة' };
 type Speech = ReturnType<typeof useArabicSpeech>;
 
-export function IssueRow({ issue, prior, speech, hadithStart }: { issue: RecitationIssue; prior: number; speech: Speech; hadithStart: number }) {
+export function IssueRow({ issue, prior, speech, hadithStart }: { issue: RecitationIssue; prior: number | null; speech: Speech; hadithStart: number }) {
   return (
     <li className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border bg-background/70 p-3" data-testid={`report-issue-${issue.index}`}>
       <span className="font-ui text-[11px] text-muted-foreground" data-testid={`text-issue-location-${issue.index}`}>
@@ -19,7 +20,7 @@ export function IssueRow({ issue, prior, speech, hadithStart }: { issue: Recitat
         {issue.kind !== 'omission' && issue.heard && <span className="hadith-text text-lg text-red-700 dark:text-red-400" data-testid="text-issue-heard"><span className="font-ui text-[10px]">المسموع: </span>{issue.heard}</span>}
         <span className="font-ui text-[11px] text-muted-foreground">{KIND[issue.kind]}</span>
       </div>
-      <span className="font-ui text-[11px] text-muted-foreground" data-testid="text-issue-prior">{prior ? `ظهرت في ${num(prior)} محاولة سابقة` : 'لم تظهر سابقاً'}</span>
+      <span className="font-ui text-[11px] text-muted-foreground" data-testid="text-issue-prior">{prior === null ? 'السجل السابق غير متاح هنا' : prior ? `ظهرت في ${num(prior)} محاولة سابقة` : 'لم تظهر سابقاً'}</span>
       {issue.kind !== 'extra' && issue.expected && <PronounceButton word={issue.expected} speech={speech} />}
     </li>
   );
@@ -29,13 +30,17 @@ const Stat = ({ label, value, id }: { label: string; value: string; id: string }
   <div className="rounded-xl border bg-card px-3 py-2.5"><p className="font-ui text-[11px] text-muted-foreground">{label}</p><p className="font-display text-2xl font-bold" data-testid={id}>{value}</p></div>
 );
 
-export function RecitationReport({ report, onClose, onSave, canSave, alreadySaved, speech }: {
+export function RecitationReport({ report, onClose, onSave, canSave, alreadySaved, speech, userId, onAccountSave }: {
   report: ReportSnapshot | null; onClose: () => void; onSave: () => { ok: boolean; message?: string }; canSave: boolean;
-  alreadySaved: boolean; speech: Speech;
+  alreadySaved: boolean; speech: Speech; userId?: string | null;
+  onAccountSave?: () => Promise<void>;
 }) {
   const [saved, setSaved] = useState<{ ok: boolean; message?: string } | null>(null);
+  const [consent, setConsent] = useState(false);
+  const [accountSaving, setAccountSaving] = useState(false);
+  const [accountStatus, setAccountStatus] = useState<{ ok: boolean; message: string } | null>(null);
   const attemptId = report?.attemptId;
-  useEffect(() => { setSaved(null); }, [attemptId]);
+  useEffect(() => { setSaved(null); setConsent(false); setAccountStatus(null); }, [attemptId]);
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [attemptId]);
   const t = useMemo(() => {
     const s = { matched: 0, attempted: 0, heard: 0, sub: 0, om: 0, ex: 0 };
@@ -53,6 +58,7 @@ export function RecitationReport({ report, onClose, onSave, canSave, alreadySave
       <header className="rounded-3xl border bg-gradient-to-b from-secondary/10 to-card px-5 pb-5 pt-6 sm:px-8">
         <h2 className="font-display text-3xl font-bold">مراجعة المحاولة</h2>
         <p className="mt-1 font-ui text-xs leading-relaxed text-muted-foreground">ملخص تقريبي من التعرّف الآلي على الصوت. الاختلافات غير مؤكدة وقد تكون من خطأ التعرّف لا من حفظك. ليست درجة ولا تقييماً.</p>
+        {report.complete === false && <p role="status" className="mt-3 rounded-xl border p-3 font-ui text-xs">هذه محاولة محلية قديمة نُقلت بموافقتك. المقاييس محفوظة، لكن تفاصيل الكلمات جزئية وقد تقتصر على أول 100 اختلاف؛ لا يمكن استعادة الكلمات التي لم يحفظها المتصفح.</p>}
         <div className="mt-5 flex flex-wrap items-end gap-4">
           <p className="font-display text-6xl font-bold text-primary" data-testid="text-report-percent">{t.attempted ? <>{num(pct)}<span className="text-2xl">٪</span></> : '—'}</p>
           <p className="max-w-md pb-2 font-ui text-xs text-muted-foreground" data-testid="text-report-counts">تطابق تقريبي = المطابق ÷ المحاولة: {num(t.matched)} من {num(t.attempted)} كلمة. المحاولة = مطابقة + استبدال + حذف + زيادة. الأحاديث التي لم تصل إليها غير مذكورة ولا تُعدّ إخفاقاً.</p>
@@ -86,7 +92,9 @@ export function RecitationReport({ report, onClose, onSave, canSave, alreadySave
               <p className="rounded-lg bg-red-50 px-3 py-2 text-red-800 dark:bg-red-950/30 dark:text-red-300">نسبة الاختلاف <b className="block text-base" data-testid={`text-hadith-difference-${a.number}`}>{num(a.differencePercent)}٪</b></p>
             </div>
             <p className="mt-2 font-ui text-[11px] text-muted-foreground" data-testid={`text-hadith-breakdown-${a.number}`}>مطابقة {num(a.matched)} · استبدال {num(a.substitutions)} · حذف {num(a.omissions)} · زيادة {num(a.extras)}</p>
-            {a.issues.length === 0
+            {report.accountReportId && userId
+              ? <SavedReportWords key={`${report.accountReportId}-${a.id}`} id={report.accountReportId} userId={userId} hadith={a} speech={speech} />
+              : a.issues.length === 0
               ? <p className="mt-3 rounded-xl border border-dashed p-3 text-center font-ui text-xs text-muted-foreground" data-testid={`text-hadith-no-issues-${a.number}`}>لم تُرصد اختلافات في الجزء الذي سمّعته.</p>
               : <ul className="mt-3 space-y-2">{a.issues.map((i) => <IssueRow key={`${i.index}-${i.kind}-${i.heard}`} issue={i} hadithStart={a.start} prior={report.priorCounts.get(normalizeWord(i.expected)) ?? 0} speech={speech} />)}</ul>}
           </article>
@@ -94,6 +102,8 @@ export function RecitationReport({ report, onClose, onSave, canSave, alreadySave
         <SpeechError speech={speech} />
       </section>
 
+      {report.accountReportId && <p className="font-ui text-xs text-muted-foreground">تقرير محفوظ في الحساب · {num(report.issueCount ?? 0)} اختلاف محفوظ. يمكنك حذفه من سجل تقارير الحساب.</p>}
+      {!report.accountReportId && <>
       {alreadySaved && !saved && <p role="status" className="rounded-xl bg-secondary/10 px-3 py-2 font-ui text-xs" data-testid="text-report-already-saved">هذه المحاولة محفوظة مسبقاً على هذا الجهاز.</p>}
       {saved && <p role="status" className={`rounded-xl px-3 py-2 font-ui text-xs ${saved.ok ? 'bg-secondary/10' : 'bg-destructive/10 text-destructive'}`} data-testid="text-report-save-status">{saved.ok ? (saved.message ?? 'حُفظت النتيجة على هذا الجهاز فقط.') : saved.message}</p>}
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
@@ -105,6 +115,20 @@ export function RecitationReport({ report, onClose, onSave, canSave, alreadySave
       <p className="font-ui text-[11px] leading-relaxed text-muted-foreground" data-testid="text-report-history-limit">
         تُعرض هنا كل الاختلافات ({num(report.issues.length)}). عند الحفظ يخزّن هذا المتصفح الملخص ومقاييس كل حديث دون تفاصيل الاختلافات، ويحفظ في السجل العام أول {num(MAX_ISSUES)} اختلاف فقط لكل محاولة، وآخر {num(HISTORY_CAP)} محاولة. لا صوت ولا نص مسموع كامل، ولا تُرسل إلى الخادم.
       </p>
+      <section className="space-y-3 rounded-2xl border bg-card p-4 font-ui text-xs" data-testid="account-report-save">
+        <p>حفظ التقرير الكامل في حسابك يتيح فتحه من أي جهاز، بكل اختلافات الكلمات ومقاييس الأحاديث. لا يُحفظ صوت أو نص مفرّغ كامل، ولا تتغيّر درجاتك أو إتمام الدراسة. الحد 500 تقرير للحساب؛ يمكنك حذف أي تقرير من السجل.</p>
+        <label className="flex items-start gap-2"><input type="checkbox" checked={consent} disabled={accountSaving || !!accountStatus?.ok} onChange={e => setConsent(e.target.checked)} data-testid="checkbox-account-report-consent" /><span>أوافق على حفظ هذا التقرير واختلافات الكلمات في حسابي.</span></label>
+        {!userId && <p>سجّل الدخول لحفظ التقرير في حسابك.</p>}
+        <button className="min-h-11 rounded-full bg-primary px-5 font-bold text-primary-foreground disabled:opacity-50" disabled={!userId || !report.attempted || !consent || accountSaving || !!accountStatus?.ok || !onAccountSave}
+          data-testid="button-report-save-account" onClick={async () => {
+            setAccountSaving(true); setAccountStatus(null);
+            try { await onAccountSave!(); setAccountStatus({ ok: true, message: 'حُفظ التقرير الكامل في حسابك. يمكنك فتحه من السجل على أي جهاز.' }); }
+            catch { setAccountStatus({ ok: false, message: 'تعذّر حفظ التقرير في الحساب. قد يكون الطلب غير صالح أو تجاوز الحد؛ لم يُحذف التقرير الحالي أو سجلك المحلي. أعد المحاولة أو احذف تقريرًا قديمًا إذا بلغ الحساب 500 تقرير.' }); }
+            finally { setAccountSaving(false); }
+          }}>{accountSaving ? 'جارٍ الحفظ…' : accountStatus?.ok ? 'محفوظ في الحساب' : 'حفظ التقرير الكامل في حسابي'}</button>
+        {accountStatus && <p role={accountStatus.ok ? 'status' : 'alert'} data-testid="text-account-report-save-status">{accountStatus.message}</p>}
+      </section>
+      </>}
     </div>
   );
 }

@@ -7,10 +7,12 @@ import scholarlyRouter from "./scholarly";
 import recitationRouter from "./recitations";
 import assessmentRouter from "./assessments";
 import recitationPagesRouter from "./recitation-pages";
+import practiceReportsRouter from "./practice-reports";
 
 const router: IRouter = Router();
 router.use(healthRouter);
 router.use(recitationPagesRouter);
+router.use(practiceReportsRouter);
 router.use(teacherReviewRouter);
 router.use(sourceReviewRouter);
 router.use(mateenRouter);

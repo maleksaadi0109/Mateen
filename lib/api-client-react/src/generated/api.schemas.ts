@@ -5,6 +5,142 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+export type PracticeReportIssueKind = typeof PracticeReportIssueKind[keyof typeof PracticeReportIssueKind];
+
+
+export const PracticeReportIssueKind = {
+  substitution: 'substitution',
+  omission: 'omission',
+  extra: 'extra',
+} as const;
+
+export interface PracticeReportIssue {
+  /**
+     * @minimum 0
+     * @maximum 19999
+     */
+  index: number;
+  /** @maxLength 60 */
+  expected: string;
+  /** @maxLength 60 */
+  heard: string;
+  kind: PracticeReportIssueKind;
+}
+
+export interface PracticeReportHadith {
+  /**
+     * @minimum 1
+     * @maximum 100000
+     */
+  id: number;
+  /**
+     * @minimum 1
+     * @maximum 42
+     */
+  number: number;
+  /** @maxLength 500 */
+  title: string;
+  /**
+     * @minimum 0
+     * @maximum 19999
+     */
+  start: number;
+  /**
+     * @minimum 1
+     * @maximum 20000
+     */
+  end: number;
+  /**
+     * @minimum 1
+     * @maximum 20000
+     */
+  totalWords: number;
+  /**
+     * @minimum 0
+     * @maximum 20000
+     */
+  matched: number;
+  /**
+     * @minimum 0
+     * @maximum 20000
+     */
+  substitutions: number;
+  /**
+     * @minimum 0
+     * @maximum 20000
+     */
+  omissions: number;
+  /**
+     * @minimum 0
+     * @maximum 20000
+     */
+  extras: number;
+  /**
+     * @minimum 1
+     * @maximum 30000
+     */
+  attempted: number;
+  /**
+     * @minimum 0
+     * @maximum 30000
+     */
+  heard: number;
+  /**
+     * @minimum 0
+     * @maximum 20000
+     */
+  covered: number;
+  /**
+     * @minimum 0
+     * @maximum 100
+     */
+  successPercent: number;
+  /**
+     * @minimum 0
+     * @maximum 100
+     */
+  differencePercent: number;
+}
+
+export interface PracticeReportInput {
+  /**
+     * @minLength 1
+     * @maxLength 64
+     * @pattern ^[a-zA-Z0-9_-]+$
+     */
+  attemptId: string;
+  consent: true;
+  complete: boolean;
+  /**
+     * @minimum 0
+     * @maximum 20000
+     */
+  matched: number;
+  /**
+     * @minimum 1
+     * @maximum 30000
+     */
+  attempted: number;
+  /**
+     * @minItems 1
+     * @maxItems 42
+     */
+  analyses: PracticeReportHadith[];
+  /** @maxItems 20000 */
+  issues: PracticeReportIssue[];
+}
+
+export interface PracticeReport {
+  id: string;
+  attemptId: string;
+  createdAt: string;
+  complete: boolean;
+  matched: number;
+  attempted: number;
+  analyses: PracticeReportHadith[];
+  issueCount: number;
+}
+
 export type NawawiBookHadithPagesItem = {
   hadithId: number;
   firstPage: number;
@@ -1534,6 +1670,29 @@ export interface CompleteScheduledReviewInput {
   writtenAnswer: string;
   mutationId: string;
 }
+
+export type PracticeReportErrorResponse = {
+  error: string;
+};
+
+export type ListPracticeReportsParams = {
+/**
+ * @minimum 0
+ * @maximum 100000
+ */
+offset?: number;
+};
+
+export type ListPracticeReports200 = {
+  reports: PracticeReport[];
+  hasMore: boolean;
+};
+
+export type GetPracticeReportWords200 = {
+  issues: PracticeReportIssue[];
+  total: number;
+  hasMore: boolean;
+};
 
 export type GetMateenTeacherReferralsParams = {
 status?: GetMateenTeacherReferralsStatus;

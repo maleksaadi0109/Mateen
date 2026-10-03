@@ -8,6 +8,363 @@
 import * as zod from 'zod';
 
 
+export const listPracticeReportsQueryOffsetDefault = 0;
+export const listPracticeReportsQueryOffsetMin = 0;
+export const listPracticeReportsQueryOffsetMax = 100000;
+
+
+
+export const ListPracticeReportsQueryParams = zod.object({
+  "offset": zod.coerce.number().int().min(listPracticeReportsQueryOffsetMin).max(listPracticeReportsQueryOffsetMax).default(listPracticeReportsQueryOffsetDefault)
+})
+
+export const listPracticeReportsResponseReportsItemAnalysesItemIdMax = 100000;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemNumberMax = 42;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemTitleMax = 500;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemStartMin = 0;
+export const listPracticeReportsResponseReportsItemAnalysesItemStartMax = 19999;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemEndMax = 20000;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemTotalWordsMax = 20000;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemMatchedMin = 0;
+export const listPracticeReportsResponseReportsItemAnalysesItemMatchedMax = 20000;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemSubstitutionsMin = 0;
+export const listPracticeReportsResponseReportsItemAnalysesItemSubstitutionsMax = 20000;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemOmissionsMin = 0;
+export const listPracticeReportsResponseReportsItemAnalysesItemOmissionsMax = 20000;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemExtrasMin = 0;
+export const listPracticeReportsResponseReportsItemAnalysesItemExtrasMax = 20000;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemAttemptedMax = 30000;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemHeardMin = 0;
+export const listPracticeReportsResponseReportsItemAnalysesItemHeardMax = 30000;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemCoveredMin = 0;
+export const listPracticeReportsResponseReportsItemAnalysesItemCoveredMax = 20000;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemSuccessPercentMin = 0;
+export const listPracticeReportsResponseReportsItemAnalysesItemSuccessPercentMax = 100;
+
+export const listPracticeReportsResponseReportsItemAnalysesItemDifferencePercentMin = 0;
+export const listPracticeReportsResponseReportsItemAnalysesItemDifferencePercentMax = 100;
+
+
+
+export const ListPracticeReportsResponse = zod.object({
+  "reports": zod.array(zod.object({
+  "id": zod.string().uuid(),
+  "attemptId": zod.string(),
+  "createdAt": zod.coerce.date(),
+  "complete": zod.boolean(),
+  "matched": zod.number().int(),
+  "attempted": zod.number().int(),
+  "analyses": zod.array(zod.object({
+  "id": zod.number().int().min(1).max(listPracticeReportsResponseReportsItemAnalysesItemIdMax),
+  "number": zod.number().int().min(1).max(listPracticeReportsResponseReportsItemAnalysesItemNumberMax),
+  "title": zod.string().max(listPracticeReportsResponseReportsItemAnalysesItemTitleMax),
+  "start": zod.number().int().min(listPracticeReportsResponseReportsItemAnalysesItemStartMin).max(listPracticeReportsResponseReportsItemAnalysesItemStartMax),
+  "end": zod.number().int().min(1).max(listPracticeReportsResponseReportsItemAnalysesItemEndMax),
+  "totalWords": zod.number().int().min(1).max(listPracticeReportsResponseReportsItemAnalysesItemTotalWordsMax),
+  "matched": zod.number().int().min(listPracticeReportsResponseReportsItemAnalysesItemMatchedMin).max(listPracticeReportsResponseReportsItemAnalysesItemMatchedMax),
+  "substitutions": zod.number().int().min(listPracticeReportsResponseReportsItemAnalysesItemSubstitutionsMin).max(listPracticeReportsResponseReportsItemAnalysesItemSubstitutionsMax),
+  "omissions": zod.number().int().min(listPracticeReportsResponseReportsItemAnalysesItemOmissionsMin).max(listPracticeReportsResponseReportsItemAnalysesItemOmissionsMax),
+  "extras": zod.number().int().min(listPracticeReportsResponseReportsItemAnalysesItemExtrasMin).max(listPracticeReportsResponseReportsItemAnalysesItemExtrasMax),
+  "attempted": zod.number().int().min(1).max(listPracticeReportsResponseReportsItemAnalysesItemAttemptedMax),
+  "heard": zod.number().int().min(listPracticeReportsResponseReportsItemAnalysesItemHeardMin).max(listPracticeReportsResponseReportsItemAnalysesItemHeardMax),
+  "covered": zod.number().int().min(listPracticeReportsResponseReportsItemAnalysesItemCoveredMin).max(listPracticeReportsResponseReportsItemAnalysesItemCoveredMax),
+  "successPercent": zod.number().int().min(listPracticeReportsResponseReportsItemAnalysesItemSuccessPercentMin).max(listPracticeReportsResponseReportsItemAnalysesItemSuccessPercentMax),
+  "differencePercent": zod.number().int().min(listPracticeReportsResponseReportsItemAnalysesItemDifferencePercentMin).max(listPracticeReportsResponseReportsItemAnalysesItemDifferencePercentMax)
+})),
+  "issueCount": zod.number().int()
+})),
+  "hasMore": zod.boolean()
+})
+
+
+export const savePracticeReportBodyAttemptIdMax = 64;
+
+
+export const savePracticeReportBodyAttemptIdRegExp = new RegExp('^[a-zA-Z0-9_-]+$');
+export const savePracticeReportBodyMatchedMin = 0;
+export const savePracticeReportBodyMatchedMax = 20000;
+
+export const savePracticeReportBodyAttemptedMax = 30000;
+
+export const savePracticeReportBodyAnalysesItemIdMax = 100000;
+
+export const savePracticeReportBodyAnalysesItemNumberMax = 42;
+
+export const savePracticeReportBodyAnalysesItemTitleMax = 500;
+
+export const savePracticeReportBodyAnalysesItemStartMin = 0;
+export const savePracticeReportBodyAnalysesItemStartMax = 19999;
+
+export const savePracticeReportBodyAnalysesItemEndMax = 20000;
+
+export const savePracticeReportBodyAnalysesItemTotalWordsMax = 20000;
+
+export const savePracticeReportBodyAnalysesItemMatchedMin = 0;
+export const savePracticeReportBodyAnalysesItemMatchedMax = 20000;
+
+export const savePracticeReportBodyAnalysesItemSubstitutionsMin = 0;
+export const savePracticeReportBodyAnalysesItemSubstitutionsMax = 20000;
+
+export const savePracticeReportBodyAnalysesItemOmissionsMin = 0;
+export const savePracticeReportBodyAnalysesItemOmissionsMax = 20000;
+
+export const savePracticeReportBodyAnalysesItemExtrasMin = 0;
+export const savePracticeReportBodyAnalysesItemExtrasMax = 20000;
+
+export const savePracticeReportBodyAnalysesItemAttemptedMax = 30000;
+
+export const savePracticeReportBodyAnalysesItemHeardMin = 0;
+export const savePracticeReportBodyAnalysesItemHeardMax = 30000;
+
+export const savePracticeReportBodyAnalysesItemCoveredMin = 0;
+export const savePracticeReportBodyAnalysesItemCoveredMax = 20000;
+
+export const savePracticeReportBodyAnalysesItemSuccessPercentMin = 0;
+export const savePracticeReportBodyAnalysesItemSuccessPercentMax = 100;
+
+export const savePracticeReportBodyAnalysesItemDifferencePercentMin = 0;
+export const savePracticeReportBodyAnalysesItemDifferencePercentMax = 100;
+
+export const savePracticeReportBodyAnalysesMax = 42;
+
+export const savePracticeReportBodyIssuesItemIndexMin = 0;
+export const savePracticeReportBodyIssuesItemIndexMax = 19999;
+
+export const savePracticeReportBodyIssuesItemExpectedMax = 60;
+
+export const savePracticeReportBodyIssuesItemHeardMax = 60;
+
+export const savePracticeReportBodyIssuesMax = 20000;
+
+
+
+export const SavePracticeReportBody = zod.object({
+  "attemptId": zod.string().min(1).max(savePracticeReportBodyAttemptIdMax).regex(savePracticeReportBodyAttemptIdRegExp),
+  "consent": zod.literal(true),
+  "complete": zod.boolean(),
+  "matched": zod.number().int().min(savePracticeReportBodyMatchedMin).max(savePracticeReportBodyMatchedMax),
+  "attempted": zod.number().int().min(1).max(savePracticeReportBodyAttemptedMax),
+  "analyses": zod.array(zod.object({
+  "id": zod.number().int().min(1).max(savePracticeReportBodyAnalysesItemIdMax),
+  "number": zod.number().int().min(1).max(savePracticeReportBodyAnalysesItemNumberMax),
+  "title": zod.string().max(savePracticeReportBodyAnalysesItemTitleMax),
+  "start": zod.number().int().min(savePracticeReportBodyAnalysesItemStartMin).max(savePracticeReportBodyAnalysesItemStartMax),
+  "end": zod.number().int().min(1).max(savePracticeReportBodyAnalysesItemEndMax),
+  "totalWords": zod.number().int().min(1).max(savePracticeReportBodyAnalysesItemTotalWordsMax),
+  "matched": zod.number().int().min(savePracticeReportBodyAnalysesItemMatchedMin).max(savePracticeReportBodyAnalysesItemMatchedMax),
+  "substitutions": zod.number().int().min(savePracticeReportBodyAnalysesItemSubstitutionsMin).max(savePracticeReportBodyAnalysesItemSubstitutionsMax),
+  "omissions": zod.number().int().min(savePracticeReportBodyAnalysesItemOmissionsMin).max(savePracticeReportBodyAnalysesItemOmissionsMax),
+  "extras": zod.number().int().min(savePracticeReportBodyAnalysesItemExtrasMin).max(savePracticeReportBodyAnalysesItemExtrasMax),
+  "attempted": zod.number().int().min(1).max(savePracticeReportBodyAnalysesItemAttemptedMax),
+  "heard": zod.number().int().min(savePracticeReportBodyAnalysesItemHeardMin).max(savePracticeReportBodyAnalysesItemHeardMax),
+  "covered": zod.number().int().min(savePracticeReportBodyAnalysesItemCoveredMin).max(savePracticeReportBodyAnalysesItemCoveredMax),
+  "successPercent": zod.number().int().min(savePracticeReportBodyAnalysesItemSuccessPercentMin).max(savePracticeReportBodyAnalysesItemSuccessPercentMax),
+  "differencePercent": zod.number().int().min(savePracticeReportBodyAnalysesItemDifferencePercentMin).max(savePracticeReportBodyAnalysesItemDifferencePercentMax)
+})).min(1).max(savePracticeReportBodyAnalysesMax),
+  "issues": zod.array(zod.object({
+  "index": zod.number().int().min(savePracticeReportBodyIssuesItemIndexMin).max(savePracticeReportBodyIssuesItemIndexMax),
+  "expected": zod.string().max(savePracticeReportBodyIssuesItemExpectedMax),
+  "heard": zod.string().max(savePracticeReportBodyIssuesItemHeardMax),
+  "kind": zod.enum(['substitution', 'omission', 'extra'])
+})).max(savePracticeReportBodyIssuesMax)
+})
+
+export const savePracticeReportResponseAnalysesItemIdMax = 100000;
+
+export const savePracticeReportResponseAnalysesItemNumberMax = 42;
+
+export const savePracticeReportResponseAnalysesItemTitleMax = 500;
+
+export const savePracticeReportResponseAnalysesItemStartMin = 0;
+export const savePracticeReportResponseAnalysesItemStartMax = 19999;
+
+export const savePracticeReportResponseAnalysesItemEndMax = 20000;
+
+export const savePracticeReportResponseAnalysesItemTotalWordsMax = 20000;
+
+export const savePracticeReportResponseAnalysesItemMatchedMin = 0;
+export const savePracticeReportResponseAnalysesItemMatchedMax = 20000;
+
+export const savePracticeReportResponseAnalysesItemSubstitutionsMin = 0;
+export const savePracticeReportResponseAnalysesItemSubstitutionsMax = 20000;
+
+export const savePracticeReportResponseAnalysesItemOmissionsMin = 0;
+export const savePracticeReportResponseAnalysesItemOmissionsMax = 20000;
+
+export const savePracticeReportResponseAnalysesItemExtrasMin = 0;
+export const savePracticeReportResponseAnalysesItemExtrasMax = 20000;
+
+export const savePracticeReportResponseAnalysesItemAttemptedMax = 30000;
+
+export const savePracticeReportResponseAnalysesItemHeardMin = 0;
+export const savePracticeReportResponseAnalysesItemHeardMax = 30000;
+
+export const savePracticeReportResponseAnalysesItemCoveredMin = 0;
+export const savePracticeReportResponseAnalysesItemCoveredMax = 20000;
+
+export const savePracticeReportResponseAnalysesItemSuccessPercentMin = 0;
+export const savePracticeReportResponseAnalysesItemSuccessPercentMax = 100;
+
+export const savePracticeReportResponseAnalysesItemDifferencePercentMin = 0;
+export const savePracticeReportResponseAnalysesItemDifferencePercentMax = 100;
+
+
+
+export const SavePracticeReportResponse = zod.object({
+  "id": zod.string().uuid(),
+  "attemptId": zod.string(),
+  "createdAt": zod.coerce.date(),
+  "complete": zod.boolean(),
+  "matched": zod.number().int(),
+  "attempted": zod.number().int(),
+  "analyses": zod.array(zod.object({
+  "id": zod.number().int().min(1).max(savePracticeReportResponseAnalysesItemIdMax),
+  "number": zod.number().int().min(1).max(savePracticeReportResponseAnalysesItemNumberMax),
+  "title": zod.string().max(savePracticeReportResponseAnalysesItemTitleMax),
+  "start": zod.number().int().min(savePracticeReportResponseAnalysesItemStartMin).max(savePracticeReportResponseAnalysesItemStartMax),
+  "end": zod.number().int().min(1).max(savePracticeReportResponseAnalysesItemEndMax),
+  "totalWords": zod.number().int().min(1).max(savePracticeReportResponseAnalysesItemTotalWordsMax),
+  "matched": zod.number().int().min(savePracticeReportResponseAnalysesItemMatchedMin).max(savePracticeReportResponseAnalysesItemMatchedMax),
+  "substitutions": zod.number().int().min(savePracticeReportResponseAnalysesItemSubstitutionsMin).max(savePracticeReportResponseAnalysesItemSubstitutionsMax),
+  "omissions": zod.number().int().min(savePracticeReportResponseAnalysesItemOmissionsMin).max(savePracticeReportResponseAnalysesItemOmissionsMax),
+  "extras": zod.number().int().min(savePracticeReportResponseAnalysesItemExtrasMin).max(savePracticeReportResponseAnalysesItemExtrasMax),
+  "attempted": zod.number().int().min(1).max(savePracticeReportResponseAnalysesItemAttemptedMax),
+  "heard": zod.number().int().min(savePracticeReportResponseAnalysesItemHeardMin).max(savePracticeReportResponseAnalysesItemHeardMax),
+  "covered": zod.number().int().min(savePracticeReportResponseAnalysesItemCoveredMin).max(savePracticeReportResponseAnalysesItemCoveredMax),
+  "successPercent": zod.number().int().min(savePracticeReportResponseAnalysesItemSuccessPercentMin).max(savePracticeReportResponseAnalysesItemSuccessPercentMax),
+  "differencePercent": zod.number().int().min(savePracticeReportResponseAnalysesItemDifferencePercentMin).max(savePracticeReportResponseAnalysesItemDifferencePercentMax)
+})),
+  "issueCount": zod.number().int()
+})
+
+
+export const GetPracticeReportParams = zod.object({
+  "id": zod.coerce.string().uuid()
+})
+
+export const getPracticeReportResponseAnalysesItemIdMax = 100000;
+
+export const getPracticeReportResponseAnalysesItemNumberMax = 42;
+
+export const getPracticeReportResponseAnalysesItemTitleMax = 500;
+
+export const getPracticeReportResponseAnalysesItemStartMin = 0;
+export const getPracticeReportResponseAnalysesItemStartMax = 19999;
+
+export const getPracticeReportResponseAnalysesItemEndMax = 20000;
+
+export const getPracticeReportResponseAnalysesItemTotalWordsMax = 20000;
+
+export const getPracticeReportResponseAnalysesItemMatchedMin = 0;
+export const getPracticeReportResponseAnalysesItemMatchedMax = 20000;
+
+export const getPracticeReportResponseAnalysesItemSubstitutionsMin = 0;
+export const getPracticeReportResponseAnalysesItemSubstitutionsMax = 20000;
+
+export const getPracticeReportResponseAnalysesItemOmissionsMin = 0;
+export const getPracticeReportResponseAnalysesItemOmissionsMax = 20000;
+
+export const getPracticeReportResponseAnalysesItemExtrasMin = 0;
+export const getPracticeReportResponseAnalysesItemExtrasMax = 20000;
+
+export const getPracticeReportResponseAnalysesItemAttemptedMax = 30000;
+
+export const getPracticeReportResponseAnalysesItemHeardMin = 0;
+export const getPracticeReportResponseAnalysesItemHeardMax = 30000;
+
+export const getPracticeReportResponseAnalysesItemCoveredMin = 0;
+export const getPracticeReportResponseAnalysesItemCoveredMax = 20000;
+
+export const getPracticeReportResponseAnalysesItemSuccessPercentMin = 0;
+export const getPracticeReportResponseAnalysesItemSuccessPercentMax = 100;
+
+export const getPracticeReportResponseAnalysesItemDifferencePercentMin = 0;
+export const getPracticeReportResponseAnalysesItemDifferencePercentMax = 100;
+
+
+
+export const GetPracticeReportResponse = zod.object({
+  "id": zod.string().uuid(),
+  "attemptId": zod.string(),
+  "createdAt": zod.coerce.date(),
+  "complete": zod.boolean(),
+  "matched": zod.number().int(),
+  "attempted": zod.number().int(),
+  "analyses": zod.array(zod.object({
+  "id": zod.number().int().min(1).max(getPracticeReportResponseAnalysesItemIdMax),
+  "number": zod.number().int().min(1).max(getPracticeReportResponseAnalysesItemNumberMax),
+  "title": zod.string().max(getPracticeReportResponseAnalysesItemTitleMax),
+  "start": zod.number().int().min(getPracticeReportResponseAnalysesItemStartMin).max(getPracticeReportResponseAnalysesItemStartMax),
+  "end": zod.number().int().min(1).max(getPracticeReportResponseAnalysesItemEndMax),
+  "totalWords": zod.number().int().min(1).max(getPracticeReportResponseAnalysesItemTotalWordsMax),
+  "matched": zod.number().int().min(getPracticeReportResponseAnalysesItemMatchedMin).max(getPracticeReportResponseAnalysesItemMatchedMax),
+  "substitutions": zod.number().int().min(getPracticeReportResponseAnalysesItemSubstitutionsMin).max(getPracticeReportResponseAnalysesItemSubstitutionsMax),
+  "omissions": zod.number().int().min(getPracticeReportResponseAnalysesItemOmissionsMin).max(getPracticeReportResponseAnalysesItemOmissionsMax),
+  "extras": zod.number().int().min(getPracticeReportResponseAnalysesItemExtrasMin).max(getPracticeReportResponseAnalysesItemExtrasMax),
+  "attempted": zod.number().int().min(1).max(getPracticeReportResponseAnalysesItemAttemptedMax),
+  "heard": zod.number().int().min(getPracticeReportResponseAnalysesItemHeardMin).max(getPracticeReportResponseAnalysesItemHeardMax),
+  "covered": zod.number().int().min(getPracticeReportResponseAnalysesItemCoveredMin).max(getPracticeReportResponseAnalysesItemCoveredMax),
+  "successPercent": zod.number().int().min(getPracticeReportResponseAnalysesItemSuccessPercentMin).max(getPracticeReportResponseAnalysesItemSuccessPercentMax),
+  "differencePercent": zod.number().int().min(getPracticeReportResponseAnalysesItemDifferencePercentMin).max(getPracticeReportResponseAnalysesItemDifferencePercentMax)
+})),
+  "issueCount": zod.number().int()
+})
+
+
+export const DeletePracticeReportParams = zod.object({
+  "id": zod.coerce.string().uuid()
+})
+
+export const DeletePracticeReportResponse = zod.void()
+
+
+export const getPracticeReportWordsPathHadithIdMax = 100000;
+
+export const getPracticeReportWordsPathOffsetMin = 0;
+export const getPracticeReportWordsPathOffsetMax = 20000;
+
+
+
+export const GetPracticeReportWordsParams = zod.object({
+  "id": zod.coerce.string().uuid(),
+  "hadithId": zod.coerce.number().int().min(1).max(getPracticeReportWordsPathHadithIdMax),
+  "offset": zod.coerce.number().int().min(getPracticeReportWordsPathOffsetMin).max(getPracticeReportWordsPathOffsetMax)
+})
+
+export const getPracticeReportWordsResponseIssuesItemIndexMin = 0;
+export const getPracticeReportWordsResponseIssuesItemIndexMax = 19999;
+
+export const getPracticeReportWordsResponseIssuesItemExpectedMax = 60;
+
+export const getPracticeReportWordsResponseIssuesItemHeardMax = 60;
+
+
+
+export const GetPracticeReportWordsResponse = zod.object({
+  "issues": zod.array(zod.object({
+  "index": zod.number().int().min(getPracticeReportWordsResponseIssuesItemIndexMin).max(getPracticeReportWordsResponseIssuesItemIndexMax),
+  "expected": zod.string().max(getPracticeReportWordsResponseIssuesItemExpectedMax),
+  "heard": zod.string().max(getPracticeReportWordsResponseIssuesItemHeardMax),
+  "kind": zod.enum(['substitution', 'omission', 'extra'])
+})),
+  "total": zod.number().int(),
+  "hasMore": zod.boolean()
+})
+
+
 export const GetNawawiBookResponse = zod.object({
   "edition": zod.string(),
   "sourceUrl": zod.string(),

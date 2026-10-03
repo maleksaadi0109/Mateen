@@ -40,11 +40,17 @@ import type {
   ConversationStatus,
   Dashboard,
   GetMateenTeacherReferralsParams,
+  GetPracticeReportWords200,
   HealthStatus,
+  ListPracticeReports200,
+  ListPracticeReportsParams,
   ListScholarlyIssuesParams,
   NawawiBook,
   NotificationState,
   PracticeRecitation,
+  PracticeReport,
+  PracticeReportErrorResponse,
+  PracticeReportInput,
   Profile,
   ProfileInput,
   ProgressInput,
@@ -126,6 +132,386 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   }
   return result;
 };
+
+export const getListPracticeReportsUrl = (params?: ListPracticeReportsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/mateen/practice-reports?${stringifiedParams}` : `/api/mateen/practice-reports`
+}
+
+export const listPracticeReports = async (params?: ListPracticeReportsParams, options?: Parameters<typeof customFetch>[1]): Promise<ListPracticeReports200> => {
+
+  return customFetch<ListPracticeReports200>(getListPracticeReportsUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListPracticeReportsQueryKey = (params?: ListPracticeReportsParams,) => {
+    return [
+    `/api/mateen/practice-reports`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getListPracticeReportsQueryOptions = <TData = Awaited<ReturnType<typeof listPracticeReports>>, TError = ErrorType<PracticeReportErrorResponse>>(params?: ListPracticeReportsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listPracticeReports>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListPracticeReportsQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listPracticeReports>>> = ({ signal }) => listPracticeReports(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listPracticeReports>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListPracticeReportsQueryResult = NonNullable<Awaited<ReturnType<typeof listPracticeReports>>>
+export type ListPracticeReportsQueryError = ErrorType<PracticeReportErrorResponse>
+
+
+
+export function useListPracticeReports<TData = Awaited<ReturnType<typeof listPracticeReports>>, TError = ErrorType<PracticeReportErrorResponse>>(
+ params?: ListPracticeReportsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listPracticeReports>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListPracticeReportsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getSavePracticeReportUrl = () => {
+
+
+
+
+  return `/api/mateen/practice-reports`
+}
+
+export const savePracticeReport = async (practiceReportInput: PracticeReportInput, options?: Parameters<typeof customFetch>[1]): Promise<PracticeReport> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<PracticeReport>(getSavePracticeReportUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(practiceReportInput)
+  }
+);}
+
+
+
+
+
+export const getSavePracticeReportMutationKey = () => ['savePracticeReport'] as const;
+
+export const getSavePracticeReportMutationOptions = <TError = ErrorType<PracticeReportErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof savePracticeReport>>, TError,SavePracticeReportMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof savePracticeReport>>, TError,SavePracticeReportMutationVariables, TContext> => {
+
+const mutationKey = getSavePracticeReportMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof savePracticeReport>>, SavePracticeReportMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  savePracticeReport(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SavePracticeReportMutationResult = NonNullable<Awaited<ReturnType<typeof savePracticeReport>>>
+    export type SavePracticeReportMutationBody = BodyType<PracticeReportInput>
+    export type SavePracticeReportMutationError = ErrorType<PracticeReportErrorResponse>
+    export type SavePracticeReportMutationVariables = {data: BodyType<PracticeReportInput>}
+
+    export const useSavePracticeReport = <TError = ErrorType<PracticeReportErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof savePracticeReport>>, TError,SavePracticeReportMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof savePracticeReport>>,
+        TError,
+        SavePracticeReportMutationVariables,
+        TContext
+      > => {
+      return useMutation(getSavePracticeReportMutationOptions(options));
+    }
+
+export const getGetPracticeReportUrl = (id: string,) => {
+
+
+
+
+  return `/api/mateen/practice-reports/${id}`
+}
+
+export const getPracticeReport = async (id: string, options?: Parameters<typeof customFetch>[1]): Promise<PracticeReport> => {
+
+  return customFetch<PracticeReport>(getGetPracticeReportUrl(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetPracticeReportQueryKey = (id: string,) => {
+    return [
+    `/api/mateen/practice-reports/${id}`
+    ] as const;
+    }
+
+
+export const getGetPracticeReportQueryOptions = <TData = Awaited<ReturnType<typeof getPracticeReport>>, TError = ErrorType<PracticeReportErrorResponse>>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getPracticeReport>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPracticeReportQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPracticeReport>>> = ({ signal }) => getPracticeReport(id, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPracticeReport>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetPracticeReportQueryResult = NonNullable<Awaited<ReturnType<typeof getPracticeReport>>>
+export type GetPracticeReportQueryError = ErrorType<PracticeReportErrorResponse>
+
+
+
+export function useGetPracticeReport<TData = Awaited<ReturnType<typeof getPracticeReport>>, TError = ErrorType<PracticeReportErrorResponse>>(
+ id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getPracticeReport>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetPracticeReportQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getDeletePracticeReportUrl = (id: string,) => {
+
+
+
+
+  return `/api/mateen/practice-reports/${id}`
+}
+
+export const deletePracticeReport = async (id: string, options?: Parameters<typeof customFetch>[1]): Promise<void> => {
+
+  return customFetch<void>(getDeletePracticeReportUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+
+export const getDeletePracticeReportMutationKey = () => ['deletePracticeReport'] as const;
+
+export const getDeletePracticeReportMutationOptions = <TError = ErrorType<PracticeReportErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePracticeReport>>, TError,DeletePracticeReportMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deletePracticeReport>>, TError,DeletePracticeReportMutationVariables, TContext> => {
+
+const mutationKey = getDeletePracticeReportMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deletePracticeReport>>, DeletePracticeReportMutationVariables> = (props) => {
+          const {id} = props ?? {};
+
+          return  deletePracticeReport(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeletePracticeReportMutationResult = NonNullable<Awaited<ReturnType<typeof deletePracticeReport>>>
+
+    export type DeletePracticeReportMutationError = ErrorType<PracticeReportErrorResponse>
+    export type DeletePracticeReportMutationVariables = {id: string}
+
+    export const useDeletePracticeReport = <TError = ErrorType<PracticeReportErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePracticeReport>>, TError,DeletePracticeReportMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deletePracticeReport>>,
+        TError,
+        DeletePracticeReportMutationVariables,
+        TContext
+      > => {
+      return useMutation(getDeletePracticeReportMutationOptions(options));
+    }
+
+export const getGetPracticeReportWordsUrl = (id: string,
+    hadithId: number,
+    offset: number,) => {
+
+
+
+
+  return `/api/mateen/practice-reports/${id}/words/${hadithId}/${offset}`
+}
+
+export const getPracticeReportWords = async (id: string,
+    hadithId: number,
+    offset: number, options?: Parameters<typeof customFetch>[1]): Promise<GetPracticeReportWords200> => {
+
+  return customFetch<GetPracticeReportWords200>(getGetPracticeReportWordsUrl(id,hadithId,offset),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetPracticeReportWordsQueryKey = (id: string,
+    hadithId: number,
+    offset: number,) => {
+    return [
+    `/api/mateen/practice-reports/${id}/words/${hadithId}/${offset}`
+    ] as const;
+    }
+
+
+export const getGetPracticeReportWordsQueryOptions = <TData = Awaited<ReturnType<typeof getPracticeReportWords>>, TError = ErrorType<PracticeReportErrorResponse>>(id: string,
+    hadithId: number,
+    offset: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getPracticeReportWords>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPracticeReportWordsQueryKey(id,hadithId,offset);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPracticeReportWords>>> = ({ signal }) => getPracticeReportWords(id,hadithId,offset, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined && hadithId !== null && hadithId !== undefined && offset !== null && offset !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPracticeReportWords>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetPracticeReportWordsQueryResult = NonNullable<Awaited<ReturnType<typeof getPracticeReportWords>>>
+export type GetPracticeReportWordsQueryError = ErrorType<PracticeReportErrorResponse>
+
+
+
+export function useGetPracticeReportWords<TData = Awaited<ReturnType<typeof getPracticeReportWords>>, TError = ErrorType<PracticeReportErrorResponse>>(
+ id: string,
+    hadithId: number,
+    offset: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getPracticeReportWords>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetPracticeReportWordsQueryOptions(id,hadithId,offset,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
 
 export const getGetNawawiBookUrl = () => {
 

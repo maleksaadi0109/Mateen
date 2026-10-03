@@ -13,7 +13,7 @@
 - [Managed storage permissions](storage-permissions.md) — Private object operations work without bucket metadata permission; do not use bucket access as a file-service gate.
 - [Managed Python entrypoints](managed-python-entrypoints.md) — Preserve the managed interpreter path; resolving its symlink can lose workspace package discovery.
 - [Signed upload immutability](signed-upload-immutability.md) — Commit validated media to never-signed private objects; track temporary keys until reusable PUT links expire.
-- [OpenAPI YAML compatibility](openapi-yaml-compatibility.md) — Orval does not expand YAML merge keys; keep contract mappings explicit when combining APIs.
+- [OpenAPI generator compatibility](openapi-yaml-compatibility.md) — Avoid YAML merges and generated path/query name collisions; regenerate rather than editing outputs.
 - [Scanned Nawawi edition](nawawi-scan-rights.md) — The supplied Dar al-Salam scan reserves publication rights; image permission must be separate from text and scientific review.
 - [Book recitation direction](book-reading-first.md) — Tarteel-inspired interactive text, not scan images; full collection and automatic numbered-page continuation.
 - [Arabic scanned-word alignment](arabic-page-alignment.md) — OCR text matches and detected document blocks do not establish reliable word geometry.

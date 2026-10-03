@@ -35,7 +35,11 @@ app.use(
 app.use(CLERK_PROXY_PATH, clerkProxyMiddleware());
 
 app.use(cors({ origin: false }));
-app.use(express.json({ limit: "64kb" }));
+// Only the consented report endpoint accepts the larger bounded JSON payload.
+app.use((req, res, next) => {
+  if (req.method === "POST" && req.path === "/api/mateen/practice-reports") { next(); return; }
+  express.json({ limit: "64kb" })(req, res, next);
+});
 app.use(express.urlencoded({ extended: true, limit: "64kb" }));
 
 app.use(
@@ -61,7 +65,7 @@ app.use(
       "type" in error &&
       error.type === "entity.too.large"
     ) {
-      res.status(413).json({ error: "Request body exceeds the 64 KB limit" });
+      res.status(413).json({ error: "Request body exceeds the endpoint size limit" });
       return;
     }
     if (

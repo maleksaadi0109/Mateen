@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test:practice-reports": "node ./test-practice-reports.mjs",
     "test:recitation-pages": "tsx --test src/lib/recitation-pages.test.ts",
     "dev": "export NODE_ENV=development && pnpm run build && pnpm run start",
     "build": "node ./build.mjs",
