@@ -7,6 +7,7 @@ import { MessageSquare } from 'lucide-react';
 import { EmptyState, ErrorState, LoadingList, PageHeader } from '@/components/mateen/bits';
 import { CitationList, StatusPill, btnGhost, btnPrimary, field, useFinitePoll } from '@/components/scholarly/shared';
 import { fmtDate, usePageMeta } from '@/lib/mateen';
+import { AnswerText } from '@/components/scholarly/AnswerText';
 import { useToast } from '@/hooks/use-toast';
 
 const ROLE: Record<string, string> = { student: 'الطالب', assistant: 'المساعد', teacher: 'المعلم' };
@@ -44,7 +45,7 @@ function Thread({ conversationId, teacher, referralId }: { conversationId: strin
         <ul className="space-y-3">{msgs.data?.map((m) => (
           <li key={m.id} className={`rounded-2xl p-4 ${m.role === 'teacher' ? 'bg-muted' : 'border bg-background'}`} data-testid={`message-${m.id}`}>
             <p className="font-ui text-xs font-bold text-secondary">{ROLE[m.role] ?? m.role} · <span className="font-normal text-muted-foreground">{fmtDate(m.createdAt)}</span></p>
-            <p className="mt-1 whitespace-pre-wrap font-arabic text-lg leading-loose">{m.text}</p>
+            <AnswerText className="mt-1 font-arabic text-lg leading-loose" text={m.text} />
             <CitationList citations={m.citations} />
           </li>
         ))}</ul>

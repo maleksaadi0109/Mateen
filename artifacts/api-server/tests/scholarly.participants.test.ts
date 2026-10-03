@@ -5,13 +5,16 @@ import { eq } from "drizzle-orm";
 import {
   scholarlyConversationsTable, scholarlyMessagesTable, scholarlyNotificationsTable,
   scholarlyQuestionsTable, scholarlyReferralsTable, scholarlySourcesTable,
-  teacherApplicationsTable,
+  teacherApplicationsTable, sourceVersionsTable,
 } from "@workspace/db";
 import {
   startHarness, resetFixtures, question, readyCorpus, barrier, db,
   changeTeacherWhileReferring, pool,
 } from "./scholarly.harness";
-import { setCompletion, ScholarlyProviderUnavailableError } from "./doubles/provider";
+import { setCompletion, ScholarlyProviderUnavailableError, getStudyCallCount } from "./doubles/provider";
+import { setExcerptUnavailable, getExcerptCallCount } from "./doubles/excerpts";
+import { hashSourcePayload } from "../src/lib/source-review";
+import nawawi from "../src/data/nawawi.json";
 
 let harness: Awaited<ReturnType<typeof startHarness>>;
 before(async () => { harness = await startHarness(); });
@@ -233,7 +236,7 @@ test("new assistant follow-ups stay private instead of sharing an unrelated ques
   assert.equal((await counts()).notifications, 1);
 });
 
-test("HTTP study answers work without approved sources and persist with an unverified label", async () => {
+test("HTTP numbered commentary excerpts persist without claiming source approval or model generation", async () => {
   const readiness = await request("student-a", "GET", "/assistant/readiness");
   assert.equal(readiness.body.assistantEnabled, false);
   assert.equal(readiness.body.studyAnswersEnabled, true);
@@ -242,7 +245,9 @@ test("HTTP study answers work without approved sources and persist with an unver
   });
   assert.equal(response.status, 201);
   assert.equal(response.body.status, "unverified");
-  assert.match(response.body.answer, /إجابة آلية غير موثّقة/);
+  assert.match(response.body.answer, /مقتطف مرجعي قصير/);
+  assert.equal(response.body.model, "reference-excerpt");
+  assert.match(response.body.answer, /رابط المرجع: https:\/\/shamela\.ws\/book\/21812\/5/);
   assert.deepEqual(response.body.citations, []);
   const saved = (await db.select().from(scholarlyQuestionsTable))
     .find(row => row.id === response.body.questionId);
@@ -251,6 +256,118 @@ test("HTTP study answers work without approved sources and persist with an unver
   const history = await request("student-a", "GET", "/assistant/questions");
   assert.ok(history.body.some((row: { questionId: string; status: string }) =>
     row.questionId === response.body.questionId && row.status === "unverified"));
+  const thread = await request("student-a", "GET", `/conversations/${response.body.conversationId}/messages`);
+  assert.ok(thread.body.some((row: { role: string; text: string }) =>
+    row.role === "assistant" && row.text === response.body.answer));
+  assert.deepEqual(await db.select().from(scholarlySourcesTable), []);
+});
+
+test("HTTP unavailable excerpts privately save the question without a generated replacement", async () => {
+  setExcerptUnavailable(true);
+  try {
+    const response = await request("student-a", "POST", "/assistant/questions", {
+      question: "اشرح الحديث الأول",
+    });
+    assert.equal(response.status, 503);
+    const [saved] = await db.select().from(scholarlyQuestionsTable)
+      .where(eq(scholarlyQuestionsTable.id, response.body.questionId));
+    assert.equal(saved?.answer, null);
+    assert.equal(saved?.status, "abstained");
+    assert.equal(saved?.model, "reference-excerpt");
+    const messages = await db.select().from(scholarlyMessagesTable)
+      .where(eq(scholarlyMessagesTable.questionId, saved.id));
+    assert.deepEqual(messages.map(message => message.role), ["student"]);
+    assert.deepEqual(await db.select().from(scholarlySourcesTable), []);
+  } finally {
+    setExcerptUnavailable(false);
+  }
+});
+
+test("HTTP general study questions retain clearly labelled unverified educational answers", async () => {
+  const response = await request("student-a", "POST", "/assistant/questions", {
+    question: "كيف أنظم وقت الدراسة؟",
+  });
+  assert.equal(response.status, 201);
+  assert.equal(response.body.status, "unverified");
+  assert.match(response.body.answer, /إجابة آلية غير موثّقة/);
+  assert.deepEqual(response.body.citations, []);
+});
+
+async function restoreStudyFixtures() {
+  // Each test truncates its private cluster; the process-level initial seed
+  // cache does not reset. Restore only pending study fixtures needed here,
+  // never approvals or production records.
+  await db.insert(sourceVersionsTable).values(nawawi
+    .filter(record => [1, 7, 16].includes(record.number))
+    .map(record => {
+      const payload = {
+        hadithNumber: record.number, text: record.text, printedPage: record.sourcePage,
+        viewerPage: Number(new URL(record.sourceUrl).searchParams.get("page")),
+        viewerUrl: record.sourceUrl, edition: "بيانات دراسة للاختبار المعزول",
+        changeReason: "تجهيز بيانات اختبار فقط", rightsEvidence: "", rightsUrl: "",
+      };
+      return {
+        id: `test-study-${record.number}`, hadithNumber: record.number, version: 1,
+        payload, payloadHash: hashSourcePayload(payload), createdBy: "system:test",
+      };
+    }));
+}
+
+test("HTTP recognizes number-before-hadith phrasing, quoted text, names and study context", async () => {
+  await restoreStudyFixtures();
+  for (const [question, textContext, number] of [
+    ["اشرح لي 1 حديث في الاربيعن النووية", undefined, 1],
+    ["اشرح لي ١ حديث", undefined, 1],
+    ["اشرح إنما الأعمال بالنيات", undefined, 1],
+    ["اشرح حديث النية", undefined, 1],
+    ["ما معنى الدين النصيحة؟", undefined, 7],
+    ["اشرح لا تغضب", undefined, 16],
+    ["اشرح هذا النص", "إنما الأعمال بالنيات وإنما لكل امرئ ما نوى", 1],
+  ] as const) {
+    const response = await request("student-a", "POST", "/assistant/questions", {
+      question, ...(textContext ? { textContext } : {}),
+    });
+    assert.equal(response.status, 201, question);
+    assert.equal(response.body.status, "unverified", question);
+    assert.equal(response.body.model, "reference-excerpt", question);
+    assert.match(response.body.answer, new RegExp(`الحديث رقم ${number}\\.`), question);
+  }
+});
+
+test("HTTP conflicting references and invalid bare numbers clarify without any excerpt or model generation", async () => {
+  await restoreStudyFixtures();
+  const excerptsBefore = getExcerptCallCount();
+  const studyBefore = getStudyCallCount();
+  setCompletion(async () => { assert.fail("Ambiguous/invalid references must not call model completion"); });
+  for (const question of [
+    "اشرح حديث النية وحديث النصيحة", "حديث النية وحديث النصيحة",
+    "اشرح حديث النية والنصيحة", "اشرح الحديث 1 و2",
+    "اشرح الحديث 1 وحديث النصيحة", "اشرح الحديث 1 الدين النصيحة",
+    "اشرح 99", "اشرح ٠",
+  ]) {
+    const response = await request("student-a", "POST", "/assistant/questions", { question });
+    assert.equal(response.status, 201, question);
+    assert.equal(response.body.status, "abstained", question);
+    assert.equal(response.body.answer, null, question);
+    assert.equal(response.body.model, "reference-excerpt", question);
+    assert.match(response.body.reason, /بعض ألفاظه أو عنوانه/, question);
+    assert.deepEqual(response.body.citations, [], question);
+    const messages = await db.select().from(scholarlyMessagesTable)
+      .where(eq(scholarlyMessagesTable.questionId, response.body.questionId));
+    assert.deepEqual(messages.map(message => message.role), ["student"], question);
+  }
+  assert.equal(getExcerptCallCount(), excerptsBefore);
+  assert.equal(getStudyCallCount(), studyBefore);
+});
+
+test("HTTP asks for wording or a title only when the hadith cannot be identified safely", async () => {
+  for (const question of ["اشرح الحديث في الأربعين النووية", "اشرح الحديث رقم 99"]) {
+    const response = await request("student-a", "POST", "/assistant/questions", { question });
+    assert.equal(response.status, 201);
+    assert.equal(response.body.status, "abstained");
+    assert.equal(response.body.answer, null);
+    assert.match(response.body.reason, /بعض ألفاظه أو عنوانه/);
+  }
 });
 
 test("HTTP completion publishes indexed-source citations when the source remains eligible", async () => {

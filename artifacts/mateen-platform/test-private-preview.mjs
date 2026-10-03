@@ -27,7 +27,13 @@ try {
       },
     }],
   });
-  const child = spawn(process.execPath, ["--test", "--test-timeout=30000", outfile], {
+  const answerFile = join(temp, "answer-text.test.mjs");
+  await build({
+    entryPoints: [join(root, "tests/answer-text.test.tsx")],
+    bundle: true, platform: "node", format: "esm", outfile: answerFile, jsx: "automatic",
+    external: ["react", "react/*", "react-dom/*"],
+  });
+  const child = spawn(process.execPath, ["--test", "--test-timeout=30000", outfile, answerFile], {
     stdio: "inherit",
     // Never inherit provider, application database or Clerk credentials.
     env: { PATH: process.env.PATH, NODE_ENV: "test", HOME: temp },

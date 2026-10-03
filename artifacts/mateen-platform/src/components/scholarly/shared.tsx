@@ -8,7 +8,7 @@ export const btnPrimary = 'inline-flex items-center justify-center gap-2 rounded
 export const btnGhost = 'inline-flex items-center justify-center gap-2 rounded-full border px-5 py-2 font-ui text-sm font-semibold hover:bg-muted disabled:opacity-50';
 
 const LABELS: Record<string, string> = {
-  answered: 'أُجيب', unverified: 'إجابة AI غير موثّقة', abstained: 'يحتاج متابعة', waiting_for_teacher: 'بانتظار معلم', referred: 'أُحيل إلى معلم',
+  answered: 'أُجيب', unverified: 'لم يُعتمد علمياً', abstained: 'يحتاج متابعة', waiting_for_teacher: 'بانتظار معلم', referred: 'أُحيل إلى معلم',
   not_referred: 'دون إحالة', awaiting_reply: 'بانتظار الرد', draft: 'مسودة', reviewed: 'مراجَع', indexed: 'مفهرس', withdrawn: 'مسحوب',
   open: 'مفتوح', closed: 'مغلق', resolved: 'محلول',
 };
@@ -41,7 +41,7 @@ export function CitationList({ citations }: { citations: Citation[] }) {
   );
 }
 
-export const NO_FATWA = 'هذا المساعد يعين على الدراسة ولا يصدر فتوى ولا يغني عن العالم المؤهل. تُميَّز الإجابات الآلية غير الموثّقة بوضوح عن الاقتباسات من المصادر المعتمدة.';
+export const NO_FATWA = 'هذا المساعد يعين على الدراسة ولا يصدر فتوى ولا يغني عن العالم المؤهل. المقتطفات المرجعية تنقل كلام الشارح دون شرح مولّد؛ وجود المرجع لا يعني اعتماد النقل علمياً داخل المنصة. تُميَّز الإجابات غير المعتمدة عن المصادر المعتمدة.';
 
 /** Finite polling: returns interval ms until maxMs elapsed since mount/reset, then false. */
 export function useFinitePoll(ms = 8000, maxMs = 300000, resetKey: unknown = null) {

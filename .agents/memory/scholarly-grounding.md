@@ -43,6 +43,18 @@ Resolve an explicitly numbered matn entry from the study text before asking the 
 
 **How to apply:** Supply the selected entry as reference data, keep its review status explicit, and never substitute the model's recollection for known passage identity.
 
+Student-facing Arabic explanations should use clear Arabic throughout, including hadith terminology, rather than mixing in English phrases.
+
+**Why:** The user reported that an English phrase in a generated Nawawi explanation made the answer difficult to understand, and requested accurate commentary-based explanations.
+
+**How to apply:** Use Arabic terms such as «متفق عليه» with a brief explanation where needed. Language clarity does not replace commentary grounding or scientific review.
+
+For Nawawi explanations, the user chose short source excerpts with their references rather than model-written simplified explanations.
+
+**Why:** Unrestricted answers were unclear and insufficiently grounded; the user explicitly selected direct excerpts after comparing both approaches.
+
+**How to apply:** Preserve the distinction between the commentator's actual words, electronic-transcription verification, and platform scientific approval. Never substitute generated prose when the requested excerpt cannot be retrieved, or infer full-book reuse clearance from this choice. The user explicitly rejected mandatory hadith numbers: identify an entry from its wording or recognized title when possible, and clarify ambiguity instead of guessing.
+
 NVIDIA transport timeouts can be transient even when configuration is valid.
 
 **Why:** Repeated deadline expirations were followed by a successful fast response without replacing the credential or model. Neither configuration presence nor a failed request alone establishes provider availability or Arabic quality.

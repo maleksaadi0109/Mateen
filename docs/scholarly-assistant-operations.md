@@ -34,6 +34,37 @@ NVIDIA requests never silently fall back to another provider. Once a connection 
 
 Published answers are assembled only from verified exact quotations. The model's unrestricted explanatory prose is not published: a genuine citation alone cannot prove that every generated claim is supported. Fatwa requests and questions without sufficient evidence lead to abstention/referral.
 
+## Short external commentary excerpts
+
+Numbered Nawawi study requests now retrieve a short, exact excerpt (at most 70
+words per book) from the corresponding chapter of Ibn Uthaymeen's commentary
+and al-Abbad's *Fath al-Qawi al-Matin* on Shamela. The identifier accepts numbers
+before or after "حديث", Arabic/Persian digits, ordinals, recognized names, and
+distinctive phrases matched against the actual study text. The optional study
+context can identify the entry too. Only ambiguous or unidentified requests ask
+for more wording, a title, or a number; explicit invalid/conflicting numbers are
+never replaced with an inferred entry. Other general study
+questions retain their explicitly unverified model-answer path.
+
+Excerpt intent is retained even when identification fails (including bare
+requests such as "اشرح 99" and "اشرح ٠"). Multiple numeric or named references
+are collected before selection; conflicting entries request clarification,
+without fetching an excerpt or calling either model-answer path.
+
+The source URLs and chapter indexes are server-owned allowlisted values.
+Responses are bounded, redirects are refused, and the chapter heading and
+printed-page metadata are checked. Only paginated text needed for a short
+excerpt is fetched; a bounded five-minute memory cache reduces repeated
+requests. External source failures are explicit and never substituted with
+model-written explanations.
+
+These are **unreviewed electronic reference excerpts**, not approved corpus
+citations. They retain `unverified` status, `reference-excerpt` as their origin,
+an explicit notice, and links to the exact external pages. They do not create
+source/passages/approval/evaluation records or fabricate citation UUIDs. Saved
+answers and message history retain the quoted text and source links. Full-book
+reuse clearance and scientific review remain separate requirements.
+
 ## Private NVIDIA experiment
 
 The **تجربة خاصة** tab at `/admin/scholarly` generates an unreviewed draft through `POST /api/mateen/admin/scholarly/preview`. It requires the same content-review permission and secured session as the other administrative operations; it does not grant access or disable MFA.

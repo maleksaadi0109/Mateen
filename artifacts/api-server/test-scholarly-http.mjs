@@ -61,6 +61,9 @@ try {
           path: join(root, preview ? "tests/doubles/preview-auth.ts" : "tests/doubles/auth.ts"),
         }));
         if (preview) return; // Exercise the real admin router and provider implementation.
+        builder.onResolve({ filter: /^\.\.\/lib\/scholarly-excerpts$/ }, () => ({
+          path: join(root, "tests/doubles/excerpts.ts"),
+        }));
         builder.onResolve({ filter: /^\.\/scholarly\.admin$/ }, () => ({
           path: join(root, "tests/doubles/admin.ts"),
         }));

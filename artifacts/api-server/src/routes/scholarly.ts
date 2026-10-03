@@ -61,7 +61,8 @@ import {
 } from "./scholarly.readiness";
 import teacherRoutes from "./scholarly.teacher";
 import { getNawawiStudyRecords } from "../lib/source-review";
-import { selectNawawiReference } from "../lib/scholarly-study-context";
+import { resolveNawawiHadith, selectNawawiReference, wantsNawawiExcerpt } from "../lib/scholarly-study-context";
+import { answerNawawiExcerpt, EXCERPT_NOTICE, ScholarlyExcerptUnavailableError } from "../lib/scholarly-excerpts";
 import adminRoutes from "./scholarly.admin";
 import {
   authenticationRequired,
@@ -141,10 +142,32 @@ async function createAssistantQuestion(
   let reason = "";
   let status = "answered";
   let providerFailed = false;
+  let responseModel: string = gate.model;
   const requiredGuidance = requiresHumanGuidance(question);
+  const resolution = requiredGuidance
+    ? { number: null, requested: wantsNawawiExcerpt(question) }
+    : resolveNawawiHadith(question, (await getNawawiStudyRecords()).hadiths, textContext);
+  const excerptNumber = resolution.number;
+  const excerptRequested = resolution.requested;
   if (requiredGuidance) {
     status = "abstained";
     reason = requiredGuidance;
+  } else if (excerptNumber !== null) {
+    responseModel = "reference-excerpt";
+    try {
+      answer = await answerNawawiExcerpt(question, excerptNumber);
+      status = "unverified";
+      reason = EXCERPT_NOTICE;
+    } catch (error) {
+      if (!(error instanceof ScholarlyExcerptUnavailableError)) throw error;
+      status = "abstained";
+      reason = "تعذّر جلب المقتطف من الشرح والتحقق من موضعه. لم نستبدله بإجابة مولّدة؛ أعد المحاولة أو اطلب إحالة.";
+      providerFailed = true;
+    }
+  } else if (excerptRequested) {
+    responseModel = "reference-excerpt";
+    status = "abstained";
+    reason = "لم أستطع تحديد حديث واحد من سؤالك. اكتب بعض ألفاظه أو عنوانه، ويمكنك ذكر رقمه أيضاً، حتى أعرض المقتطف الصحيح دون تخمين.";
   } else if (!gate.assistantEnabled) {
     status = "abstained";
     reason = "تعذّر الاتصال بالمساعد الآن؛ يمكنك إعادة المحاولة أو طلب إحالة.";
@@ -184,7 +207,7 @@ async function createAssistantQuestion(
 
   // Student general answers are newly generated from the student's input only.
   // Never read or publish the separate private administrator preview drafts.
-  if (!answer && !providerFailed && gate.providerConfigured) {
+  if (!answer && !providerFailed && !excerptRequested && gate.providerConfigured) {
     try {
       const studyRecords = await getNawawiStudyRecords();
       const reference = selectNawawiReference(question, studyRecords.hadiths);
@@ -246,7 +269,7 @@ async function createAssistantQuestion(
       answer,
       status,
       reason: reason || null,
-      model: gate.model,
+      model: responseModel,
       corpusHash: gate.corpus.hash,
     }).returning();
     await tx.insert(scholarlyMessagesTable).values({

@@ -7,6 +7,7 @@ import { ShieldAlert, Sparkles } from 'lucide-react';
 import { EmptyState, ErrorState, LoadingList, PageHeader } from '@/components/mateen/bits';
 import { CitationList, Field, NO_FATWA, StatusPill, btnGhost, btnPrimary, field, useFinitePoll } from '@/components/scholarly/shared';
 import { ReferralPanel } from '@/components/scholarly/ReferralPanel';
+import { AnswerText } from '@/components/scholarly/AnswerText';
 import { fmtDate, usePageMeta } from '@/lib/mateen';
 import { useToast } from '@/hooks/use-toast';
 
@@ -39,7 +40,7 @@ function QuestionCard({ a }: { a: AssistantQuestion }) {
       <p className="mt-2 font-ui text-xs text-muted-foreground">{fmtDate(a.createdAt)}</p>
       <p className="mt-3 whitespace-pre-wrap font-ui text-sm font-semibold">{a.question}</p>
       {a.textContext && <p className="mt-2 whitespace-pre-wrap font-arabic text-sm text-muted-foreground">سياق الدراسة: {a.textContext}</p>}
-      {a.answer ? <p className="mt-3 whitespace-pre-wrap font-arabic text-lg leading-loose" data-testid="text-answer">{a.answer}</p>
+      {a.answer ? <AnswerText className="mt-3 font-arabic text-lg leading-loose" testId="text-answer" text={a.answer} />
         : <p className="mt-3 font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-abstained">{a.reason || 'لم تكفِ المصادر المراجَعة للجواب، فامتنع المساعد بدل أن يخمّن.'}</p>}
       <CitationList citations={a.citations} />
       {a.referral.status !== 'not_referred' && (
@@ -77,7 +78,7 @@ export default function AssistantPage() {
   const history = hist.data ?? [];
   return (
     <div>
-      <PageHeader eyebrow="المساعد العلمي" title="اسأل، ثم انظر إلى السند">يجيب فقط مما في المصادر المراجَعة، ويعرض الكتاب والصفحة والنص. وإن لم يجد، قال ذلك.</PageHeader>
+      <PageHeader eyebrow="المساعد العلمي" title="اسأل، ثم انظر إلى السند">اسأل برقم الحديث أو عنوانه أو بعض ألفاظه لعرض مقتطف من شرح ابن عثيمين والعباد مع رابط موضعه. يمكنك أيضاً وضع النص في سياق الدراسة. النقل المرجعي غير المعتمد يُميَّز عن المصادر المعتمدة.</PageHeader>
       <p className="mb-6 rounded-2xl border border-secondary/30 bg-card p-4 font-ui text-sm" data-testid="text-no-fatwa">{NO_FATWA}</p>
       {ready.isLoading ? <LoadingList rows={1} /> : ready.isError || !ready.data ? <ErrorState message="تعذّر قراءة حالة المساعد." onRetry={() => ready.refetch()} /> : (
         <section className="paper-card mb-8 p-6" data-testid="card-readiness">
@@ -88,7 +89,7 @@ export default function AssistantPage() {
             <li data-testid="text-ready-eval">التقييم: {ready.data.evaluationPassed ? 'اجتاز' : 'لم يجتز بعد'}</li>
             <li data-testid="text-ready-model">النموذج: {ready.data.model}</li>
           </ul>
-           {!enabled && <p className="mt-4 font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-assistant-disabled">{ready.data.studyAnswersEnabled ? 'المساعد متاح للإجابة. إلى حين اكتمال مراجعة الشروح، تظهر الإجابات الآلية بوسم «غير موثّقة»؛ ليست فتوى أو اعتمادًا علميًا.' : 'اتصال النموذج غير متاح الآن. يمكنك حفظ سؤالك أو طلب إحالة؛ لن يُشارك مع معلم دون موافقتك.'}</p>}
+           {!enabled && <p className="mt-4 font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-assistant-disabled">يمكنك طلب مقتطف مرجعي برقم الحديث أو عنوانه أو بعض ألفاظه، دون الحاجة إلى توليد شرح آلي. هذه المقتطفات لم تُعتمد علمياً داخل المنصة بعد.{!ready.data.studyAnswersEnabled && ' اتصال النموذج غير متاح للأسئلة العامة؛ لا نبدّل المقتطف بإجابة مولّدة.'}</p>}
         </section>
       )}
       <section className="paper-card mb-8 space-y-4 p-6">
