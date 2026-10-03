@@ -42,13 +42,19 @@ try {
   await build({
     entryPoints: [join(root, "tests/live-recitation.test.tsx")],
     bundle: true, platform: "node", format: "esm", outfile: liveFile, jsx: "automatic",
-    external: ["react", "react/*", "react-dom/*", "jsdom"],
+    external: ["react", "react/*", "react-dom", "react-dom/*", "jsdom", "lucide-react"],
+    plugins: [{name:"live-test-auth",setup(builder) {
+      builder.onResolve({filter:/^@clerk\/react$/},() => ({path:join(root,"tests/doubles/preview-auth.ts")}));
+    }}],
   });
   const bookTextFile = join(temp, "recitation-book-view.test.mjs");
   await build({
     entryPoints: [join(root, "tests/recitation-book-view.test.tsx")],
     bundle: true, platform: "node", format: "esm", outfile: bookTextFile, jsx: "automatic",
     external: ["react", "react/*", "react-dom", "react-dom/*", "lucide-react", "@radix-ui/react-dialog"],
+    plugins: [{name:"book-test-auth",setup(builder) {
+      builder.onResolve({filter:/^@clerk\/react$/},() => ({path:join(root,"tests/doubles/preview-auth.ts")}));
+    }}],
   });
   const studyProgressFile = join(temp, "study-progress.test.mjs");
   await build({
@@ -56,6 +62,7 @@ try {
     bundle: true, platform: "node", format: "esm", outfile: studyProgressFile, jsx: "automatic",
     external: ["react", "react/*", "react-dom", "react-dom/*", "lucide-react", "@radix-ui/react-dialog", "@tanstack/react-query", "jsdom", "wouter"],
     plugins: [{name:"study-progress-boundaries",setup(builder) {
+      builder.onResolve({filter:/^@clerk\/react$/},() => ({path:join(root,"tests/doubles/preview-auth.ts")}));
       builder.onResolve({filter:/^@workspace\/api-client-react$/},() => ({path:join(root,"tests/doubles/study-progress-api.ts")}));
       builder.onResolve({filter:/^@\/components\/mateen\/bits$/},() => ({path:join(root,"tests/doubles/study-bits.tsx")}));
     }}],

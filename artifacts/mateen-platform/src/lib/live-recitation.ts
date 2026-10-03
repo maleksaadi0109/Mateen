@@ -1,10 +1,65 @@
 // Matching aids practice, not grading. A gap stays blank rather than becoming
 // an asserted learner error, and arbitrary ASR output is never rendered as matn.
 export function normalizeRecitationWord(word: string): string {
-  return word.normalize('NFKC')
+  const normalized = word.normalize('NFKC')
     .replace(/[\u064B-\u065F\u0670\u06D6-\u06EDـ]/g, '')
     .replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه')
     .replace(/[^\p{L}\p{N}]/gu, '');
+  return normalized === 'ابن' ? 'بن' : normalized;
+}
+
+export type RecitationIssue = {
+  index: number;
+  expected: string;
+  heard: string;
+  kind: 'substitution' | 'omission' | 'extra';
+};
+
+/** Practice alignment, not assessment: retain ASR differences without blocking. */
+export function matchContinuousRecitation(words: string[], transcript: string, start = 0) {
+  const target = words.map(normalizeRecitationWord);
+  const raw = recitationWords(transcript.slice(0, 250_000)).filter(w => normalizeRecitationWord(w));
+  const heard = raw.map(normalizeRecitationWord);
+  const indices: number[] = [];
+  const issues: RecitationIssue[] = [];
+  let cursor = Math.max(0, start);
+  let offset = 0;
+  if (cursor > 0 && heard[0] !== target[cursor]) {
+    for (let n = Math.min(cursor, 4); n > 0; n--) {
+      if (heard.length >= n + 2 && heard.slice(0, n).every((w, i) => w === target[cursor - n + i]) &&
+          heard[n] === target[cursor] && heard[n + 1] === target[cursor + 1]) { offset = n; break; }
+    }
+  }
+  for (let i = offset; i < heard.length && cursor < target.length; i++) {
+    while (cursor < target.length && !target[cursor]) indices.push(cursor++);
+    if (cursor >= target.length) break;
+    if (heard[i] === target[cursor]) { indices.push(cursor++); continue; }
+    if (heard[i + 1] && heard[i] + heard[i + 1] === target[cursor]) {
+      indices.push(cursor++); i++; continue;
+    }
+    if (target[cursor + 1] && heard[i] === target[cursor] + target[cursor + 1]) {
+      indices.push(cursor, cursor + 1); cursor += 2; continue;
+    }
+    // An omission needs an observed two-word continuation, never just silence.
+    let jump = 0;
+    for (let n = 1; n <= 5 && cursor + n + 1 < target.length; n++) {
+      if (heard[i] === target[cursor + n] && heard[i + 1] === target[cursor + n + 1]) { jump = n; break; }
+    }
+    if (jump) {
+      for (let n = 0; n < jump; n++, cursor++) {
+        if (target[cursor]) issues.push({ index: cursor, expected: words[cursor], heard: '', kind: 'omission' });
+      }
+      indices.push(cursor++); continue;
+    }
+    if (heard[i + 1] === target[cursor] && heard[i + 2] && heard[i + 2] === target[cursor + 1]) {
+      issues.push({ index: cursor, expected: words[cursor], heard: raw[i], kind: 'extra' });
+      continue;
+    }
+    issues.push({ index: cursor, expected: words[cursor], heard: raw[i], kind: 'substitution' });
+    cursor++;
+  }
+  while (cursor < target.length && !target[cursor]) indices.push(cursor++);
+  return { indices, cursor, issues, mismatchIndex: issues[0]?.index ?? null };
 }
 
 export function recitationWords(text: string): string[] {

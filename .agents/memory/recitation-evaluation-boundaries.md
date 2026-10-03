@@ -66,3 +66,15 @@ improve recognition.
 tolerating exact Arabic whitespace variations and safely anchored repetitions
 of already revealed context. Do not claim a larger local model improves the
 live browser recognizer unless it is actually integrated and measured.
+
+The user now explicitly wants practice to continue through differences, show
+the recognized differing word in red, and offer an end-of-attempt review with
+an approximate percentage, prior-attempt word history and pronunciation.
+
+**Why:** On 2026-10-03 the user rejected stopping capture at each difference.
+This expands the earlier no-percentage practice presentation, not permission
+to award assessment grades from ASR.
+
+**How to apply:** Label the percentage as approximate word matching in the
+attempted passage, exclude unspoken suffixes, keep differences provisional,
+and keep practice history separate from exam scores and advancement.

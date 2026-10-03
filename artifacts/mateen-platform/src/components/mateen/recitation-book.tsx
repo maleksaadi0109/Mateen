@@ -1,25 +1,40 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { BookOpen, ChevronLeft, ChevronRight, Eye, Lightbulb, Mic, MoreHorizontal, Pause, RotateCcw, ShieldAlert } from 'lucide-react';
+import { useUser } from '@clerk/react';
+import { Flag, BookOpen, ChevronLeft, ChevronRight, Eye, Lightbulb, Mic, MoreHorizontal, Pause, RotateCcw, ShieldAlert } from 'lucide-react';
 import { useLiveRecitation } from '@/hooks/use-live-recitation';
 import { buildRecitationBook } from '@/lib/recitation-book';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { num } from '@/lib/mateen';
 import { cn } from '@/lib/utils';
+import { useRecitationHistory, useArabicSpeech, RecitationHistory, normalizeWord, PronounceButton, SpeechError } from './recitation-history';
+import { RecitationReport, type ReportSnapshot } from './recitation-report';
 
 type BookHadith = { id: number; number: number; title: string; text: string; sourceUrl: string; sourcePage: number; reviewStatus?: string };
 type BookProps = { hadiths: BookHadith[]; initialHadith?: number; sourceStatus?: string; navigationPending?: boolean; onNavigate?: (number: number) => void; onModeChange?: (m: 'read' | 'recite') => void };
 
 export default function RecitationBook(props: BookProps) {
+  const { user } = useUser();
   const book = useMemo(() => {
     try { return buildRecitationBook(props.hadiths); }
     catch { return null; }
   }, [props.hadiths]);
   if (!book) return <p role="alert" className="rounded-xl border p-5 font-ui">تعذّر إعداد صفحات التسميع لأن بيانات النص غير مكتملة. أعد تحميل الصفحة.</p>;
-  return <RecitationBookContent key={book.text} {...props} book={book} />;
+  return <RecitationBookContent key={`${user?.id ?? 'guest'}:${book.text}`} {...props} book={book} />;
 }
 
 function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeChange, onNavigate, navigationPending, book }: BookProps & {book: ReturnType<typeof buildRecitationBook>}) {
-  const r = useLiveRecitation(book.text);
+  const r = useLiveRecitation(book.text, { continuousFeedback: true });
+  const { user, isLoaded: userLoaded } = useUser();
+  const userId = userLoaded && user ? user.id : null;
+  const history = useRecitationHistory(userId);
+  const newAttemptId = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+  const [attemptId, setAttemptId] = useState(newAttemptId);
+  const stopMicRef = useRef<() => void>(() => {});
+  const speech = useArabicSpeech(() => stopMicRef.current());
+  const livePrior = useMemo(() => history.countsExcluding(attemptId), [history.countsExcluding, attemptId]);
+  const [report, setReport] = useState<ReportSnapshot | null>(null);
+  const issueAt = useMemo(() => { const m = new Map<number, typeof r.issues[number]>(); for (const i of r.issues) m.set(i.index, i); return m; }, [r.issues]);
+  const latestIssues = r.issues.slice(-3).reverse();
   const total = r.words.length;
   const pageOf = (i: number) => Math.max(0, book.pages.findIndex((p) => i >= p.start && i < p.end));
 
@@ -45,11 +60,14 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
   seekRef.current = r.seek;
   const stopRef = useRef(r.stop);
   stopRef.current = r.stop;
+  stopMicRef.current = r.stop;
   useEffect(() => {
     seekRef.current(initialIdx);
     setPageIdx(pageOf(initialIdx));
   }, [initialIdx]);
-  useEffect(() => () => { stopRef.current(); modeCb.current?.('read'); }, []);
+  const cancelSpeechRef = useRef(speech.cancel);
+  cancelSpeechRef.current = speech.cancel;
+  useEffect(() => () => { stopRef.current(); cancelSpeechRef.current(); modeCb.current?.('read'); }, []);
 
   // Follow the reciter: frontier = furthest committed or provisional word.
   const lastInterim = r.interimIndices.length ? Math.max(...r.interimIndices) + 1 : 0;
@@ -73,8 +91,19 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
   const unsupported = r.supported === false;
   const pending = sourceStatus !== 'approved' || hadiths.some((h) => h.reviewStatus && h.reviewStatus !== 'approved');
 
+  const canFinish = !manual && !r.finishing && (r.attemptedCount > 0 || r.listening);
+  const finishReview = async () => {
+    if (!canFinish) return;
+    speech.cancel();
+    const summary = await r.finish();
+    if (!summary) return;
+    setReport({ attemptId, priorCounts: history.countsExcluding(attemptId), matched: summary.matchedCount, attempted: summary.attemptedCount, issues: summary.issues.slice(0, 100) });
+  };
+  const discardReport = () => setReport(null);
+  const freshAttempt = () => { setReport(null); setAttemptId(newAttemptId()); };
   const jumpTo = (wordIdx: number) => {
     if (navigationPending) return;
+    freshAttempt(); speech.cancel();
     r.seek(wordIdx); setManual(false); setPageIdx(pageOf(wordIdx));
     const segment = book.pages[pageOf(wordIdx)]?.segments.find(s => wordIdx >= s.start && wordIdx < s.end);
     if (segment) onNavigate?.(segment.hadithNumber);
@@ -84,9 +113,14 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
   const begin = () => { setManual(false); setMode('recite'); r.start(); };
   const requestStart = () => { if (consented) begin(); else { setAgree(false); setConsentOpen(true); } };
   const confirmStart = () => { if (!agree) return; setConsented(true); setConsentOpen(false); begin(); };
-  const resetPage = () => { if (page) { r.seek(page.start); setManual(false); } };
+  const resetPage = () => { freshAttempt(); speech.cancel(); if (page) { r.seek(page.start); setManual(false); } };
   const revealPage = () => { r.stop(); setManual(true); };
-  const backToReading = () => { r.stop(); setManual(false); setMode('read'); };
+  const backToReading = () => { r.seek(page.start); speech.cancel(); freshAttempt(); setManual(false); setMode('read'); };
+  const reportSaved = !!report && history.entries.some(e =>
+    e.attemptId === report.attemptId && e.matched === report.matched && e.attempted === report.attempted &&
+    e.issues.length === report.issues.length && e.issues.every((issue, i) =>
+      issue.index === report.issues[i].index && issue.kind === report.issues[i].kind &&
+      issue.expected === report.issues[i].expected.slice(0, 60) && issue.heard === report.issues[i].heard.slice(0, 60)));
   const currentHadith = page?.segments.find(s => r.cursor >= s.start && r.cursor < s.end) ?? page?.segments[0];
 
   if (!page) return null;
@@ -130,6 +164,10 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
                 : <button type="button" onClick={requestStart} disabled={unsupported || manual || finished} className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-primary px-6 font-ui text-sm font-bold text-primary-foreground shadow-[0_14px_30px_-16px_hsl(var(--primary)/0.8)] disabled:opacity-40 sm:flex-none" data-testid="button-book-resume"><Mic size={16} />متابعة التسميع</button>}
               {r.listening && <span className="inline-flex items-center gap-1.5 font-ui text-xs font-bold text-secondary" role="status" data-testid="status-book-listening"><span className="h-2 w-2 animate-pulse rounded-full bg-secondary motion-reduce:animate-none" />يستمع الآن</span>}
             </div>
+            <div className="flex w-full flex-col items-center gap-1">
+              <button type="button" onClick={finishReview} disabled={!canFinish} className="inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-primary/70 bg-card px-5 font-ui text-sm font-bold text-primary hover:bg-primary/5 disabled:opacity-40" data-testid="button-book-finish"><Flag size={15} />إنهاء ومراجعة المحاولة</button>
+              <p className="font-ui text-[11px] text-muted-foreground" data-testid="text-book-finish-note">{manual ? 'الإظهار اليدوي لا يُراجَع ولا يُحفظ. أعد الصفحة أولاً ثم سمّع.' : r.attemptedCount === 0 ? 'سمّع بعض الكلمات أولاً لتظهر المراجعة.' : 'الإيقاف المؤقت يتيح المتابعة؛ الإنهاء يعرض الملخص. يُحتسب ما اعتُمد من التعرّف فقط.'}</p>
+            </div>
             <div className="flex flex-wrap items-center justify-center gap-1 font-ui text-xs font-bold text-muted-foreground">
               <button type="button" onClick={resetPage} className="inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 hover:bg-muted hover:text-foreground" data-testid="button-book-reset"><RotateCcw size={14} />إعادة الصفحة</button>
               <button type="button" onClick={backToReading} className="inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 hover:bg-muted hover:text-foreground" data-testid="button-book-read"><BookOpen size={14} />القراءة</button>
@@ -158,8 +196,26 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
           </div>
         </div>
       )}
+      {!reading && !manual && latestIssues.length > 0 && (
+        <div className="mx-auto max-w-xl rounded-2xl border border-amber-300/70 bg-amber-50/70 p-4 font-ui text-amber-950 dark:border-amber-500/40 dark:bg-amber-950/40 dark:text-amber-100" role="status" aria-live="polite" data-testid="panel-book-live-issues">
+          <p className="text-xs font-bold">اختلافات محتملة في التعرّف — غير مؤكدة، {r.listening ? 'والاستماع مستمر' : 'والميكروفون متوقف'}</p>
+          <ul className="mt-2 space-y-2">
+            {latestIssues.map((i) => (
+              <li key={`${i.index}-${i.kind}`} className="flex flex-wrap items-center gap-3" data-testid={`live-issue-${i.index}`}>
+                <span className="text-[11px] opacity-70">الكلمة {num(i.index + 1)}</span>
+                {i.kind !== 'omission' && i.heard && <span className="hadith-text text-lg text-red-700 dark:text-red-400 line-through decoration-1"><span className="sr-only">المسموع: </span>{i.heard}</span>}
+                {i.kind !== 'extra' && <span className="hadith-text text-lg"><span className="sr-only">المتوقع: </span>{i.expected}</span>}
+                <span className="text-[11px] opacity-70">{(livePrior.get(normalizeWord(i.expected)) ?? 0) ? `في ${num(livePrior.get(normalizeWord(i.expected)) ?? 0)} محاولة سابقة` : ''}</span>
+                {i.kind !== 'extra' && i.expected && <PronounceButton word={i.expected} speech={speech} />}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-2"><SpeechError speech={speech} /></div>
+        </div>
+      )}
       {!reading && r.error && <p className="mx-auto max-w-xl rounded-xl border border-destructive/30 bg-destructive/5 px-3 py-2 text-center font-ui text-xs text-destructive" role="alert" data-testid="text-book-error">{r.error}</p>}
       {!reading && manual && <p className="mx-auto max-w-xl rounded-xl border bg-muted/50 px-3 py-2 text-center font-ui text-xs" role="status" data-testid="text-book-manual">أظهرتَ الصفحة يدوياً؛ هذا ليس تسميعاً. أعد الصفحة لتسمّعها.</p>}
+      {finished && !report && <div className="flex justify-center"><button type="button" onClick={finishReview} disabled={!canFinish} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 font-ui text-sm font-bold text-primary-foreground disabled:opacity-40" data-testid="button-book-finish-complete"><Flag size={15} />مراجعة المحاولة</button></div>}
       {finished && <p className="rounded-xl border border-secondary/40 bg-secondary/10 px-4 py-3 text-center font-ui text-sm font-bold" role="status" data-testid="text-book-complete">بلغتَ نهاية الأحاديث المتاحة. هذا انتهاء للمقطع وليس درجة أو إثباتاً لتسميع الصفحات التي تجاوزتها.</p>}
 
       {/* Page */}
@@ -182,11 +238,14 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
                 const prov = !on && interim.has(i);
                 const bad = !reading && !manual && r.mismatchIndex === i;
                 const visible = on || prov;
+                const iss = !reading && !manual ? issueAt.get(i) : undefined;
                 return (
                   <span key={i}>
+                    {iss && iss.kind !== 'omission' && iss.heard && <span className="mx-0.5 inline-block rounded bg-red-50 dark:bg-red-950/30 px-1 text-[0.7em] text-red-700 dark:text-red-400 line-through decoration-1" data-testid={`book-heard-${i}`}><span className="sr-only">سُمع على وجه غير مؤكد: </span>{iss.heard}</span>}
                     <span aria-hidden={visible ? undefined : true} data-testid={`book-word-${i}`}
                       className={cn('inline-block transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none',
                         on ? 'translate-y-0 opacity-100' : prov ? 'translate-y-0 text-secondary opacity-60' : 'invisible translate-y-1 opacity-0',
+                        iss && iss.kind !== 'extra' && 'visible rounded-md border-b-2 border-dashed border-amber-500 opacity-100',
                         bad && 'visible rounded-md bg-amber-100/70 text-transparent opacity-100 ring-2 ring-amber-400/80 dark:bg-amber-900/30')}>{w}</span>{' '}
                   </span>
                 );
@@ -207,6 +266,11 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
         {pending && <p className="font-bold text-secondary" data-testid="text-book-pending">النص قيد المراجعة العلمية، فالتسميع تجريبي.</p>}
       </footer>
 
+      <RecitationHistory entries={history.entries} onClear={history.clear} signedIn={!!userId} speech={speech} />
+      {r.finishing && <p role="status" className="text-center font-ui text-sm">جارٍ انتظار آخر كلمات الميكروفون قبل إعداد المراجعة…</p>}
+      <RecitationReport report={report} onClose={discardReport} canSave={!!userId && !manual && !!report?.attempted} alreadySaved={reportSaved} speech={speech}
+        onSave={() => report ? history.save({ attemptId: report.attemptId, matched: report.matched, attempted: report.attempted, issues: report.issues.map(({ index, expected, heard, kind }) => ({ index, expected, heard, kind })) }) : { ok: false }} />
+
       <Dialog open={consentOpen} onOpenChange={setConsentOpen}>
           <DialogContent className="w-[calc(100%-2rem)] max-w-md rounded-2xl p-5" dir="rtl" data-testid="dialog-book-consent">
             <div className="flex items-start justify-between gap-3">
@@ -215,7 +279,7 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
             <DialogDescription className="font-ui text-sm">تدريب تجريبي لإظهار الكلمات، لا تقييم للنطق أو التشكيل أو الحفظ.</DialogDescription>
             <label className="mt-4 flex cursor-pointer gap-3 rounded-xl border bg-background p-3 font-ui text-sm leading-relaxed">
               <input type="checkbox" className="mt-1 h-4 w-4 accent-[hsl(var(--secondary))]" checked={agree} onChange={(e) => setAgree(e.target.checked)} data-testid="checkbox-book-consent" />
-              <span>أوافق على استخدام الميكروفون. قد ترسل خدمة التعرّف في المتصفح صوتي إلى مزوّد خارجي. لا تحفظ المنصة تسجيلاً ولا نصاً مسموعاً ولا درجات.</span>
+              <span>أوافق على استخدام الميكروفون. قد ترسل خدمة التعرّف في المتصفح صوتي إلى مزوّد خارجي. لا تحفظ المنصة تسجيلاً صوتياً ولا النص المسموع كاملاً، ولا تُرسل نتائج إلى الخادم. بعد إنهاء المحاولة يمكنك اختيارياً «حفظ النتيجة» (نسبة التطابق التقريبية والكلمات المختلفة) على هذا المتصفح فقط لحسابك، ويمكنك مسحها في أي وقت.</span>
             </label>
             <div className="mt-4 flex justify-end gap-2">
               <button type="button" onClick={() => setConsentOpen(false)} className="min-h-10 rounded-full border px-5 font-ui text-sm font-bold" data-testid="button-book-consent-cancel">إلغاء</button>

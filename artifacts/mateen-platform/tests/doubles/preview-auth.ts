@@ -4,3 +4,4 @@ export const identity = {
 };
 // Only used by the temporary test bundle, never by the app build.
 export function useAuth() { return identity; }
+export function useUser() { return { isLoaded: identity.isLoaded, user: identity.isSignedIn ? { id: identity.userId } : null }; }

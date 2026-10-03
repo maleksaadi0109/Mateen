@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { matchRecitation, recitationWords } from '@/lib/live-recitation';
+import { matchRecitation, matchContinuousRecitation, normalizeRecitationWord, recitationWords, type RecitationIssue } from '@/lib/live-recitation';
 
 type SpeechResult = { isFinal: boolean; length?: number; [index: number]: { transcript: string; confidence?: number } };
 type SpeechEvent = { results: { length: number; [index: number]: SpeechResult } };
@@ -12,6 +12,7 @@ type Recognition = {
   onerror: ((event: { error: string }) => void) | null;
   onend: (() => void) | null;
   start(): void;
+  stop?(): void;
   abort(): void;
 };
 type RecognitionConstructor = new () => Recognition;
@@ -25,7 +26,7 @@ function speechConstructor() {
   return browser.SpeechRecognition ?? browser.webkitSpeechRecognition;
 }
 
-export function useLiveRecitation(text: string) {
+export function useLiveRecitation(text: string, options: { continuousFeedback?: boolean } = {}) {
   const words = useMemo(() => recitationWords(text), [text]);
   const [revealed, setRevealed] = useState<boolean[]>(() => words.map(() => false));
   const [interimIndices, setInterimIndices] = useState<number[]>([]);
@@ -38,8 +39,27 @@ export function useLiveRecitation(text: string) {
   const recognition = useRef<Recognition | null>(null);
   const committed = useRef<boolean[]>(words.map(() => false));
   const cursor = useRef(0);
+  const [issues, setIssues] = useState<RecitationIssue[]>([]);
+  const issuesRef = useRef<RecitationIssue[]>([]);
+  type Summary = { matchedCount: number; attemptedCount: number; issues: RecitationIssue[] };
+  const [finishing, setFinishing] = useState(false);
+  const pendingFinish = useRef<{ resolve: (value: Summary | null) => void; timer: number } | null>(null);
+  const snapshot = (): Summary => {
+    const matchedCount = committed.current.reduce((n, visible, i) => n + (visible && normalizeRecitationWord(words[i]) ? 1 : 0), 0);
+    return { matchedCount, attemptedCount: matchedCount + issuesRef.current.length, issues: [...issuesRef.current] };
+  };
+  const settleFinish = (keep: boolean) => {
+    const pending = pendingFinish.current;
+    if (!pending) return;
+    pendingFinish.current = null;
+    window.clearTimeout(pending.timer);
+    setFinishing(false);
+    pending.resolve(keep ? snapshot() : null);
+  };
+  const clearIssues = () => { issuesRef.current = []; setIssues([]); };
 
   const stop = () => {
+    settleFinish(false);
     const active = recognition.current;
     recognition.current = null; // Late callbacks cannot restore old text/mic state.
     if (active) {
@@ -54,6 +74,7 @@ export function useLiveRecitation(text: string) {
 
   useEffect(() => {
     setSupported(Boolean(window.isSecureContext && speechConstructor()));
+    clearIssues();
     setListening(false);
     committed.current = words.map(() => false);
     cursor.current = 0;
@@ -64,6 +85,9 @@ export function useLiveRecitation(text: string) {
     setMismatchIndex(null);
     setError('');
     return () => {
+      const pending = pendingFinish.current;
+      pendingFinish.current = null;
+      if (pending) { window.clearTimeout(pending.timer); pending.resolve(null); }
       const active = recognition.current;
       recognition.current = null;
       if (active) {
@@ -89,6 +113,7 @@ export function useLiveRecitation(text: string) {
     const active = new Constructor();
     const baseMask = [...committed.current];
     const baseCursor = cursor.current;
+    const baseIssues = [...issuesRef.current];
     active.lang = 'ar-SA';
     active.continuous = true;
     active.interimResults = true;
@@ -129,22 +154,29 @@ export function useLiveRecitation(text: string) {
         stop();
         return;
       }
-      const aligned = matchRecitation(words, final, baseCursor);
+      const continuous = options.continuousFeedback ? matchContinuousRecitation(words, final, baseCursor) : null;
+      const aligned = continuous ?? matchRecitation(words, final, baseCursor);
+      if (continuous) {
+        issuesRef.current = [...baseIssues, ...continuous.issues];
+        setIssues(issuesRef.current);
+      }
       const finalSet = new Set(aligned.indices);
       committed.current = baseMask.map((visible, i) => visible || finalSet.has(i));
       cursor.current = aligned.cursor;
       setPosition(aligned.cursor);
       setRevealed([...committed.current]);
-      setMismatchIndex(aligned.mismatchIndex);
-      if (aligned.mismatchIndex !== null) {
+      setMismatchIndex(options.continuousFeedback ? null : aligned.mismatchIndex);
+      if (aligned.mismatchIndex !== null && !options.continuousFeedback) {
         setHeardText(final.trim().slice(-500));
         stop();
         return;
       }
-      const provisional = matchRecitation(words, `${final} ${interim}`, baseCursor);
+      const provisional = options.continuousFeedback
+        ? matchContinuousRecitation(words, `${final} ${interim}`, baseCursor)
+        : matchRecitation(words, `${final} ${interim}`, baseCursor);
       setInterimIndices(provisional.indices.filter((i) => !committed.current[i]));
       setHeardText(`${final} ${interim}`.trim().slice(-500));
-      if (aligned.cursor >= words.length) stop();
+      if (aligned.cursor >= words.length) { settleFinish(true); stop(); }
     };
     active.onerror = ({ error: code }) => {
       if (recognition.current !== active) return;
@@ -161,6 +193,7 @@ export function useLiveRecitation(text: string) {
     };
     active.onend = () => {
       if (recognition.current !== active) return;
+      settleFinish(true);
       recognition.current = null;
       setListening(false);
       setInterimIndices([]);
@@ -176,6 +209,7 @@ export function useLiveRecitation(text: string) {
 
   const reset = () => {
     stop();
+    clearIssues();
     setMismatchIndex(null);
     cursor.current = 0;
     setPosition(0);
@@ -184,8 +218,22 @@ export function useLiveRecitation(text: string) {
     setHeardText('');
     setError('');
   };
+  // Unlike abort(), native stop() requests the final speech result before
+  // ending capture. Bound the wait; navigation/reset cancels the pending review.
+  const finish = async (): Promise<Summary | null> => {
+    if (pendingFinish.current) return null;
+    const active = recognition.current;
+    if (!active?.stop) { const result = snapshot(); stop(); return result; }
+    setFinishing(true);
+    return new Promise(resolve => {
+      const timer = window.setTimeout(() => { settleFinish(true); stop(); }, 2000);
+      pendingFinish.current = { resolve, timer };
+      try { active.stop!(); } catch { settleFinish(false); stop(); setError('تعذّر إنهاء التقاط الصوت. يمكنك إعادة فتح مراجعة الكلمات المثبتة.'); }
+    });
+  };
   const revealAll = () => {
     stop();
+    clearIssues();
     setMismatchIndex(null);
     cursor.current = words.length;
     setPosition(words.length);
@@ -197,6 +245,7 @@ export function useLiveRecitation(text: string) {
   const seek = (index: number) => {
     if (!Number.isSafeInteger(index) || index < 0 || index > words.length) return;
     stop();
+    clearIssues();
     cursor.current = index;
     setPosition(index);
     committed.current = words.map(() => false);
@@ -206,5 +255,7 @@ export function useLiveRecitation(text: string) {
     setError('');
   };
 
-  return { words, revealed, interimIndices, listening, supported, error, heardText, mismatchIndex, cursor: position, start, stop, reset, revealAll, seek };
+  const matchedCount = revealed.reduce((count, visible, i) => count + (visible && normalizeRecitationWord(words[i]) ? 1 : 0), 0);
+  return { words, revealed, interimIndices, listening, supported, error, heardText, mismatchIndex, cursor: position, start, stop, reset, revealAll, seek,
+    issues, matchedCount, attemptedCount: matchedCount + issues.length, finish, finishing };
 }

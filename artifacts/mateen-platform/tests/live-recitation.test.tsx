@@ -3,8 +3,9 @@ import { after, afterEach, beforeEach, test } from 'node:test';
 import { JSDOM } from 'jsdom';
 import { act } from 'react';
 import { useLiveRecitation } from '../src/hooks/use-live-recitation';
-import { matchRecitation, recitationWords } from '../src/lib/live-recitation';
+import { matchRecitation, matchContinuousRecitation, recitationWords } from '../src/lib/live-recitation';
 import { buildRecitationBook } from '../src/lib/recitation-book';
+import { useRecitationHistory, useArabicSpeech } from '../src/components/mateen/recitation-history';
 import nawawi from '../../api-server/src/data/nawawi.json';
 
 const dom = new JSDOM('<html><body></body></html>', { url: 'https://test.invalid' });
@@ -24,6 +25,7 @@ class FakeRecognition {
   aborted = false;
   constructor() { FakeRecognition.latest = this; }
   start() {}
+  stop?: () => void;
   abort() { this.aborted = true; }
   emit(text: string, final: boolean) {
     this.onresult?.({ results: [{ isFinal: final, 0: { transcript: text } }] });
@@ -39,6 +41,12 @@ test('Arabic whitespace variations do not become substitutions, without forgivin
   assert.equal(matchRecitation(recitationWords(reference), 'الأعمال بالنيات لكل امرئ', 3).mismatchIndex, 3);
 });
 function Harness() { state = useLiveRecitation(reference); return null; }
+function ContinuousHarness() { state = useLiveRecitation(reference, { continuousFeedback: true }); return null; }
+let historyState: ReturnType<typeof useRecitationHistory>;
+function HistoryHarness({ user }: { user: string }) { historyState = useRecitationHistory(user); return null; }
+let speechState: ReturnType<typeof useArabicSpeech>;
+const speechOrder: string[] = [];
+function SpeechHarness() { speechState = useArabicSpeech(() => speechOrder.push('microphone-stopped')); return null; }
 let container: HTMLDivElement;
 let root: ReturnType<typeof createRoot>;
 const originalFetch = globalThis.fetch;
@@ -56,6 +64,111 @@ afterEach(async () => {
   globalThis.fetch = originalFetch;
 });
 after(() => dom.window.close());
+
+test('finishing requests the final native result, while reset cancels an unfinished review', async () => {
+  await act(async () => root.render(<ContinuousHarness />));
+  await act(async () => state.start());
+  const recognizer = FakeRecognition.latest;
+  recognizer.stop = () => { recognizer.emit('إنما الأقوال بالنيات', true); recognizer.onend?.(); };
+  let summary: Awaited<ReturnType<typeof state.finish>>;
+  await act(async () => { summary = await state.finish(); });
+  assert.equal(summary!.matchedCount, 2);
+  assert.equal(summary!.attemptedCount, 3);
+  assert.equal(state.finishing, false);
+  await act(async () => state.start());
+  FakeRecognition.latest.stop = () => {};
+  let pending: ReturnType<typeof state.finish>;
+  await act(async () => { pending = state.finish(); });
+  await act(async () => state.reset());
+  assert.equal(await pending!, null);
+  assert.equal(state.issues.length, 0);
+});
+
+test('Arabic playback chooses the expected text and stops capture before speaking', async () => {
+  speechOrder.length = 0;
+  let utterance: any;
+  Object.assign(globalThis, { SpeechSynthesisUtterance: class { constructor(public text: string) {} } });
+  Object.assign(window, { speechSynthesis: {
+    getVoices: () => [{ lang: 'ar-SA', localService: true, name: 'Synthetic Arabic test voice' }],
+    cancel: () => speechOrder.push('cancel-playback'),
+    speak: (u: any) => { utterance = u; speechOrder.push('speak'); },
+    addEventListener() {}, removeEventListener() {},
+  } });
+  try {
+    await act(async () => root.render(<SpeechHarness />));
+    assert.equal(speechState.available, true);
+    await act(async () => speechState.speak('المؤمنين'));
+    assert.deepEqual(speechOrder, ['microphone-stopped', 'cancel-playback', 'speak']);
+    assert.equal(utterance.text, 'المؤمنين');
+    assert.equal(utterance.lang, 'ar-SA');
+    await act(async () => utterance.onerror({ error: 'synthesis-failed' }));
+    assert.match(speechState.error, /تعذّر/);
+    await act(async () => root.render(<Harness />));
+  } finally { delete (window as any).speechSynthesis; delete (globalThis as any).SpeechSynthesisUtterance; }
+});
+
+test('device history survives reload, isolates accounts, rejects duplicate attempts and reports deletion failures', async () => {
+  dom.window.localStorage.clear();
+  await act(async () => root.render(<HistoryHarness user="synthetic-a" />));
+  const entry = { attemptId: 'attempt-1', matched: 2, attempted: 3,
+    issues: [{ index: 1, expected: 'الأعمال', heard: 'الأقوال', kind: 'substitution' as const }] };
+  await act(async () => { assert.equal(historyState.save(entry).ok, true); });
+  assert.equal(historyState.entries.length, 1);
+  await act(async () => { historyState.save(entry); });
+  assert.equal(historyState.entries.length, 1);
+  assert.equal(historyState.countsExcluding('attempt-1').size, 0);
+  assert.equal(historyState.countsExcluding().get('الاعمال'), 1);
+  await act(async () => { historyState.save({ ...entry, matched: 3, attempted: 4 }); });
+  assert.equal(historyState.entries.length, 1);
+  assert.equal(historyState.entries[0].matched, 3);
+  await act(async () => root.render(<HistoryHarness user="synthetic-b" />));
+  assert.equal(historyState.entries.length, 0);
+  await act(async () => root.render(<HistoryHarness user="synthetic-a" />));
+  assert.equal(historyState.entries.length, 1);
+  const remove = dom.window.Storage.prototype.removeItem;
+  try {
+    dom.window.Storage.prototype.removeItem = () => { throw new Error('blocked'); };
+    await act(async () => { assert.equal(historyState.clear().ok, false); });
+    assert.equal(historyState.entries.length, 1);
+  } finally { dom.window.Storage.prototype.removeItem = remove; }
+  await act(async () => { assert.equal(historyState.clear().ok, true); });
+  assert.equal(historyState.entries.length, 0);
+});
+
+test('ibn spelling and continuous differences do not lose the following phrase', () => {
+  assert.equal(matchRecitation(recitationWords('عمر بن الخطاب'), 'عمر ابن الخطاب').mismatchIndex, null);
+  const replaced = matchContinuousRecitation(recitationWords(reference), 'إنما الأقوال بالنيات وإنما');
+  assert.deepEqual(replaced.indices, [0, 2, 3]);
+  assert.deepEqual(replaced.issues, [{ index: 1, expected: 'الأعمال', heard: 'الأقوال', kind: 'substitution' }]);
+  const omitted = matchContinuousRecitation(recitationWords(reference), 'إنما بالنيات وإنما');
+  assert.equal(omitted.issues[0].kind, 'omission');
+  assert.deepEqual(omitted.indices, [0, 2, 3]);
+  const added = matchContinuousRecitation(recitationWords(reference), 'إنما حقا الأعمال بالنيات');
+  assert.equal(added.issues[0].kind, 'extra');
+  assert.deepEqual(added.indices, [0, 1, 2]);
+  assert.deepEqual(matchContinuousRecitation(recitationWords(reference), 'إنما الأعمال').issues, []);
+});
+
+test('continuous feedback does not abort or duplicate issues in cumulative events', async () => {
+  await act(async () => root.render(<ContinuousHarness />));
+  await act(async () => state.start());
+  const recognizer = FakeRecognition.latest;
+  await act(async () => recognizer.emit('إنما الأقوال بالنيات', true));
+  assert.equal(state.listening, true);
+  assert.equal(recognizer.aborted, false);
+  assert.equal(state.issues.length, 1);
+  assert.equal(state.matchedCount, 2);
+  assert.equal(state.attemptedCount, 3);
+  await act(async () => recognizer.emit('إنما الأقوال بالنيات وإنما', true));
+  assert.equal(state.issues.length, 1);
+  assert.equal(state.matchedCount, 3);
+  assert.equal(state.attemptedCount, 4);
+  await act(async () => state.stop());
+  assert.equal(state.issues.length, 1);
+  await act(async () => state.reset());
+  assert.equal(state.issues.length, 0);
+  assert.equal(state.attemptedCount, 0);
+});
 
 test('normalizes Arabic but never reveals skipped or invented source words', () => {
   const words = recitationWords('إِنَّمَا الأعمالُ بالنيات وإنما لكل امرئ');
