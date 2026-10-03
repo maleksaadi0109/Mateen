@@ -21,17 +21,20 @@ export function matchRecitation(
   start = 0,
 ): { indices: number[]; cursor: number; mismatchIndex: number | null } {
   const target = words.map(normalizeRecitationWord);
-  const heard = recitationWords(transcript.slice(0, 30_000)).map(normalizeRecitationWord).filter(Boolean);
+  const heard = recitationWords(transcript.slice(0, 250_000)).map(normalizeRecitationWord).filter(Boolean);
   const indices: number[] = [];
   let cursor = Math.max(0, start);
   for (let i = 0; i < heard.length && cursor < target.length; i++) {
     // Punctuation-only source tokens do not need to be spoken.
-    while (cursor < target.length && !target[cursor]) cursor++;
+    while (cursor < target.length && !target[cursor]) indices.push(cursor++);
     if (cursor >= target.length) break;
     // Never jump over a word, even when a later phrase is recognizable.
     if (target[cursor] !== heard[i]) return {indices, cursor, mismatchIndex:cursor};
     indices.push(cursor);
     cursor++;
   }
+  // Printed quotation marks and standalone punctuation are displayed with the
+  // matched passage; they must not leave a completed page waiting for speech.
+  while (cursor < target.length && !target[cursor]) indices.push(cursor++);
   return { indices, cursor, mismatchIndex:null };
 }

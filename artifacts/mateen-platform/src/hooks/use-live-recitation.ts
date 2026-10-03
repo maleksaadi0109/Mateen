@@ -34,6 +34,7 @@ export function useLiveRecitation(text: string) {
   const [error, setError] = useState('');
   const [heardText, setHeardText] = useState('');
   const [mismatchIndex, setMismatchIndex] = useState<number | null>(null);
+  const [position, setPosition] = useState(0);
   const recognition = useRef<Recognition | null>(null);
   const committed = useRef<boolean[]>(words.map(() => false));
   const cursor = useRef(0);
@@ -56,6 +57,7 @@ export function useLiveRecitation(text: string) {
     setListening(false);
     committed.current = words.map(() => false);
     cursor.current = 0;
+    setPosition(0);
     setRevealed(committed.current);
     setInterimIndices([]);
     setHeardText('');
@@ -101,14 +103,23 @@ export function useLiveRecitation(text: string) {
       let interim = '';
       for (let i = 0; i < event.results.length; i++) {
         const result = event.results[i];
-        const value = typeof result[0]?.transcript === 'string' ? result[0].transcript.slice(0,30_000) : '';
+        const value = typeof result[0]?.transcript === 'string' ? result[0].transcript.slice(0,250_001) : '';
         if (result.isFinal) final += ` ${value}`;
         else interim += ` ${value}`;
+        if (final.length + interim.length > 250_000) break;
+      }
+      // Never silently truncate a long continuous book session and then appear
+      // to stop making progress. Resume explicitly from the committed position.
+      if (final.length + interim.length > 250_000) {
+        setError('بلغت جلسة التعرّف حدّها. استكمل التسميع من موضعك لبدء جلسة جديدة.');
+        stop();
+        return;
       }
       const aligned = matchRecitation(words, final, baseCursor);
       const finalSet = new Set(aligned.indices);
       committed.current = baseMask.map((visible, i) => visible || finalSet.has(i));
       cursor.current = aligned.cursor;
+      setPosition(aligned.cursor);
       setRevealed([...committed.current]);
       setMismatchIndex(aligned.mismatchIndex);
       if (aligned.mismatchIndex !== null) {
@@ -153,6 +164,7 @@ export function useLiveRecitation(text: string) {
     stop();
     setMismatchIndex(null);
     cursor.current = 0;
+    setPosition(0);
     committed.current = words.map(() => false);
     setRevealed([...committed.current]);
     setHeardText('');
@@ -162,10 +174,23 @@ export function useLiveRecitation(text: string) {
     stop();
     setMismatchIndex(null);
     cursor.current = words.length;
+    setPosition(words.length);
     committed.current = words.map(() => true);
     setRevealed([...committed.current]);
     setError('');
   };
 
-  return { words, revealed, interimIndices, listening, supported, error, heardText, mismatchIndex, start, stop, reset, revealAll };
+  const seek = (index: number) => {
+    if (!Number.isSafeInteger(index) || index < 0 || index > words.length) return;
+    stop();
+    cursor.current = index;
+    setPosition(index);
+    committed.current = words.map(() => false);
+    setRevealed([...committed.current]);
+    setMismatchIndex(null);
+    setHeardText('');
+    setError('');
+  };
+
+  return { words, revealed, interimIndices, listening, supported, error, heardText, mismatchIndex, cursor: position, start, stop, reset, revealAll, seek };
 }

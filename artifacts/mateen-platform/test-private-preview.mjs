@@ -44,6 +44,22 @@ try {
     bundle: true, platform: "node", format: "esm", outfile: liveFile, jsx: "automatic",
     external: ["react", "react/*", "react-dom/*", "jsdom"],
   });
+  const bookTextFile = join(temp, "recitation-book-view.test.mjs");
+  await build({
+    entryPoints: [join(root, "tests/recitation-book-view.test.tsx")],
+    bundle: true, platform: "node", format: "esm", outfile: bookTextFile, jsx: "automatic",
+    external: ["react", "react/*", "react-dom", "react-dom/*", "lucide-react", "@radix-ui/react-dialog"],
+  });
+  const studyProgressFile = join(temp, "study-progress.test.mjs");
+  await build({
+    entryPoints: [join(root, "tests/study-progress.test.tsx")],
+    bundle: true, platform: "node", format: "esm", outfile: studyProgressFile, jsx: "automatic",
+    external: ["react", "react/*", "react-dom", "react-dom/*", "lucide-react", "@radix-ui/react-dialog", "@tanstack/react-query", "jsdom", "wouter"],
+    plugins: [{name:"study-progress-boundaries",setup(builder) {
+      builder.onResolve({filter:/^@workspace\/api-client-react$/},() => ({path:join(root,"tests/doubles/study-progress-api.ts")}));
+      builder.onResolve({filter:/^@\/components\/mateen\/bits$/},() => ({path:join(root,"tests/doubles/study-bits.tsx")}));
+    }}],
+  });
   const scanFile = join(temp, "scanned-pages.test.mjs");
   await build({
     entryPoints: [join(root, "tests/scanned-pages.test.tsx")],
@@ -67,7 +83,7 @@ try {
       }));
     }}],
   });
-  const child = spawn(process.execPath, ["--test", "--test-timeout=30000", outfile, answerFile, chatFile, liveFile, scanFile, bookFile, bookFlowFile], {
+  const child = spawn(process.execPath, ["--test", "--test-timeout=30000", outfile, answerFile, chatFile, liveFile, bookTextFile, studyProgressFile, scanFile, bookFile, bookFlowFile], {
     stdio: "inherit",
     // Never inherit provider, application database or Clerk credentials.
     env: { PATH: process.env.PATH, NODE_ENV: "test", HOME: temp },
