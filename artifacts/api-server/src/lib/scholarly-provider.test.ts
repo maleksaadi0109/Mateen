@@ -127,7 +127,8 @@ it("routes NVIDIA requests to the fixed NVIDIA endpoint with its own key and val
       assert.equal(body.model, NVIDIA_SCHOLARLY_MODEL);
       assert.equal(body.stream, false);
       assert.equal(body.max_tokens, 5000);
-      assert.equal(body.reasoning_budget, 0);
+      assert.deepEqual(body.chat_template_kwargs, { enable_thinking: false });
+      assert.equal(body.reasoning_budget, undefined);
       assert.equal(body.max_completion_tokens, undefined);
       assert.match(body.messages[0].content, /JSON object matching this schema/);
       return new Response(JSON.stringify({
@@ -145,6 +146,40 @@ it("routes NVIDIA requests to the fixed NVIDIA endpoint with its own key and val
     );
   } finally {
     globalThis.fetch = originalFetch;
+    if (saved === undefined) delete process.env.NVIDIA_API_KEY;
+    else process.env.NVIDIA_API_KEY = saved;
+  }
+});
+
+it("language repair shares the original study deadline instead of starting another full wait", async () => {
+  const originalFetch = globalThis.fetch;
+  const originalTimeout = AbortSignal.timeout;
+  const saved = process.env.NVIDIA_API_KEY;
+  process.env.NVIDIA_API_KEY = "synthetic-nvidia-test-key";
+  const timers: AbortController[] = [];
+  let calls = 0;
+  try {
+    AbortSignal.timeout = (ms) => {
+      assert.equal(ms, 55_000);
+      const controller = new AbortController();
+      timers.push(controller);
+      return controller.signal;
+    };
+    globalThis.fetch = async (_url, options) => {
+      calls++;
+      assert.equal(options?.signal?.aborted, false);
+      timers[0].abort(new DOMException("deadline", "TimeoutError"));
+      assert.equal(options?.signal?.aborted, true);
+      return new Response(JSON.stringify({
+        choices: [{ message: { content: JSON.stringify({ answer: "شرح يحتوي English", needsTeacher: false }) } }],
+      }));
+    };
+    await assert.rejects(generateStudyAnswer("اشرح النية", null, NVIDIA_SCHOLARLY_MODEL), ScholarlyProviderUnavailableError);
+    assert.equal(calls, 1);
+    assert.equal(timers.length, 2);
+  } finally {
+    globalThis.fetch = originalFetch;
+    AbortSignal.timeout = originalTimeout;
     if (saved === undefined) delete process.env.NVIDIA_API_KEY;
     else process.env.NVIDIA_API_KEY = saved;
   }

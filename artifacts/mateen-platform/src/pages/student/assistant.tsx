@@ -1,15 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { getGetMateenAssistantQuestionsQueryKey, getGetMateenAssistantReadinessQueryKey, getGetMateenConversationMessagesQueryKey, getGetMateenConversationStatusQueryKey, getGetMateenConversationsQueryKey, useAskMateenAssistant, useGetMateenAssistantQuestions, useGetMateenAssistantReadiness, useGetMateenConversationMessages, useGetMateenConversationStatus, useReportScholarlyIssue, useSendMateenFollowUp } from '@workspace/api-client-react';
+import { askMateenAssistant, sendMateenFollowUp, getGetMateenAssistantQuestionsQueryKey, getGetMateenAssistantReadinessQueryKey, getGetMateenConversationMessagesQueryKey, getGetMateenConversationStatusQueryKey, getGetMateenConversationsQueryKey, useAskMateenAssistant, useGetMateenAssistantQuestions, useGetMateenAssistantReadiness, useGetMateenConversationMessages, useGetMateenConversationStatus, useReportScholarlyIssue, useSendMateenFollowUp } from '@workspace/api-client-react';
 import type { AssistantQuestion } from '@workspace/api-client-react';
 import { Link } from 'wouter';
 import { Plus, SendHorizontal, ShieldAlert } from 'lucide-react';
 import { ErrorState, LoadingList, PageHeader } from '@/components/mateen/bits';
 import { ChatMessages } from '@/components/scholarly/ChatMessages';
-import { Field, NO_FATWA, StatusPill, btnGhost, btnPrimary, field, useFinitePoll } from '@/components/scholarly/shared';
+import { Field, NO_FATWA, StatusPill, btnGhost, btnPrimary, field } from '@/components/scholarly/shared';
 import { ReferralPanel } from '@/components/scholarly/ReferralPanel';
 import { fmtDate, usePageMeta } from '@/lib/mateen';
 import { useToast } from '@/hooks/use-toast';
+import { boundedChatRequest } from '@/lib/chat-request';
 
 const STUDY_BOOKS = [
   { id: 'nawawi', title: 'الأربعون النووية' },
@@ -45,8 +46,10 @@ export default function AssistantPage() {
   const ready = useGetMateenAssistantReadiness({ query: { queryKey: getGetMateenAssistantReadinessQueryKey() } });
   const poll = 8000;
   const hist = useGetMateenAssistantQuestions({ query: { queryKey: getGetMateenAssistantQuestionsQueryKey(), refetchInterval: poll } });
-  const ask = useAskMateenAssistant();
-  const follow = useSendMateenFollowUp();
+  const ask = useAskMateenAssistant({ mutation: { retry: false, mutationFn: ({ data }) =>
+    boundedChatRequest((signal) => askMateenAssistant(data, { signal })) } });
+  const follow = useSendMateenFollowUp({ mutation: { retry: false, mutationFn: ({ conversationId, data }) =>
+    boundedChatRequest((signal) => sendMateenFollowUp(conversationId, data, { signal })) } });
   const [sel, setSel] = useState<string | null>(null); // null = new conversation
   const [bookId, setBookId] = useState<StudyBookId | ''>('');
   const [drafts, setDrafts] = useState<Record<string, string>>({});
@@ -55,6 +58,14 @@ export default function AssistantPage() {
   const [issue, setIssue] = useState(false);
   const reqId = useRef<{ key: string; text: string; id: string }>({ key: '', text: '', id: crypto.randomUUID() });
   const pending = ask.isPending || follow.isPending;
+  const [slowPending, setSlowPending] = useState(false);
+  const [sendError, setSendError] = useState('');
+  useEffect(() => {
+    setSlowPending(false);
+    if (!pending) return;
+    const timer = window.setTimeout(() => setSlowPending(true), 15_000);
+    return () => window.clearTimeout(timer);
+  }, [pending]);
   const key = sel ?? 'new';
   const text = drafts[key] ?? '';
   const setText = (v: string) => setDrafts((d) => ({ ...d, [key]: v }));
@@ -91,7 +102,14 @@ export default function AssistantPage() {
     if (reqId.current.key !== k || reqId.current.text !== t) reqId.current = { key: k, text: t, id: crypto.randomUUID() };
     return reqId.current.id;
   };
-  const failToast = () => toast({ title: 'تعذّر الإرسال', description: 'نصك محفوظ في الحقل؛ أعد المحاولة.', variant: 'destructive' });
+  const failToast = (err?: unknown) => {
+    const timedOut = err instanceof Error && ['TimeoutError', 'AbortError'].includes(err.name);
+    const description = timedOut
+      ? 'تأخر اتصال المساعد وانتهت مهلة الانتظار. نصك محفوظ؛ راجع المحادثات المحفوظة قبل إعادة الإرسال، فقد يكون الطلب وصل للخادم.'
+      : 'تعذّر الحصول على الرد. نصك محفوظ في الحقل؛ يمكنك إعادة المحاولة.';
+    setSendError(description);
+    toast({ title: timedOut ? 'انتهت مهلة انتظار الرد' : 'تعذّر الإرسال', description, variant: 'destructive' });
+  };
   const clearDraft = (k: string) => {
     if (reqId.current.key === k) reqId.current = { key: '', text: '', id: crypto.randomUUID() };
     setDrafts((d) => { const n = { ...d }; delete n[k]; return n; });
@@ -100,18 +118,19 @@ export default function AssistantPage() {
   const send = () => {
     const t = text.trim();
     if (!t || pending || waiting || closed || (sel ? !status.data : !ready.data)) return;
+    setSendError('');
     if (!sel) {
       if (!bookId) return;
       ask.mutate({ data: { question: t, textId: bookId, textContext: null } }, {
         onSuccess: (a) => { clearDraft('new'); refresh(a.conversationId); setSel(a.conversationId); },
         onError: async (err) => {
           const qid = (err as { data?: { questionId?: string } } | null)?.data?.questionId;
-          const res = await hist.refetch();
-          const found = qid ? res.data?.find((q) => q.questionId === qid) : undefined;
+           const res = qid ? await boundedChatRequest(() => hist.refetch(), 5000).catch(() => null) : null;
+           const found = qid ? res?.data?.find((q) => q.questionId === qid) : undefined;
           if (found) {
             clearDraft('new'); refresh(found.conversationId); setSel(found.conversationId);
             toast({ title: 'حُفظ سؤالك', description: 'تعذّر على المساعد الجواب الآن. السؤال محفوظ في المحادثة، ولم يُرسل شيء مكرراً.' });
-          } else failToast();
+           } else failToast(err);
         },
       });
     } else {
@@ -120,11 +139,11 @@ export default function AssistantPage() {
         onSuccess: () => { clearDraft(cid); refresh(cid); },
         onError: async (err) => {
           const qid = (err as { data?: { questionId?: string } } | null)?.data?.questionId;
-          const res = await hist.refetch();
-          if (qid && res.data?.some(q => q.questionId === qid && q.conversationId === cid)) {
+           const res = qid ? await boundedChatRequest(() => hist.refetch(), 5000).catch(() => null) : null;
+           if (qid && res?.data?.some(q => q.questionId === qid && q.conversationId === cid)) {
             clearDraft(cid);
             toast({ title: 'حُفظت رسالتك', description: 'تعذّر على المساعد الجواب. يمكنك إحالة الحوار إلى معلم دون إعادة إرسال الرسالة.' });
-          } else failToast();
+           } else failToast(err);
           refresh(cid);
         },
       });
@@ -175,7 +194,8 @@ export default function AssistantPage() {
           <div className="min-h-[14rem] flex-1 space-y-3 md:max-h-[55vh] md:overflow-y-auto">
             {!sel ? <p className="py-10 text-center font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-chat-empty">{bookId === 'usul-thalatha' ? 'سيشرح المساعد سؤالك في سياق الأصول الثلاثة.' : bookId ? 'اكتب سؤالك عن الأربعين النووية لتبدأ المحادثة.' : 'اختر الكتاب أولاً، ثم اكتب سؤالك.'}</p>
               : msgs.isLoading ? <LoadingList rows={2} /> : msgs.isError ? <ErrorState onRetry={() => msgs.refetch()} /> : <ChatMessages messages={msgs.data ?? []} viewer="student" />}
-             {pending && <p className="font-ui text-sm text-muted-foreground" data-testid="text-pending">جارٍ المعالجة...</p>}
+              {pending && <p className="font-ui text-sm text-muted-foreground" role="status" data-testid="text-pending">{slowPending ? 'تأخر اتصال النموذج. الانتظار محدود؛ ستظهر الإجابة أو رسالة توضّح تعذّر الرد.' : 'المساعد يجهّز الرد...'}</p>}
+              {!pending && sendError && <p className="font-ui text-sm text-destructive" role="alert" data-testid="text-send-error">{sendError}</p>}
              {sel && status.isError && <ErrorState message="تعذّر التحقق من حالة المحادثة؛ لم تُرسل رسالة جديدة." onRetry={() => status.refetch()} />}
           </div>
 

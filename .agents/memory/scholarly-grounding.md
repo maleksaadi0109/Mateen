@@ -75,6 +75,12 @@ NVIDIA transport timeouts can be transient even when configuration is valid.
 
 **How to apply:** Distinguish missing configuration, transport failure and scientific suitability. Use bounded retries for diagnostic generation; do not switch providers, change credentials, or score scientific quality from a timeout.
 
+Student chat generation and language-repair retries must share one total waiting budget, with a separate browser deadline covering token acquisition as well as fetch.
+
+**Why:** A student saw only the processing indicator while a request lasted about 80 seconds and disconnected. Independent per-attempt timeouts can outlive the student's connection, and a fetch deadline alone cannot stop waiting for authentication.
+
+**How to apply:** Keep the full Arabic explanation requirement and selected provider. Budget retries within the same operation, leave time for persistence, retain unsent drafts on transport failure, and report uncertainty about delivery instead of automatically resending.
+
 Quality audits of generated explanations are diagnostic, not approval exercises or requests to replace generation with source excerpts.
 
 **Why:** The user explicitly separated content-quality review from the approval journey and asked to record false claims in the existing long-form explanations without granting automatic approval or substituting excerpts.

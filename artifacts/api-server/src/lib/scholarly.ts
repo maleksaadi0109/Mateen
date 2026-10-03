@@ -102,7 +102,11 @@ export async function generateStudyAnswer(
     });
   // Validate untrusted model text before persisting it. Do not silently delete
   // foreign words, which could change the meaning of an explanation.
+  // Both the initial answer and language repair share one deadline, leaving
+  // time to persist the result and respond before the browser/proxy disconnects.
+  const deadline = AbortSignal.timeout(55_000);
   for (let attempt = 0; attempt < 2; attempt++) {
+    if (deadline.aborted) throw new ScholarlyProviderUnavailableError("The study answer deadline expired");
     const result = await structuredCompletion(
       model,
       z.object({
@@ -113,7 +117,7 @@ export async function generateStudyAnswer(
         ? " Your previous response contained non-Arabic words. Generate the explanation again using exclusively Arabic words."
         : ""),
       userData,
-      { timeoutMs: 65_000, maxTokens: 4500 },
+      { timeoutMs: 55_000, maxTokens: 4500, signal: deadline },
     );
     if (result.needsTeacher) return null;
     if (result.answer === null) throw new ScholarlyProviderUnavailableError("The provider returned no answer without requesting a teacher");
@@ -181,7 +185,7 @@ async function structuredCompletion<T>(
   schema: z.ZodType<T>,
   system: string,
   user: string,
-  options: { timeoutMs: number; maxTokens: number } = { timeoutMs: 25_000, maxTokens: 5000 },
+  options: { timeoutMs: number; maxTokens: number; signal?: AbortSignal } = { timeoutMs: 25_000, maxTokens: 5000 },
 ): Promise<T> {
   if (!isScholarlyProviderConfigured(model)) throw new ScholarlyProviderUnavailableError();
   const nvidia = model === NVIDIA_SCHOLARLY_MODEL;
@@ -199,14 +203,16 @@ async function structuredCompletion<T>(
       body: JSON.stringify({
         model,
         ...(nvidia
-          ? { max_tokens: options.maxTokens, reasoning_budget: 0, temperature: 0, stream: false }
+          ? { max_tokens: options.maxTokens, chat_template_kwargs: { enable_thinking: false }, temperature: 0, stream: false }
           : { max_completion_tokens: options.maxTokens, response_format: { type: "json_object" } }),
         messages: [
           { role: "system", content: `${system} ${outputInstruction}` },
           { role: "user", content: user },
         ],
       }),
-      signal: AbortSignal.timeout(options.timeoutMs),
+      signal: options.signal
+        ? AbortSignal.any([options.signal, AbortSignal.timeout(options.timeoutMs)])
+        : AbortSignal.timeout(options.timeoutMs),
     });
   } catch {
     throw new ScholarlyProviderUnavailableError();
