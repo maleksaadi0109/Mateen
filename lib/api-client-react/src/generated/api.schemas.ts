@@ -23,6 +23,14 @@ export interface CatalogText {
   hadithCount: number;
 }
 
+export type HadithRecitationSelection = typeof HadithRecitationSelection[keyof typeof HadithRecitationSelection];
+
+
+export const HadithRecitationSelection = {
+  'primary-report': 'primary-report',
+  'selected-primary-report': 'selected-primary-report',
+} as const;
+
 export type HadithReviewStatus = typeof HadithReviewStatus[keyof typeof HadithReviewStatus];
 
 
@@ -40,6 +48,9 @@ export interface Hadith {
   text: string;
   sourceUrl: string;
   sourcePage: number;
+  /** Exact canonical primary-report text for recitation and assessment. */
+  recitationText: string;
+  recitationSelection: HadithRecitationSelection;
   sourceVersionId?: string;
   reviewStatus?: HadithReviewStatus;
   viewerPage?: number;
@@ -407,6 +418,157 @@ export interface Capabilities {
   examsReady: boolean;
   sourceStatus: string;
   notice: string;
+}
+
+export type RecitationPracticeInputTextId = typeof RecitationPracticeInputTextId[keyof typeof RecitationPracticeInputTextId];
+
+
+export const RecitationPracticeInputTextId = {
+  nawawi: 'nawawi',
+} as const;
+
+export interface RecitationPracticeInput {
+  textId: RecitationPracticeInputTextId;
+  /**
+     * @minimum 1
+     * @maximum 42
+     */
+  hadithNumber: number;
+  /**
+     * @maxLength 100
+     * @pattern ^audio/(webm|ogg|mp4|mpeg)(\s*;\s*codecs=(opus|vorbis|mp4a\.40\.2|mp3))?$
+     */
+  contentType: string;
+  /**
+     * @minimum 1
+     * @maximum 10485760
+     */
+  sizeBytes: number;
+  consent: true;
+}
+
+export interface RecitationUpload {
+  id: string;
+  /** @maxLength 4096 */
+  uploadUrl: string;
+  expiresAt: string;
+  maxDurationSeconds: 60;
+  retentionHours: 24;
+}
+
+export type PracticeRecitationTextId = typeof PracticeRecitationTextId[keyof typeof PracticeRecitationTextId];
+
+
+export const PracticeRecitationTextId = {
+  nawawi: 'nawawi',
+} as const;
+
+export type PracticeRecitationStatus = typeof PracticeRecitationStatus[keyof typeof PracticeRecitationStatus];
+
+
+export const PracticeRecitationStatus = {
+  uploading: 'uploading',
+  processing: 'processing',
+  completed: 'completed',
+  error: 'error',
+  deleted: 'deleted',
+} as const;
+
+export type RecitationPracticeResultAlignmentSpansItemKind = typeof RecitationPracticeResultAlignmentSpansItemKind[keyof typeof RecitationPracticeResultAlignmentSpansItemKind];
+
+
+export const RecitationPracticeResultAlignmentSpansItemKind = {
+  recognized_word_match_not_assessment: 'recognized_word_match_not_assessment',
+  possible_omission: 'possible_omission',
+  unconfirmed_passage_boundary: 'unconfirmed_passage_boundary',
+  possible_substitution: 'possible_substitution',
+  possible_extra_words: 'possible_extra_words',
+  recognizer_disagreement_not_reader_error: 'recognizer_disagreement_not_reader_error',
+} as const;
+
+export type RecitationPracticeResultAlignmentSpansItemOperation = typeof RecitationPracticeResultAlignmentSpansItemOperation[keyof typeof RecitationPracticeResultAlignmentSpansItemOperation];
+
+
+export const RecitationPracticeResultAlignmentSpansItemOperation = {
+  equal: 'equal',
+  replace: 'replace',
+  insert: 'insert',
+  delete: 'delete',
+} as const;
+
+export type RecitationPracticeResultAlignmentSpansItem = {
+  kind: RecitationPracticeResultAlignmentSpansItemKind;
+  operation: RecitationPracticeResultAlignmentSpansItemOperation;
+  /**
+     * @maxItems 1000
+     * @items.maxLength 120
+     */
+  referenceWords: string[];
+  /**
+     * @maxItems 1000
+     * @items.maxLength 120
+     */
+  recognizedWords: string[];
+  humanReviewRequired: boolean;
+  confirmedLearnerError: false;
+};
+
+export type RecitationPracticeResultAlignment = {
+  /** @maxItems 5000 */
+  spans: RecitationPracticeResultAlignmentSpansItem[];
+  approvedForAssessment: false;
+  /** @nullable */
+  studentScore: null;
+  /** @nullable */
+  wordErrorRate: null;
+};
+
+export interface RecitationPracticeResult {
+  /**
+     * @minLength 1
+     * @maxLength 20000
+     */
+  transcript: string;
+  /**
+     * @minLength 1
+     * @maxLength 20000
+     */
+  referenceText: string;
+  /**
+     * @minLength 1
+     * @maxLength 200
+     * @pattern ^[A-Za-z0-9._:/-]+$
+     */
+  model: string;
+  /**
+     * @minLength 1
+     * @maxLength 200
+     * @pattern ^[A-Za-z0-9._:/-]+$
+     */
+  modelRevision: string;
+  provisional: true;
+  assessment: false;
+  alignment: RecitationPracticeResultAlignment;
+}
+
+export interface PracticeRecitation {
+  id: string;
+  textId: PracticeRecitationTextId;
+  /**
+     * @minimum 1
+     * @maximum 42
+     */
+  hadithNumber: number;
+  status: PracticeRecitationStatus;
+  createdAt: string;
+  expiresAt: string;
+  /**
+     * @maxLength 300
+     * @nullable
+     */
+  error: string | null;
+  result: RecitationPracticeResult | null;
+  audioDeleted: boolean;
 }
 
 export interface HealthStatus {
@@ -864,6 +1026,381 @@ export interface ScholarlyEvaluationInput {
      * @maxLength 3000
      */
   note: string;
+}
+
+export type AssessmentPolicySourceStatus = typeof AssessmentPolicySourceStatus[keyof typeof AssessmentPolicySourceStatus];
+
+
+export const AssessmentPolicySourceStatus = {
+  retrieved_pending_review: 'retrieved_pending_review',
+  unavailable: 'unavailable',
+} as const;
+
+export interface AssessmentPolicy {
+  textId: 'nawawi';
+  level: 'التمهيدي';
+  questions: 30;
+  writtenQuestions: 15;
+  oralQuestions: 15;
+  activeMinutes: 30;
+  pointsPerQuestion: 1;
+  passScore: 25;
+  retryHours: 24;
+  sourceVersion: string;
+  canonicalHash: string;
+  audioRetentionDays: 30;
+  gradingMode: 'human_adjudicated_oral';
+  sourceStatus: AssessmentPolicySourceStatus;
+}
+
+export interface StartAssessmentInput {
+  sessionId: string;
+}
+
+export type AssessmentAttemptStatus = typeof AssessmentAttemptStatus[keyof typeof AssessmentAttemptStatus];
+
+
+export const AssessmentAttemptStatus = {
+  in_progress: 'in_progress',
+  paused_connection: 'paused_connection',
+  submitted: 'submitted',
+  technical_review: 'technical_review',
+  passed: 'passed',
+  failed: 'failed',
+} as const;
+
+export type AssessmentQuestionKind = typeof AssessmentQuestionKind[keyof typeof AssessmentQuestionKind];
+
+
+export const AssessmentQuestionKind = {
+  written: 'written',
+  oral: 'oral',
+} as const;
+
+export interface AssessmentQuestion {
+  id: string;
+  /**
+     * @minimum 1
+     * @maximum 30
+     */
+  position: number;
+  kind: AssessmentQuestionKind;
+  prompt: string;
+  /** @minimum 0 */
+  answerSequence: number;
+  audioReceived: boolean;
+  audioDeletionAvailable: boolean;
+  /**
+     * @maxLength 20000
+     * @nullable
+     */
+  writtenAnswer: string | null;
+}
+
+export type AssessmentFinalAnswerKind = typeof AssessmentFinalAnswerKind[keyof typeof AssessmentFinalAnswerKind];
+
+
+export const AssessmentFinalAnswerKind = {
+  written: 'written',
+  oral: 'oral',
+} as const;
+
+export type AssessmentFinalAnswerScore = typeof AssessmentFinalAnswerScore[keyof typeof AssessmentFinalAnswerScore];
+
+
+export const AssessmentFinalAnswerScore = {
+  NUMBER_0: 0,
+  NUMBER_1: 1,
+} as const;
+
+export type AssessmentFinalAnswerProvenance = typeof AssessmentFinalAnswerProvenance[keyof typeof AssessmentFinalAnswerProvenance];
+
+
+export const AssessmentFinalAnswerProvenance = {
+  written: 'written',
+  human_verified_oral: 'human_verified_oral',
+  unanswered: 'unanswered',
+} as const;
+
+export type AssessmentWordDifferenceKind = typeof AssessmentWordDifferenceKind[keyof typeof AssessmentWordDifferenceKind];
+
+
+export const AssessmentWordDifferenceKind = {
+  substitution: 'substitution',
+  omission: 'omission',
+  extra: 'extra',
+} as const;
+
+export interface AssessmentWordDifference {
+  kind: AssessmentWordDifferenceKind;
+  expectedWords: string[];
+  submittedWords: string[];
+}
+
+export interface AssessmentFinalAnswer {
+  questionId: string;
+  kind: AssessmentFinalAnswerKind;
+  expectedText: string;
+  /** @nullable */
+  submittedText: string | null;
+  score: AssessmentFinalAnswerScore;
+  provenance: AssessmentFinalAnswerProvenance;
+  differences: AssessmentWordDifference[];
+}
+
+export interface AssessmentResult {
+  /**
+     * @minimum 0
+     * @maximum 30
+     */
+  score: number;
+  passed: boolean;
+  completedAt: string;
+  /** @nullable */
+  reviewedAt: string | null;
+  /** @nullable */
+  retryAvailableAt: string | null;
+  /**
+     * @minimum 0
+     * @maximum 15
+     */
+  writtenScore: number;
+  /**
+     * @minimum 0
+     * @maximum 15
+     */
+  oralScore: number;
+  technicalReview: boolean;
+  sourceVersion: string;
+  canonicalHash: string;
+  retentionNotice: string;
+  policy: AssessmentPolicy;
+  /**
+     * @minItems 30
+     * @maxItems 30
+     */
+  answers: AssessmentFinalAnswer[];
+}
+
+export interface AssessmentAttempt {
+  id: string;
+  status: AssessmentAttemptStatus;
+  /** @maxItems 30 */
+  questions: AssessmentQuestion[];
+  /**
+     * @minimum 0
+     * @maximum 1800
+     */
+  activeSeconds: number;
+  /**
+     * @minimum 0
+     * @maximum 1800
+     */
+  remainingSeconds: number;
+  /**
+     * @minimum 0
+     * @maximum 29
+     */
+  currentQuestionPosition: number;
+  expiresAt: string;
+  result: AssessmentResult | null;
+  sourceVersion: string;
+  canonicalHash: string;
+  policy: AssessmentPolicy;
+}
+
+export interface AssessmentHeartbeatInput {
+  sessionId: string;
+  /**
+     * @minimum 0
+     * @maximum 29
+     */
+  currentQuestionPosition: number;
+}
+
+export interface AssessmentAnswerInput {
+  sessionId: string;
+  /** @minimum 1 */
+  sequence: number;
+  mutationId: string;
+  /** @maxLength 20000 */
+  writtenAnswer: string;
+}
+
+export interface AnswerAcknowledgement {
+  questionId: string;
+  /** @minimum 0 */
+  sequence: number;
+  acknowledged: boolean;
+  audioReceived: boolean;
+}
+
+export interface AssessmentAudioInput {
+  sessionId: string;
+  /** @minimum 1 */
+  sequence: number;
+  /**
+     * @maxLength 100
+     * @pattern ^audio/(webm|ogg|mp4|mpeg)(\s*;\s*codecs=(opus|vorbis|mp4a\.40\.2|mp3))?$
+     */
+  contentType: string;
+  /**
+     * @minimum 1
+     * @maximum 10485760
+     */
+  sizeBytes: number;
+  /**
+     * @maximum 60
+     * @exclusiveMinimum 0
+     */
+  durationSeconds: number;
+  consent: true;
+}
+
+export interface AssessmentAudioUpload {
+  uploadUrl: string;
+  expiresAt: string;
+  maxBytes: 10485760;
+  maxDurationSeconds: 60;
+  retentionDays: 30;
+}
+
+export interface ConfirmAssessmentAudioInput {
+  sessionId: string;
+  /** @minimum 1 */
+  sequence: number;
+}
+
+export interface SubmitAssessmentInput {
+  sessionId: string;
+  mutationId: string;
+}
+
+export interface StudentAssessmentSummary {
+  available: boolean;
+  completedAvailableContent: boolean;
+  /** @nullable */
+  nextLevel: null;
+  /** @nullable */
+  activeAttempt: string | null;
+  latestResult: AssessmentResult | null;
+  /** @nullable */
+  retryAvailableAt: string | null;
+  serverNow: string;
+  /** @minimum 0 */
+  dueReviewsCount: number;
+  /** @minimum 0 */
+  confirmedMistakesCount: number;
+  /** @nullable */
+  nextAssessmentAvailableAt: string | null;
+}
+
+export interface AssessmentAdjudicationInput {
+  questionId: string;
+  /**
+     * @maxLength 20000
+     * @nullable
+     */
+  transcript: string | null;
+  /**
+     * @maxLength 1000
+     * @nullable
+     */
+  technicalIssue: string | null;
+  attestCompleteRecording: true;
+  attestAudioReviewed: true;
+  attestReferenceAccurate: true;
+}
+
+export interface ReviewQueueItem {
+  attemptId: string;
+  studentId: string;
+  submittedAt: string;
+  /**
+     * @minimum 1
+     * @maximum 15
+     */
+  pendingAnswers: number;
+}
+
+export type AssessmentReviewAnswerStatus = typeof AssessmentReviewAnswerStatus[keyof typeof AssessmentReviewAnswerStatus];
+
+
+export const AssessmentReviewAnswerStatus = {
+  pending: 'pending',
+  scored: 'scored',
+  technical_review: 'technical_review',
+} as const;
+
+export interface AssessmentReviewAnswer {
+  questionId: string;
+  prompt: string;
+  referenceText: string;
+  audioAvailable: boolean;
+  status: AssessmentReviewAnswerStatus;
+}
+
+export interface AssessmentReviewDetail {
+  attemptId: string;
+  sourceVersion: string;
+  canonicalHash: string;
+  answers: AssessmentReviewAnswer[];
+}
+
+export interface ReviewerAccess {
+  authorized: boolean;
+}
+
+export type ScheduledReviewIntervalDays = typeof ScheduledReviewIntervalDays[keyof typeof ScheduledReviewIntervalDays];
+
+
+export const ScheduledReviewIntervalDays = {
+  NUMBER_1: 1,
+  NUMBER_3: 3,
+  NUMBER_7: 7,
+  NUMBER_14: 14,
+  NUMBER_30: 30,
+} as const;
+
+export type ScheduledReviewStatus = typeof ScheduledReviewStatus[keyof typeof ScheduledReviewStatus];
+
+
+export const ScheduledReviewStatus = {
+  due: 'due',
+  completed: 'completed',
+  technical_review: 'technical_review',
+} as const;
+
+export interface ScheduledReview {
+  id: string;
+  /**
+     * @minimum 1
+     * @maximum 42
+     */
+  hadithNumber: number;
+  prompt: string;
+  /** @nullable */
+  sourceMistake: string | null;
+  dueAt: string;
+  intervalDays: ScheduledReviewIntervalDays;
+  status: ScheduledReviewStatus;
+  /** @nullable */
+  nextDueAt: string | null;
+  /** @nullable */
+  correctness: boolean | null;
+  /** @nullable */
+  feedback: string | null;
+  /** @nullable */
+  referenceText: string | null;
+  /** @nullable */
+  mutationId: string | null;
+  differences: AssessmentWordDifference[];
+}
+
+export interface CompleteScheduledReviewInput {
+  /** @maxLength 20000 */
+  writtenAnswer: string;
+  mutationId: string;
 }
 
 export type GetMateenTeacherReferralsParams = {

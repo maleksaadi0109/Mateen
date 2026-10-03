@@ -7,9 +7,14 @@
     "dev": "export NODE_ENV=development && pnpm run build && pnpm run start",
     "build": "node ./build.mjs",
     "start": "node --enable-source-maps ./dist/index.mjs",
+    "test:recitations": "tsx --test src/lib/recitation.test.ts",
+    "test:assessments": "tsx --test src/lib/assessment-policy.test.ts src/lib/assessment-audio-freeze.test.ts",
+    "assessment-reviewer": "tsx scripts/assessment-reviewer.ts",
+    "assessment-retention-cleanup": "tsx scripts/assessment-retention-cleanup.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.tests.json --noEmit",
     "test:scholarly": "node ./test-scholarly.mjs && node ./test-scholarly-http.mjs",
-    "test:scholarly:http": "node ./test-scholarly-http.mjs"
+    "test:scholarly:http": "node ./test-scholarly-http.mjs",
+    "test:assessment:integration": "node ./test-assessment-audio-integration.mjs"
   },
   "dependencies": {
     "@clerk/express": "^2.1.74",
@@ -35,6 +40,7 @@
     "esbuild": "0.28.2",
     "esbuild-plugin-pino": "^2.3.3",
     "pino-pretty": "^13.1.3",
+    "tsx": "catalog:",
     "thread-stream": "3.1.0"
   }
 }

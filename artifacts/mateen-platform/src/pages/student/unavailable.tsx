@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 import { Link } from 'wouter';
 import { getGetCapabilitiesQueryKey, useGetCapabilities } from '@workspace/api-client-react';
-import { ClipboardCheck, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { ErrorState, LoadingList, Notice, PageHeader } from '@/components/mateen/bits';
 import { usePageMeta } from '@/lib/mateen';
 
@@ -31,15 +31,6 @@ export function AssistantPage() {
     <Unavailable eyebrow="المساعد العلمي" title="المساعد العلمي" icon={<Sparkles size={28} />} ready={(c) => c.assistantReady}
       lead="سيجيب من كتب الشروح المعتمدة مع ذكر المصدر والصفحة، ويحيل ما عداه إلى معلم معتمد.">
       لا يُعرض هنا أي جواب حتى تكتمل مراجعة المصادر. لا فتاوى ولا اجتهاد.
-    </Unavailable>
-  );
-}
-export function ExamsPage() {
-  usePageMeta('الاختبارات | مَتِين', 'الاختبارات غير مفعّلة بعد.');
-  return (
-    <Unavailable eyebrow="الاختبارات" title="الاختبارات" icon={<ClipboardCheck size={28} />} ready={(c) => c.examsReady}
-      lead="اختبارات المستوى الشفوية والتحريرية قيد الإعداد.">
-      لا اختبارات ولا درجات ولا تسميع صوتي الآن. سنُعلن عنها هنا حين تُفعَّل بعد التحقق منها.
     </Unavailable>
   );
 }

@@ -45,11 +45,13 @@ Arabic RTL platform for studying Islamic scholarly texts. The approved full prod
 
 The current foundation supports real sign-in, student/teacher onboarding, persistent reading position, study markers, bookmarks, text search, name editing, and teacher draft profiles. Only الأربعون النووية under الحديث / التمهيدي is open; other texts are locked with «قريباً».
 
-Voice grading, assessments and spaced-review scheduling remain separate implementation stages. Qualification uploads, independent source/teacher review, scholarly question intake, private history, consented referrals, text conversations, commentary administration and audit/moderation are implemented. Generated scholarly answers remain gated on a configured provider, authorized reviewed commentary and a passing model/corpus evaluation. See `docs/scholarly-assistant-operations.md`; do not advertise gated services as operational.
+Microphone recording, playback, private bounded uploads, and experimental Arabic speech recognition are available in the student reader. Experimental recognition never supplies verified grades. Direct introductory assessments use 30 immutable question snapshots, server-owned active time, deterministic written matching, and separately authorized human review of oral recordings. Confirmed mistakes create per-passage scheduled reviews; self-reported markers and bookmarks remain separate. Audio confirmation commits validated bytes to never-signed private objects, with owner deletion and retention cleanup. See `docs/assessment-operations.md`; a real reviewer identity must be explicitly designated, not inferred from a teacher profile.
+
+Qualification uploads, independent source/teacher review, scholarly question intake, private history, consented referrals, text conversations, commentary administration and audit/moderation are implemented. Generated scholarly answers remain gated on a configured provider, authorized reviewed commentary and a passing model/corpus evaluation. See `docs/scholarly-assistant-operations.md`; do not advertise gated services as operational.
 
 ## Gotchas
 
-- The imported Nawawi transcription is pending scientific review; modern edition reuse rights remain unclear. Preserve source attribution, separate printed page numbers from viewer indexes, and do not use unreviewed text for graded assessments.
+- The user confirms that a specialist reviewed the linked Nawawi original; the imported transcription still requires a verified match to it, and modern edition reuse rights remain unclear. Preserve source attribution, separate printed page numbers from viewer indexes, and do not use unverified transcriptions for graded assessments.
 - No production readiness claim until source review, remaining launch gates, and production authentication configuration are addressed.
 - Use the approved warm brand, official logo, and Arabic RTL layout. The public landing stays light; portals may use a dark theme.
 

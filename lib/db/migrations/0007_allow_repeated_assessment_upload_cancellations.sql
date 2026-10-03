@@ -1,0 +1,2 @@
+ALTER TABLE mateen_assessment_audio_upload_cleanup_outbox
+  DROP CONSTRAINT IF EXISTS mateen_assessment_audio_upload_cleanup_job;

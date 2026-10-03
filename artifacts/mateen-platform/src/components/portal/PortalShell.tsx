@@ -4,7 +4,7 @@ import { useClerk } from '@clerk/react';
 import {
   LayoutDashboard, Library, BookOpen, Bookmark, ClipboardCheck, ScrollText, MessageSquare, Sparkles, Settings, LogOut, Moon, Sun, FileText, ShieldCheck,
 } from 'lucide-react';
-import { getGetProfileQueryKey, getGetReviewAccessQueryKey, useGetProfile, useGetReviewAccess } from '@workspace/api-client-react';
+import { getGetProfileQueryKey, getGetReviewAccessQueryKey, getGetAssessmentReviewerAccessQueryKey, useGetProfile, useGetReviewAccess, useGetAssessmentReviewerAccess } from '@workspace/api-client-react';
 import { Logo, ErrorState, SkeletonBlock } from '@/components/mateen/bits';
 import { useAuthReady } from '@/lib/mateen';
 import { cn } from '@/lib/utils';
@@ -35,6 +35,7 @@ const teacherNav = [
 export function PortalGate({ role, children }: { role: 'student' | 'teacher'; children: ReactNode }) {
   const { isLoaded, isSignedIn, ready } = useAuthReady();
   const profile = useGetProfile({ query: { enabled: ready, queryKey: getGetProfileQueryKey() } });
+  const reviewer = useGetAssessmentReviewerAccess({ query: { enabled: ready, queryKey: getGetAssessmentReviewerAccessQueryKey() } });
   const [theme, setThemeState] = useState<Theme>(() => (localStorage.getItem('mateen-theme') === 'dark' ? 'dark' : 'light'));
   const setTheme = (t: Theme) => { localStorage.setItem('mateen-theme', t); setThemeState(t); };
 
@@ -55,7 +56,8 @@ export function PortalGate({ role, children }: { role: 'student' | 'teacher'; ch
   if (!profile.data.onboarded) return <Redirect to="/onboarding" />;
   if (profile.data.role !== role) return <Redirect to={profile.data.role === 'teacher' ? '/teacher' : '/student'} />;
 
-  const nav = role === 'student' ? studentNav : teacherNav;
+  const base0 = role === 'student' ? studentNav : teacherNav;
+  const nav = reviewer.data?.authorized ? [...base0, { href: '/admin/assessments', label: 'مراجعة الاختبارات', icon: ClipboardCheck }] : base0;
   return (
     <ThemeCtx.Provider value={{ theme, setTheme }}>
       <Shell nav={nav} name={profile.data.name} role={role}>{children}</Shell>

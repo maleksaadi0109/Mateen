@@ -17,7 +17,6 @@ import StudyPage from '@/pages/student/study';
 import ReviewsPage from '@/pages/student/reviews';
 import ScholarsPage from '@/pages/student/scholars';
 import MessagesPage from '@/pages/student/messages';
-import { ExamsPage } from '@/pages/student/unavailable';
 import AssistantPage from '@/pages/student/assistant';
 import ScholarlyAdminPage from '@/pages/admin/scholarly';
 import TeacherOverview from '@/components/scholarly/TeacherOverview';
@@ -28,6 +27,10 @@ import AdminTeachers from '@/pages/admin/teachers';
 import AdminSources from '@/pages/admin/sources';
 import AdminAudit from '@/pages/admin/audit';
 import HomeGate from '@/pages/home-gate';
+import { claimAssessmentStorage } from '@/lib/assessment';
+import ExamsPage from '@/pages/student/exams';
+import ExamAttemptPage from '@/pages/student/exam-attempt';
+import AdminAssessments from '@/pages/admin/assessments';
 
 const clerkPubKey = publishableKeyFromHost(window.location.hostname, import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
 const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
@@ -114,6 +117,7 @@ function ClerkQueryClientCacheInvalidator() {
   useEffect(() => {
     const unsub = addListener(({ user }) => {
       const id = user?.id ?? null;
+      claimAssessmentStorage(id);
       if (prev.current !== undefined && prev.current !== id) qc.clear();
       prev.current = id;
     });
@@ -156,6 +160,8 @@ function Routes() {
           <Route path="/student/messages"><Portal role="student"><MessagesPage /></Portal></Route>
           <Route path="/student/assistant"><Portal role="student"><AssistantPage /></Portal></Route>
           <Route path="/student/exams"><Portal role="student"><ExamsPage /></Portal></Route>
+          <Route path="/student/exams/:attemptId"><Portal role="student"><ExamAttemptPage /></Portal></Route>
+          <Route path="/admin/assessments" component={AdminAssessments} />
           <Route path="/student/settings"><Portal role="student"><SettingsPage /></Portal></Route>
           <Route path="/teacher"><Portal role="teacher"><TeacherHome /></Portal></Route>
           <Route path="/teacher/overview"><Portal role="teacher"><TeacherOverview /></Portal></Route>

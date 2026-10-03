@@ -4,6 +4,7 @@ import {
 } from '@workspace/api-client-react';
 import { Bookmark, BookOpen } from 'lucide-react';
 import { EmptyState, ErrorState, LoadingList, Notice, PageHeader } from '@/components/mateen/bits';
+import { ScheduledReviews } from '@/components/assessment/ScheduledReviews';
 import { num, usePageMeta } from '@/lib/mateen';
 
 export default function ReviewsPage() {
@@ -15,6 +16,9 @@ export default function ReviewsPage() {
 
   return (
     <div>
+      <h2 className="mb-3 font-display text-xl font-bold">مراجعات مجدولة من أخطاء مؤكدة</h2>
+      <div className="mb-10"><ScheduledReviews /></div>
+      <h2 className="mb-3 font-display text-xl font-bold">قائمة القراءة</h2>
       <PageHeader eyebrow="المراجعات" title="قائمة المراجعة">هذه قائمة قراءة بالمواضع التي وسمتها بعلامة. ليست جدولة متباعدة ولا قياساً لحفظك.</PageHeader>
       {prog.isLoading ? <LoadingList /> : prog.isError ? <ErrorState onRetry={() => prog.refetch()} /> : marks.length === 0 ? (
         <EmptyState icon={<Bookmark size={28} />} title="لا علامات بعد" action={<Link href="/student/study/nawawi" className="inline-flex items-center gap-2 rounded-full bg-secondary px-6 py-2.5 font-ui font-bold text-secondary-foreground"><BookOpen size={16} />افتح الدراسة</Link>}>

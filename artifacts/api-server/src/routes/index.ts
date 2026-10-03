@@ -4,13 +4,15 @@ import teacherReviewRouter from "./teacher-review";
 import sourceReviewRouter from "./source-review";
 import mateenRouter from "./mateen";
 import scholarlyRouter from "./scholarly";
+import recitationRouter from "./recitations";
+import assessmentRouter from "./assessments";
 
 const router: IRouter = Router();
-
 router.use(healthRouter);
 router.use(teacherReviewRouter);
 router.use(sourceReviewRouter);
 router.use(mateenRouter);
 router.use(scholarlyRouter);
-
+router.use(recitationRouter);
+router.use(assessmentRouter);
 export default router;

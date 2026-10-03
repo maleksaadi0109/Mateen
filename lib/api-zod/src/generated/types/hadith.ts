@@ -5,6 +5,7 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { HadithRecitationSelection } from './hadithRecitationSelection';
 import type { HadithReviewStatus } from './hadithReviewStatus';
 
 export interface Hadith {
@@ -14,6 +15,9 @@ export interface Hadith {
   text: string;
   sourceUrl: string;
   sourcePage: number;
+  /** Exact canonical primary-report text for recitation and assessment. */
+  recitationText: string;
+  recitationSelection: HadithRecitationSelection;
   sourceVersionId?: string;
   reviewStatus?: HadithReviewStatus;
   viewerPage?: number;

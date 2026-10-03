@@ -126,3 +126,17 @@ mtime_ms = 1790705350747
 storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/fd4ea8d5-88c8-4dee-98e0-66a49f8e78e8/d59ead1e-1e91-4db0-8605-20d6612fdbdf"
 storage_version_token = "1790705368574191"
 content_type = "application/pdf"
+
+[[outputs]]
+id = "B_4PIRHx3izA_CMDMo6dT"
+uri = "file://deliverables/recitation/recitation-review.html"
+type = "html"
+title = "مراجعة تجربة التسميع"
+description = "تقرير محلي للعينات الثلاث، يعرض فروق الكلمات والتفريغ الخام للمراجعة فقط، دون درجات أو ملفات صوتية."
+logical_id = "aec4bddd-90be-4966-b533-551ad48400cf"
+content_hash = "sha256:5d1ccca6a8ff22003b3ac886929216e6b3439d2ae3dec3fec37526a0e60ba033"
+size = 21063
+mtime_ms = 1790948371991
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/aec4bddd-90be-4966-b533-551ad48400cf/f671f32b-0916-4e86-ae6f-21a915f333f7"
+storage_version_token = "1790948482074924"
+content_type = "text/html"

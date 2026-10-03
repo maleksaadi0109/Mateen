@@ -1,4 +1,6 @@
 - [Recitation scope](recitation-scope.md) — Initial release detects word substitutions and omissions; pronunciation and diacritics assessment is deferred.
+- [Recitation practice authorization](recitation-practice-authorization.md) — Proceed with experimental practice without repeating documentation/transcript requests; do not fabricate verified grades.
+- [Recitation evaluation boundaries](recitation-evaluation-boundaries.md) — Labelled error samples inform experiments; ASR artifacts and differing passage lengths must not become learner mistakes.
 - [Learning and guidance boundaries](learning-guidance.md) — Level assessments allow direct attempts; teachers provide text-only guidance in the first release.
 - [Approved portal scope](portal-scope.md) — Approved portal scope; V1 opens only الأربعون النووية; teachers reached only via assistant referral.
 - [Registration pitch framing](registration-pitch.md) — Pitch the concept and proposed plan, not implementation; preserve separate disclosure obligations.
@@ -7,3 +9,8 @@
 - [Turath source boundaries](turath-source-boundaries.md) — Review matn versus editorial content; viewer and printed pages differ; public access is not reuse permission.
 - [Review trust boundaries](review-trust-boundaries.md) — Independent rights review and immutable scanned bytes; never self-grant reviewer authority for a demonstration.
 - [Scholarly grounding](scholarly-grounding.md) — A real citation does not validate generated claims; prefer verified quotations until claim-level grounding is evaluated.
+- [Python CPU package sources](python-cpu-package-sources.md) — Keep the CPU index scoped to PyTorch; broad automatic mappings can hide newer Transformers releases.
+- [Managed storage permissions](storage-permissions.md) — Private object operations work without bucket metadata permission; do not use bucket access as a file-service gate.
+- [Managed Python entrypoints](managed-python-entrypoints.md) — Preserve the managed interpreter path; resolving its symlink can lose workspace package discovery.
+- [Signed upload immutability](signed-upload-immutability.md) — Commit validated media to never-signed private objects; track temporary keys until reusable PUT links expire.
+- [OpenAPI YAML compatibility](openapi-yaml-compatibility.md) — Orval does not expand YAML merge keys; keep contract mappings explicit when combining APIs.

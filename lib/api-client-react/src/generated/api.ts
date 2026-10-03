@@ -20,10 +20,21 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AnswerAcknowledgement,
+  AssessmentAdjudicationInput,
+  AssessmentAnswerInput,
+  AssessmentAttempt,
+  AssessmentAudioInput,
+  AssessmentAudioUpload,
+  AssessmentHeartbeatInput,
+  AssessmentPolicy,
+  AssessmentReviewDetail,
   AssistantQuestion,
   AssistantQuestionInput,
   Capabilities,
   CatalogText,
+  CompleteScheduledReviewInput,
+  ConfirmAssessmentAudioInput,
   ConversationMessageInput,
   ConversationStatus,
   Dashboard,
@@ -31,12 +42,15 @@ import type {
   HealthStatus,
   ListScholarlyIssuesParams,
   NotificationState,
+  PracticeRecitation,
   Profile,
   ProfileInput,
   ProgressInput,
   QualificationDocument,
   QualificationUpload,
   QualificationUploadInput,
+  RecitationPracticeInput,
+  RecitationUpload,
   Referral,
   ReferralConsentInput,
   ReferralPreview,
@@ -44,7 +58,10 @@ import type {
   ReviewAccess,
   ReviewAudit,
   ReviewDecisionInput,
+  ReviewQueueItem,
+  ReviewerAccess,
   RevisionInput,
+  ScheduledReview,
   Scholar,
   ScholarlyAuditEvent,
   ScholarlyConfig,
@@ -66,8 +83,11 @@ import type {
   SourceDecisionInput,
   SourceVersion,
   SourceVersionInput,
+  StartAssessmentInput,
+  StudentAssessmentSummary,
   StudyProgress,
   StudyText,
+  SubmitAssessmentInput,
   TeacherApplication,
   TeacherInput,
   TeacherReferral,
@@ -4190,6 +4210,1708 @@ export function useHealthCheck<TData = Awaited<ReturnType<typeof healthCheck>>, 
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getHealthCheckQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetRecitationPracticeUrl = (id: string,) => {
+
+
+
+
+  return `/api/mateen/recitations/${id}`
+}
+
+/**
+ * @summary Get one authenticated student's own practice record
+ */
+export const getRecitationPractice = async (id: string, options?: Parameters<typeof customFetch>[1]): Promise<PracticeRecitation> => {
+
+  return customFetch<PracticeRecitation>(getGetRecitationPracticeUrl(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetRecitationPracticeQueryKey = (id: string,) => {
+    return [
+    `/api/mateen/recitations/${id}`
+    ] as const;
+    }
+
+
+export const getGetRecitationPracticeQueryOptions = <TData = Awaited<ReturnType<typeof getRecitationPractice>>, TError = ErrorType<void>>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getRecitationPractice>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRecitationPracticeQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRecitationPractice>>> = ({ signal }) => getRecitationPractice(id, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getRecitationPractice>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetRecitationPracticeQueryResult = NonNullable<Awaited<ReturnType<typeof getRecitationPractice>>>
+export type GetRecitationPracticeQueryError = ErrorType<void>
+
+
+/**
+ * @summary Get one authenticated student's own practice record
+ */
+
+export function useGetRecitationPractice<TData = Awaited<ReturnType<typeof getRecitationPractice>>, TError = ErrorType<void>>(
+ id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getRecitationPractice>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetRecitationPracticeQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getDeleteRecitationPracticeUrl = (id: string,) => {
+
+
+
+
+  return `/api/mateen/recitations/${id}`
+}
+
+/**
+ * @summary Cancel practice and delete its audio and derived result
+ */
+export const deleteRecitationPractice = async (id: string, options?: Parameters<typeof customFetch>[1]): Promise<void> => {
+
+  return customFetch<void>(getDeleteRecitationPracticeUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+
+export const getDeleteRecitationPracticeMutationKey = () => ['deleteRecitationPractice'] as const;
+
+export const getDeleteRecitationPracticeMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteRecitationPractice>>, TError,DeleteRecitationPracticeMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteRecitationPractice>>, TError,DeleteRecitationPracticeMutationVariables, TContext> => {
+
+const mutationKey = getDeleteRecitationPracticeMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteRecitationPractice>>, DeleteRecitationPracticeMutationVariables> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteRecitationPractice(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteRecitationPracticeMutationResult = NonNullable<Awaited<ReturnType<typeof deleteRecitationPractice>>>
+
+    export type DeleteRecitationPracticeMutationError = ErrorType<void>
+    export type DeleteRecitationPracticeMutationVariables = {id: string}
+
+    /**
+ * @summary Cancel practice and delete its audio and derived result
+ */
+export const useDeleteRecitationPractice = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteRecitationPractice>>, TError,DeleteRecitationPracticeMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteRecitationPractice>>,
+        TError,
+        DeleteRecitationPracticeMutationVariables,
+        TContext
+      > => {
+      return useMutation(getDeleteRecitationPracticeMutationOptions(options));
+    }
+
+export const getAnalyzeRecitationPracticeUrl = (id: string,) => {
+
+
+
+
+  return `/api/mateen/recitations/${id}/analyze`
+}
+
+/**
+ * @summary Finalize direct upload and request experimental local analysis
+ */
+export const analyzeRecitationPractice = async (id: string, options?: Parameters<typeof customFetch>[1]): Promise<PracticeRecitation> => {
+
+  return customFetch<PracticeRecitation>(getAnalyzeRecitationPracticeUrl(id),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+
+export const getAnalyzeRecitationPracticeMutationKey = () => ['analyzeRecitationPractice'] as const;
+
+export const getAnalyzeRecitationPracticeMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof analyzeRecitationPractice>>, TError,AnalyzeRecitationPracticeMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof analyzeRecitationPractice>>, TError,AnalyzeRecitationPracticeMutationVariables, TContext> => {
+
+const mutationKey = getAnalyzeRecitationPracticeMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof analyzeRecitationPractice>>, AnalyzeRecitationPracticeMutationVariables> = (props) => {
+          const {id} = props ?? {};
+
+          return  analyzeRecitationPractice(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AnalyzeRecitationPracticeMutationResult = NonNullable<Awaited<ReturnType<typeof analyzeRecitationPractice>>>
+
+    export type AnalyzeRecitationPracticeMutationError = ErrorType<void>
+    export type AnalyzeRecitationPracticeMutationVariables = {id: string}
+
+    /**
+ * @summary Finalize direct upload and request experimental local analysis
+ */
+export const useAnalyzeRecitationPractice = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof analyzeRecitationPractice>>, TError,AnalyzeRecitationPracticeMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof analyzeRecitationPractice>>,
+        TError,
+        AnalyzeRecitationPracticeMutationVariables,
+        TContext
+      > => {
+      return useMutation(getAnalyzeRecitationPracticeMutationOptions(options));
+    }
+
+export const getGetAssessmentPolicyUrl = () => {
+
+
+
+
+  return `/api/mateen/assessment/policy`
+}
+
+export const getAssessmentPolicy = async ( options?: Parameters<typeof customFetch>[1]): Promise<AssessmentPolicy> => {
+
+  return customFetch<AssessmentPolicy>(getGetAssessmentPolicyUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetAssessmentPolicyQueryKey = () => {
+    return [
+    `/api/mateen/assessment/policy`
+    ] as const;
+    }
+
+
+export const getGetAssessmentPolicyQueryOptions = <TData = Awaited<ReturnType<typeof getAssessmentPolicy>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessmentPolicy>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssessmentPolicyQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssessmentPolicy>>> = ({ signal }) => getAssessmentPolicy({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssessmentPolicy>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAssessmentPolicyQueryResult = NonNullable<Awaited<ReturnType<typeof getAssessmentPolicy>>>
+export type GetAssessmentPolicyQueryError = ErrorType<unknown>
+
+
+
+export function useGetAssessmentPolicy<TData = Awaited<ReturnType<typeof getAssessmentPolicy>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessmentPolicy>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetAssessmentPolicyQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getStartAssessmentUrl = () => {
+
+
+
+
+  return `/api/mateen/assessments`
+}
+
+export const startAssessment = async (startAssessmentInput: StartAssessmentInput, options?: Parameters<typeof customFetch>[1]): Promise<AssessmentAttempt> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<AssessmentAttempt>(getStartAssessmentUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(startAssessmentInput)
+  }
+);}
+
+
+
+
+
+export const getStartAssessmentMutationKey = () => ['startAssessment'] as const;
+
+export const getStartAssessmentMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startAssessment>>, TError,StartAssessmentMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof startAssessment>>, TError,StartAssessmentMutationVariables, TContext> => {
+
+const mutationKey = getStartAssessmentMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof startAssessment>>, StartAssessmentMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  startAssessment(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type StartAssessmentMutationResult = NonNullable<Awaited<ReturnType<typeof startAssessment>>>
+    export type StartAssessmentMutationBody = BodyType<StartAssessmentInput>
+    export type StartAssessmentMutationError = ErrorType<void>
+    export type StartAssessmentMutationVariables = {data: BodyType<StartAssessmentInput>}
+
+    export const useStartAssessment = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startAssessment>>, TError,StartAssessmentMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof startAssessment>>,
+        TError,
+        StartAssessmentMutationVariables,
+        TContext
+      > => {
+      return useMutation(getStartAssessmentMutationOptions(options));
+    }
+
+export const getGetAssessmentSummaryUrl = () => {
+
+
+
+
+  return `/api/mateen/assessments`
+}
+
+export const getAssessmentSummary = async ( options?: Parameters<typeof customFetch>[1]): Promise<StudentAssessmentSummary> => {
+
+  return customFetch<StudentAssessmentSummary>(getGetAssessmentSummaryUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetAssessmentSummaryQueryKey = () => {
+    return [
+    `/api/mateen/assessments`
+    ] as const;
+    }
+
+
+export const getGetAssessmentSummaryQueryOptions = <TData = Awaited<ReturnType<typeof getAssessmentSummary>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessmentSummary>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssessmentSummaryQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssessmentSummary>>> = ({ signal }) => getAssessmentSummary({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssessmentSummary>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAssessmentSummaryQueryResult = NonNullable<Awaited<ReturnType<typeof getAssessmentSummary>>>
+export type GetAssessmentSummaryQueryError = ErrorType<unknown>
+
+
+
+export function useGetAssessmentSummary<TData = Awaited<ReturnType<typeof getAssessmentSummary>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessmentSummary>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetAssessmentSummaryQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetAssessmentUrl = (attemptId: string,) => {
+
+
+
+
+  return `/api/mateen/assessments/${attemptId}`
+}
+
+export const getAssessment = async (attemptId: string, options?: Parameters<typeof customFetch>[1]): Promise<AssessmentAttempt> => {
+
+  return customFetch<AssessmentAttempt>(getGetAssessmentUrl(attemptId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetAssessmentQueryKey = (attemptId: string,) => {
+    return [
+    `/api/mateen/assessments/${attemptId}`
+    ] as const;
+    }
+
+
+export const getGetAssessmentQueryOptions = <TData = Awaited<ReturnType<typeof getAssessment>>, TError = ErrorType<void>>(attemptId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessment>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssessmentQueryKey(attemptId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssessment>>> = ({ signal }) => getAssessment(attemptId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: attemptId !== null && attemptId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssessment>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAssessmentQueryResult = NonNullable<Awaited<ReturnType<typeof getAssessment>>>
+export type GetAssessmentQueryError = ErrorType<void>
+
+
+
+export function useGetAssessment<TData = Awaited<ReturnType<typeof getAssessment>>, TError = ErrorType<void>>(
+ attemptId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessment>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetAssessmentQueryOptions(attemptId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getSubmitAssessmentUrl = (attemptId: string,) => {
+
+
+
+
+  return `/api/mateen/assessments/${attemptId}`
+}
+
+export const submitAssessment = async (attemptId: string,
+    submitAssessmentInput: SubmitAssessmentInput, options?: Parameters<typeof customFetch>[1]): Promise<AssessmentAttempt> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<AssessmentAttempt>(getSubmitAssessmentUrl(attemptId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(submitAssessmentInput)
+  }
+);}
+
+
+
+
+
+export const getSubmitAssessmentMutationKey = () => ['submitAssessment'] as const;
+
+export const getSubmitAssessmentMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitAssessment>>, TError,SubmitAssessmentMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof submitAssessment>>, TError,SubmitAssessmentMutationVariables, TContext> => {
+
+const mutationKey = getSubmitAssessmentMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof submitAssessment>>, SubmitAssessmentMutationVariables> = (props) => {
+          const {attemptId,data} = props ?? {};
+
+          return  submitAssessment(attemptId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SubmitAssessmentMutationResult = NonNullable<Awaited<ReturnType<typeof submitAssessment>>>
+    export type SubmitAssessmentMutationBody = BodyType<SubmitAssessmentInput>
+    export type SubmitAssessmentMutationError = ErrorType<unknown>
+    export type SubmitAssessmentMutationVariables = {attemptId: string;data: BodyType<SubmitAssessmentInput>}
+
+    export const useSubmitAssessment = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitAssessment>>, TError,SubmitAssessmentMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof submitAssessment>>,
+        TError,
+        SubmitAssessmentMutationVariables,
+        TContext
+      > => {
+      return useMutation(getSubmitAssessmentMutationOptions(options));
+    }
+
+export const getHeartbeatAssessmentUrl = (attemptId: string,) => {
+
+
+
+
+  return `/api/mateen/assessments/${attemptId}/heartbeat`
+}
+
+export const heartbeatAssessment = async (attemptId: string,
+    assessmentHeartbeatInput: AssessmentHeartbeatInput, options?: Parameters<typeof customFetch>[1]): Promise<AssessmentAttempt> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<AssessmentAttempt>(getHeartbeatAssessmentUrl(attemptId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(assessmentHeartbeatInput)
+  }
+);}
+
+
+
+
+
+export const getHeartbeatAssessmentMutationKey = () => ['heartbeatAssessment'] as const;
+
+export const getHeartbeatAssessmentMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof heartbeatAssessment>>, TError,HeartbeatAssessmentMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof heartbeatAssessment>>, TError,HeartbeatAssessmentMutationVariables, TContext> => {
+
+const mutationKey = getHeartbeatAssessmentMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof heartbeatAssessment>>, HeartbeatAssessmentMutationVariables> = (props) => {
+          const {attemptId,data} = props ?? {};
+
+          return  heartbeatAssessment(attemptId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type HeartbeatAssessmentMutationResult = NonNullable<Awaited<ReturnType<typeof heartbeatAssessment>>>
+    export type HeartbeatAssessmentMutationBody = BodyType<AssessmentHeartbeatInput>
+    export type HeartbeatAssessmentMutationError = ErrorType<unknown>
+    export type HeartbeatAssessmentMutationVariables = {attemptId: string;data: BodyType<AssessmentHeartbeatInput>}
+
+    export const useHeartbeatAssessment = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof heartbeatAssessment>>, TError,HeartbeatAssessmentMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof heartbeatAssessment>>,
+        TError,
+        HeartbeatAssessmentMutationVariables,
+        TContext
+      > => {
+      return useMutation(getHeartbeatAssessmentMutationOptions(options));
+    }
+
+export const getSaveAssessmentAnswerUrl = (attemptId: string,
+    questionId: string,) => {
+
+
+
+
+  return `/api/mateen/assessments/${attemptId}/answers/${questionId}`
+}
+
+export const saveAssessmentAnswer = async (attemptId: string,
+    questionId: string,
+    assessmentAnswerInput: AssessmentAnswerInput, options?: Parameters<typeof customFetch>[1]): Promise<AnswerAcknowledgement> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<AnswerAcknowledgement>(getSaveAssessmentAnswerUrl(attemptId,questionId),
+  {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(assessmentAnswerInput)
+  }
+);}
+
+
+
+
+
+export const getSaveAssessmentAnswerMutationKey = () => ['saveAssessmentAnswer'] as const;
+
+export const getSaveAssessmentAnswerMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveAssessmentAnswer>>, TError,SaveAssessmentAnswerMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof saveAssessmentAnswer>>, TError,SaveAssessmentAnswerMutationVariables, TContext> => {
+
+const mutationKey = getSaveAssessmentAnswerMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof saveAssessmentAnswer>>, SaveAssessmentAnswerMutationVariables> = (props) => {
+          const {attemptId,questionId,data} = props ?? {};
+
+          return  saveAssessmentAnswer(attemptId,questionId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SaveAssessmentAnswerMutationResult = NonNullable<Awaited<ReturnType<typeof saveAssessmentAnswer>>>
+    export type SaveAssessmentAnswerMutationBody = BodyType<AssessmentAnswerInput>
+    export type SaveAssessmentAnswerMutationError = ErrorType<void>
+    export type SaveAssessmentAnswerMutationVariables = {attemptId: string;questionId: string;data: BodyType<AssessmentAnswerInput>}
+
+    export const useSaveAssessmentAnswer = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof saveAssessmentAnswer>>, TError,SaveAssessmentAnswerMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof saveAssessmentAnswer>>,
+        TError,
+        SaveAssessmentAnswerMutationVariables,
+        TContext
+      > => {
+      return useMutation(getSaveAssessmentAnswerMutationOptions(options));
+    }
+
+export const getRequestAssessmentAudioUrl = (attemptId: string,
+    questionId: string,) => {
+
+
+
+
+  return `/api/mateen/assessments/${attemptId}/answers/${questionId}/audio`
+}
+
+export const requestAssessmentAudio = async (attemptId: string,
+    questionId: string,
+    assessmentAudioInput: AssessmentAudioInput, options?: Parameters<typeof customFetch>[1]): Promise<AssessmentAudioUpload> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<AssessmentAudioUpload>(getRequestAssessmentAudioUrl(attemptId,questionId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(assessmentAudioInput)
+  }
+);}
+
+
+
+
+
+export const getRequestAssessmentAudioMutationKey = () => ['requestAssessmentAudio'] as const;
+
+export const getRequestAssessmentAudioMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof requestAssessmentAudio>>, TError,RequestAssessmentAudioMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof requestAssessmentAudio>>, TError,RequestAssessmentAudioMutationVariables, TContext> => {
+
+const mutationKey = getRequestAssessmentAudioMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof requestAssessmentAudio>>, RequestAssessmentAudioMutationVariables> = (props) => {
+          const {attemptId,questionId,data} = props ?? {};
+
+          return  requestAssessmentAudio(attemptId,questionId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RequestAssessmentAudioMutationResult = NonNullable<Awaited<ReturnType<typeof requestAssessmentAudio>>>
+    export type RequestAssessmentAudioMutationBody = BodyType<AssessmentAudioInput>
+    export type RequestAssessmentAudioMutationError = ErrorType<unknown>
+    export type RequestAssessmentAudioMutationVariables = {attemptId: string;questionId: string;data: BodyType<AssessmentAudioInput>}
+
+    export const useRequestAssessmentAudio = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof requestAssessmentAudio>>, TError,RequestAssessmentAudioMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof requestAssessmentAudio>>,
+        TError,
+        RequestAssessmentAudioMutationVariables,
+        TContext
+      > => {
+      return useMutation(getRequestAssessmentAudioMutationOptions(options));
+    }
+
+export const getDeleteAssessmentAudioUrl = (attemptId: string,
+    questionId: string,) => {
+
+
+
+
+  return `/api/mateen/assessments/${attemptId}/answers/${questionId}/audio`
+}
+
+export const deleteAssessmentAudio = async (attemptId: string,
+    questionId: string, options?: Parameters<typeof customFetch>[1]): Promise<void> => {
+
+  return customFetch<void>(getDeleteAssessmentAudioUrl(attemptId,questionId),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+
+export const getDeleteAssessmentAudioMutationKey = () => ['deleteAssessmentAudio'] as const;
+
+export const getDeleteAssessmentAudioMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAssessmentAudio>>, TError,DeleteAssessmentAudioMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAssessmentAudio>>, TError,DeleteAssessmentAudioMutationVariables, TContext> => {
+
+const mutationKey = getDeleteAssessmentAudioMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAssessmentAudio>>, DeleteAssessmentAudioMutationVariables> = (props) => {
+          const {attemptId,questionId} = props ?? {};
+
+          return  deleteAssessmentAudio(attemptId,questionId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAssessmentAudioMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAssessmentAudio>>>
+
+    export type DeleteAssessmentAudioMutationError = ErrorType<unknown>
+    export type DeleteAssessmentAudioMutationVariables = {attemptId: string;questionId: string}
+
+    export const useDeleteAssessmentAudio = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAssessmentAudio>>, TError,DeleteAssessmentAudioMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAssessmentAudio>>,
+        TError,
+        DeleteAssessmentAudioMutationVariables,
+        TContext
+      > => {
+      return useMutation(getDeleteAssessmentAudioMutationOptions(options));
+    }
+
+export const getConfirmAssessmentAudioUrl = (attemptId: string,
+    questionId: string,) => {
+
+
+
+
+  return `/api/mateen/assessments/${attemptId}/answers/${questionId}/audio/confirm`
+}
+
+export const confirmAssessmentAudio = async (attemptId: string,
+    questionId: string,
+    confirmAssessmentAudioInput: ConfirmAssessmentAudioInput, options?: Parameters<typeof customFetch>[1]): Promise<AnswerAcknowledgement> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<AnswerAcknowledgement>(getConfirmAssessmentAudioUrl(attemptId,questionId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(confirmAssessmentAudioInput)
+  }
+);}
+
+
+
+
+
+export const getConfirmAssessmentAudioMutationKey = () => ['confirmAssessmentAudio'] as const;
+
+export const getConfirmAssessmentAudioMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof confirmAssessmentAudio>>, TError,ConfirmAssessmentAudioMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof confirmAssessmentAudio>>, TError,ConfirmAssessmentAudioMutationVariables, TContext> => {
+
+const mutationKey = getConfirmAssessmentAudioMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof confirmAssessmentAudio>>, ConfirmAssessmentAudioMutationVariables> = (props) => {
+          const {attemptId,questionId,data} = props ?? {};
+
+          return  confirmAssessmentAudio(attemptId,questionId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ConfirmAssessmentAudioMutationResult = NonNullable<Awaited<ReturnType<typeof confirmAssessmentAudio>>>
+    export type ConfirmAssessmentAudioMutationBody = BodyType<ConfirmAssessmentAudioInput>
+    export type ConfirmAssessmentAudioMutationError = ErrorType<void>
+    export type ConfirmAssessmentAudioMutationVariables = {attemptId: string;questionId: string;data: BodyType<ConfirmAssessmentAudioInput>}
+
+    export const useConfirmAssessmentAudio = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof confirmAssessmentAudio>>, TError,ConfirmAssessmentAudioMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof confirmAssessmentAudio>>,
+        TError,
+        ConfirmAssessmentAudioMutationVariables,
+        TContext
+      > => {
+      return useMutation(getConfirmAssessmentAudioMutationOptions(options));
+    }
+
+export const getListScheduledReviewsUrl = () => {
+
+
+
+
+  return `/api/mateen/assessment/reviews`
+}
+
+export const listScheduledReviews = async ( options?: Parameters<typeof customFetch>[1]): Promise<ScheduledReview[]> => {
+
+  return customFetch<ScheduledReview[]>(getListScheduledReviewsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListScheduledReviewsQueryKey = () => {
+    return [
+    `/api/mateen/assessment/reviews`
+    ] as const;
+    }
+
+
+export const getListScheduledReviewsQueryOptions = <TData = Awaited<ReturnType<typeof listScheduledReviews>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listScheduledReviews>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListScheduledReviewsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listScheduledReviews>>> = ({ signal }) => listScheduledReviews({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listScheduledReviews>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListScheduledReviewsQueryResult = NonNullable<Awaited<ReturnType<typeof listScheduledReviews>>>
+export type ListScheduledReviewsQueryError = ErrorType<unknown>
+
+
+
+export function useListScheduledReviews<TData = Awaited<ReturnType<typeof listScheduledReviews>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listScheduledReviews>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListScheduledReviewsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getCompleteScheduledReviewUrl = (reviewId: string,) => {
+
+
+
+
+  return `/api/mateen/assessment/reviews/${reviewId}/complete`
+}
+
+export const completeScheduledReview = async (reviewId: string,
+    completeScheduledReviewInput: CompleteScheduledReviewInput, options?: Parameters<typeof customFetch>[1]): Promise<ScheduledReview> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<ScheduledReview>(getCompleteScheduledReviewUrl(reviewId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(completeScheduledReviewInput)
+  }
+);}
+
+
+
+
+
+export const getCompleteScheduledReviewMutationKey = () => ['completeScheduledReview'] as const;
+
+export const getCompleteScheduledReviewMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof completeScheduledReview>>, TError,CompleteScheduledReviewMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof completeScheduledReview>>, TError,CompleteScheduledReviewMutationVariables, TContext> => {
+
+const mutationKey = getCompleteScheduledReviewMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof completeScheduledReview>>, CompleteScheduledReviewMutationVariables> = (props) => {
+          const {reviewId,data} = props ?? {};
+
+          return  completeScheduledReview(reviewId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CompleteScheduledReviewMutationResult = NonNullable<Awaited<ReturnType<typeof completeScheduledReview>>>
+    export type CompleteScheduledReviewMutationBody = BodyType<CompleteScheduledReviewInput>
+    export type CompleteScheduledReviewMutationError = ErrorType<unknown>
+    export type CompleteScheduledReviewMutationVariables = {reviewId: string;data: BodyType<CompleteScheduledReviewInput>}
+
+    export const useCompleteScheduledReview = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof completeScheduledReview>>, TError,CompleteScheduledReviewMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof completeScheduledReview>>,
+        TError,
+        CompleteScheduledReviewMutationVariables,
+        TContext
+      > => {
+      return useMutation(getCompleteScheduledReviewMutationOptions(options));
+    }
+
+export const getGetAssessmentReviewerAccessUrl = () => {
+
+
+
+
+  return `/api/mateen/assessment/reviewer-access`
+}
+
+export const getAssessmentReviewerAccess = async ( options?: Parameters<typeof customFetch>[1]): Promise<ReviewerAccess> => {
+
+  return customFetch<ReviewerAccess>(getGetAssessmentReviewerAccessUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetAssessmentReviewerAccessQueryKey = () => {
+    return [
+    `/api/mateen/assessment/reviewer-access`
+    ] as const;
+    }
+
+
+export const getGetAssessmentReviewerAccessQueryOptions = <TData = Awaited<ReturnType<typeof getAssessmentReviewerAccess>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessmentReviewerAccess>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssessmentReviewerAccessQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssessmentReviewerAccess>>> = ({ signal }) => getAssessmentReviewerAccess({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssessmentReviewerAccess>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAssessmentReviewerAccessQueryResult = NonNullable<Awaited<ReturnType<typeof getAssessmentReviewerAccess>>>
+export type GetAssessmentReviewerAccessQueryError = ErrorType<unknown>
+
+
+
+export function useGetAssessmentReviewerAccess<TData = Awaited<ReturnType<typeof getAssessmentReviewerAccess>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessmentReviewerAccess>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetAssessmentReviewerAccessQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getListAssessmentReviewQueueUrl = () => {
+
+
+
+
+  return `/api/mateen/assessment/reviewer/queue`
+}
+
+export const listAssessmentReviewQueue = async ( options?: Parameters<typeof customFetch>[1]): Promise<ReviewQueueItem[]> => {
+
+  return customFetch<ReviewQueueItem[]>(getListAssessmentReviewQueueUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListAssessmentReviewQueueQueryKey = () => {
+    return [
+    `/api/mateen/assessment/reviewer/queue`
+    ] as const;
+    }
+
+
+export const getListAssessmentReviewQueueQueryOptions = <TData = Awaited<ReturnType<typeof listAssessmentReviewQueue>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listAssessmentReviewQueue>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListAssessmentReviewQueueQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listAssessmentReviewQueue>>> = ({ signal }) => listAssessmentReviewQueue({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listAssessmentReviewQueue>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListAssessmentReviewQueueQueryResult = NonNullable<Awaited<ReturnType<typeof listAssessmentReviewQueue>>>
+export type ListAssessmentReviewQueueQueryError = ErrorType<unknown>
+
+
+
+export function useListAssessmentReviewQueue<TData = Awaited<ReturnType<typeof listAssessmentReviewQueue>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listAssessmentReviewQueue>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListAssessmentReviewQueueQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetAssessmentReviewUrl = (attemptId: string,) => {
+
+
+
+
+  return `/api/mateen/assessment/reviewer/${attemptId}`
+}
+
+export const getAssessmentReview = async (attemptId: string, options?: Parameters<typeof customFetch>[1]): Promise<AssessmentReviewDetail> => {
+
+  return customFetch<AssessmentReviewDetail>(getGetAssessmentReviewUrl(attemptId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetAssessmentReviewQueryKey = (attemptId: string,) => {
+    return [
+    `/api/mateen/assessment/reviewer/${attemptId}`
+    ] as const;
+    }
+
+
+export const getGetAssessmentReviewQueryOptions = <TData = Awaited<ReturnType<typeof getAssessmentReview>>, TError = ErrorType<unknown>>(attemptId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessmentReview>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssessmentReviewQueryKey(attemptId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssessmentReview>>> = ({ signal }) => getAssessmentReview(attemptId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: attemptId !== null && attemptId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssessmentReview>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAssessmentReviewQueryResult = NonNullable<Awaited<ReturnType<typeof getAssessmentReview>>>
+export type GetAssessmentReviewQueryError = ErrorType<unknown>
+
+
+
+export function useGetAssessmentReview<TData = Awaited<ReturnType<typeof getAssessmentReview>>, TError = ErrorType<unknown>>(
+ attemptId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessmentReview>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetAssessmentReviewQueryOptions(attemptId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getAdjudicateAssessmentOralUrl = (attemptId: string,) => {
+
+
+
+
+  return `/api/mateen/assessment/reviewer/${attemptId}`
+}
+
+export const adjudicateAssessmentOral = async (attemptId: string,
+    assessmentAdjudicationInput: AssessmentAdjudicationInput, options?: Parameters<typeof customFetch>[1]): Promise<AssessmentAttempt> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<AssessmentAttempt>(getAdjudicateAssessmentOralUrl(attemptId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(assessmentAdjudicationInput)
+  }
+);}
+
+
+
+
+
+export const getAdjudicateAssessmentOralMutationKey = () => ['adjudicateAssessmentOral'] as const;
+
+export const getAdjudicateAssessmentOralMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof adjudicateAssessmentOral>>, TError,AdjudicateAssessmentOralMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof adjudicateAssessmentOral>>, TError,AdjudicateAssessmentOralMutationVariables, TContext> => {
+
+const mutationKey = getAdjudicateAssessmentOralMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof adjudicateAssessmentOral>>, AdjudicateAssessmentOralMutationVariables> = (props) => {
+          const {attemptId,data} = props ?? {};
+
+          return  adjudicateAssessmentOral(attemptId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AdjudicateAssessmentOralMutationResult = NonNullable<Awaited<ReturnType<typeof adjudicateAssessmentOral>>>
+    export type AdjudicateAssessmentOralMutationBody = BodyType<AssessmentAdjudicationInput>
+    export type AdjudicateAssessmentOralMutationError = ErrorType<void>
+    export type AdjudicateAssessmentOralMutationVariables = {attemptId: string;data: BodyType<AssessmentAdjudicationInput>}
+
+    export const useAdjudicateAssessmentOral = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof adjudicateAssessmentOral>>, TError,AdjudicateAssessmentOralMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof adjudicateAssessmentOral>>,
+        TError,
+        AdjudicateAssessmentOralMutationVariables,
+        TContext
+      > => {
+      return useMutation(getAdjudicateAssessmentOralMutationOptions(options));
+    }
+
+export const getGetAssessmentReviewAudioUrl = (attemptId: string,
+    questionId: string,) => {
+
+
+
+
+  return `/api/mateen/assessment/reviewer/${attemptId}/audio/${questionId}`
+}
+
+export const getAssessmentReviewAudio = async (attemptId: string,
+    questionId: string, options?: Parameters<typeof customFetch>[1]): Promise<Blob> => {
+
+  return customFetch<Blob>(getGetAssessmentReviewAudioUrl(attemptId,questionId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetAssessmentReviewAudioQueryKey = (attemptId: string,
+    questionId: string,) => {
+    return [
+    `/api/mateen/assessment/reviewer/${attemptId}/audio/${questionId}`
+    ] as const;
+    }
+
+
+export const getGetAssessmentReviewAudioQueryOptions = <TData = Awaited<ReturnType<typeof getAssessmentReviewAudio>>, TError = ErrorType<void>>(attemptId: string,
+    questionId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessmentReviewAudio>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssessmentReviewAudioQueryKey(attemptId,questionId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssessmentReviewAudio>>> = ({ signal }) => getAssessmentReviewAudio(attemptId,questionId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: attemptId !== null && attemptId !== undefined && questionId !== null && questionId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssessmentReviewAudio>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAssessmentReviewAudioQueryResult = NonNullable<Awaited<ReturnType<typeof getAssessmentReviewAudio>>>
+export type GetAssessmentReviewAudioQueryError = ErrorType<void>
+
+
+
+export function useGetAssessmentReviewAudio<TData = Awaited<ReturnType<typeof getAssessmentReviewAudio>>, TError = ErrorType<void>>(
+ attemptId: string,
+    questionId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessmentReviewAudio>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetAssessmentReviewAudioQueryOptions(attemptId,questionId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getRequestRecitationPracticeUrl = () => {
+
+
+
+
+  return `/api/mateen/recitations`
+}
+
+/**
+ * @summary Create experimental local recitation practice and private upload URL
+ */
+export const requestRecitationPractice = async (recitationPracticeInput: RecitationPracticeInput, options?: Parameters<typeof customFetch>[1]): Promise<RecitationUpload> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<RecitationUpload>(getRequestRecitationPracticeUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(recitationPracticeInput)
+  }
+);}
+
+
+
+
+
+export const getRequestRecitationPracticeMutationKey = () => ['requestRecitationPractice'] as const;
+
+export const getRequestRecitationPracticeMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof requestRecitationPractice>>, TError,RequestRecitationPracticeMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof requestRecitationPractice>>, TError,RequestRecitationPracticeMutationVariables, TContext> => {
+
+const mutationKey = getRequestRecitationPracticeMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof requestRecitationPractice>>, RequestRecitationPracticeMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  requestRecitationPractice(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RequestRecitationPracticeMutationResult = NonNullable<Awaited<ReturnType<typeof requestRecitationPractice>>>
+    export type RequestRecitationPracticeMutationBody = BodyType<RecitationPracticeInput>
+    export type RequestRecitationPracticeMutationError = ErrorType<void>
+    export type RequestRecitationPracticeMutationVariables = {data: BodyType<RecitationPracticeInput>}
+
+    /**
+ * @summary Create experimental local recitation practice and private upload URL
+ */
+export const useRequestRecitationPractice = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof requestRecitationPractice>>, TError,RequestRecitationPracticeMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof requestRecitationPractice>>,
+        TError,
+        RequestRecitationPracticeMutationVariables,
+        TContext
+      > => {
+      return useMutation(getRequestRecitationPracticeMutationOptions(options));
+    }
+
+export const getListRecitationPracticesUrl = () => {
+
+
+
+
+  return `/api/mateen/recitations`
+}
+
+/**
+ * @summary List the authenticated student's own practice records
+ */
+export const listRecitationPractices = async ( options?: Parameters<typeof customFetch>[1]): Promise<PracticeRecitation[]> => {
+
+  return customFetch<PracticeRecitation[]>(getListRecitationPracticesUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListRecitationPracticesQueryKey = () => {
+    return [
+    `/api/mateen/recitations`
+    ] as const;
+    }
+
+
+export const getListRecitationPracticesQueryOptions = <TData = Awaited<ReturnType<typeof listRecitationPractices>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listRecitationPractices>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListRecitationPracticesQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listRecitationPractices>>> = ({ signal }) => listRecitationPractices({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listRecitationPractices>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListRecitationPracticesQueryResult = NonNullable<Awaited<ReturnType<typeof listRecitationPractices>>>
+export type ListRecitationPracticesQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List the authenticated student's own practice records
+ */
+
+export function useListRecitationPractices<TData = Awaited<ReturnType<typeof listRecitationPractices>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listRecitationPractices>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListRecitationPracticesQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 

@@ -3,7 +3,7 @@ import { Link, useParams, useSearch } from 'wouter';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   getGetCatalogQueryKey, getGetDashboardQueryKey, getGetProgressQueryKey, getGetStudyTextQueryKey,
-  useGetCatalog, useGetProgress, useGetStudyText, useSaveProgress,
+  useGetCatalog, useGetProgress, useGetStudyText, useSaveProgress, useListScheduledReviews, getListScheduledReviewsQueryKey,
 } from '@workspace/api-client-react';
 import type { StudyProgress } from '@workspace/api-client-react';
 import { Bookmark, BookmarkCheck, CheckCircle2, Circle, ChevronRight, ChevronLeft, ExternalLink, Lock, Minus, Plus, Search, X } from 'lucide-react';
@@ -11,6 +11,7 @@ import { EmptyState, ErrorState, LoadingList, Notice, useLocalNumber } from '@/c
 import { normalizeArabic, num, usePageMeta } from '@/lib/mateen';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import RecitationRecorder from '@/components/mateen/recitation-recorder';
 
 type Snap = { current: number; completed: number[]; bookmarked: number[] };
 
@@ -25,6 +26,7 @@ export default function StudyPage() {
   const locked = !!entry && entry.status !== 'available';
   const text = useGetStudyText(textId, { query: { enabled: !!catalog.data && !locked, queryKey: getGetStudyTextQueryKey(textId), retry: false } });
   const progress = useGetProgress({ query: { enabled: true, queryKey: getGetProgressQueryKey() } });
+  const scheduledReviews = useListScheduledReviews({ query: { enabled: textId === 'nawawi' && !locked, queryKey: getListScheduledReviewsQueryKey() } });
   const save = useSaveProgress();
   const mutateRef = useRef(save.mutate);
   mutateRef.current = save.mutate;
@@ -95,6 +97,7 @@ export default function StudyPage() {
   const h = hadiths[idx];
   const studied = snap.completed.includes(h.id);
   const marked = snap.bookmarked.includes(h.id);
+  const confirmedReviews = scheduledReviews.data?.filter((item) => item.hadithNumber === h.number) ?? [];
   const go = (i: number) => { const n = hadiths[i]; if (n && n.number !== snap.current) persist({ ...snap, current: n.number }, snap); setListOpen(false); window.scrollTo({ top: 0 }); };
   const toggle = (arr: number[], id: number) => (arr.includes(id) ? arr.filter((x) => x !== id) : [...arr, id]);
   const nq = normalizeArabic(q.trim());
@@ -128,7 +131,7 @@ export default function StudyPage() {
           <button onClick={() => setFontSize(Math.min(60, fontSize + 3))} className="rounded-full p-2 hover:bg-muted" aria-label="تكبير الخط" data-testid="button-font-up"><Plus size={16} /></button>
         </div>
       </div>
-      {review && <div className="mb-6"><Notice title="النص قيد المراجعة العلمية">نُقل هذا النص من مصدره المذكور ولم تكتمل مراجعته العلمية بعد. هو للقراءة والدراسة الشخصية، وليس مرجعاً معتمداً ولا أساساً لتقييم أو اختبار. راجع المصدر الأصلي عند الحاجة.</Notice></div>}
+      {review && <div className="mb-6"><Notice title="بيان مصدر النص والتقييم">نُقل هذا النص من مصدره المذكور، ولم تكتمل مراجعته العلمية الشاملة بعد. مقطع التدريب أدناه مستخرج منه دون تعليقات الناشر. المقارنات الصوتية الآلية تجريبية ولا تُعتمد درجات منها؛ وتحتاج إجابات الاختبار الشفهية إلى مراجعة مخوّلة للتسجيل والنص المرجعي قبل اعتماد نتيجة المطابقة.</Notice></div>}
 
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <article className="paper-card relative overflow-hidden p-6 md:p-12" aria-live="polite">
@@ -168,6 +171,21 @@ export default function StudyPage() {
         </article>
         <aside className="paper-card hidden h-fit p-4 lg:sticky lg:top-6 lg:block">{list}</aside>
       </div>
+      <section className="paper-card mt-6 min-w-0 space-y-4 p-5 sm:p-7" aria-labelledby="recitation-reference-title">
+        <h2 id="recitation-reference-title" className="font-display text-xl font-bold">المقطع المحدد للتدريب الصوتي</h2>
+        <p className="font-ui text-sm text-muted-foreground">اقرأ هذا المقطع؛ ولا تُدخل سند الحديث أو تعليقات المصدر التي تقع خارجه. لا يُقيَّم النطق أو التشكيل.</p>
+        {h.recitationSelection === 'selected-primary-report' && <p className="font-ui text-sm text-muted-foreground">اختير التقرير الأول من هذا الحديث فقط لهذا التدريب.</p>}
+        {h.recitationText
+          ? <p className="break-words font-arabic text-xl leading-loose sm:text-2xl" data-testid="text-recitation-reference">{h.recitationText}</p>
+          : <Notice title="المقطع غير متاح">تعذّر تحميل المقطع المحدد. أعد تحميل النص قبل بدء التسجيل.</Notice>}
+        {scheduledReviews.isError && <button type="button" onClick={() => scheduledReviews.refetch()} className="min-h-11 rounded-full border px-5 py-2 font-ui text-sm">إعادة تحميل المراجعات المصححة</button>}
+        {confirmedReviews.length > 0 && <Notice title="لهذا الحديث مراجعات مبنية على أداء مصحح">
+          لديك {num(confirmedReviews.length)} مراجعة محفوظة لهذا الحديث، وهي منفصلة عن علامة القراءة.
+          <Link href="/student/reviews" className="mt-2 block w-fit rounded-full border px-5 py-2 font-ui font-bold">عرض المواعيد وأداء المراجعة</Link>
+        </Notice>}
+        <Link href="/student/exams" className="inline-flex min-h-11 items-center rounded-full border px-5 py-2 font-ui text-sm font-bold">الانتقال إلى اختبار المستوى دون اشتراط إكمال الدراسة</Link>
+      </section>
+      {h.recitationText && <RecitationRecorder key={`${textId}:${h.id}`} hadithNumber={h.number} />}
     </div>
   );
 }

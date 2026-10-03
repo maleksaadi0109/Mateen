@@ -1,0 +1,2314 @@
+{
+  "kind": "human_review_packet_not_assessment",
+  "createdAt": "2026-10-02T13:39:31.985774+00:00",
+  "reference": {
+    "text": "إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى، فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله، ومن كانت هجرته لدنيا يصيبها أو امرأة ينكحها فهجرته إلى ما هاجر إليه",
+    "sourceSha256": "2bee64fda55aedb7cdd14c175f6f53eec4901a031cbde398443b485e3956e05b",
+    "sourceStatus": "retrieved_pending_review",
+    "reusePermission": "unresolved"
+  },
+  "samples": [
+    {
+      "label": "قراءة صحيحة بحسب تأكيد المستخدم",
+      "runs": [
+        {
+          "model": "Qwen/Qwen3-ASR-0.6B-hf",
+          "rawTranscript": "عن أمير المؤمنين أبي حفص عمر بن الخطاب رضي الله عنه قال: سمعت رسول الله صلى الله عليه وسلم يقول: إنما الأعمال بنيات وإنما لكل أمرأة ما نوى فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله ومن كانت هجرته لدنيا يصيبها أو أمرأة ينكحها فهجرته إلى ما هجر إليها. رواه إمامال محدثين أبو عبد الله محمد بن إسماعيل بن إبراهيم بن المغيرة ابن بردزبه البخاري الجعفي وابن حسين مسلم بن الحجاج ابن مسلم القشيري النيسابري رضي الله عنهما في صحيحهما الذينهما أصح الكتب المصنفة.",
+          "selection": {
+            "text": "إنما الأعمال بنيات وإنما لكل أمرأة ما نوى فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله ومن كانت هجرته لدنيا يصيبها أو أمرأة ينكحها فهجرته إلى ما هجر إليها",
+            "selectedRange": [
+              20,
+              51
+            ],
+            "excludedPrefix": [
+              "عن",
+              "أمير",
+              "المؤمنين",
+              "أبي",
+              "حفص",
+              "عمر",
+              "بن",
+              "الخطاب",
+              "رضي",
+              "الله",
+              "عنه",
+              "قال",
+              "سمعت",
+              "رسول",
+              "الله",
+              "صلى",
+              "الله",
+              "عليه",
+              "وسلم",
+              "يقول"
+            ],
+            "excludedSuffix": [
+              "رواه",
+              "إمامال",
+              "محدثين",
+              "أبو",
+              "عبد",
+              "الله",
+              "محمد",
+              "بن",
+              "إسماعيل",
+              "بن",
+              "إبراهيم",
+              "بن",
+              "المغيرة",
+              "ابن",
+              "بردزبه",
+              "البخاري",
+              "الجعفي",
+              "وابن",
+              "حسين",
+              "مسلم",
+              "بن",
+              "الحجاج",
+              "ابن",
+              "مسلم",
+              "القشيري",
+              "النيسابري",
+              "رضي",
+              "الله",
+              "عنهما",
+              "في",
+              "صحيحهما",
+              "الذينهما",
+              "أصح",
+              "الكتب",
+              "المصنفة"
+            ],
+            "selectionStatus": "experimental_anchor_selection_requires_human_review"
+          },
+          "alignment": {
+            "kind": "diagnostic_alignment_not_assessment",
+            "referenceWords": [
+              "إنما",
+              "الأعمال",
+              "بالنيات",
+              "وإنما",
+              "لكل",
+              "امرئ",
+              "ما",
+              "نوى",
+              "فمن",
+              "كانت",
+              "هجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "فهجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "ومن",
+              "كانت",
+              "هجرته",
+              "لدنيا",
+              "يصيبها",
+              "أو",
+              "امرأة",
+              "ينكحها",
+              "فهجرته",
+              "إلى",
+              "ما",
+              "هاجر",
+              "إليه"
+            ],
+            "recognizedWords": [
+              "إنما",
+              "الأعمال",
+              "بنيات",
+              "وإنما",
+              "لكل",
+              "أمرأة",
+              "ما",
+              "نوى",
+              "فمن",
+              "كانت",
+              "هجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "فهجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "ومن",
+              "كانت",
+              "هجرته",
+              "لدنيا",
+              "يصيبها",
+              "أو",
+              "أمرأة",
+              "ينكحها",
+              "فهجرته",
+              "إلى",
+              "ما",
+              "هجر",
+              "إليها"
+            ],
+            "spans": [
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  0,
+                  2
+                ],
+                "transcriptRange": [
+                  0,
+                  2
+                ],
+                "referenceWords": [
+                  "إنما",
+                  "الأعمال"
+                ],
+                "recognizedWords": [
+                  "إنما",
+                  "الأعمال"
+                ],
+                "observedContinuationOnBothSides": false,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  2,
+                  3
+                ],
+                "transcriptRange": [
+                  2,
+                  3
+                ],
+                "referenceWords": [
+                  "بالنيات"
+                ],
+                "recognizedWords": [
+                  "بنيات"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  3,
+                  5
+                ],
+                "transcriptRange": [
+                  3,
+                  5
+                ],
+                "referenceWords": [
+                  "وإنما",
+                  "لكل"
+                ],
+                "recognizedWords": [
+                  "وإنما",
+                  "لكل"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  5,
+                  6
+                ],
+                "transcriptRange": [
+                  5,
+                  6
+                ],
+                "referenceWords": [
+                  "امرئ"
+                ],
+                "recognizedWords": [
+                  "أمرأة"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  6,
+                  24
+                ],
+                "transcriptRange": [
+                  6,
+                  24
+                ],
+                "referenceWords": [
+                  "ما",
+                  "نوى",
+                  "فمن",
+                  "كانت",
+                  "هجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "فهجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "ومن",
+                  "كانت",
+                  "هجرته",
+                  "لدنيا",
+                  "يصيبها",
+                  "أو"
+                ],
+                "recognizedWords": [
+                  "ما",
+                  "نوى",
+                  "فمن",
+                  "كانت",
+                  "هجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "فهجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "ومن",
+                  "كانت",
+                  "هجرته",
+                  "لدنيا",
+                  "يصيبها",
+                  "أو"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  24,
+                  25
+                ],
+                "transcriptRange": [
+                  24,
+                  25
+                ],
+                "referenceWords": [
+                  "امرأة"
+                ],
+                "recognizedWords": [
+                  "أمرأة"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  25,
+                  29
+                ],
+                "transcriptRange": [
+                  25,
+                  29
+                ],
+                "referenceWords": [
+                  "ينكحها",
+                  "فهجرته",
+                  "إلى",
+                  "ما"
+                ],
+                "recognizedWords": [
+                  "ينكحها",
+                  "فهجرته",
+                  "إلى",
+                  "ما"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  29,
+                  31
+                ],
+                "transcriptRange": [
+                  29,
+                  31
+                ],
+                "referenceWords": [
+                  "هاجر",
+                  "إليه"
+                ],
+                "recognizedWords": [
+                  "هجر",
+                  "إليها"
+                ],
+                "observedContinuationOnBothSides": false,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              }
+            ],
+            "studentScore": null,
+            "wordErrorRate": null,
+            "approvedForAssessment": false
+          }
+        },
+        {
+          "model": "jonatasgrosman/wav2vec2-large-xlsr-53-arabic",
+          "rawTranscript": "عَنْ أَمِيرِ الْمُؤْمِنِينَ أَبِي حَفْصِ عُمْرَ بْنِ الْخَطَّابِ رَضِيَ اللَّهُ عَنْهُ قَالَ سَمِعْتُ رَسُولَى اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ يَقُولَ إِنَّمَا الْأَعْمَالُ بالنِّيَاتِ وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَاءَ - فَمَنْ كَانَْ هِجْرَتُهُ إلَى اللَّهِ وَرَسُولِهِ - فَهِجْرَتُهُ إلَى اللَّهِ وَرَسُولِهِ - وَمَنْ كَانَتْ هِجْرَتُهُ لِدُنْيَا يُصِيبُهَا أَوِ امْرَأَةٍ يَنْكِحُهَا - فَهِجْرَتُهُ إلَى مَا هَاجَرَ إلَيْحِ - رَوَاهُ إمَا مَاالْمُحَدِّثِينَ - أَبُعَبْضِ اللَّهِ مُحَمَّدُ بنُ إسْمَاعِيلَ بنِ إِبْرَاهِيمَ بْنِ الْمُغِيرَةِ ابْنِ بَرْدِزْبَه لْبُخَارِيُّ الْجُعْفِيِّ وَأَبُو الْحُسَيْنِ مُسْلِمُ بنُ الْحَجَّاجِ ابْنِ مُسْلِمِ الْقُشَيْرِيُّ لنَّيسَابُرِيِّ رَضِيَ اللَّهُ عَنْهُمَا فِي صَحِ حَهِمَا لَّذَيْنِ هُمَا أَصَحُّ الْكُتُبِ الْمُصَنَّفَهُ",
+          "selection": {
+            "text": "إنما الأعمال بالنيات وإنما لكل امرئ ما نواء فمن كان هجرته إلى الله ورسوله فهجرته إلى الله ورسوله ومن كانت هجرته لدنيا يصيبها أو امرأة ينكحها فهجرته إلى ما هاجر إليح",
+            "selectedRange": [
+              20,
+              51
+            ],
+            "excludedPrefix": [
+              "عن",
+              "أمير",
+              "المؤمنين",
+              "أبي",
+              "حفص",
+              "عمر",
+              "بن",
+              "الخطاب",
+              "رضي",
+              "الله",
+              "عنه",
+              "قال",
+              "سمعت",
+              "رسولى",
+              "الله",
+              "صلى",
+              "الله",
+              "عليه",
+              "وسلم",
+              "يقول"
+            ],
+            "excludedSuffix": [
+              "رواه",
+              "إما",
+              "ماالمحدثين",
+              "أبعبض",
+              "الله",
+              "محمد",
+              "بن",
+              "إسماعيل",
+              "بن",
+              "إبراهيم",
+              "بن",
+              "المغيرة",
+              "ابن",
+              "بردزبه",
+              "لبخاري",
+              "الجعفي",
+              "وأبو",
+              "الحسين",
+              "مسلم",
+              "بن",
+              "الحجاج",
+              "ابن",
+              "مسلم",
+              "القشيري",
+              "لنيسابري",
+              "رضي",
+              "الله",
+              "عنهما",
+              "في",
+              "صح",
+              "حهما",
+              "لذين",
+              "هما",
+              "أصح",
+              "الكتب",
+              "المصنفه"
+            ],
+            "selectionStatus": "experimental_anchor_selection_requires_human_review"
+          },
+          "alignment": {
+            "kind": "diagnostic_alignment_not_assessment",
+            "referenceWords": [
+              "إنما",
+              "الأعمال",
+              "بالنيات",
+              "وإنما",
+              "لكل",
+              "امرئ",
+              "ما",
+              "نوى",
+              "فمن",
+              "كانت",
+              "هجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "فهجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "ومن",
+              "كانت",
+              "هجرته",
+              "لدنيا",
+              "يصيبها",
+              "أو",
+              "امرأة",
+              "ينكحها",
+              "فهجرته",
+              "إلى",
+              "ما",
+              "هاجر",
+              "إليه"
+            ],
+            "recognizedWords": [
+              "إنما",
+              "الأعمال",
+              "بالنيات",
+              "وإنما",
+              "لكل",
+              "امرئ",
+              "ما",
+              "نواء",
+              "فمن",
+              "كان",
+              "هجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "فهجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "ومن",
+              "كانت",
+              "هجرته",
+              "لدنيا",
+              "يصيبها",
+              "أو",
+              "امرأة",
+              "ينكحها",
+              "فهجرته",
+              "إلى",
+              "ما",
+              "هاجر",
+              "إليح"
+            ],
+            "spans": [
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  0,
+                  7
+                ],
+                "transcriptRange": [
+                  0,
+                  7
+                ],
+                "referenceWords": [
+                  "إنما",
+                  "الأعمال",
+                  "بالنيات",
+                  "وإنما",
+                  "لكل",
+                  "امرئ",
+                  "ما"
+                ],
+                "recognizedWords": [
+                  "إنما",
+                  "الأعمال",
+                  "بالنيات",
+                  "وإنما",
+                  "لكل",
+                  "امرئ",
+                  "ما"
+                ],
+                "observedContinuationOnBothSides": false,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  7,
+                  8
+                ],
+                "transcriptRange": [
+                  7,
+                  8
+                ],
+                "referenceWords": [
+                  "نوى"
+                ],
+                "recognizedWords": [
+                  "نواء"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  8,
+                  9
+                ],
+                "transcriptRange": [
+                  8,
+                  9
+                ],
+                "referenceWords": [
+                  "فمن"
+                ],
+                "recognizedWords": [
+                  "فمن"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  9,
+                  10
+                ],
+                "transcriptRange": [
+                  9,
+                  10
+                ],
+                "referenceWords": [
+                  "كانت"
+                ],
+                "recognizedWords": [
+                  "كان"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  10,
+                  30
+                ],
+                "transcriptRange": [
+                  10,
+                  30
+                ],
+                "referenceWords": [
+                  "هجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "فهجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "ومن",
+                  "كانت",
+                  "هجرته",
+                  "لدنيا",
+                  "يصيبها",
+                  "أو",
+                  "امرأة",
+                  "ينكحها",
+                  "فهجرته",
+                  "إلى",
+                  "ما",
+                  "هاجر"
+                ],
+                "recognizedWords": [
+                  "هجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "فهجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "ومن",
+                  "كانت",
+                  "هجرته",
+                  "لدنيا",
+                  "يصيبها",
+                  "أو",
+                  "امرأة",
+                  "ينكحها",
+                  "فهجرته",
+                  "إلى",
+                  "ما",
+                  "هاجر"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  30,
+                  31
+                ],
+                "transcriptRange": [
+                  30,
+                  31
+                ],
+                "referenceWords": [
+                  "إليه"
+                ],
+                "recognizedWords": [
+                  "إليح"
+                ],
+                "observedContinuationOnBothSides": false,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              }
+            ],
+            "studentScore": null,
+            "wordErrorRate": null,
+            "approvedForAssessment": false
+          }
+        }
+      ]
+    },
+    {
+      "label": "حذف «يصيبها» بحسب توصيف المستخدم",
+      "runs": [
+        {
+          "model": "Qwen/Qwen3-ASR-0.6B-hf",
+          "rawTranscript": "عن أمير المؤمنين أبي حفص عمر بن الخطاب رضي الله عنه قال سمعت رسول الله صلى الله عليه وسلم يقول إنما الأعمال بنيات وإنما لكل مرئ ما نوى فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله ومن كانت هجرته لدنيا أو مرأت ينكحها فهجرته إلى ما هجر إليه",
+          "selection": {
+            "text": "إنما الأعمال بنيات وإنما لكل مرئ ما نوى فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله ومن كانت هجرته لدنيا أو مرأت ينكحها فهجرته إلى ما هجر إليه",
+            "selectedRange": [
+              20,
+              50
+            ],
+            "excludedPrefix": [
+              "عن",
+              "أمير",
+              "المؤمنين",
+              "أبي",
+              "حفص",
+              "عمر",
+              "بن",
+              "الخطاب",
+              "رضي",
+              "الله",
+              "عنه",
+              "قال",
+              "سمعت",
+              "رسول",
+              "الله",
+              "صلى",
+              "الله",
+              "عليه",
+              "وسلم",
+              "يقول"
+            ],
+            "excludedSuffix": [],
+            "selectionStatus": "experimental_anchor_selection_requires_human_review"
+          },
+          "alignment": {
+            "kind": "diagnostic_alignment_not_assessment",
+            "referenceWords": [
+              "إنما",
+              "الأعمال",
+              "بالنيات",
+              "وإنما",
+              "لكل",
+              "امرئ",
+              "ما",
+              "نوى",
+              "فمن",
+              "كانت",
+              "هجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "فهجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "ومن",
+              "كانت",
+              "هجرته",
+              "لدنيا",
+              "يصيبها",
+              "أو",
+              "امرأة",
+              "ينكحها",
+              "فهجرته",
+              "إلى",
+              "ما",
+              "هاجر",
+              "إليه"
+            ],
+            "recognizedWords": [
+              "إنما",
+              "الأعمال",
+              "بنيات",
+              "وإنما",
+              "لكل",
+              "مرئ",
+              "ما",
+              "نوى",
+              "فمن",
+              "كانت",
+              "هجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "فهجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "ومن",
+              "كانت",
+              "هجرته",
+              "لدنيا",
+              "أو",
+              "مرأت",
+              "ينكحها",
+              "فهجرته",
+              "إلى",
+              "ما",
+              "هجر",
+              "إليه"
+            ],
+            "spans": [
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  0,
+                  2
+                ],
+                "transcriptRange": [
+                  0,
+                  2
+                ],
+                "referenceWords": [
+                  "إنما",
+                  "الأعمال"
+                ],
+                "recognizedWords": [
+                  "إنما",
+                  "الأعمال"
+                ],
+                "observedContinuationOnBothSides": false,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  2,
+                  3
+                ],
+                "transcriptRange": [
+                  2,
+                  3
+                ],
+                "referenceWords": [
+                  "بالنيات"
+                ],
+                "recognizedWords": [
+                  "بنيات"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  3,
+                  5
+                ],
+                "transcriptRange": [
+                  3,
+                  5
+                ],
+                "referenceWords": [
+                  "وإنما",
+                  "لكل"
+                ],
+                "recognizedWords": [
+                  "وإنما",
+                  "لكل"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  5,
+                  6
+                ],
+                "transcriptRange": [
+                  5,
+                  6
+                ],
+                "referenceWords": [
+                  "امرئ"
+                ],
+                "recognizedWords": [
+                  "مرئ"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  6,
+                  22
+                ],
+                "transcriptRange": [
+                  6,
+                  22
+                ],
+                "referenceWords": [
+                  "ما",
+                  "نوى",
+                  "فمن",
+                  "كانت",
+                  "هجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "فهجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "ومن",
+                  "كانت",
+                  "هجرته",
+                  "لدنيا"
+                ],
+                "recognizedWords": [
+                  "ما",
+                  "نوى",
+                  "فمن",
+                  "كانت",
+                  "هجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "فهجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "ومن",
+                  "كانت",
+                  "هجرته",
+                  "لدنيا"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_omission",
+                "operation": "delete",
+                "referenceRange": [
+                  22,
+                  23
+                ],
+                "transcriptRange": [
+                  22,
+                  22
+                ],
+                "referenceWords": [
+                  "يصيبها"
+                ],
+                "recognizedWords": [],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  23,
+                  24
+                ],
+                "transcriptRange": [
+                  22,
+                  23
+                ],
+                "referenceWords": [
+                  "أو"
+                ],
+                "recognizedWords": [
+                  "أو"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  24,
+                  25
+                ],
+                "transcriptRange": [
+                  23,
+                  24
+                ],
+                "referenceWords": [
+                  "امرأة"
+                ],
+                "recognizedWords": [
+                  "مرأت"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  25,
+                  29
+                ],
+                "transcriptRange": [
+                  24,
+                  28
+                ],
+                "referenceWords": [
+                  "ينكحها",
+                  "فهجرته",
+                  "إلى",
+                  "ما"
+                ],
+                "recognizedWords": [
+                  "ينكحها",
+                  "فهجرته",
+                  "إلى",
+                  "ما"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  29,
+                  30
+                ],
+                "transcriptRange": [
+                  28,
+                  29
+                ],
+                "referenceWords": [
+                  "هاجر"
+                ],
+                "recognizedWords": [
+                  "هجر"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  30,
+                  31
+                ],
+                "transcriptRange": [
+                  29,
+                  30
+                ],
+                "referenceWords": [
+                  "إليه"
+                ],
+                "recognizedWords": [
+                  "إليه"
+                ],
+                "observedContinuationOnBothSides": false,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              }
+            ],
+            "studentScore": null,
+            "wordErrorRate": null,
+            "approvedForAssessment": false
+          }
+        },
+        {
+          "model": "jonatasgrosman/wav2vec2-large-xlsr-53-arabic",
+          "rawTranscript": "عَنْ أَمِيرَ الْمُؤْمِنِينَ أَبِي حَفصٍأَمَرِ بْنِ الْخَطَّابِ رَضِيَ اللَّهُ عَنْهُ قَالَ سَمِعَتُ رَسُولَ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ يَقُولَ إِنَّمَا الْأَعْمَالُ بِالنِّيَّةٍ وَإِنَّمَا لِكُلِّ امُرِئٍ مَا نَوَ فَمَنْ كَاَتْ ِجْرَتُهُ إلَى اللَّهِ وَرَسُولِهُ فَهِجْرَتُهُ إلَى اللَهِ وَرَسُولِهِ وَمَنْ َانَتْ هِجْرَتُهُ لِدُنْيَا أَو امْرَأَةٍ يَنْكِحُوهَا فَهِجْرَتُهُ إلَى مَا هَاجَرَائِلَيْ",
+          "selection": {
+            "text": "إنما الأعمال بالنية وإنما لكل امرئ ما نو فمن كات جرته إلى الله ورسوله فهجرته إلى الله ورسوله ومن انت هجرته لدنيا أو امرأة ينكحوها فهجرته إلى ما هاجرائلي",
+            "selectedRange": [
+              19,
+              48
+            ],
+            "excludedPrefix": [
+              "عن",
+              "أمير",
+              "المؤمنين",
+              "أبي",
+              "حفصأمر",
+              "بن",
+              "الخطاب",
+              "رضي",
+              "الله",
+              "عنه",
+              "قال",
+              "سمعت",
+              "رسول",
+              "الله",
+              "صلى",
+              "الله",
+              "عليه",
+              "وسلم",
+              "يقول"
+            ],
+            "excludedSuffix": [],
+            "selectionStatus": "experimental_anchor_selection_requires_human_review"
+          },
+          "alignment": {
+            "kind": "diagnostic_alignment_not_assessment",
+            "referenceWords": [
+              "إنما",
+              "الأعمال",
+              "بالنيات",
+              "وإنما",
+              "لكل",
+              "امرئ",
+              "ما",
+              "نوى",
+              "فمن",
+              "كانت",
+              "هجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "فهجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "ومن",
+              "كانت",
+              "هجرته",
+              "لدنيا",
+              "يصيبها",
+              "أو",
+              "امرأة",
+              "ينكحها",
+              "فهجرته",
+              "إلى",
+              "ما",
+              "هاجر",
+              "إليه"
+            ],
+            "recognizedWords": [
+              "إنما",
+              "الأعمال",
+              "بالنية",
+              "وإنما",
+              "لكل",
+              "امرئ",
+              "ما",
+              "نو",
+              "فمن",
+              "كات",
+              "جرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "فهجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "ومن",
+              "انت",
+              "هجرته",
+              "لدنيا",
+              "أو",
+              "امرأة",
+              "ينكحوها",
+              "فهجرته",
+              "إلى",
+              "ما",
+              "هاجرائلي"
+            ],
+            "spans": [
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  0,
+                  2
+                ],
+                "transcriptRange": [
+                  0,
+                  2
+                ],
+                "referenceWords": [
+                  "إنما",
+                  "الأعمال"
+                ],
+                "recognizedWords": [
+                  "إنما",
+                  "الأعمال"
+                ],
+                "observedContinuationOnBothSides": false,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  2,
+                  3
+                ],
+                "transcriptRange": [
+                  2,
+                  3
+                ],
+                "referenceWords": [
+                  "بالنيات"
+                ],
+                "recognizedWords": [
+                  "بالنية"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  3,
+                  7
+                ],
+                "transcriptRange": [
+                  3,
+                  7
+                ],
+                "referenceWords": [
+                  "وإنما",
+                  "لكل",
+                  "امرئ",
+                  "ما"
+                ],
+                "recognizedWords": [
+                  "وإنما",
+                  "لكل",
+                  "امرئ",
+                  "ما"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  7,
+                  8
+                ],
+                "transcriptRange": [
+                  7,
+                  8
+                ],
+                "referenceWords": [
+                  "نوى"
+                ],
+                "recognizedWords": [
+                  "نو"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  8,
+                  9
+                ],
+                "transcriptRange": [
+                  8,
+                  9
+                ],
+                "referenceWords": [
+                  "فمن"
+                ],
+                "recognizedWords": [
+                  "فمن"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  9,
+                  11
+                ],
+                "transcriptRange": [
+                  9,
+                  11
+                ],
+                "referenceWords": [
+                  "كانت",
+                  "هجرته"
+                ],
+                "recognizedWords": [
+                  "كات",
+                  "جرته"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  11,
+                  19
+                ],
+                "transcriptRange": [
+                  11,
+                  19
+                ],
+                "referenceWords": [
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "فهجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "ومن"
+                ],
+                "recognizedWords": [
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "فهجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "ومن"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  19,
+                  20
+                ],
+                "transcriptRange": [
+                  19,
+                  20
+                ],
+                "referenceWords": [
+                  "كانت"
+                ],
+                "recognizedWords": [
+                  "انت"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  20,
+                  22
+                ],
+                "transcriptRange": [
+                  20,
+                  22
+                ],
+                "referenceWords": [
+                  "هجرته",
+                  "لدنيا"
+                ],
+                "recognizedWords": [
+                  "هجرته",
+                  "لدنيا"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_omission",
+                "operation": "delete",
+                "referenceRange": [
+                  22,
+                  23
+                ],
+                "transcriptRange": [
+                  22,
+                  22
+                ],
+                "referenceWords": [
+                  "يصيبها"
+                ],
+                "recognizedWords": [],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  23,
+                  25
+                ],
+                "transcriptRange": [
+                  22,
+                  24
+                ],
+                "referenceWords": [
+                  "أو",
+                  "امرأة"
+                ],
+                "recognizedWords": [
+                  "أو",
+                  "امرأة"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  25,
+                  26
+                ],
+                "transcriptRange": [
+                  24,
+                  25
+                ],
+                "referenceWords": [
+                  "ينكحها"
+                ],
+                "recognizedWords": [
+                  "ينكحوها"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  26,
+                  29
+                ],
+                "transcriptRange": [
+                  25,
+                  28
+                ],
+                "referenceWords": [
+                  "فهجرته",
+                  "إلى",
+                  "ما"
+                ],
+                "recognizedWords": [
+                  "فهجرته",
+                  "إلى",
+                  "ما"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  29,
+                  31
+                ],
+                "transcriptRange": [
+                  28,
+                  29
+                ],
+                "referenceWords": [
+                  "هاجر",
+                  "إليه"
+                ],
+                "recognizedWords": [
+                  "هاجرائلي"
+                ],
+                "observedContinuationOnBothSides": false,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              }
+            ],
+            "studentScore": null,
+            "wordErrorRate": null,
+            "approvedForAssessment": false
+          }
+        }
+      ]
+    },
+    {
+      "label": "استبدال «يصيبها» بـ«يستمتع بها» بحسب توصيف المستخدم",
+      "runs": [
+        {
+          "model": "Qwen/Qwen3-ASR-0.6B-hf",
+          "rawTranscript": "عن أمير المؤمنين أبي حفص عمر رضي الله عنه قال سمعت رسول الله صلى الله عليه وسلم يقول إنما الأعمال بنيت وإنما لكل أمرين ما نوى فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله ومن كانت هجرته لدنيا يستمتع بها أو مراة ينكحها فهجرته إلى ما هجر إليه.",
+          "selection": {
+            "text": "إنما الأعمال بنيت وإنما لكل أمرين ما نوى فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله ومن كانت هجرته لدنيا يستمتع بها أو مراة ينكحها فهجرته إلى ما هجر إليه",
+            "selectedRange": [
+              18,
+              50
+            ],
+            "excludedPrefix": [
+              "عن",
+              "أمير",
+              "المؤمنين",
+              "أبي",
+              "حفص",
+              "عمر",
+              "رضي",
+              "الله",
+              "عنه",
+              "قال",
+              "سمعت",
+              "رسول",
+              "الله",
+              "صلى",
+              "الله",
+              "عليه",
+              "وسلم",
+              "يقول"
+            ],
+            "excludedSuffix": [],
+            "selectionStatus": "experimental_anchor_selection_requires_human_review"
+          },
+          "alignment": {
+            "kind": "diagnostic_alignment_not_assessment",
+            "referenceWords": [
+              "إنما",
+              "الأعمال",
+              "بالنيات",
+              "وإنما",
+              "لكل",
+              "امرئ",
+              "ما",
+              "نوى",
+              "فمن",
+              "كانت",
+              "هجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "فهجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "ومن",
+              "كانت",
+              "هجرته",
+              "لدنيا",
+              "يصيبها",
+              "أو",
+              "امرأة",
+              "ينكحها",
+              "فهجرته",
+              "إلى",
+              "ما",
+              "هاجر",
+              "إليه"
+            ],
+            "recognizedWords": [
+              "إنما",
+              "الأعمال",
+              "بنيت",
+              "وإنما",
+              "لكل",
+              "أمرين",
+              "ما",
+              "نوى",
+              "فمن",
+              "كانت",
+              "هجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "فهجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "ومن",
+              "كانت",
+              "هجرته",
+              "لدنيا",
+              "يستمتع",
+              "بها",
+              "أو",
+              "مراة",
+              "ينكحها",
+              "فهجرته",
+              "إلى",
+              "ما",
+              "هجر",
+              "إليه"
+            ],
+            "spans": [
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  0,
+                  2
+                ],
+                "transcriptRange": [
+                  0,
+                  2
+                ],
+                "referenceWords": [
+                  "إنما",
+                  "الأعمال"
+                ],
+                "recognizedWords": [
+                  "إنما",
+                  "الأعمال"
+                ],
+                "observedContinuationOnBothSides": false,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  2,
+                  3
+                ],
+                "transcriptRange": [
+                  2,
+                  3
+                ],
+                "referenceWords": [
+                  "بالنيات"
+                ],
+                "recognizedWords": [
+                  "بنيت"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  3,
+                  5
+                ],
+                "transcriptRange": [
+                  3,
+                  5
+                ],
+                "referenceWords": [
+                  "وإنما",
+                  "لكل"
+                ],
+                "recognizedWords": [
+                  "وإنما",
+                  "لكل"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  5,
+                  6
+                ],
+                "transcriptRange": [
+                  5,
+                  6
+                ],
+                "referenceWords": [
+                  "امرئ"
+                ],
+                "recognizedWords": [
+                  "أمرين"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  6,
+                  22
+                ],
+                "transcriptRange": [
+                  6,
+                  22
+                ],
+                "referenceWords": [
+                  "ما",
+                  "نوى",
+                  "فمن",
+                  "كانت",
+                  "هجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "فهجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "ومن",
+                  "كانت",
+                  "هجرته",
+                  "لدنيا"
+                ],
+                "recognizedWords": [
+                  "ما",
+                  "نوى",
+                  "فمن",
+                  "كانت",
+                  "هجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "فهجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله",
+                  "ومن",
+                  "كانت",
+                  "هجرته",
+                  "لدنيا"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  22,
+                  23
+                ],
+                "transcriptRange": [
+                  22,
+                  24
+                ],
+                "referenceWords": [
+                  "يصيبها"
+                ],
+                "recognizedWords": [
+                  "يستمتع",
+                  "بها"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  23,
+                  24
+                ],
+                "transcriptRange": [
+                  24,
+                  25
+                ],
+                "referenceWords": [
+                  "أو"
+                ],
+                "recognizedWords": [
+                  "أو"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  24,
+                  25
+                ],
+                "transcriptRange": [
+                  25,
+                  26
+                ],
+                "referenceWords": [
+                  "امرأة"
+                ],
+                "recognizedWords": [
+                  "مراة"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  25,
+                  29
+                ],
+                "transcriptRange": [
+                  26,
+                  30
+                ],
+                "referenceWords": [
+                  "ينكحها",
+                  "فهجرته",
+                  "إلى",
+                  "ما"
+                ],
+                "recognizedWords": [
+                  "ينكحها",
+                  "فهجرته",
+                  "إلى",
+                  "ما"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  29,
+                  30
+                ],
+                "transcriptRange": [
+                  30,
+                  31
+                ],
+                "referenceWords": [
+                  "هاجر"
+                ],
+                "recognizedWords": [
+                  "هجر"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  30,
+                  31
+                ],
+                "transcriptRange": [
+                  31,
+                  32
+                ],
+                "referenceWords": [
+                  "إليه"
+                ],
+                "recognizedWords": [
+                  "إليه"
+                ],
+                "observedContinuationOnBothSides": false,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              }
+            ],
+            "studentScore": null,
+            "wordErrorRate": null,
+            "approvedForAssessment": false
+          }
+        },
+        {
+          "model": "jonatasgrosman/wav2vec2-large-xlsr-53-arabic",
+          "rawTranscript": "عَنْ أَمِيلَ الْمُؤْمِنينَ أَبِي حَفْصٍ عُمَرر عُمَرُ بْنُ خَطَّابٍ رَضِي اللهُ عَنْهُ قَالَ سَمِعْتُ رَسُولَ اللهِ صَالَّى اللهُ عَلَيْهِ وَسَلَّمَ يَقُولُ إنَّمَا الْأَعْمَالُ بِلنَّيَّاتٍ وَإِنَّمَا لِكُلِّ امْرِئٍم فَمَنْ كَانَتْ هِجْرَتُهُ إلَى اللهِ وَرَسُولِهِ فَعِجْرَتُهُ إلَى اللهِ وَرَسُولِ وَمَنْ كَانَتْ هِجْرَتُهُ لِدُنْيَايَسْتَمْتِعُ بِهَا أَوْ امْرَأَةٍ اَنْكحُهَا فَهِجْرَتُهُ إلَى مَا هَاجَرَ إلَيْهِ",
+          "selection": {
+            "text": "إنما الأعمال بلنيات وإنما لكل امرئم فمن كانت هجرته إلى الله ورسوله فعجرته إلى الله ورسول ومن كانت هجرته لدنيايستمتع بها أو امرأة انكحها فهجرته إلى ما هاجر إليه",
+            "selectedRange": [
+              21,
+              50
+            ],
+            "excludedPrefix": [
+              "عن",
+              "أميل",
+              "المؤمنين",
+              "أبي",
+              "حفص",
+              "عمرر",
+              "عمر",
+              "بن",
+              "خطاب",
+              "رضي",
+              "الله",
+              "عنه",
+              "قال",
+              "سمعت",
+              "رسول",
+              "الله",
+              "صالى",
+              "الله",
+              "عليه",
+              "وسلم",
+              "يقول"
+            ],
+            "excludedSuffix": [],
+            "selectionStatus": "experimental_anchor_selection_requires_human_review"
+          },
+          "alignment": {
+            "kind": "diagnostic_alignment_not_assessment",
+            "referenceWords": [
+              "إنما",
+              "الأعمال",
+              "بالنيات",
+              "وإنما",
+              "لكل",
+              "امرئ",
+              "ما",
+              "نوى",
+              "فمن",
+              "كانت",
+              "هجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "فهجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "ومن",
+              "كانت",
+              "هجرته",
+              "لدنيا",
+              "يصيبها",
+              "أو",
+              "امرأة",
+              "ينكحها",
+              "فهجرته",
+              "إلى",
+              "ما",
+              "هاجر",
+              "إليه"
+            ],
+            "recognizedWords": [
+              "إنما",
+              "الأعمال",
+              "بلنيات",
+              "وإنما",
+              "لكل",
+              "امرئم",
+              "فمن",
+              "كانت",
+              "هجرته",
+              "إلى",
+              "الله",
+              "ورسوله",
+              "فعجرته",
+              "إلى",
+              "الله",
+              "ورسول",
+              "ومن",
+              "كانت",
+              "هجرته",
+              "لدنيايستمتع",
+              "بها",
+              "أو",
+              "امرأة",
+              "انكحها",
+              "فهجرته",
+              "إلى",
+              "ما",
+              "هاجر",
+              "إليه"
+            ],
+            "spans": [
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  0,
+                  2
+                ],
+                "transcriptRange": [
+                  0,
+                  2
+                ],
+                "referenceWords": [
+                  "إنما",
+                  "الأعمال"
+                ],
+                "recognizedWords": [
+                  "إنما",
+                  "الأعمال"
+                ],
+                "observedContinuationOnBothSides": false,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  2,
+                  3
+                ],
+                "transcriptRange": [
+                  2,
+                  3
+                ],
+                "referenceWords": [
+                  "بالنيات"
+                ],
+                "recognizedWords": [
+                  "بلنيات"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  3,
+                  5
+                ],
+                "transcriptRange": [
+                  3,
+                  5
+                ],
+                "referenceWords": [
+                  "وإنما",
+                  "لكل"
+                ],
+                "recognizedWords": [
+                  "وإنما",
+                  "لكل"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  5,
+                  8
+                ],
+                "transcriptRange": [
+                  5,
+                  6
+                ],
+                "referenceWords": [
+                  "امرئ",
+                  "ما",
+                  "نوى"
+                ],
+                "recognizedWords": [
+                  "امرئم"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  8,
+                  14
+                ],
+                "transcriptRange": [
+                  6,
+                  12
+                ],
+                "referenceWords": [
+                  "فمن",
+                  "كانت",
+                  "هجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله"
+                ],
+                "recognizedWords": [
+                  "فمن",
+                  "كانت",
+                  "هجرته",
+                  "إلى",
+                  "الله",
+                  "ورسوله"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  14,
+                  15
+                ],
+                "transcriptRange": [
+                  12,
+                  13
+                ],
+                "referenceWords": [
+                  "فهجرته"
+                ],
+                "recognizedWords": [
+                  "فعجرته"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  15,
+                  17
+                ],
+                "transcriptRange": [
+                  13,
+                  15
+                ],
+                "referenceWords": [
+                  "إلى",
+                  "الله"
+                ],
+                "recognizedWords": [
+                  "إلى",
+                  "الله"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  17,
+                  18
+                ],
+                "transcriptRange": [
+                  15,
+                  16
+                ],
+                "referenceWords": [
+                  "ورسوله"
+                ],
+                "recognizedWords": [
+                  "ورسول"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  18,
+                  21
+                ],
+                "transcriptRange": [
+                  16,
+                  19
+                ],
+                "referenceWords": [
+                  "ومن",
+                  "كانت",
+                  "هجرته"
+                ],
+                "recognizedWords": [
+                  "ومن",
+                  "كانت",
+                  "هجرته"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  21,
+                  23
+                ],
+                "transcriptRange": [
+                  19,
+                  21
+                ],
+                "referenceWords": [
+                  "لدنيا",
+                  "يصيبها"
+                ],
+                "recognizedWords": [
+                  "لدنيايستمتع",
+                  "بها"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  23,
+                  25
+                ],
+                "transcriptRange": [
+                  21,
+                  23
+                ],
+                "referenceWords": [
+                  "أو",
+                  "امرأة"
+                ],
+                "recognizedWords": [
+                  "أو",
+                  "امرأة"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "possible_substitution",
+                "operation": "replace",
+                "referenceRange": [
+                  25,
+                  26
+                ],
+                "transcriptRange": [
+                  23,
+                  24
+                ],
+                "referenceWords": [
+                  "ينكحها"
+                ],
+                "recognizedWords": [
+                  "انكحها"
+                ],
+                "observedContinuationOnBothSides": true,
+                "humanReviewRequired": true,
+                "confirmedLearnerError": false
+              },
+              {
+                "kind": "recognized_word_match_not_assessment",
+                "operation": "equal",
+                "referenceRange": [
+                  26,
+                  31
+                ],
+                "transcriptRange": [
+                  24,
+                  29
+                ],
+                "referenceWords": [
+                  "فهجرته",
+                  "إلى",
+                  "ما",
+                  "هاجر",
+                  "إليه"
+                ],
+                "recognizedWords": [
+                  "فهجرته",
+                  "إلى",
+                  "ما",
+                  "هاجر",
+                  "إليه"
+                ],
+                "observedContinuationOnBothSides": false,
+                "humanReviewRequired": false,
+                "confirmedLearnerError": false
+              }
+            ],
+            "studentScore": null,
+            "wordErrorRate": null,
+            "approvedForAssessment": false
+          }
+        }
+      ]
+    }
+  ],
+  "studentScore": null,
+  "wordErrorRate": null,
+  "approvedForAssessment": false
+}

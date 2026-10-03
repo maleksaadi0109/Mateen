@@ -1,6 +1,7 @@
 import { Link } from 'wouter';
 import {
   getGetDashboardQueryKey, getGetProfileQueryKey, getGetProgressQueryKey, getGetCatalogQueryKey,
+  getGetAssessmentSummaryQueryKey, useGetAssessmentSummary,
   useGetDashboard, useGetProfile, useGetProgress, useGetCatalog,
 } from '@workspace/api-client-react';
 import { ArrowLeft, Bookmark, CheckCheck } from 'lucide-react';
@@ -12,6 +13,7 @@ export default function StudentHome() {
   const profile = useGetProfile({ query: { enabled: true, queryKey: getGetProfileQueryKey() } });
   const dash = useGetDashboard({ query: { enabled: true, queryKey: getGetDashboardQueryKey() } });
   const progress = useGetProgress({ query: { enabled: true, queryKey: getGetProgressQueryKey() } });
+  const asm = useGetAssessmentSummary({ query: { enabled: true, queryKey: getGetAssessmentSummaryQueryKey() } });
   const catalog = useGetCatalog({ query: { enabled: true, queryKey: getGetCatalogQueryKey() } });
 
   if (dash.isLoading) return <LoadingList rows={3} />;
@@ -65,7 +67,11 @@ export default function StudentHome() {
       </div>
 
       <div className="mt-8 grid gap-4 md:grid-cols-2">
-        <Notice title="التسميع الصوتي والاختبارات">غير متاحة في هذا الإصدار، ولن تظهر هنا درجات أو نتائج حتى تُفعَّل فعلاً.</Notice>
+        <Link href="/student/exams" className="paper-card block p-6" data-testid="card-assessment-summary">
+          <p className="font-display font-bold">اختبار المستوى</p>
+          <p className="mt-2 font-arabic text-lg">{asm.isLoading ? 'جارٍ التحميل...' : asm.isError || !asm.data ? 'تعذّر تحميل ملخص الاختبار.' : asm.data.completedAvailableContent ? 'أتممت المحتوى المتاح (التمهيدي). لا مستوى تالياً منشوراً بعد.' : asm.data.activeAttempt ? 'لديك محاولة جارية.' : asm.data.available ? 'الاختبار متاح للبدء.' : 'الاختبار غير متاح الآن.'}</p>
+          {asm.data && <p className="mt-2 font-ui text-sm text-muted-foreground">أخطاء مؤكدة: {num(asm.data.confirmedMistakesCount)} · مراجعات مستحقة: {num(asm.data.dueReviewsCount)}{asm.data.nextAssessmentAvailableAt && new Date(asm.data.nextAssessmentAvailableAt) > new Date(asm.data.serverNow) ? ` · الاختبار التالي: ${new Date(asm.data.nextAssessmentAvailableAt).toLocaleString('ar')}` : asm.data.available && !asm.data.activeAttempt ? ' · الاختبار التالي: متاح الآن' : ''}</p>}
+        </Link>
         {available.length > 0 && (
           <div className="paper-card p-6"><p className="font-display font-bold">المتاح الآن</p>
             {available.map((t) => (<Link key={t.id} href={`/student/study/${t.id}`} className="mt-3 flex items-center gap-3 font-arabic text-lg hover:text-secondary"><StarMark size={18} className="text-secondary" />{t.title}</Link>))}

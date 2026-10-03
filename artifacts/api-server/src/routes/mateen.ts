@@ -1,4 +1,3 @@
-import { getAuth } from "@clerk/express";
 import {
   GetCapabilitiesResponse,
   GetCatalogResponse,
@@ -6,12 +5,15 @@ import {
   GetProfileResponse,
   GetProgressResponse,
   GetReferralsResponse,
+  GetTeacherResponse,
   GetStudyTextResponse,
   SaveProfileBody,
   SaveProfileResponse,
   SaveProgressBody,
   SaveProgressParams,
   SaveProgressResponse,
+  SaveTeacherBody,
+  SaveTeacherResponse,
 } from "@workspace/api-zod";
 import {
   db,
@@ -22,23 +24,53 @@ import {
   scholarlyQuestionsTable,
 } from "@workspace/db";
 import { desc, eq } from "drizzle-orm";
-import { Router, type NextFunction, type Request, type Response } from "express";
+import { Router, type Response } from "express";
 import nawawiRecords from "../data/nawawi.json";
+import {
+  authenticationRequired,
+  getOrCreateProfile,
+  mutationOriginProtection,
+  rateLimit,
+  requireProfile,
+  type AuthedRequest,
+} from "../lib/mateen-auth";
 import { getNawawiStudyRecords } from "../lib/source-review";
 import { getMateenScholarlyReadiness } from "./scholarly";
+import { canonicalMatnBoundaries, canonicalMatnRecords } from "../lib/canonical-matn";
+import {
+  assessmentAudioCapabilitiesReady,
+  recitationCapabilitiesReady,
+} from "../lib/recitation-readiness";
 
 const router = Router();
 
 const sourceUrl = "https://app.turath.io/book/12836?page=6";
 const sourceAuthor = "الإمام يحيى بن شرف النووي";
 const catalogIds = new Set(["nawawi", "nawaqid", "qawaid", "tuhfa"]);
+const canonicalRecordByNumber = new Map(canonicalMatnRecords.map((record) => [record.number, record]));
+const canonicalBoundaryByNumber = new Map(canonicalMatnBoundaries.map((boundary) => [boundary.id, boundary]));
 
 const validHadiths = (() => {
   if (!Array.isArray(nawawiRecords) || nawawiRecords.length === 0) {
     return [];
   }
   const ids = new Set<number>();
-  const parsed = nawawiRecords.map((record) =>
+  const enriched = nawawiRecords.map((record) => {
+    const number = typeof record === "object" && record !== null && "number" in record
+      ? Number(record.number)
+      : NaN;
+    const canonical = canonicalRecordByNumber.get(number);
+    const boundary = canonicalBoundaryByNumber.get(number);
+    if (!canonical || !boundary) {
+      throw new Error(`Nawawi record ${String(number)} has no explicit canonical recitation boundary.`);
+    }
+    return {
+      ...record,
+      recitationText: canonical.text,
+      recitationSelection: boundary.selection,
+    };
+  });
+  const parsed = enriched.map((record) =>
     GetStudyTextResponse.shape.hadiths.element.safeParse(record),
   );
   if (parsed.some((record) => !record.success)) {
@@ -102,117 +134,6 @@ const catalog = GetCatalogResponse.parse([
   },
 ]);
 
-type AuthedRequest = Request & { mateenUserId?: string };
-
-function authenticationRequired(
-  req: AuthedRequest,
-  res: Response,
-  next: NextFunction,
-): void {
-  const userId = getAuth(req).userId;
-  if (!userId) {
-    res.status(401).json({ error: "Authentication is required" });
-    return;
-  }
-  req.mateenUserId = userId;
-  next();
-}
-
-async function getOrCreateProfile(userId: string) {
-  await db
-    .insert(profilesTable)
-    .values({ clerkId: userId, name: "", role: "student", onboarded: false })
-    .onConflictDoNothing({ target: profilesTable.clerkId });
-  const [profile] = await db
-    .select()
-    .from(profilesTable)
-    .where(eq(profilesTable.clerkId, userId))
-    .limit(1);
-  return profile;
-}
-
-async function requireProfile(
-  req: AuthedRequest,
-  res: Response,
-  role?: "student" | "teacher",
-  requireOnboarding = true,
-) {
-  const profile = await getOrCreateProfile(req.mateenUserId!);
-  if (!profile) {
-    res.status(500).json({ error: "Unable to load the authenticated profile" });
-    return null;
-  }
-  if (requireOnboarding && !profile.onboarded) {
-    res.status(403).json({ error: "Complete profile onboarding first" });
-    return null;
-  }
-  if (role && profile.role !== role) {
-    res.status(403).json({ error: `This operation requires the ${role} role` });
-    return null;
-  }
-  return profile;
-}
-
-function mutationOriginProtection(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void {
-  const origin = req.get("origin");
-  const forwardedHost = req.get("x-forwarded-host")?.split(",")[0]?.trim();
-  const expectedHost = forwardedHost || req.get("host");
-  const expectedProtocol =
-    req.get("x-forwarded-proto")?.split(",")[0]?.trim() || req.protocol;
-  if (!origin || !expectedHost) {
-    res.status(403).json({ error: "A same-origin request is required" });
-    return;
-  }
-  try {
-    const originUrl = new URL(origin);
-    if (
-      originUrl.host.toLowerCase() !== expectedHost.toLowerCase() ||
-      originUrl.protocol.replace(":", "").toLowerCase() !==
-        expectedProtocol.toLowerCase()
-    ) {
-      res.status(403).json({ error: "Cross-origin state changes are not allowed" });
-      return;
-    }
-  } catch {
-    res.status(403).json({ error: "Invalid request origin" });
-    return;
-  }
-  next();
-}
-
-function rateLimit(limit: number, windowMs: number) {
-  const requests = new Map<string, { start: number; count: number }>();
-  return (req: Request, res: Response, next: NextFunction): void => {
-    const now = Date.now();
-    const key = getAuth(req).userId || req.ip || req.socket.remoteAddress || "unknown";
-    if (requests.size > 1000) {
-      for (const [storedKey, entry] of requests) {
-        if (now - entry.start >= windowMs) requests.delete(storedKey);
-      }
-    }
-    if (!requests.has(key) && requests.size >= 10_000) {
-      res.status(429).json({ error: "Too many requests; try again shortly" });
-      return;
-    }
-    const entry = requests.get(key);
-    if (!entry || now - entry.start >= windowMs) {
-      requests.set(key, { start: now, count: 1 });
-      next();
-      return;
-    }
-    entry.count += 1;
-    if (entry.count > limit) {
-      res.status(429).json({ error: "Too many requests; try again shortly" });
-      return;
-    }
-    next();
-  };
-}
-
 function hasOnlyKeys(value: unknown, keys: string[]): boolean {
   return (
     typeof value === "object" &&
@@ -251,7 +172,19 @@ router.get("/mateen/texts/:textId", async (req, res) => {
     author: sourceAuthor,
     sourceUrl,
     sourceStatus: reviewedSource.sourceStatus,
-    hadiths: reviewedSource.hadiths,
+    hadiths: reviewedSource.hadiths.map((record) => {
+      const original = validHadiths.find((item) => item.number === record.number);
+      const canonical = canonicalRecordByNumber.get(record.number);
+      const boundary = canonicalBoundaryByNumber.get(record.number);
+      // Preserve reviewed source metadata, but never attach an old primary
+      // passage to an edited source version whose exact text no longer matches.
+      const matchesCanonicalSource = original?.text.trim() === record.text.trim();
+      return {
+        ...record,
+        recitationText: matchesCanonicalSource && canonical ? canonical.text : "",
+        recitationSelection: boundary?.selection ?? "primary-report",
+      };
+    }),
   });
   res.json(result);
 });
@@ -496,14 +429,90 @@ router.post(
   },
 );
 
+router.get(
+  "/mateen/teacher",
+  authenticationRequired,
+  async (req: AuthedRequest, res) => {
+    const profile = await requireProfile(req, res, "teacher");
+    if (!profile) return;
+    const [application] = await db
+      .select()
+      .from(teacherApplicationsTable)
+      .where(eq(teacherApplicationsTable.userId, req.mateenUserId!))
+      .limit(1);
+    res.json(
+      GetTeacherResponse.parse({
+        biography: application?.biography ?? "",
+        specialties: application?.specialties ?? "",
+        available: application?.available ?? false,
+        status: application?.status ?? "draft",
+      }),
+    );
+  },
+);
+
+router.put(
+  "/mateen/teacher",
+  mutationOriginProtection,
+  rateLimit(20, 60_000),
+  authenticationRequired,
+  async (req: AuthedRequest, res) => {
+    const profile = await requireProfile(req, res, "teacher");
+    if (!profile) return;
+    if (
+      !hasOnlyKeys(req.body, ["biography", "specialties", "available"]) ||
+      !SaveTeacherBody.safeParse(req.body).success
+    ) {
+      res.status(400).json({ error: "Invalid teacher application payload" });
+      return;
+    }
+    const input = SaveTeacherBody.parse(req.body);
+    const [existing] = await db
+      .select()
+      .from(teacherApplicationsTable)
+      .where(eq(teacherApplicationsTable.userId, req.mateenUserId!))
+      .limit(1);
+    // Saving a draft is not a submission: qualification documents and the
+    // administrative review workflow have not been implemented yet.
+    const status = existing?.status ?? "draft";
+    const [application] = await db
+      .insert(teacherApplicationsTable)
+      .values({
+        userId: req.mateenUserId!,
+        biography: input.biography,
+        specialties: input.specialties,
+        status,
+        available: status === "approved" && input.available,
+      })
+      .onConflictDoUpdate({
+        target: teacherApplicationsTable.userId,
+        set: {
+          biography: input.biography,
+          specialties: input.specialties,
+          status,
+          available: status === "approved" && input.available,
+        },
+      })
+      .returning();
+    res.json(
+      SaveTeacherResponse.parse({
+        biography: application.biography,
+        specialties: application.specialties,
+        available: application.available,
+        status: application.status,
+      }),
+    );
+  },
+);
+
 router.get("/mateen/capabilities", async (_req, res) => {
   const reviewedSource = await getNawawiStudyRecords();
   const scholarly = await getMateenScholarlyReadiness();
   res.json(
     GetCapabilitiesResponse.parse({
-      voiceReady: false,
+      voiceReady: await recitationCapabilitiesReady(),
       assistantReady: scholarly.assistantEnabled,
-      examsReady: false,
+      examsReady: await assessmentAudioCapabilitiesReady(),
       sourceStatus: reviewedSource.sourceStatus,
       notice:
         (reviewedSource.sourceStatus === "approved"
@@ -512,12 +521,12 @@ router.get("/mateen/capabilities", async (_req, res) => {
         (scholarly.assistantEnabled
           ? " المساعد العلمي يستشهد بالشروح المعتمدة فقط، ولا يصدر فتاوى."
           : " الإجابات العلمية غير مفعّلة حتى اكتمال اعتماد الشروح وتهيئة النموذج واجتياز تقييم العربية والاستشهاد والامتناع.") +
-        " الخدمات الصوتية والاختبارات غير متاحة حاليًا.",
+        " يُصحح التحريري بمطابقة حتمية، ويتطلب الشفهي مراجعة بشرية مخولة؛ لا يستخدم التعرف الآلي على الكلام للدرجات.",
     }),
   );
 });
 
-const featureUnavailable = (feature: "assistant" | "recitation" | "exams") =>
+const featureUnavailable = (feature: "assistant" | "recitation") =>
   async (req: AuthedRequest, res: Response) => {
     const profile = await requireProfile(req, res, "student");
     if (!profile) return;
@@ -533,19 +542,11 @@ router.post(
   authenticationRequired,
   (_req, res) => res.redirect(307, "/api/mateen/assistant/questions"),
 );
-router.post(
-  "/mateen/recitation",
-  mutationOriginProtection,
-  rateLimit(20, 60_000),
-  authenticationRequired,
-  featureUnavailable("recitation"),
-);
-router.post(
-  "/mateen/exams",
-  mutationOriginProtection,
-  rateLimit(20, 60_000),
-  authenticationRequired,
-  featureUnavailable("exams"),
-);
-
+router.post("/mateen/recitation", mutationOriginProtection, rateLimit(20, 60_000), authenticationRequired, async (req: AuthedRequest, res) => {
+  const profile = await requireProfile(req, res, "student");
+  if (!profile) return;
+  res.status(410).json({
+    error: "The legacy recitation endpoint is disabled; use /mateen/recitations.",
+  });
+});
 export default router;

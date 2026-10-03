@@ -421,6 +421,8 @@ export const GetStudyTextResponse = zod.object({
   "text": zod.string(),
   "sourceUrl": zod.string(),
   "sourcePage": zod.number().int(),
+  "recitationText": zod.string().describe('Exact canonical primary-report text for recitation and assessment.'),
+  "recitationSelection": zod.enum(['primary-report', 'selected-primary-report']),
   "sourceVersionId": zod.string().optional(),
   "reviewStatus": zod.enum(['pending_review', 'approved', 'rejected', 'withdrawn']).optional(),
   "viewerPage": zod.number().int().optional()
@@ -1252,5 +1254,1155 @@ export const ListScholarlyAuditResponse = zod.array(ListScholarlyAuditResponseIt
 export const HealthCheckResponse = zod.object({
   "status": zod.string()
 })
+
+
+/**
+ * @summary Get one authenticated student's own practice record
+ */
+export const GetRecitationPracticeParams = zod.object({
+  "id": zod.coerce.string().uuid()
+})
+
+export const getRecitationPracticeResponseHadithNumberMax = 42;
+
+export const getRecitationPracticeResponseErrorMax = 300;
+
+export const getRecitationPracticeResponseResultOneTranscriptMax = 20000;
+
+export const getRecitationPracticeResponseResultOneReferenceTextMax = 20000;
+
+export const getRecitationPracticeResponseResultOneModelMax = 200;
+
+
+export const getRecitationPracticeResponseResultOneModelRegExp = new RegExp('^[A-Za-z0-9._:/-]+$');
+export const getRecitationPracticeResponseResultOneModelRevisionMax = 200;
+
+
+export const getRecitationPracticeResponseResultOneModelRevisionRegExp = new RegExp('^[A-Za-z0-9._:/-]+$');
+export const getRecitationPracticeResponseResultOneAlignmentSpansItemReferenceWordsItemMax = 120;
+
+export const getRecitationPracticeResponseResultOneAlignmentSpansItemReferenceWordsMax = 1000;
+
+export const getRecitationPracticeResponseResultOneAlignmentSpansItemRecognizedWordsItemMax = 120;
+
+export const getRecitationPracticeResponseResultOneAlignmentSpansItemRecognizedWordsMax = 1000;
+
+export const getRecitationPracticeResponseResultOneAlignmentSpansMax = 5000;
+
+
+
+export const GetRecitationPracticeResponse = zod.object({
+  "id": zod.string().uuid(),
+  "textId": zod.enum(['nawawi']),
+  "hadithNumber": zod.number().int().min(1).max(getRecitationPracticeResponseHadithNumberMax),
+  "status": zod.enum(['uploading', 'processing', 'completed', 'error', 'deleted']),
+  "createdAt": zod.coerce.date(),
+  "expiresAt": zod.coerce.date(),
+  "error": zod.string().max(getRecitationPracticeResponseErrorMax).nullable(),
+  "result": zod.union([zod.object({
+  "transcript": zod.string().min(1).max(getRecitationPracticeResponseResultOneTranscriptMax),
+  "referenceText": zod.string().min(1).max(getRecitationPracticeResponseResultOneReferenceTextMax),
+  "model": zod.string().min(1).max(getRecitationPracticeResponseResultOneModelMax).regex(getRecitationPracticeResponseResultOneModelRegExp),
+  "modelRevision": zod.string().min(1).max(getRecitationPracticeResponseResultOneModelRevisionMax).regex(getRecitationPracticeResponseResultOneModelRevisionRegExp),
+  "provisional": zod.literal(true),
+  "assessment": zod.literal(false),
+  "alignment": zod.object({
+  "spans": zod.array(zod.object({
+  "kind": zod.enum(['recognized_word_match_not_assessment', 'possible_omission', 'unconfirmed_passage_boundary', 'possible_substitution', 'possible_extra_words', 'recognizer_disagreement_not_reader_error']),
+  "operation": zod.enum(['equal', 'replace', 'insert', 'delete']),
+  "referenceWords": zod.array(zod.string().max(getRecitationPracticeResponseResultOneAlignmentSpansItemReferenceWordsItemMax)).max(getRecitationPracticeResponseResultOneAlignmentSpansItemReferenceWordsMax),
+  "recognizedWords": zod.array(zod.string().max(getRecitationPracticeResponseResultOneAlignmentSpansItemRecognizedWordsItemMax)).max(getRecitationPracticeResponseResultOneAlignmentSpansItemRecognizedWordsMax),
+  "humanReviewRequired": zod.boolean(),
+  "confirmedLearnerError": zod.literal(false)
+})).max(getRecitationPracticeResponseResultOneAlignmentSpansMax),
+  "approvedForAssessment": zod.literal(false),
+  "studentScore": zod.literal(null).nullable(),
+  "wordErrorRate": zod.literal(null).nullable()
+})
+}),zod.null()]),
+  "audioDeleted": zod.boolean()
+})
+
+
+/**
+ * @summary Cancel practice and delete its audio and derived result
+ */
+export const DeleteRecitationPracticeParams = zod.object({
+  "id": zod.coerce.string().uuid()
+})
+
+export const DeleteRecitationPracticeResponse = zod.void()
+
+
+/**
+ * @summary Finalize direct upload and request experimental local analysis
+ */
+export const AnalyzeRecitationPracticeParams = zod.object({
+  "id": zod.coerce.string().uuid()
+})
+
+export const analyzeRecitationPracticeResponseHadithNumberMax = 42;
+
+export const analyzeRecitationPracticeResponseErrorMax = 300;
+
+export const analyzeRecitationPracticeResponseResultOneTranscriptMax = 20000;
+
+export const analyzeRecitationPracticeResponseResultOneReferenceTextMax = 20000;
+
+export const analyzeRecitationPracticeResponseResultOneModelMax = 200;
+
+
+export const analyzeRecitationPracticeResponseResultOneModelRegExp = new RegExp('^[A-Za-z0-9._:/-]+$');
+export const analyzeRecitationPracticeResponseResultOneModelRevisionMax = 200;
+
+
+export const analyzeRecitationPracticeResponseResultOneModelRevisionRegExp = new RegExp('^[A-Za-z0-9._:/-]+$');
+export const analyzeRecitationPracticeResponseResultOneAlignmentSpansItemReferenceWordsItemMax = 120;
+
+export const analyzeRecitationPracticeResponseResultOneAlignmentSpansItemReferenceWordsMax = 1000;
+
+export const analyzeRecitationPracticeResponseResultOneAlignmentSpansItemRecognizedWordsItemMax = 120;
+
+export const analyzeRecitationPracticeResponseResultOneAlignmentSpansItemRecognizedWordsMax = 1000;
+
+export const analyzeRecitationPracticeResponseResultOneAlignmentSpansMax = 5000;
+
+
+
+export const AnalyzeRecitationPracticeResponse = zod.object({
+  "id": zod.string().uuid(),
+  "textId": zod.enum(['nawawi']),
+  "hadithNumber": zod.number().int().min(1).max(analyzeRecitationPracticeResponseHadithNumberMax),
+  "status": zod.enum(['uploading', 'processing', 'completed', 'error', 'deleted']),
+  "createdAt": zod.coerce.date(),
+  "expiresAt": zod.coerce.date(),
+  "error": zod.string().max(analyzeRecitationPracticeResponseErrorMax).nullable(),
+  "result": zod.union([zod.object({
+  "transcript": zod.string().min(1).max(analyzeRecitationPracticeResponseResultOneTranscriptMax),
+  "referenceText": zod.string().min(1).max(analyzeRecitationPracticeResponseResultOneReferenceTextMax),
+  "model": zod.string().min(1).max(analyzeRecitationPracticeResponseResultOneModelMax).regex(analyzeRecitationPracticeResponseResultOneModelRegExp),
+  "modelRevision": zod.string().min(1).max(analyzeRecitationPracticeResponseResultOneModelRevisionMax).regex(analyzeRecitationPracticeResponseResultOneModelRevisionRegExp),
+  "provisional": zod.literal(true),
+  "assessment": zod.literal(false),
+  "alignment": zod.object({
+  "spans": zod.array(zod.object({
+  "kind": zod.enum(['recognized_word_match_not_assessment', 'possible_omission', 'unconfirmed_passage_boundary', 'possible_substitution', 'possible_extra_words', 'recognizer_disagreement_not_reader_error']),
+  "operation": zod.enum(['equal', 'replace', 'insert', 'delete']),
+  "referenceWords": zod.array(zod.string().max(analyzeRecitationPracticeResponseResultOneAlignmentSpansItemReferenceWordsItemMax)).max(analyzeRecitationPracticeResponseResultOneAlignmentSpansItemReferenceWordsMax),
+  "recognizedWords": zod.array(zod.string().max(analyzeRecitationPracticeResponseResultOneAlignmentSpansItemRecognizedWordsItemMax)).max(analyzeRecitationPracticeResponseResultOneAlignmentSpansItemRecognizedWordsMax),
+  "humanReviewRequired": zod.boolean(),
+  "confirmedLearnerError": zod.literal(false)
+})).max(analyzeRecitationPracticeResponseResultOneAlignmentSpansMax),
+  "approvedForAssessment": zod.literal(false),
+  "studentScore": zod.literal(null).nullable(),
+  "wordErrorRate": zod.literal(null).nullable()
+})
+}),zod.null()]),
+  "audioDeleted": zod.boolean()
+})
+
+
+export const GetAssessmentPolicyResponse = zod.object({
+  "textId": zod.literal("nawawi"),
+  "level": zod.literal("التمهيدي"),
+  "questions": zod.literal(30),
+  "writtenQuestions": zod.literal(15),
+  "oralQuestions": zod.literal(15),
+  "activeMinutes": zod.literal(30),
+  "pointsPerQuestion": zod.literal(1),
+  "passScore": zod.literal(25),
+  "retryHours": zod.literal(24),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "audioRetentionDays": zod.literal(30),
+  "gradingMode": zod.literal("human_adjudicated_oral"),
+  "sourceStatus": zod.enum(['retrieved_pending_review', 'unavailable'])
+})
+
+
+export const StartAssessmentBody = zod.object({
+  "sessionId": zod.string().uuid()
+})
+
+export const startAssessmentResponseQuestionsItemPositionMax = 30;
+
+export const startAssessmentResponseQuestionsItemAnswerSequenceMin = 0;
+
+export const startAssessmentResponseQuestionsItemWrittenAnswerMax = 20000;
+
+export const startAssessmentResponseQuestionsMax = 30;
+
+export const startAssessmentResponseActiveSecondsMin = 0;
+export const startAssessmentResponseActiveSecondsMax = 1800;
+
+export const startAssessmentResponseRemainingSecondsMin = 0;
+export const startAssessmentResponseRemainingSecondsMax = 1800;
+
+export const startAssessmentResponseCurrentQuestionPositionMin = 0;
+export const startAssessmentResponseCurrentQuestionPositionMax = 29;
+
+export const startAssessmentResponseResultOneScoreMin = 0;
+export const startAssessmentResponseResultOneScoreMax = 30;
+
+export const startAssessmentResponseResultOneWrittenScoreMin = 0;
+export const startAssessmentResponseResultOneWrittenScoreMax = 15;
+
+export const startAssessmentResponseResultOneOralScoreMin = 0;
+export const startAssessmentResponseResultOneOralScoreMax = 15;
+
+export const startAssessmentResponseResultOneAnswersMin = 30;
+export const startAssessmentResponseResultOneAnswersMax = 30;
+
+
+
+export const StartAssessmentResponse = zod.object({
+  "id": zod.string().uuid(),
+  "status": zod.enum(['in_progress', 'paused_connection', 'submitted', 'technical_review', 'passed', 'failed']),
+  "questions": zod.array(zod.object({
+  "id": zod.string().uuid(),
+  "position": zod.number().int().min(1).max(startAssessmentResponseQuestionsItemPositionMax),
+  "kind": zod.enum(['written', 'oral']),
+  "prompt": zod.string(),
+  "answerSequence": zod.number().int().min(startAssessmentResponseQuestionsItemAnswerSequenceMin),
+  "audioReceived": zod.boolean(),
+  "audioDeletionAvailable": zod.boolean(),
+  "writtenAnswer": zod.string().max(startAssessmentResponseQuestionsItemWrittenAnswerMax).nullable()
+})).max(startAssessmentResponseQuestionsMax),
+  "activeSeconds": zod.number().int().min(startAssessmentResponseActiveSecondsMin).max(startAssessmentResponseActiveSecondsMax),
+  "remainingSeconds": zod.number().int().min(startAssessmentResponseRemainingSecondsMin).max(startAssessmentResponseRemainingSecondsMax),
+  "currentQuestionPosition": zod.number().int().min(startAssessmentResponseCurrentQuestionPositionMin).max(startAssessmentResponseCurrentQuestionPositionMax),
+  "expiresAt": zod.coerce.date(),
+  "result": zod.union([zod.object({
+  "score": zod.number().int().min(startAssessmentResponseResultOneScoreMin).max(startAssessmentResponseResultOneScoreMax),
+  "passed": zod.boolean(),
+  "completedAt": zod.coerce.date(),
+  "reviewedAt": zod.coerce.date().nullable(),
+  "retryAvailableAt": zod.coerce.date().nullable(),
+  "writtenScore": zod.number().int().min(startAssessmentResponseResultOneWrittenScoreMin).max(startAssessmentResponseResultOneWrittenScoreMax),
+  "oralScore": zod.number().int().min(startAssessmentResponseResultOneOralScoreMin).max(startAssessmentResponseResultOneOralScoreMax),
+  "technicalReview": zod.boolean(),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "retentionNotice": zod.string(),
+  "policy": zod.object({
+  "textId": zod.literal("nawawi"),
+  "level": zod.literal("التمهيدي"),
+  "questions": zod.literal(30),
+  "writtenQuestions": zod.literal(15),
+  "oralQuestions": zod.literal(15),
+  "activeMinutes": zod.literal(30),
+  "pointsPerQuestion": zod.literal(1),
+  "passScore": zod.literal(25),
+  "retryHours": zod.literal(24),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "audioRetentionDays": zod.literal(30),
+  "gradingMode": zod.literal("human_adjudicated_oral"),
+  "sourceStatus": zod.enum(['retrieved_pending_review', 'unavailable'])
+}),
+  "answers": zod.array(zod.object({
+  "questionId": zod.string().uuid(),
+  "kind": zod.enum(['written', 'oral']),
+  "expectedText": zod.string(),
+  "submittedText": zod.string().nullable(),
+  "score": zod.union([zod.literal(0),zod.literal(1)]),
+  "provenance": zod.enum(['written', 'human_verified_oral', 'unanswered']),
+  "differences": zod.array(zod.object({
+  "kind": zod.enum(['substitution', 'omission', 'extra']),
+  "expectedWords": zod.array(zod.string()),
+  "submittedWords": zod.array(zod.string())
+}))
+})).min(startAssessmentResponseResultOneAnswersMin).max(startAssessmentResponseResultOneAnswersMax)
+}),zod.null()]),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "policy": zod.object({
+  "textId": zod.literal("nawawi"),
+  "level": zod.literal("التمهيدي"),
+  "questions": zod.literal(30),
+  "writtenQuestions": zod.literal(15),
+  "oralQuestions": zod.literal(15),
+  "activeMinutes": zod.literal(30),
+  "pointsPerQuestion": zod.literal(1),
+  "passScore": zod.literal(25),
+  "retryHours": zod.literal(24),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "audioRetentionDays": zod.literal(30),
+  "gradingMode": zod.literal("human_adjudicated_oral"),
+  "sourceStatus": zod.enum(['retrieved_pending_review', 'unavailable'])
+})
+})
+
+
+export const getAssessmentSummaryResponseLatestResultOneScoreMin = 0;
+export const getAssessmentSummaryResponseLatestResultOneScoreMax = 30;
+
+export const getAssessmentSummaryResponseLatestResultOneWrittenScoreMin = 0;
+export const getAssessmentSummaryResponseLatestResultOneWrittenScoreMax = 15;
+
+export const getAssessmentSummaryResponseLatestResultOneOralScoreMin = 0;
+export const getAssessmentSummaryResponseLatestResultOneOralScoreMax = 15;
+
+export const getAssessmentSummaryResponseLatestResultOneAnswersMin = 30;
+export const getAssessmentSummaryResponseLatestResultOneAnswersMax = 30;
+
+export const getAssessmentSummaryResponseDueReviewsCountMin = 0;
+
+export const getAssessmentSummaryResponseConfirmedMistakesCountMin = 0;
+
+
+
+export const GetAssessmentSummaryResponse = zod.object({
+  "available": zod.boolean(),
+  "completedAvailableContent": zod.boolean(),
+  "nextLevel": zod.literal("null").nullable(),
+  "activeAttempt": zod.string().uuid().nullable(),
+  "latestResult": zod.union([zod.object({
+  "score": zod.number().int().min(getAssessmentSummaryResponseLatestResultOneScoreMin).max(getAssessmentSummaryResponseLatestResultOneScoreMax),
+  "passed": zod.boolean(),
+  "completedAt": zod.coerce.date(),
+  "reviewedAt": zod.coerce.date().nullable(),
+  "retryAvailableAt": zod.coerce.date().nullable(),
+  "writtenScore": zod.number().int().min(getAssessmentSummaryResponseLatestResultOneWrittenScoreMin).max(getAssessmentSummaryResponseLatestResultOneWrittenScoreMax),
+  "oralScore": zod.number().int().min(getAssessmentSummaryResponseLatestResultOneOralScoreMin).max(getAssessmentSummaryResponseLatestResultOneOralScoreMax),
+  "technicalReview": zod.boolean(),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "retentionNotice": zod.string(),
+  "policy": zod.object({
+  "textId": zod.literal("nawawi"),
+  "level": zod.literal("التمهيدي"),
+  "questions": zod.literal(30),
+  "writtenQuestions": zod.literal(15),
+  "oralQuestions": zod.literal(15),
+  "activeMinutes": zod.literal(30),
+  "pointsPerQuestion": zod.literal(1),
+  "passScore": zod.literal(25),
+  "retryHours": zod.literal(24),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "audioRetentionDays": zod.literal(30),
+  "gradingMode": zod.literal("human_adjudicated_oral"),
+  "sourceStatus": zod.enum(['retrieved_pending_review', 'unavailable'])
+}),
+  "answers": zod.array(zod.object({
+  "questionId": zod.string().uuid(),
+  "kind": zod.enum(['written', 'oral']),
+  "expectedText": zod.string(),
+  "submittedText": zod.string().nullable(),
+  "score": zod.union([zod.literal(0),zod.literal(1)]),
+  "provenance": zod.enum(['written', 'human_verified_oral', 'unanswered']),
+  "differences": zod.array(zod.object({
+  "kind": zod.enum(['substitution', 'omission', 'extra']),
+  "expectedWords": zod.array(zod.string()),
+  "submittedWords": zod.array(zod.string())
+}))
+})).min(getAssessmentSummaryResponseLatestResultOneAnswersMin).max(getAssessmentSummaryResponseLatestResultOneAnswersMax)
+}),zod.null()]),
+  "retryAvailableAt": zod.coerce.date().nullable(),
+  "serverNow": zod.coerce.date(),
+  "dueReviewsCount": zod.number().int().min(getAssessmentSummaryResponseDueReviewsCountMin),
+  "confirmedMistakesCount": zod.number().int().min(getAssessmentSummaryResponseConfirmedMistakesCountMin),
+  "nextAssessmentAvailableAt": zod.coerce.date().nullable()
+})
+
+
+export const GetAssessmentParams = zod.object({
+  "attemptId": zod.coerce.string().uuid()
+})
+
+export const GetAssessmentHeader = zod.object({
+  "X-Assessment-Session": zod.string().uuid()
+})
+
+export const getAssessmentResponseQuestionsItemPositionMax = 30;
+
+export const getAssessmentResponseQuestionsItemAnswerSequenceMin = 0;
+
+export const getAssessmentResponseQuestionsItemWrittenAnswerMax = 20000;
+
+export const getAssessmentResponseQuestionsMax = 30;
+
+export const getAssessmentResponseActiveSecondsMin = 0;
+export const getAssessmentResponseActiveSecondsMax = 1800;
+
+export const getAssessmentResponseRemainingSecondsMin = 0;
+export const getAssessmentResponseRemainingSecondsMax = 1800;
+
+export const getAssessmentResponseCurrentQuestionPositionMin = 0;
+export const getAssessmentResponseCurrentQuestionPositionMax = 29;
+
+export const getAssessmentResponseResultOneScoreMin = 0;
+export const getAssessmentResponseResultOneScoreMax = 30;
+
+export const getAssessmentResponseResultOneWrittenScoreMin = 0;
+export const getAssessmentResponseResultOneWrittenScoreMax = 15;
+
+export const getAssessmentResponseResultOneOralScoreMin = 0;
+export const getAssessmentResponseResultOneOralScoreMax = 15;
+
+export const getAssessmentResponseResultOneAnswersMin = 30;
+export const getAssessmentResponseResultOneAnswersMax = 30;
+
+
+
+export const GetAssessmentResponse = zod.object({
+  "id": zod.string().uuid(),
+  "status": zod.enum(['in_progress', 'paused_connection', 'submitted', 'technical_review', 'passed', 'failed']),
+  "questions": zod.array(zod.object({
+  "id": zod.string().uuid(),
+  "position": zod.number().int().min(1).max(getAssessmentResponseQuestionsItemPositionMax),
+  "kind": zod.enum(['written', 'oral']),
+  "prompt": zod.string(),
+  "answerSequence": zod.number().int().min(getAssessmentResponseQuestionsItemAnswerSequenceMin),
+  "audioReceived": zod.boolean(),
+  "audioDeletionAvailable": zod.boolean(),
+  "writtenAnswer": zod.string().max(getAssessmentResponseQuestionsItemWrittenAnswerMax).nullable()
+})).max(getAssessmentResponseQuestionsMax),
+  "activeSeconds": zod.number().int().min(getAssessmentResponseActiveSecondsMin).max(getAssessmentResponseActiveSecondsMax),
+  "remainingSeconds": zod.number().int().min(getAssessmentResponseRemainingSecondsMin).max(getAssessmentResponseRemainingSecondsMax),
+  "currentQuestionPosition": zod.number().int().min(getAssessmentResponseCurrentQuestionPositionMin).max(getAssessmentResponseCurrentQuestionPositionMax),
+  "expiresAt": zod.coerce.date(),
+  "result": zod.union([zod.object({
+  "score": zod.number().int().min(getAssessmentResponseResultOneScoreMin).max(getAssessmentResponseResultOneScoreMax),
+  "passed": zod.boolean(),
+  "completedAt": zod.coerce.date(),
+  "reviewedAt": zod.coerce.date().nullable(),
+  "retryAvailableAt": zod.coerce.date().nullable(),
+  "writtenScore": zod.number().int().min(getAssessmentResponseResultOneWrittenScoreMin).max(getAssessmentResponseResultOneWrittenScoreMax),
+  "oralScore": zod.number().int().min(getAssessmentResponseResultOneOralScoreMin).max(getAssessmentResponseResultOneOralScoreMax),
+  "technicalReview": zod.boolean(),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "retentionNotice": zod.string(),
+  "policy": zod.object({
+  "textId": zod.literal("nawawi"),
+  "level": zod.literal("التمهيدي"),
+  "questions": zod.literal(30),
+  "writtenQuestions": zod.literal(15),
+  "oralQuestions": zod.literal(15),
+  "activeMinutes": zod.literal(30),
+  "pointsPerQuestion": zod.literal(1),
+  "passScore": zod.literal(25),
+  "retryHours": zod.literal(24),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "audioRetentionDays": zod.literal(30),
+  "gradingMode": zod.literal("human_adjudicated_oral"),
+  "sourceStatus": zod.enum(['retrieved_pending_review', 'unavailable'])
+}),
+  "answers": zod.array(zod.object({
+  "questionId": zod.string().uuid(),
+  "kind": zod.enum(['written', 'oral']),
+  "expectedText": zod.string(),
+  "submittedText": zod.string().nullable(),
+  "score": zod.union([zod.literal(0),zod.literal(1)]),
+  "provenance": zod.enum(['written', 'human_verified_oral', 'unanswered']),
+  "differences": zod.array(zod.object({
+  "kind": zod.enum(['substitution', 'omission', 'extra']),
+  "expectedWords": zod.array(zod.string()),
+  "submittedWords": zod.array(zod.string())
+}))
+})).min(getAssessmentResponseResultOneAnswersMin).max(getAssessmentResponseResultOneAnswersMax)
+}),zod.null()]),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "policy": zod.object({
+  "textId": zod.literal("nawawi"),
+  "level": zod.literal("التمهيدي"),
+  "questions": zod.literal(30),
+  "writtenQuestions": zod.literal(15),
+  "oralQuestions": zod.literal(15),
+  "activeMinutes": zod.literal(30),
+  "pointsPerQuestion": zod.literal(1),
+  "passScore": zod.literal(25),
+  "retryHours": zod.literal(24),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "audioRetentionDays": zod.literal(30),
+  "gradingMode": zod.literal("human_adjudicated_oral"),
+  "sourceStatus": zod.enum(['retrieved_pending_review', 'unavailable'])
+})
+})
+
+
+export const SubmitAssessmentParams = zod.object({
+  "attemptId": zod.coerce.string().uuid()
+})
+
+export const SubmitAssessmentBody = zod.object({
+  "sessionId": zod.string().uuid(),
+  "mutationId": zod.string().uuid()
+})
+
+export const submitAssessmentResponseQuestionsItemPositionMax = 30;
+
+export const submitAssessmentResponseQuestionsItemAnswerSequenceMin = 0;
+
+export const submitAssessmentResponseQuestionsItemWrittenAnswerMax = 20000;
+
+export const submitAssessmentResponseQuestionsMax = 30;
+
+export const submitAssessmentResponseActiveSecondsMin = 0;
+export const submitAssessmentResponseActiveSecondsMax = 1800;
+
+export const submitAssessmentResponseRemainingSecondsMin = 0;
+export const submitAssessmentResponseRemainingSecondsMax = 1800;
+
+export const submitAssessmentResponseCurrentQuestionPositionMin = 0;
+export const submitAssessmentResponseCurrentQuestionPositionMax = 29;
+
+export const submitAssessmentResponseResultOneScoreMin = 0;
+export const submitAssessmentResponseResultOneScoreMax = 30;
+
+export const submitAssessmentResponseResultOneWrittenScoreMin = 0;
+export const submitAssessmentResponseResultOneWrittenScoreMax = 15;
+
+export const submitAssessmentResponseResultOneOralScoreMin = 0;
+export const submitAssessmentResponseResultOneOralScoreMax = 15;
+
+export const submitAssessmentResponseResultOneAnswersMin = 30;
+export const submitAssessmentResponseResultOneAnswersMax = 30;
+
+
+
+export const SubmitAssessmentResponse = zod.object({
+  "id": zod.string().uuid(),
+  "status": zod.enum(['in_progress', 'paused_connection', 'submitted', 'technical_review', 'passed', 'failed']),
+  "questions": zod.array(zod.object({
+  "id": zod.string().uuid(),
+  "position": zod.number().int().min(1).max(submitAssessmentResponseQuestionsItemPositionMax),
+  "kind": zod.enum(['written', 'oral']),
+  "prompt": zod.string(),
+  "answerSequence": zod.number().int().min(submitAssessmentResponseQuestionsItemAnswerSequenceMin),
+  "audioReceived": zod.boolean(),
+  "audioDeletionAvailable": zod.boolean(),
+  "writtenAnswer": zod.string().max(submitAssessmentResponseQuestionsItemWrittenAnswerMax).nullable()
+})).max(submitAssessmentResponseQuestionsMax),
+  "activeSeconds": zod.number().int().min(submitAssessmentResponseActiveSecondsMin).max(submitAssessmentResponseActiveSecondsMax),
+  "remainingSeconds": zod.number().int().min(submitAssessmentResponseRemainingSecondsMin).max(submitAssessmentResponseRemainingSecondsMax),
+  "currentQuestionPosition": zod.number().int().min(submitAssessmentResponseCurrentQuestionPositionMin).max(submitAssessmentResponseCurrentQuestionPositionMax),
+  "expiresAt": zod.coerce.date(),
+  "result": zod.union([zod.object({
+  "score": zod.number().int().min(submitAssessmentResponseResultOneScoreMin).max(submitAssessmentResponseResultOneScoreMax),
+  "passed": zod.boolean(),
+  "completedAt": zod.coerce.date(),
+  "reviewedAt": zod.coerce.date().nullable(),
+  "retryAvailableAt": zod.coerce.date().nullable(),
+  "writtenScore": zod.number().int().min(submitAssessmentResponseResultOneWrittenScoreMin).max(submitAssessmentResponseResultOneWrittenScoreMax),
+  "oralScore": zod.number().int().min(submitAssessmentResponseResultOneOralScoreMin).max(submitAssessmentResponseResultOneOralScoreMax),
+  "technicalReview": zod.boolean(),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "retentionNotice": zod.string(),
+  "policy": zod.object({
+  "textId": zod.literal("nawawi"),
+  "level": zod.literal("التمهيدي"),
+  "questions": zod.literal(30),
+  "writtenQuestions": zod.literal(15),
+  "oralQuestions": zod.literal(15),
+  "activeMinutes": zod.literal(30),
+  "pointsPerQuestion": zod.literal(1),
+  "passScore": zod.literal(25),
+  "retryHours": zod.literal(24),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "audioRetentionDays": zod.literal(30),
+  "gradingMode": zod.literal("human_adjudicated_oral"),
+  "sourceStatus": zod.enum(['retrieved_pending_review', 'unavailable'])
+}),
+  "answers": zod.array(zod.object({
+  "questionId": zod.string().uuid(),
+  "kind": zod.enum(['written', 'oral']),
+  "expectedText": zod.string(),
+  "submittedText": zod.string().nullable(),
+  "score": zod.union([zod.literal(0),zod.literal(1)]),
+  "provenance": zod.enum(['written', 'human_verified_oral', 'unanswered']),
+  "differences": zod.array(zod.object({
+  "kind": zod.enum(['substitution', 'omission', 'extra']),
+  "expectedWords": zod.array(zod.string()),
+  "submittedWords": zod.array(zod.string())
+}))
+})).min(submitAssessmentResponseResultOneAnswersMin).max(submitAssessmentResponseResultOneAnswersMax)
+}),zod.null()]),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "policy": zod.object({
+  "textId": zod.literal("nawawi"),
+  "level": zod.literal("التمهيدي"),
+  "questions": zod.literal(30),
+  "writtenQuestions": zod.literal(15),
+  "oralQuestions": zod.literal(15),
+  "activeMinutes": zod.literal(30),
+  "pointsPerQuestion": zod.literal(1),
+  "passScore": zod.literal(25),
+  "retryHours": zod.literal(24),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "audioRetentionDays": zod.literal(30),
+  "gradingMode": zod.literal("human_adjudicated_oral"),
+  "sourceStatus": zod.enum(['retrieved_pending_review', 'unavailable'])
+})
+})
+
+
+export const HeartbeatAssessmentParams = zod.object({
+  "attemptId": zod.coerce.string().uuid()
+})
+
+export const heartbeatAssessmentBodyCurrentQuestionPositionMin = 0;
+export const heartbeatAssessmentBodyCurrentQuestionPositionMax = 29;
+
+
+
+export const HeartbeatAssessmentBody = zod.object({
+  "sessionId": zod.string().uuid(),
+  "currentQuestionPosition": zod.number().int().min(heartbeatAssessmentBodyCurrentQuestionPositionMin).max(heartbeatAssessmentBodyCurrentQuestionPositionMax)
+})
+
+export const heartbeatAssessmentResponseQuestionsItemPositionMax = 30;
+
+export const heartbeatAssessmentResponseQuestionsItemAnswerSequenceMin = 0;
+
+export const heartbeatAssessmentResponseQuestionsItemWrittenAnswerMax = 20000;
+
+export const heartbeatAssessmentResponseQuestionsMax = 30;
+
+export const heartbeatAssessmentResponseActiveSecondsMin = 0;
+export const heartbeatAssessmentResponseActiveSecondsMax = 1800;
+
+export const heartbeatAssessmentResponseRemainingSecondsMin = 0;
+export const heartbeatAssessmentResponseRemainingSecondsMax = 1800;
+
+export const heartbeatAssessmentResponseCurrentQuestionPositionMin = 0;
+export const heartbeatAssessmentResponseCurrentQuestionPositionMax = 29;
+
+export const heartbeatAssessmentResponseResultOneScoreMin = 0;
+export const heartbeatAssessmentResponseResultOneScoreMax = 30;
+
+export const heartbeatAssessmentResponseResultOneWrittenScoreMin = 0;
+export const heartbeatAssessmentResponseResultOneWrittenScoreMax = 15;
+
+export const heartbeatAssessmentResponseResultOneOralScoreMin = 0;
+export const heartbeatAssessmentResponseResultOneOralScoreMax = 15;
+
+export const heartbeatAssessmentResponseResultOneAnswersMin = 30;
+export const heartbeatAssessmentResponseResultOneAnswersMax = 30;
+
+
+
+export const HeartbeatAssessmentResponse = zod.object({
+  "id": zod.string().uuid(),
+  "status": zod.enum(['in_progress', 'paused_connection', 'submitted', 'technical_review', 'passed', 'failed']),
+  "questions": zod.array(zod.object({
+  "id": zod.string().uuid(),
+  "position": zod.number().int().min(1).max(heartbeatAssessmentResponseQuestionsItemPositionMax),
+  "kind": zod.enum(['written', 'oral']),
+  "prompt": zod.string(),
+  "answerSequence": zod.number().int().min(heartbeatAssessmentResponseQuestionsItemAnswerSequenceMin),
+  "audioReceived": zod.boolean(),
+  "audioDeletionAvailable": zod.boolean(),
+  "writtenAnswer": zod.string().max(heartbeatAssessmentResponseQuestionsItemWrittenAnswerMax).nullable()
+})).max(heartbeatAssessmentResponseQuestionsMax),
+  "activeSeconds": zod.number().int().min(heartbeatAssessmentResponseActiveSecondsMin).max(heartbeatAssessmentResponseActiveSecondsMax),
+  "remainingSeconds": zod.number().int().min(heartbeatAssessmentResponseRemainingSecondsMin).max(heartbeatAssessmentResponseRemainingSecondsMax),
+  "currentQuestionPosition": zod.number().int().min(heartbeatAssessmentResponseCurrentQuestionPositionMin).max(heartbeatAssessmentResponseCurrentQuestionPositionMax),
+  "expiresAt": zod.coerce.date(),
+  "result": zod.union([zod.object({
+  "score": zod.number().int().min(heartbeatAssessmentResponseResultOneScoreMin).max(heartbeatAssessmentResponseResultOneScoreMax),
+  "passed": zod.boolean(),
+  "completedAt": zod.coerce.date(),
+  "reviewedAt": zod.coerce.date().nullable(),
+  "retryAvailableAt": zod.coerce.date().nullable(),
+  "writtenScore": zod.number().int().min(heartbeatAssessmentResponseResultOneWrittenScoreMin).max(heartbeatAssessmentResponseResultOneWrittenScoreMax),
+  "oralScore": zod.number().int().min(heartbeatAssessmentResponseResultOneOralScoreMin).max(heartbeatAssessmentResponseResultOneOralScoreMax),
+  "technicalReview": zod.boolean(),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "retentionNotice": zod.string(),
+  "policy": zod.object({
+  "textId": zod.literal("nawawi"),
+  "level": zod.literal("التمهيدي"),
+  "questions": zod.literal(30),
+  "writtenQuestions": zod.literal(15),
+  "oralQuestions": zod.literal(15),
+  "activeMinutes": zod.literal(30),
+  "pointsPerQuestion": zod.literal(1),
+  "passScore": zod.literal(25),
+  "retryHours": zod.literal(24),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "audioRetentionDays": zod.literal(30),
+  "gradingMode": zod.literal("human_adjudicated_oral"),
+  "sourceStatus": zod.enum(['retrieved_pending_review', 'unavailable'])
+}),
+  "answers": zod.array(zod.object({
+  "questionId": zod.string().uuid(),
+  "kind": zod.enum(['written', 'oral']),
+  "expectedText": zod.string(),
+  "submittedText": zod.string().nullable(),
+  "score": zod.union([zod.literal(0),zod.literal(1)]),
+  "provenance": zod.enum(['written', 'human_verified_oral', 'unanswered']),
+  "differences": zod.array(zod.object({
+  "kind": zod.enum(['substitution', 'omission', 'extra']),
+  "expectedWords": zod.array(zod.string()),
+  "submittedWords": zod.array(zod.string())
+}))
+})).min(heartbeatAssessmentResponseResultOneAnswersMin).max(heartbeatAssessmentResponseResultOneAnswersMax)
+}),zod.null()]),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "policy": zod.object({
+  "textId": zod.literal("nawawi"),
+  "level": zod.literal("التمهيدي"),
+  "questions": zod.literal(30),
+  "writtenQuestions": zod.literal(15),
+  "oralQuestions": zod.literal(15),
+  "activeMinutes": zod.literal(30),
+  "pointsPerQuestion": zod.literal(1),
+  "passScore": zod.literal(25),
+  "retryHours": zod.literal(24),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "audioRetentionDays": zod.literal(30),
+  "gradingMode": zod.literal("human_adjudicated_oral"),
+  "sourceStatus": zod.enum(['retrieved_pending_review', 'unavailable'])
+})
+})
+
+
+export const SaveAssessmentAnswerParams = zod.object({
+  "attemptId": zod.coerce.string().uuid(),
+  "questionId": zod.coerce.string().uuid()
+})
+
+
+export const saveAssessmentAnswerBodyWrittenAnswerMax = 20000;
+
+
+
+export const SaveAssessmentAnswerBody = zod.object({
+  "sessionId": zod.string().uuid(),
+  "sequence": zod.number().int().min(1),
+  "mutationId": zod.string().uuid(),
+  "writtenAnswer": zod.string().max(saveAssessmentAnswerBodyWrittenAnswerMax)
+})
+
+export const saveAssessmentAnswerResponseSequenceMin = 0;
+
+
+
+export const SaveAssessmentAnswerResponse = zod.object({
+  "questionId": zod.string().uuid(),
+  "sequence": zod.number().int().min(saveAssessmentAnswerResponseSequenceMin),
+  "acknowledged": zod.boolean(),
+  "audioReceived": zod.boolean()
+})
+
+
+export const RequestAssessmentAudioParams = zod.object({
+  "attemptId": zod.coerce.string().uuid(),
+  "questionId": zod.coerce.string().uuid()
+})
+
+
+export const requestAssessmentAudioBodyContentTypeMax = 100;
+
+
+export const requestAssessmentAudioBodyContentTypeRegExp = new RegExp('^audio/(webm|ogg|mp4|mpeg)(\\s*;\\s*codecs=(opus|vorbis|mp4a\\.40\\.2|mp3))?$');
+export const requestAssessmentAudioBodySizeBytesMax = 10485760;
+
+export const requestAssessmentAudioBodyDurationSecondsExclusiveMin = 0;
+export const requestAssessmentAudioBodyDurationSecondsMax = 60;
+
+
+
+export const RequestAssessmentAudioBody = zod.object({
+  "sessionId": zod.string().uuid(),
+  "sequence": zod.number().int().min(1),
+  "contentType": zod.string().max(requestAssessmentAudioBodyContentTypeMax).regex(requestAssessmentAudioBodyContentTypeRegExp),
+  "sizeBytes": zod.number().int().min(1).max(requestAssessmentAudioBodySizeBytesMax),
+  "durationSeconds": zod.number().gt(requestAssessmentAudioBodyDurationSecondsExclusiveMin).max(requestAssessmentAudioBodyDurationSecondsMax),
+  "consent": zod.literal(true)
+})
+
+export const RequestAssessmentAudioResponse = zod.object({
+  "uploadUrl": zod.string().url(),
+  "expiresAt": zod.coerce.date(),
+  "maxBytes": zod.literal(10485760),
+  "maxDurationSeconds": zod.literal(60),
+  "retentionDays": zod.literal(30)
+})
+
+
+export const DeleteAssessmentAudioParams = zod.object({
+  "attemptId": zod.coerce.string().uuid(),
+  "questionId": zod.coerce.string().uuid()
+})
+
+export const DeleteAssessmentAudioResponse = zod.void()
+
+
+export const ConfirmAssessmentAudioParams = zod.object({
+  "attemptId": zod.coerce.string().uuid(),
+  "questionId": zod.coerce.string().uuid()
+})
+
+
+
+
+export const ConfirmAssessmentAudioBody = zod.object({
+  "sessionId": zod.string().uuid(),
+  "sequence": zod.number().int().min(1)
+})
+
+export const confirmAssessmentAudioResponseSequenceMin = 0;
+
+
+
+export const ConfirmAssessmentAudioResponse = zod.object({
+  "questionId": zod.string().uuid(),
+  "sequence": zod.number().int().min(confirmAssessmentAudioResponseSequenceMin),
+  "acknowledged": zod.boolean(),
+  "audioReceived": zod.boolean()
+})
+
+
+export const listScheduledReviewsResponseHadithNumberMax = 42;
+
+
+
+export const ListScheduledReviewsResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "hadithNumber": zod.number().int().min(1).max(listScheduledReviewsResponseHadithNumberMax),
+  "prompt": zod.string(),
+  "sourceMistake": zod.string().nullable(),
+  "dueAt": zod.coerce.date(),
+  "intervalDays": zod.union([zod.literal(1),zod.literal(3),zod.literal(7),zod.literal(14),zod.literal(30)]),
+  "status": zod.enum(['due', 'completed', 'technical_review']),
+  "nextDueAt": zod.coerce.date().nullable(),
+  "correctness": zod.boolean().nullable(),
+  "feedback": zod.string().nullable(),
+  "referenceText": zod.string().nullable(),
+  "mutationId": zod.string().uuid().nullable(),
+  "differences": zod.array(zod.object({
+  "kind": zod.enum(['substitution', 'omission', 'extra']),
+  "expectedWords": zod.array(zod.string()),
+  "submittedWords": zod.array(zod.string())
+}))
+})
+export const ListScheduledReviewsResponse = zod.array(ListScheduledReviewsResponseItem)
+
+
+export const CompleteScheduledReviewParams = zod.object({
+  "reviewId": zod.coerce.string().uuid()
+})
+
+export const completeScheduledReviewBodyWrittenAnswerMax = 20000;
+
+
+
+export const CompleteScheduledReviewBody = zod.object({
+  "writtenAnswer": zod.string().max(completeScheduledReviewBodyWrittenAnswerMax),
+  "mutationId": zod.string().uuid()
+})
+
+export const completeScheduledReviewResponseHadithNumberMax = 42;
+
+
+
+export const CompleteScheduledReviewResponse = zod.object({
+  "id": zod.string().uuid(),
+  "hadithNumber": zod.number().int().min(1).max(completeScheduledReviewResponseHadithNumberMax),
+  "prompt": zod.string(),
+  "sourceMistake": zod.string().nullable(),
+  "dueAt": zod.coerce.date(),
+  "intervalDays": zod.union([zod.literal(1),zod.literal(3),zod.literal(7),zod.literal(14),zod.literal(30)]),
+  "status": zod.enum(['due', 'completed', 'technical_review']),
+  "nextDueAt": zod.coerce.date().nullable(),
+  "correctness": zod.boolean().nullable(),
+  "feedback": zod.string().nullable(),
+  "referenceText": zod.string().nullable(),
+  "mutationId": zod.string().uuid().nullable(),
+  "differences": zod.array(zod.object({
+  "kind": zod.enum(['substitution', 'omission', 'extra']),
+  "expectedWords": zod.array(zod.string()),
+  "submittedWords": zod.array(zod.string())
+}))
+})
+
+
+export const GetAssessmentReviewerAccessResponse = zod.object({
+  "authorized": zod.boolean()
+})
+
+
+export const listAssessmentReviewQueueResponsePendingAnswersMax = 15;
+
+
+
+export const ListAssessmentReviewQueueResponseItem = zod.object({
+  "attemptId": zod.string().uuid(),
+  "studentId": zod.string(),
+  "submittedAt": zod.coerce.date(),
+  "pendingAnswers": zod.number().int().min(1).max(listAssessmentReviewQueueResponsePendingAnswersMax)
+})
+export const ListAssessmentReviewQueueResponse = zod.array(ListAssessmentReviewQueueResponseItem).max(100)
+
+
+export const GetAssessmentReviewParams = zod.object({
+  "attemptId": zod.coerce.string().uuid()
+})
+
+export const GetAssessmentReviewResponse = zod.object({
+  "attemptId": zod.string().uuid(),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "answers": zod.array(zod.object({
+  "questionId": zod.string().uuid(),
+  "prompt": zod.string(),
+  "referenceText": zod.string(),
+  "audioAvailable": zod.boolean(),
+  "status": zod.enum(['pending', 'scored', 'technical_review'])
+}))
+})
+
+
+export const AdjudicateAssessmentOralParams = zod.object({
+  "attemptId": zod.coerce.string().uuid()
+})
+
+export const adjudicateAssessmentOralBodyTranscriptMax = 20000;
+
+export const adjudicateAssessmentOralBodyTechnicalIssueMax = 1000;
+
+
+
+export const AdjudicateAssessmentOralBody = zod.object({
+  "questionId": zod.string().uuid(),
+  "transcript": zod.string().max(adjudicateAssessmentOralBodyTranscriptMax).nullable(),
+  "technicalIssue": zod.string().max(adjudicateAssessmentOralBodyTechnicalIssueMax).nullable(),
+  "attestCompleteRecording": zod.literal(true),
+  "attestAudioReviewed": zod.literal(true),
+  "attestReferenceAccurate": zod.literal(true)
+})
+
+export const adjudicateAssessmentOralResponseQuestionsItemPositionMax = 30;
+
+export const adjudicateAssessmentOralResponseQuestionsItemAnswerSequenceMin = 0;
+
+export const adjudicateAssessmentOralResponseQuestionsItemWrittenAnswerMax = 20000;
+
+export const adjudicateAssessmentOralResponseQuestionsMax = 30;
+
+export const adjudicateAssessmentOralResponseActiveSecondsMin = 0;
+export const adjudicateAssessmentOralResponseActiveSecondsMax = 1800;
+
+export const adjudicateAssessmentOralResponseRemainingSecondsMin = 0;
+export const adjudicateAssessmentOralResponseRemainingSecondsMax = 1800;
+
+export const adjudicateAssessmentOralResponseCurrentQuestionPositionMin = 0;
+export const adjudicateAssessmentOralResponseCurrentQuestionPositionMax = 29;
+
+export const adjudicateAssessmentOralResponseResultOneScoreMin = 0;
+export const adjudicateAssessmentOralResponseResultOneScoreMax = 30;
+
+export const adjudicateAssessmentOralResponseResultOneWrittenScoreMin = 0;
+export const adjudicateAssessmentOralResponseResultOneWrittenScoreMax = 15;
+
+export const adjudicateAssessmentOralResponseResultOneOralScoreMin = 0;
+export const adjudicateAssessmentOralResponseResultOneOralScoreMax = 15;
+
+export const adjudicateAssessmentOralResponseResultOneAnswersMin = 30;
+export const adjudicateAssessmentOralResponseResultOneAnswersMax = 30;
+
+
+
+export const AdjudicateAssessmentOralResponse = zod.object({
+  "id": zod.string().uuid(),
+  "status": zod.enum(['in_progress', 'paused_connection', 'submitted', 'technical_review', 'passed', 'failed']),
+  "questions": zod.array(zod.object({
+  "id": zod.string().uuid(),
+  "position": zod.number().int().min(1).max(adjudicateAssessmentOralResponseQuestionsItemPositionMax),
+  "kind": zod.enum(['written', 'oral']),
+  "prompt": zod.string(),
+  "answerSequence": zod.number().int().min(adjudicateAssessmentOralResponseQuestionsItemAnswerSequenceMin),
+  "audioReceived": zod.boolean(),
+  "audioDeletionAvailable": zod.boolean(),
+  "writtenAnswer": zod.string().max(adjudicateAssessmentOralResponseQuestionsItemWrittenAnswerMax).nullable()
+})).max(adjudicateAssessmentOralResponseQuestionsMax),
+  "activeSeconds": zod.number().int().min(adjudicateAssessmentOralResponseActiveSecondsMin).max(adjudicateAssessmentOralResponseActiveSecondsMax),
+  "remainingSeconds": zod.number().int().min(adjudicateAssessmentOralResponseRemainingSecondsMin).max(adjudicateAssessmentOralResponseRemainingSecondsMax),
+  "currentQuestionPosition": zod.number().int().min(adjudicateAssessmentOralResponseCurrentQuestionPositionMin).max(adjudicateAssessmentOralResponseCurrentQuestionPositionMax),
+  "expiresAt": zod.coerce.date(),
+  "result": zod.union([zod.object({
+  "score": zod.number().int().min(adjudicateAssessmentOralResponseResultOneScoreMin).max(adjudicateAssessmentOralResponseResultOneScoreMax),
+  "passed": zod.boolean(),
+  "completedAt": zod.coerce.date(),
+  "reviewedAt": zod.coerce.date().nullable(),
+  "retryAvailableAt": zod.coerce.date().nullable(),
+  "writtenScore": zod.number().int().min(adjudicateAssessmentOralResponseResultOneWrittenScoreMin).max(adjudicateAssessmentOralResponseResultOneWrittenScoreMax),
+  "oralScore": zod.number().int().min(adjudicateAssessmentOralResponseResultOneOralScoreMin).max(adjudicateAssessmentOralResponseResultOneOralScoreMax),
+  "technicalReview": zod.boolean(),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "retentionNotice": zod.string(),
+  "policy": zod.object({
+  "textId": zod.literal("nawawi"),
+  "level": zod.literal("التمهيدي"),
+  "questions": zod.literal(30),
+  "writtenQuestions": zod.literal(15),
+  "oralQuestions": zod.literal(15),
+  "activeMinutes": zod.literal(30),
+  "pointsPerQuestion": zod.literal(1),
+  "passScore": zod.literal(25),
+  "retryHours": zod.literal(24),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "audioRetentionDays": zod.literal(30),
+  "gradingMode": zod.literal("human_adjudicated_oral"),
+  "sourceStatus": zod.enum(['retrieved_pending_review', 'unavailable'])
+}),
+  "answers": zod.array(zod.object({
+  "questionId": zod.string().uuid(),
+  "kind": zod.enum(['written', 'oral']),
+  "expectedText": zod.string(),
+  "submittedText": zod.string().nullable(),
+  "score": zod.union([zod.literal(0),zod.literal(1)]),
+  "provenance": zod.enum(['written', 'human_verified_oral', 'unanswered']),
+  "differences": zod.array(zod.object({
+  "kind": zod.enum(['substitution', 'omission', 'extra']),
+  "expectedWords": zod.array(zod.string()),
+  "submittedWords": zod.array(zod.string())
+}))
+})).min(adjudicateAssessmentOralResponseResultOneAnswersMin).max(adjudicateAssessmentOralResponseResultOneAnswersMax)
+}),zod.null()]),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "policy": zod.object({
+  "textId": zod.literal("nawawi"),
+  "level": zod.literal("التمهيدي"),
+  "questions": zod.literal(30),
+  "writtenQuestions": zod.literal(15),
+  "oralQuestions": zod.literal(15),
+  "activeMinutes": zod.literal(30),
+  "pointsPerQuestion": zod.literal(1),
+  "passScore": zod.literal(25),
+  "retryHours": zod.literal(24),
+  "sourceVersion": zod.string(),
+  "canonicalHash": zod.string(),
+  "audioRetentionDays": zod.literal(30),
+  "gradingMode": zod.literal("human_adjudicated_oral"),
+  "sourceStatus": zod.enum(['retrieved_pending_review', 'unavailable'])
+})
+})
+
+
+export const GetAssessmentReviewAudioParams = zod.object({
+  "attemptId": zod.coerce.string().uuid(),
+  "questionId": zod.coerce.string().uuid()
+})
+
+export const GetAssessmentReviewAudioResponse = zod.unknown()
+
+
+/**
+ * @summary Create experimental local recitation practice and private upload URL
+ */
+export const requestRecitationPracticeBodyHadithNumberMax = 42;
+
+export const requestRecitationPracticeBodyContentTypeMax = 100;
+
+
+export const requestRecitationPracticeBodyContentTypeRegExp = new RegExp('^audio/(webm|ogg|mp4|mpeg)(\\s*;\\s*codecs=(opus|vorbis|mp4a\\.40\\.2|mp3))?$');
+export const requestRecitationPracticeBodySizeBytesMax = 10485760;
+
+
+
+export const RequestRecitationPracticeBody = zod.object({
+  "textId": zod.enum(['nawawi']),
+  "hadithNumber": zod.number().int().min(1).max(requestRecitationPracticeBodyHadithNumberMax),
+  "contentType": zod.string().max(requestRecitationPracticeBodyContentTypeMax).regex(requestRecitationPracticeBodyContentTypeRegExp),
+  "sizeBytes": zod.number().int().min(1).max(requestRecitationPracticeBodySizeBytesMax),
+  "consent": zod.literal(true)
+})
+
+export const requestRecitationPracticeResponseUploadUrlMax = 4096;
+
+
+
+export const RequestRecitationPracticeResponse = zod.object({
+  "id": zod.string().uuid(),
+  "uploadUrl": zod.string().url().max(requestRecitationPracticeResponseUploadUrlMax),
+  "expiresAt": zod.coerce.date(),
+  "maxDurationSeconds": zod.literal(60),
+  "retentionHours": zod.literal(24)
+})
+
+
+/**
+ * @summary List the authenticated student's own practice records
+ */
+export const listRecitationPracticesResponseHadithNumberMax = 42;
+
+export const listRecitationPracticesResponseErrorMax = 300;
+
+export const listRecitationPracticesResponseResultOneTranscriptMax = 20000;
+
+export const listRecitationPracticesResponseResultOneReferenceTextMax = 20000;
+
+export const listRecitationPracticesResponseResultOneModelMax = 200;
+
+
+export const listRecitationPracticesResponseResultOneModelRegExp = new RegExp('^[A-Za-z0-9._:/-]+$');
+export const listRecitationPracticesResponseResultOneModelRevisionMax = 200;
+
+
+export const listRecitationPracticesResponseResultOneModelRevisionRegExp = new RegExp('^[A-Za-z0-9._:/-]+$');
+export const listRecitationPracticesResponseResultOneAlignmentSpansItemReferenceWordsItemMax = 120;
+
+export const listRecitationPracticesResponseResultOneAlignmentSpansItemReferenceWordsMax = 1000;
+
+export const listRecitationPracticesResponseResultOneAlignmentSpansItemRecognizedWordsItemMax = 120;
+
+export const listRecitationPracticesResponseResultOneAlignmentSpansItemRecognizedWordsMax = 1000;
+
+export const listRecitationPracticesResponseResultOneAlignmentSpansMax = 5000;
+
+
+
+export const ListRecitationPracticesResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "textId": zod.enum(['nawawi']),
+  "hadithNumber": zod.number().int().min(1).max(listRecitationPracticesResponseHadithNumberMax),
+  "status": zod.enum(['uploading', 'processing', 'completed', 'error', 'deleted']),
+  "createdAt": zod.coerce.date(),
+  "expiresAt": zod.coerce.date(),
+  "error": zod.string().max(listRecitationPracticesResponseErrorMax).nullable(),
+  "result": zod.union([zod.object({
+  "transcript": zod.string().min(1).max(listRecitationPracticesResponseResultOneTranscriptMax),
+  "referenceText": zod.string().min(1).max(listRecitationPracticesResponseResultOneReferenceTextMax),
+  "model": zod.string().min(1).max(listRecitationPracticesResponseResultOneModelMax).regex(listRecitationPracticesResponseResultOneModelRegExp),
+  "modelRevision": zod.string().min(1).max(listRecitationPracticesResponseResultOneModelRevisionMax).regex(listRecitationPracticesResponseResultOneModelRevisionRegExp),
+  "provisional": zod.literal(true),
+  "assessment": zod.literal(false),
+  "alignment": zod.object({
+  "spans": zod.array(zod.object({
+  "kind": zod.enum(['recognized_word_match_not_assessment', 'possible_omission', 'unconfirmed_passage_boundary', 'possible_substitution', 'possible_extra_words', 'recognizer_disagreement_not_reader_error']),
+  "operation": zod.enum(['equal', 'replace', 'insert', 'delete']),
+  "referenceWords": zod.array(zod.string().max(listRecitationPracticesResponseResultOneAlignmentSpansItemReferenceWordsItemMax)).max(listRecitationPracticesResponseResultOneAlignmentSpansItemReferenceWordsMax),
+  "recognizedWords": zod.array(zod.string().max(listRecitationPracticesResponseResultOneAlignmentSpansItemRecognizedWordsItemMax)).max(listRecitationPracticesResponseResultOneAlignmentSpansItemRecognizedWordsMax),
+  "humanReviewRequired": zod.boolean(),
+  "confirmedLearnerError": zod.literal(false)
+})).max(listRecitationPracticesResponseResultOneAlignmentSpansMax),
+  "approvedForAssessment": zod.literal(false),
+  "studentScore": zod.literal(null).nullable(),
+  "wordErrorRate": zod.literal(null).nullable()
+})
+}),zod.null()]),
+  "audioDeleted": zod.boolean()
+})
+export const ListRecitationPracticesResponse = zod.array(ListRecitationPracticesResponseItem).max(100)
 
 
