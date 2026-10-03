@@ -10,7 +10,7 @@ Generated answers remain disabled until all three gates pass:
 2. A model provider is configured and usable.
 3. The server's Arabic retrieval, exact-citation and abstention evaluation passes for the current model and corpus, together with the administrator's scientific sign-off.
 
-The current workspace does **not** contain an approved commentary corpus or a configured model provider. Do not mark these as approved merely to make the readiness indicator turn green. Synthetic regression fixtures are test data, not authorized scholarly sources.
+Read the live readiness indicator for the configured provider and current corpus. A configured NVIDIA connection alone does not approve a commentary corpus. Do not mark sources as approved merely to make the indicator turn green. Synthetic regression fixtures are test data, not authorized scholarly sources.
 
 ## Administrative workflow
 
@@ -28,11 +28,22 @@ Changing the corpus, citation metadata or model invalidates the corresponding ev
 
 ## Provider configuration
 
-The adapter supports Replit-managed OpenAI settings (`AI_INTEGRATIONS_OPENAI_BASE_URL` and `AI_INTEGRATIONS_OPENAI_API_KEY`) and a direct OpenAI key (`OPENAI_API_KEY`, with optional `OPENAI_BASE_URL`). Manage credentials only through Replit Secrets; never enter them into source records, prompts, admin notes or source code.
+The adapter supports NVIDIA Nemotron via `NVIDIA_API_KEY` at the fixed NVIDIA endpoint, Replit-managed OpenAI settings (`AI_INTEGRATIONS_OPENAI_BASE_URL` and `AI_INTEGRATIONS_OPENAI_API_KEY`), and a direct OpenAI key (`OPENAI_API_KEY`, with optional `OPENAI_BASE_URL`). Manage credentials only through Replit Secrets; never enter them into source records, prompts, admin notes or source code.
 
-The managed setup was not available in this task environment, so no provider connection was fabricated. Once an actual connection is configured, use the server evaluation rather than assuming Arabic suitability.
+NVIDIA requests never silently fall back to another provider. Once a connection is configured, use the scientific evaluation rather than assuming Arabic suitability.
 
 Published answers are assembled only from verified exact quotations. The model's unrestricted explanatory prose is not published: a genuine citation alone cannot prove that every generated claim is supported. Fatwa requests and questions without sufficient evidence lead to abstention/referral.
+
+## Private NVIDIA experiment
+
+The **تجربة خاصة** tab at `/admin/scholarly` generates an unreviewed draft through `POST /api/mateen/admin/scholarly/preview`. It requires the same content-review permission and secured session as the other administrative operations; it does not grant access or disable MFA.
+
+- This experiment does not require an indexed corpus or a passing scientific evaluation. Its fixed NVIDIA model is independent of the student assistant's configured model.
+- The question is sent to NVIDIA; do not enter private student questions or personal information. Provider-side retention is governed by NVIDIA's own policies.
+- Questions and draft answers are not stored in Mateen's database or audit details. Only the occurrence and model are audited. Leaving the tab, clearing the form or reloading removes the displayed draft.
+- Inputs are bounded to 3–2000 characters; outputs are schema-checked and rendered as escaped plain text, not HTML or executable Markdown. Validation here is technical, not scientific.
+- Five requests per minute per account are allowed, with a bounded provider timeout and explicit errors. Permission is rechecked after generation before releasing a result.
+- Every result is marked **unreviewed**, without verified sources. This does not change source approvals, model configuration, corpus evaluation, student history, referrals or student readiness. Never treat a successful generation request as a scientific evaluation.
 
 ## Referral operation
 

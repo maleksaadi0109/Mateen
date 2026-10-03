@@ -694,6 +694,30 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/ScholarlyConfig" }
+  /mateen/admin/scholarly/preview:
+    post:
+      operationId: generateScholarlyPreview
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ScholarlyPreviewInput" }
+      responses:
+        "200":
+          description: Private unreviewed NVIDIA draft; never an evaluation or student answer
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlyPreview" }
+        "400":
+          description: Invalid question
+        "401":
+          description: Sign-in required
+        "403":
+          description: Secure content-reviewer session required
+        "429":
+          description: Preview request limit reached
+        "503":
+          description: NVIDIA unavailable or returned invalid output
   /mateen/admin/scholarly/evaluations:
     post:
       operationId: recordScholarlyEvaluation
@@ -1665,6 +1689,21 @@ components:
       required: [model]
       properties:
         model: { type: string, enum: [gpt-5.4-mini, gpt-5.4, nvidia/nemotron-3.5-lightning-30b-a3b] }
+    ScholarlyPreviewInput:
+      type: object
+      additionalProperties: false
+      required: [question]
+      properties:
+        question: { type: string, minLength: 3, maxLength: 2000 }
+    ScholarlyPreview:
+      type: object
+      required: [answer, model, reviewStatus, sourceGrounded, generatedAt]
+      properties:
+        answer: { type: string, minLength: 1, maxLength: 6000 }
+        model: { type: string, enum: [nvidia/nemotron-3.5-lightning-30b-a3b] }
+        reviewStatus: { type: string, enum: [unreviewed] }
+        sourceGrounded: { type: boolean, const: false }
+        generatedAt: { type: string, format: date-time }
     ScholarlyEvaluationInput:
       type: object
       required: [model, arabicQualityPassed, groundingPassed, abstentionPassed, note]

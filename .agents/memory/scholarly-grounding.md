@@ -18,3 +18,21 @@ The user selected their own NVIDIA API access for the scholarly assistant instea
 **Why:** This was an explicit provider choice, not permission to substitute another billed provider when NVIDIA is unavailable.
 
 **How to apply:** Preserve NVIDIA as the intended provider unless the user changes it. Report connection failures explicitly; never silently route its requests to another provider or bypass source evaluation.
+
+The user identified Muhammad ibn Salih al-Uthaymeen as the intended commentator for the Forty Nawawi Hadith source, then selected https://shamela.ws/book/21812 as the commentary reference.
+
+**Why:** This identifies the desired scholarly reference; it does not establish that an unattributed third-party dataset contains his commentary.
+
+**How to apply:** Use the user-selected Shamela reference rather than assume the earlier unattributed GitHub dataset contains his commentary. Keep attribution, scientific approval, and reuse clearance as separate checks.
+
+The user explicitly accepted a private administrative NVIDIA generation experiment while postponing scientific evaluation.
+
+**Why:** They wanted to try real generation and continue development without waiting for source review; the accepted alternative was private unreviewed drafts, not publication to students.
+
+**How to apply:** Keep experimental generation separate from scholarly approval and student launch readiness. Do not interpret permission for the private experiment as permission to record passing scientific results.
+
+NVIDIA transport timeouts can be transient even when configuration is valid.
+
+**Why:** Repeated deadline expirations were followed by a successful fast response without replacing the credential or model. Neither configuration presence nor a failed request alone establishes provider availability or Arabic quality.
+
+**How to apply:** Distinguish missing configuration, transport failure and scientific suitability. Use bounded retries for diagnostic generation; do not switch providers, change credentials, or score scientific quality from a timeout.

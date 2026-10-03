@@ -140,3 +140,17 @@ mtime_ms = 1790948371991
 storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/aec4bddd-90be-4966-b533-551ad48400cf/f671f32b-0916-4e86-ae6f-21a915f333f7"
 storage_version_token = "1790948482074924"
 content_type = "text/html"
+
+[[outputs]]
+id = "rGUEhf97wPsrwy8E-WUGE"
+uri = "file://attached_assets/source-candidates/shamela-21812/commentary.txt"
+type = "text"
+title = "شرح الأربعين النووية — ابن عثيمين"
+description = "نسخة نصية من رابط المكتبة الشاملة المختار، مع أرقام الصفحات المطبوعة وروابطها. مرشّحة للمراجعة؛ ليست اعتمادًا علميًا أو تصريح إعادة استخدام."
+logical_id = "7bf167ca-63fa-4dc8-965f-8195e6156828"
+content_hash = "sha256:1236a121af1482c7e0465e6757c257457c004bd76b81b052c1b2634df38d59c3"
+size = 1016552
+mtime_ms = 1791012667649
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/7bf167ca-63fa-4dc8-965f-8195e6156828/4762d598-5db0-4120-892a-9e8f482376fc"
+storage_version_token = "1791012697947920"
+content_type = "text/plain"

@@ -1213,6 +1213,28 @@ export const UpdateScholarlyConfigResponse = zod.object({
 })
 
 
+export const generateScholarlyPreviewBodyQuestionMin = 3;
+export const generateScholarlyPreviewBodyQuestionMax = 2000;
+
+
+
+export const GenerateScholarlyPreviewBody = zod.object({
+  "question": zod.string().min(generateScholarlyPreviewBodyQuestionMin).max(generateScholarlyPreviewBodyQuestionMax)
+})
+
+export const generateScholarlyPreviewResponseAnswerMax = 6000;
+
+
+
+export const GenerateScholarlyPreviewResponse = zod.object({
+  "answer": zod.string().min(1).max(generateScholarlyPreviewResponseAnswerMax),
+  "model": zod.enum(['nvidia/nemotron-3.5-lightning-30b-a3b']),
+  "reviewStatus": zod.enum(['unreviewed']),
+  "sourceGrounded": zod.literal(false),
+  "generatedAt": zod.coerce.date()
+})
+
+
 export const recordScholarlyEvaluationBodyNoteMin = 3;
 export const recordScholarlyEvaluationBodyNoteMax = 3000;
 

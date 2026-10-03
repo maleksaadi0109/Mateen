@@ -1,0 +1,3926 @@
+[
+  {
+    "ordinal": 1,
+    "sourceUrl": "https://shamela.ws/book/21812/3",
+    "viewerPage": 3,
+    "printedPage": 5,
+    "startCharacter": 0,
+    "endCharacter": 1333,
+    "sha256": "700c64a196afed92b66fed994f94d928143daf0592361602d11622337fccdc7e"
+  },
+  {
+    "ordinal": 2,
+    "sourceUrl": "https://shamela.ws/book/21812/4",
+    "viewerPage": 4,
+    "printedPage": 6,
+    "startCharacter": 0,
+    "endCharacter": 1618,
+    "sha256": "f92379ce251e8bdc28fed1c47bf62139006d95fe1d90c87e9545561f40b9e404"
+  },
+  {
+    "ordinal": 3,
+    "sourceUrl": "https://shamela.ws/book/21812/4",
+    "viewerPage": 4,
+    "printedPage": 6,
+    "startCharacter": 1618,
+    "endCharacter": 1992,
+    "sha256": "c584e93f9fe3a5753c366c81f5eb44f8181a27ee3f1bb254817410b37fed7329"
+  },
+  {
+    "ordinal": 4,
+    "sourceUrl": "https://shamela.ws/book/21812/5",
+    "viewerPage": 5,
+    "printedPage": 7,
+    "startCharacter": 0,
+    "endCharacter": 1305,
+    "sha256": "5f17c7671818306d21ac303e413bd11e32a0aca3d1bb54d612521e7d12218189"
+  },
+  {
+    "ordinal": 5,
+    "sourceUrl": "https://shamela.ws/book/21812/6",
+    "viewerPage": 6,
+    "printedPage": 8,
+    "startCharacter": 0,
+    "endCharacter": 1360,
+    "sha256": "4d69001b76f0cc7b10919fc3e66b513b5945270b6efe253415193f4d2ebe9789"
+  },
+  {
+    "ordinal": 6,
+    "sourceUrl": "https://shamela.ws/book/21812/7",
+    "viewerPage": 7,
+    "printedPage": 9,
+    "startCharacter": 0,
+    "endCharacter": 1482,
+    "sha256": "443c05b61662793e8fb2ca6772f94671b39c0211218c93677b6b7784c6f2bf18"
+  },
+  {
+    "ordinal": 7,
+    "sourceUrl": "https://shamela.ws/book/21812/8",
+    "viewerPage": 8,
+    "printedPage": 10,
+    "startCharacter": 0,
+    "endCharacter": 1516,
+    "sha256": "5fa6cb8a713c9741d255397c35fed98f794ef5b4eaa1d4c22961c44b6738c5c1"
+  },
+  {
+    "ordinal": 8,
+    "sourceUrl": "https://shamela.ws/book/21812/9",
+    "viewerPage": 9,
+    "printedPage": 11,
+    "startCharacter": 0,
+    "endCharacter": 1422,
+    "sha256": "f7efc6891958b2cde4cfe83186ce58fd15345b30ab182c88e4c78685551e9592"
+  },
+  {
+    "ordinal": 9,
+    "sourceUrl": "https://shamela.ws/book/21812/9",
+    "viewerPage": 9,
+    "printedPage": 11,
+    "startCharacter": 1422,
+    "endCharacter": 1780,
+    "sha256": "8a3e5fd152b8ec02a5b64f0e124f89c9d45bf90397f7375bfd39554b332e0f68"
+  },
+  {
+    "ordinal": 10,
+    "sourceUrl": "https://shamela.ws/book/21812/10",
+    "viewerPage": 10,
+    "printedPage": 12,
+    "startCharacter": 0,
+    "endCharacter": 1568,
+    "sha256": "6e353805fa8fff251f674cebabc0eb3cc79241636a354fad9f2cb05230598482"
+  },
+  {
+    "ordinal": 11,
+    "sourceUrl": "https://shamela.ws/book/21812/11",
+    "viewerPage": 11,
+    "printedPage": 13,
+    "startCharacter": 0,
+    "endCharacter": 1352,
+    "sha256": "16d0a3ee23d1c73e61b2a76f09f5a583c202ae2de97bcfaeec95676464b81b59"
+  },
+  {
+    "ordinal": 12,
+    "sourceUrl": "https://shamela.ws/book/21812/12",
+    "viewerPage": 12,
+    "printedPage": 14,
+    "startCharacter": 0,
+    "endCharacter": 1521,
+    "sha256": "4d811c006e5964429fd625ad71729b7af785d1ed1b33788343f72c80530b5b4a"
+  },
+  {
+    "ordinal": 13,
+    "sourceUrl": "https://shamela.ws/book/21812/13",
+    "viewerPage": 13,
+    "printedPage": 15,
+    "startCharacter": 0,
+    "endCharacter": 1430,
+    "sha256": "1a071e0c6390cc237838c81f45045def45e6c8b00838e45ceba9c6abe96586fa"
+  },
+  {
+    "ordinal": 14,
+    "sourceUrl": "https://shamela.ws/book/21812/13",
+    "viewerPage": 13,
+    "printedPage": 15,
+    "startCharacter": 1430,
+    "endCharacter": 1756,
+    "sha256": "80586215115861d9e494fa685d70d4576253f0c779194f1b294b3eb8100a8910"
+  },
+  {
+    "ordinal": 15,
+    "sourceUrl": "https://shamela.ws/book/21812/14",
+    "viewerPage": 14,
+    "printedPage": 16,
+    "startCharacter": 0,
+    "endCharacter": 1483,
+    "sha256": "03ac830cb0b39aeb1750ed2ad93870de19b8a8431a912fb3a38794793c22c04d"
+  },
+  {
+    "ordinal": 16,
+    "sourceUrl": "https://shamela.ws/book/21812/15",
+    "viewerPage": 15,
+    "printedPage": 17,
+    "startCharacter": 0,
+    "endCharacter": 1598,
+    "sha256": "c36733b2044f14b7632afea7ed54fb36f05a67fd988c96bcbac0c7806018e134"
+  },
+  {
+    "ordinal": 17,
+    "sourceUrl": "https://shamela.ws/book/21812/15",
+    "viewerPage": 15,
+    "printedPage": 17,
+    "startCharacter": 1598,
+    "endCharacter": 1951,
+    "sha256": "3d9da23b509b2cb65ea7972a9df8aa3e9c1435766063dc022de96d1f03cac261"
+  },
+  {
+    "ordinal": 18,
+    "sourceUrl": "https://shamela.ws/book/21812/16",
+    "viewerPage": 16,
+    "printedPage": 18,
+    "startCharacter": 0,
+    "endCharacter": 463,
+    "sha256": "18aa16f3cbceb66c50138da1e6758afe1b84d71165a66ff72c4b666cdf1672ad"
+  },
+  {
+    "ordinal": 19,
+    "sourceUrl": "https://shamela.ws/book/21812/17",
+    "viewerPage": 17,
+    "printedPage": 19,
+    "startCharacter": 0,
+    "endCharacter": 1648,
+    "sha256": "f35c828ff576533e8dbabeccccf831dd2afd862d52e0d38d56f80bc9dd3737c0"
+  },
+  {
+    "ordinal": 20,
+    "sourceUrl": "https://shamela.ws/book/21812/17",
+    "viewerPage": 17,
+    "printedPage": 19,
+    "startCharacter": 1648,
+    "endCharacter": 1769,
+    "sha256": "487cac9b0a89d0151c1f5267f668263ce1ca02f13704ed6df76fe4890ce12d7e"
+  },
+  {
+    "ordinal": 21,
+    "sourceUrl": "https://shamela.ws/book/21812/18",
+    "viewerPage": 18,
+    "printedPage": 20,
+    "startCharacter": 0,
+    "endCharacter": 1249,
+    "sha256": "2b03626d8a587db4220932d26f6f78a0484f62f8080c49142b4ed99d3bff6bc6"
+  },
+  {
+    "ordinal": 22,
+    "sourceUrl": "https://shamela.ws/book/21812/19",
+    "viewerPage": 19,
+    "printedPage": 21,
+    "startCharacter": 0,
+    "endCharacter": 1485,
+    "sha256": "108d4adebac824672591a8254826ab3ab35bb7b440ea424456320e5e4227c40e"
+  },
+  {
+    "ordinal": 23,
+    "sourceUrl": "https://shamela.ws/book/21812/20",
+    "viewerPage": 20,
+    "printedPage": 22,
+    "startCharacter": 0,
+    "endCharacter": 1095,
+    "sha256": "805100591d346e2aaa3a3f21262b0a17d98be89bee5280e770a2bffa654b6a2c"
+  },
+  {
+    "ordinal": 24,
+    "sourceUrl": "https://shamela.ws/book/21812/21",
+    "viewerPage": 21,
+    "printedPage": 23,
+    "startCharacter": 0,
+    "endCharacter": 1619,
+    "sha256": "aa77d342807bd44f48ef0f3df474749d1a8f88ae44bb7e83cd4233b2a94c96fc"
+  },
+  {
+    "ordinal": 25,
+    "sourceUrl": "https://shamela.ws/book/21812/21",
+    "viewerPage": 21,
+    "printedPage": 23,
+    "startCharacter": 1619,
+    "endCharacter": 1807,
+    "sha256": "dc97ba7e05eb720569ce03ed81836c5b6ccdadd8874fa5895bbb44548ab20044"
+  },
+  {
+    "ordinal": 26,
+    "sourceUrl": "https://shamela.ws/book/21812/22",
+    "viewerPage": 22,
+    "printedPage": 24,
+    "startCharacter": 0,
+    "endCharacter": 1693,
+    "sha256": "80b765de4b5d82723cd575c9e8003301b5c0bcb71e60e1e260c01c9fd9ebcca8"
+  },
+  {
+    "ordinal": 27,
+    "sourceUrl": "https://shamela.ws/book/21812/23",
+    "viewerPage": 23,
+    "printedPage": 25,
+    "startCharacter": 0,
+    "endCharacter": 1678,
+    "sha256": "8070bfa9116bd6adfbd47d135e121f29a12072d5d2d808dc3b53955e51b36b8b"
+  },
+  {
+    "ordinal": 28,
+    "sourceUrl": "https://shamela.ws/book/21812/23",
+    "viewerPage": 23,
+    "printedPage": 25,
+    "startCharacter": 1678,
+    "endCharacter": 2009,
+    "sha256": "59b7d9453a10a3c87b830f1f8089a5f183793255d8b265816da67b1bfcd601f4"
+  },
+  {
+    "ordinal": 29,
+    "sourceUrl": "https://shamela.ws/book/21812/24",
+    "viewerPage": 24,
+    "printedPage": 26,
+    "startCharacter": 0,
+    "endCharacter": 1150,
+    "sha256": "b00de40fed431d77e49e24267fc824367bc5ecff26c6fca8b4c62d3ef678d0ac"
+  },
+  {
+    "ordinal": 30,
+    "sourceUrl": "https://shamela.ws/book/21812/24",
+    "viewerPage": 24,
+    "printedPage": 26,
+    "startCharacter": 1150,
+    "endCharacter": 1859,
+    "sha256": "e93b954d8ab73b0339088d73d1e49c24dd8e1a8885352593123e8578882c056c"
+  },
+  {
+    "ordinal": 31,
+    "sourceUrl": "https://shamela.ws/book/21812/25",
+    "viewerPage": 25,
+    "printedPage": 27,
+    "startCharacter": 0,
+    "endCharacter": 1685,
+    "sha256": "9bf535f32476e2b109400a4a92fe02a6715cd616645d9d6b377df05f5e6939e7"
+  },
+  {
+    "ordinal": 32,
+    "sourceUrl": "https://shamela.ws/book/21812/25",
+    "viewerPage": 25,
+    "printedPage": 27,
+    "startCharacter": 1685,
+    "endCharacter": 1927,
+    "sha256": "1ab5984dca8ce25b4324122a1a452e673999b41ff9f943e93802fc8e21becc6c"
+  },
+  {
+    "ordinal": 33,
+    "sourceUrl": "https://shamela.ws/book/21812/26",
+    "viewerPage": 26,
+    "printedPage": 28,
+    "startCharacter": 0,
+    "endCharacter": 1700,
+    "sha256": "3f199733efe49272c0e480c93ea31b18500668137c3647899dd0c1b00237455a"
+  },
+  {
+    "ordinal": 34,
+    "sourceUrl": "https://shamela.ws/book/21812/26",
+    "viewerPage": 26,
+    "printedPage": 28,
+    "startCharacter": 1700,
+    "endCharacter": 1752,
+    "sha256": "b9606298e9afeafc78373092d2a66d3648be3052c759f762411266e964f2cd39"
+  },
+  {
+    "ordinal": 35,
+    "sourceUrl": "https://shamela.ws/book/21812/27",
+    "viewerPage": 27,
+    "printedPage": 29,
+    "startCharacter": 0,
+    "endCharacter": 1688,
+    "sha256": "78107b14d7d5af4bb94f9ada4af23bca4ed6348245c5844c938d75c8d7d1b2d8"
+  },
+  {
+    "ordinal": 36,
+    "sourceUrl": "https://shamela.ws/book/21812/27",
+    "viewerPage": 27,
+    "printedPage": 29,
+    "startCharacter": 1688,
+    "endCharacter": 1988,
+    "sha256": "b9903cc065bb2c61a73b5eb66e8f50289dfbab7f48ab8044d77580c995fbdc25"
+  },
+  {
+    "ordinal": 37,
+    "sourceUrl": "https://shamela.ws/book/21812/28",
+    "viewerPage": 28,
+    "printedPage": 30,
+    "startCharacter": 0,
+    "endCharacter": 1670,
+    "sha256": "29e09a4b35d0a54a536b1d0ac297782fec2028a72c8fb256c4867163f1de9682"
+  },
+  {
+    "ordinal": 38,
+    "sourceUrl": "https://shamela.ws/book/21812/29",
+    "viewerPage": 29,
+    "printedPage": 31,
+    "startCharacter": 0,
+    "endCharacter": 1438,
+    "sha256": "66d3bdf307e1da78d8b3a08027cfc4396ef48d3da7b0dccca6573e8cd6c8da78"
+  },
+  {
+    "ordinal": 39,
+    "sourceUrl": "https://shamela.ws/book/21812/30",
+    "viewerPage": 30,
+    "printedPage": 32,
+    "startCharacter": 0,
+    "endCharacter": 1626,
+    "sha256": "ac362948ebb548b4c516cc87ee6b139b6cfc081617f0e87ae58128f3f7ef3c00"
+  },
+  {
+    "ordinal": 40,
+    "sourceUrl": "https://shamela.ws/book/21812/31",
+    "viewerPage": 31,
+    "printedPage": 33,
+    "startCharacter": 0,
+    "endCharacter": 1390,
+    "sha256": "a5022923ff2b123da0fde42c5065e88ae82dcaf00a51e607bc4de68172200653"
+  },
+  {
+    "ordinal": 41,
+    "sourceUrl": "https://shamela.ws/book/21812/32",
+    "viewerPage": 32,
+    "printedPage": 34,
+    "startCharacter": 0,
+    "endCharacter": 1572,
+    "sha256": "135c9de2d4c69beb24077a5e51746a14ce60025e47a85d4a4094131af153f924"
+  },
+  {
+    "ordinal": 42,
+    "sourceUrl": "https://shamela.ws/book/21812/33",
+    "viewerPage": 33,
+    "printedPage": 35,
+    "startCharacter": 0,
+    "endCharacter": 1435,
+    "sha256": "725be2c995a6dcc0a3057632b6f6347ec46fb349248099c43cbdfe8a320606ff"
+  },
+  {
+    "ordinal": 43,
+    "sourceUrl": "https://shamela.ws/book/21812/34",
+    "viewerPage": 34,
+    "printedPage": 36,
+    "startCharacter": 0,
+    "endCharacter": 1471,
+    "sha256": "82bea9fbd6a02de23ffaf5f68274daa4362e8916ed99a632a111819ff1f18601"
+  },
+  {
+    "ordinal": 44,
+    "sourceUrl": "https://shamela.ws/book/21812/35",
+    "viewerPage": 35,
+    "printedPage": 37,
+    "startCharacter": 0,
+    "endCharacter": 1371,
+    "sha256": "b70751c551a89cf4ffdaaf2867991791d1e4fb3f02a43ee78a3ea970753e976e"
+  },
+  {
+    "ordinal": 45,
+    "sourceUrl": "https://shamela.ws/book/21812/36",
+    "viewerPage": 36,
+    "printedPage": 38,
+    "startCharacter": 0,
+    "endCharacter": 1486,
+    "sha256": "83e774299641c27a7523ebc6b9aa3b02df41ae16bce3a1c7934df11ab6bf7570"
+  },
+  {
+    "ordinal": 46,
+    "sourceUrl": "https://shamela.ws/book/21812/37",
+    "viewerPage": 37,
+    "printedPage": 39,
+    "startCharacter": 0,
+    "endCharacter": 1319,
+    "sha256": "2c6fffebd579ce6cfae7d9e721706b77cb9b41695c5e3f9d037d9cc89e40edb4"
+  },
+  {
+    "ordinal": 47,
+    "sourceUrl": "https://shamela.ws/book/21812/38",
+    "viewerPage": 38,
+    "printedPage": 40,
+    "startCharacter": 0,
+    "endCharacter": 1078,
+    "sha256": "67d0dba1c357cde423bc64b88c20443fc0abe8f560c00c310ee087e113833420"
+  },
+  {
+    "ordinal": 48,
+    "sourceUrl": "https://shamela.ws/book/21812/39",
+    "viewerPage": 39,
+    "printedPage": 41,
+    "startCharacter": 0,
+    "endCharacter": 1663,
+    "sha256": "e885021460271522310c587fc9661adb45f3595f3f5e83921b3df1d477f285cf"
+  },
+  {
+    "ordinal": 49,
+    "sourceUrl": "https://shamela.ws/book/21812/39",
+    "viewerPage": 39,
+    "printedPage": 41,
+    "startCharacter": 1663,
+    "endCharacter": 1918,
+    "sha256": "db5dec6fe6120a216f8d75df7806dfaa4caadbd94ac32ccbf42bcc7e7ebc173c"
+  },
+  {
+    "ordinal": 50,
+    "sourceUrl": "https://shamela.ws/book/21812/40",
+    "viewerPage": 40,
+    "printedPage": 42,
+    "startCharacter": 0,
+    "endCharacter": 1475,
+    "sha256": "9c1557896b45b47eb67c9647dff407de816fdc7b13b5c5e0af971c55d39fb27a"
+  },
+  {
+    "ordinal": 51,
+    "sourceUrl": "https://shamela.ws/book/21812/41",
+    "viewerPage": 41,
+    "printedPage": 43,
+    "startCharacter": 0,
+    "endCharacter": 1304,
+    "sha256": "2a01dd4d8ae950494ba683aa9823f95cea57cba748f6f3491a855ae3901ffb17"
+  },
+  {
+    "ordinal": 52,
+    "sourceUrl": "https://shamela.ws/book/21812/42",
+    "viewerPage": 42,
+    "printedPage": 44,
+    "startCharacter": 0,
+    "endCharacter": 1336,
+    "sha256": "4391c2b173856ed5b75a57eb9a56dd431566efcba86261d333dc9a420ddb3794"
+  },
+  {
+    "ordinal": 53,
+    "sourceUrl": "https://shamela.ws/book/21812/43",
+    "viewerPage": 43,
+    "printedPage": 45,
+    "startCharacter": 0,
+    "endCharacter": 1629,
+    "sha256": "d8503eb62c415bcb879e6b1062f462947408cee84d7751c454e8727cc1234db0"
+  },
+  {
+    "ordinal": 54,
+    "sourceUrl": "https://shamela.ws/book/21812/43",
+    "viewerPage": 43,
+    "printedPage": 45,
+    "startCharacter": 1629,
+    "endCharacter": 1837,
+    "sha256": "b97be5931c21639ddd0beb0cb565c7a8c5f328db15c6d4b9b32b8ff6a1cc70a0"
+  },
+  {
+    "ordinal": 55,
+    "sourceUrl": "https://shamela.ws/book/21812/44",
+    "viewerPage": 44,
+    "printedPage": 46,
+    "startCharacter": 0,
+    "endCharacter": 1358,
+    "sha256": "6dae0c4f4e4b91746d8464a2255a4ee9036fb6a6f7bf81a4e1b28b258ada615c"
+  },
+  {
+    "ordinal": 56,
+    "sourceUrl": "https://shamela.ws/book/21812/44",
+    "viewerPage": 44,
+    "printedPage": 46,
+    "startCharacter": 1358,
+    "endCharacter": 1956,
+    "sha256": "53deeeca31383021e623c29a9973c81f533fb718f690fa510d65bb942ff1bfb1"
+  },
+  {
+    "ordinal": 57,
+    "sourceUrl": "https://shamela.ws/book/21812/45",
+    "viewerPage": 45,
+    "printedPage": 47,
+    "startCharacter": 0,
+    "endCharacter": 1588,
+    "sha256": "8e371aa67067070d0a4e52ae1e819802202ed6ed94ef64f681ea38010ff5d170"
+  },
+  {
+    "ordinal": 58,
+    "sourceUrl": "https://shamela.ws/book/21812/46",
+    "viewerPage": 46,
+    "printedPage": 48,
+    "startCharacter": 0,
+    "endCharacter": 1687,
+    "sha256": "1aef629272a9b9435f5e1813b167dd3135f8f8de6098796cb9a9f0ac3d93b52d"
+  },
+  {
+    "ordinal": 59,
+    "sourceUrl": "https://shamela.ws/book/21812/46",
+    "viewerPage": 46,
+    "printedPage": 48,
+    "startCharacter": 1687,
+    "endCharacter": 1772,
+    "sha256": "665b6f8f266baf2ed7cff6108e7bac9367e6c10945fbe4a6f83cec31ef33ead1"
+  },
+  {
+    "ordinal": 60,
+    "sourceUrl": "https://shamela.ws/book/21812/47",
+    "viewerPage": 47,
+    "printedPage": 49,
+    "startCharacter": 0,
+    "endCharacter": 1486,
+    "sha256": "ff1516d8df83764196ffbcd890c21d4cb81db01879a15c1fe943dd5d3c1dc7bc"
+  },
+  {
+    "ordinal": 61,
+    "sourceUrl": "https://shamela.ws/book/21812/48",
+    "viewerPage": 48,
+    "printedPage": 50,
+    "startCharacter": 0,
+    "endCharacter": 1546,
+    "sha256": "a3c5aabad41f21c322bd785d04c16b74c6104d48e7eb066be04cf7182ac3e868"
+  },
+  {
+    "ordinal": 62,
+    "sourceUrl": "https://shamela.ws/book/21812/48",
+    "viewerPage": 48,
+    "printedPage": 50,
+    "startCharacter": 1546,
+    "endCharacter": 1924,
+    "sha256": "01e06eb473cf9d94e71ccc1e4813f87994debf792fe84f93dfc5ced43e929f89"
+  },
+  {
+    "ordinal": 63,
+    "sourceUrl": "https://shamela.ws/book/21812/49",
+    "viewerPage": 49,
+    "printedPage": 51,
+    "startCharacter": 0,
+    "endCharacter": 1592,
+    "sha256": "64492eb2880cff508b37ac64ae4842fd8d4404736866454d2584b3d4082ed946"
+  },
+  {
+    "ordinal": 64,
+    "sourceUrl": "https://shamela.ws/book/21812/50",
+    "viewerPage": 50,
+    "printedPage": 52,
+    "startCharacter": 0,
+    "endCharacter": 1666,
+    "sha256": "3b5706d540fa85c54dace89d7d0bf909a7bf607107107e8f6dfa4f1a98f18f8c"
+  },
+  {
+    "ordinal": 65,
+    "sourceUrl": "https://shamela.ws/book/21812/51",
+    "viewerPage": 51,
+    "printedPage": 53,
+    "startCharacter": 0,
+    "endCharacter": 1471,
+    "sha256": "34855ae720c15826581114cdf2993289d17da8bd19eb68a1ceaec8530617fed2"
+  },
+  {
+    "ordinal": 66,
+    "sourceUrl": "https://shamela.ws/book/21812/52",
+    "viewerPage": 52,
+    "printedPage": 54,
+    "startCharacter": 0,
+    "endCharacter": 1496,
+    "sha256": "9ad17a6c18361d3f3f9fd8116346a2b887e74192a76652c44da6f42080ec58cb"
+  },
+  {
+    "ordinal": 67,
+    "sourceUrl": "https://shamela.ws/book/21812/53",
+    "viewerPage": 53,
+    "printedPage": 55,
+    "startCharacter": 0,
+    "endCharacter": 1383,
+    "sha256": "b209309fb0a1ca0a8ca19c21fe1c939a9a11eaad47438f117a1a1905cfbf31d8"
+  },
+  {
+    "ordinal": 68,
+    "sourceUrl": "https://shamela.ws/book/21812/54",
+    "viewerPage": 54,
+    "printedPage": 56,
+    "startCharacter": 0,
+    "endCharacter": 1441,
+    "sha256": "25da239254be1cdb86112e87109adadbf27ff7b2808f476348d1efabd548629a"
+  },
+  {
+    "ordinal": 69,
+    "sourceUrl": "https://shamela.ws/book/21812/55",
+    "viewerPage": 55,
+    "printedPage": 57,
+    "startCharacter": 0,
+    "endCharacter": 1472,
+    "sha256": "20976077a860e4159b7c186a31c2d9d0909a0b72b1ba168693443abcff39d0c4"
+  },
+  {
+    "ordinal": 70,
+    "sourceUrl": "https://shamela.ws/book/21812/56",
+    "viewerPage": 56,
+    "printedPage": 58,
+    "startCharacter": 0,
+    "endCharacter": 1229,
+    "sha256": "d6a4a731ad9904acbd2566a388bb74658e083a1c5ed461cd047ec6ab8dbd8a63"
+  },
+  {
+    "ordinal": 71,
+    "sourceUrl": "https://shamela.ws/book/21812/57",
+    "viewerPage": 57,
+    "printedPage": 59,
+    "startCharacter": 0,
+    "endCharacter": 1380,
+    "sha256": "a8f7b6edb79a2a430ede59f3a8a1c408c231a499b5e2a9fa7078c18e7cccaa29"
+  },
+  {
+    "ordinal": 72,
+    "sourceUrl": "https://shamela.ws/book/21812/58",
+    "viewerPage": 58,
+    "printedPage": 60,
+    "startCharacter": 0,
+    "endCharacter": 1682,
+    "sha256": "15097cae24150ec171e05dccae5e993513e399c1cbdb1a71c6185b70af6b8be0"
+  },
+  {
+    "ordinal": 73,
+    "sourceUrl": "https://shamela.ws/book/21812/59",
+    "viewerPage": 59,
+    "printedPage": 61,
+    "startCharacter": 0,
+    "endCharacter": 1449,
+    "sha256": "57d0bbfdabb7c5984e4a806a6ed4685104d99f4e28379a997a967f95ab15a5d4"
+  },
+  {
+    "ordinal": 74,
+    "sourceUrl": "https://shamela.ws/book/21812/60",
+    "viewerPage": 60,
+    "printedPage": 62,
+    "startCharacter": 0,
+    "endCharacter": 1642,
+    "sha256": "5f8baa2f1e8fb6e58c346794aba43d2fd65a99862c9c2376257ddd78104c1c80"
+  },
+  {
+    "ordinal": 75,
+    "sourceUrl": "https://shamela.ws/book/21812/61",
+    "viewerPage": 61,
+    "printedPage": 63,
+    "startCharacter": 0,
+    "endCharacter": 1679,
+    "sha256": "5bd396434cf38b6eef32abb552c101378c99d2e6fc7cef2ed76584875925896b"
+  },
+  {
+    "ordinal": 76,
+    "sourceUrl": "https://shamela.ws/book/21812/62",
+    "viewerPage": 62,
+    "printedPage": 64,
+    "startCharacter": 0,
+    "endCharacter": 1662,
+    "sha256": "fadcaab91a12bd28bccdbbab65ba76564b230efe86c2bf57f86e7f231b3493de"
+  },
+  {
+    "ordinal": 77,
+    "sourceUrl": "https://shamela.ws/book/21812/63",
+    "viewerPage": 63,
+    "printedPage": 65,
+    "startCharacter": 0,
+    "endCharacter": 1445,
+    "sha256": "f49f3258ab24e566663f37d20049b46af723708253a98a53258cf94511cae0eb"
+  },
+  {
+    "ordinal": 78,
+    "sourceUrl": "https://shamela.ws/book/21812/64",
+    "viewerPage": 64,
+    "printedPage": 66,
+    "startCharacter": 0,
+    "endCharacter": 1563,
+    "sha256": "7b68cc0863580a91cf6e4798a420ea99548db4831a1cd2da4274bd83155ff731"
+  },
+  {
+    "ordinal": 79,
+    "sourceUrl": "https://shamela.ws/book/21812/65",
+    "viewerPage": 65,
+    "printedPage": 67,
+    "startCharacter": 0,
+    "endCharacter": 1685,
+    "sha256": "980b73126132480af7f2a41b65c534a89d8ebfbbc672c0f819f79730e3bc54d4"
+  },
+  {
+    "ordinal": 80,
+    "sourceUrl": "https://shamela.ws/book/21812/66",
+    "viewerPage": 66,
+    "printedPage": 68,
+    "startCharacter": 0,
+    "endCharacter": 1227,
+    "sha256": "b9d9944d57733db591dfeabc9325aa14e9ddaa12cae99414381ee320a549d3aa"
+  },
+  {
+    "ordinal": 81,
+    "sourceUrl": "https://shamela.ws/book/21812/66",
+    "viewerPage": 66,
+    "printedPage": 68,
+    "startCharacter": 1227,
+    "endCharacter": 1862,
+    "sha256": "9db4a851ab36c6ac3f842437d73686288b6c0cb8fbb2e66e87f302c7d02830be"
+  },
+  {
+    "ordinal": 82,
+    "sourceUrl": "https://shamela.ws/book/21812/67",
+    "viewerPage": 67,
+    "printedPage": 69,
+    "startCharacter": 0,
+    "endCharacter": 1663,
+    "sha256": "3a5cdbad5ee4352deabdef87a6ee542845db20e965e27458bf5d7d49e19443d7"
+  },
+  {
+    "ordinal": 83,
+    "sourceUrl": "https://shamela.ws/book/21812/68",
+    "viewerPage": 68,
+    "printedPage": 70,
+    "startCharacter": 0,
+    "endCharacter": 1419,
+    "sha256": "56b9d867db658e7c57f1c663beea168481e7ce2584e65c6ec5b169e2f677b003"
+  },
+  {
+    "ordinal": 84,
+    "sourceUrl": "https://shamela.ws/book/21812/69",
+    "viewerPage": 69,
+    "printedPage": 71,
+    "startCharacter": 0,
+    "endCharacter": 1652,
+    "sha256": "f5ad536ca01b9ba5948799c06919f9b170f05c89fc5f9ff8dbcd2c3c032132eb"
+  },
+  {
+    "ordinal": 85,
+    "sourceUrl": "https://shamela.ws/book/21812/70",
+    "viewerPage": 70,
+    "printedPage": 72,
+    "startCharacter": 0,
+    "endCharacter": 1314,
+    "sha256": "be77365d56c5bc31c957bdacfa387931f2be17bca977d4cd6b500606e26dab28"
+  },
+  {
+    "ordinal": 86,
+    "sourceUrl": "https://shamela.ws/book/21812/71",
+    "viewerPage": 71,
+    "printedPage": 73,
+    "startCharacter": 0,
+    "endCharacter": 1401,
+    "sha256": "21b8ed082ec3d3258b36e6d2d691fd805b9ad1ef43321a840796296a4ce89031"
+  },
+  {
+    "ordinal": 87,
+    "sourceUrl": "https://shamela.ws/book/21812/72",
+    "viewerPage": 72,
+    "printedPage": 74,
+    "startCharacter": 0,
+    "endCharacter": 1443,
+    "sha256": "5544cd3eeba51c186044680c2ad53b7849b7bcc2a1f0f2a06fe35378170ba41d"
+  },
+  {
+    "ordinal": 88,
+    "sourceUrl": "https://shamela.ws/book/21812/73",
+    "viewerPage": 73,
+    "printedPage": 75,
+    "startCharacter": 0,
+    "endCharacter": 1629,
+    "sha256": "6817bb2ff8216017563749a509ba0f366861c619b98cc4c7a2c6bcff91a0a018"
+  },
+  {
+    "ordinal": 89,
+    "sourceUrl": "https://shamela.ws/book/21812/73",
+    "viewerPage": 73,
+    "printedPage": 75,
+    "startCharacter": 1629,
+    "endCharacter": 1835,
+    "sha256": "324a579e9d53e3e2ef742ce339c191d1b5f9c6eea7b5540564c6b948dbe2d9c0"
+  },
+  {
+    "ordinal": 90,
+    "sourceUrl": "https://shamela.ws/book/21812/74",
+    "viewerPage": 74,
+    "printedPage": 76,
+    "startCharacter": 0,
+    "endCharacter": 1573,
+    "sha256": "e5c2ced3e6720b206642d9afcc6b15661ec40e5cb99c058ef9830f452ddb29a2"
+  },
+  {
+    "ordinal": 91,
+    "sourceUrl": "https://shamela.ws/book/21812/75",
+    "viewerPage": 75,
+    "printedPage": 77,
+    "startCharacter": 0,
+    "endCharacter": 1442,
+    "sha256": "56b9c3b2a0f1539b15299879f6a051c65358695f4163319e96f6ddc45c7d4b76"
+  },
+  {
+    "ordinal": 92,
+    "sourceUrl": "https://shamela.ws/book/21812/76",
+    "viewerPage": 76,
+    "printedPage": 78,
+    "startCharacter": 0,
+    "endCharacter": 886,
+    "sha256": "1fd5189119c6b83072336e29f3d4f2567d7a809f16bb5949fd295c5fc8c2fba9"
+  },
+  {
+    "ordinal": 93,
+    "sourceUrl": "https://shamela.ws/book/21812/77",
+    "viewerPage": 77,
+    "printedPage": 79,
+    "startCharacter": 0,
+    "endCharacter": 1107,
+    "sha256": "5c603eeeca31d97b1a8745c5730a959c5e542602a099eebe8ea9053906c2974d"
+  },
+  {
+    "ordinal": 94,
+    "sourceUrl": "https://shamela.ws/book/21812/78",
+    "viewerPage": 78,
+    "printedPage": 80,
+    "startCharacter": 0,
+    "endCharacter": 951,
+    "sha256": "beb1572e9ec1517aa1250813bf42673034e4d75e2a106e87fcaca22a2e30806a"
+  },
+  {
+    "ordinal": 95,
+    "sourceUrl": "https://shamela.ws/book/21812/79",
+    "viewerPage": 79,
+    "printedPage": 81,
+    "startCharacter": 0,
+    "endCharacter": 1170,
+    "sha256": "b370507d1d6b1d1b8b4c8fe0c99c6342b8118a7d5bc866c2c9f75c856e693412"
+  },
+  {
+    "ordinal": 96,
+    "sourceUrl": "https://shamela.ws/book/21812/80",
+    "viewerPage": 80,
+    "printedPage": 82,
+    "startCharacter": 0,
+    "endCharacter": 1087,
+    "sha256": "eaefaac0bddf0cecf57aad4d0e42971fcf1d00d91de0ae32479e65b6cd7f7c6f"
+  },
+  {
+    "ordinal": 97,
+    "sourceUrl": "https://shamela.ws/book/21812/81",
+    "viewerPage": 81,
+    "printedPage": 83,
+    "startCharacter": 0,
+    "endCharacter": 1393,
+    "sha256": "c119664a8285f3585db3a6000782c9e974fe1dfb4cb57b3619a1f0bf1f9ec595"
+  },
+  {
+    "ordinal": 98,
+    "sourceUrl": "https://shamela.ws/book/21812/82",
+    "viewerPage": 82,
+    "printedPage": 84,
+    "startCharacter": 0,
+    "endCharacter": 1343,
+    "sha256": "b5f81f6fb36d6872582d6d4f2050575a87e20d675aebea761d72f7321dbf13e2"
+  },
+  {
+    "ordinal": 99,
+    "sourceUrl": "https://shamela.ws/book/21812/83",
+    "viewerPage": 83,
+    "printedPage": 85,
+    "startCharacter": 0,
+    "endCharacter": 1426,
+    "sha256": "405ef9896b8daaf52e9b1b62915523fccdb6189704c29757e8ce0bc1b841250f"
+  },
+  {
+    "ordinal": 100,
+    "sourceUrl": "https://shamela.ws/book/21812/84",
+    "viewerPage": 84,
+    "printedPage": 86,
+    "startCharacter": 0,
+    "endCharacter": 1561,
+    "sha256": "ace94c12be1e0642917ddd1f3cb0bc672bf8ee50ff00f3cea2553b9106d5d106"
+  },
+  {
+    "ordinal": 101,
+    "sourceUrl": "https://shamela.ws/book/21812/85",
+    "viewerPage": 85,
+    "printedPage": 87,
+    "startCharacter": 0,
+    "endCharacter": 1555,
+    "sha256": "35dce7c12c262d6074dbede0afe3c490fad355ae81e1b5976fbb1dd57c788854"
+  },
+  {
+    "ordinal": 102,
+    "sourceUrl": "https://shamela.ws/book/21812/86",
+    "viewerPage": 86,
+    "printedPage": 88,
+    "startCharacter": 0,
+    "endCharacter": 1495,
+    "sha256": "436fbc4a90b1a7a4ceec35559887135af6e91cb77959edbfed40f66afacaaaa3"
+  },
+  {
+    "ordinal": 103,
+    "sourceUrl": "https://shamela.ws/book/21812/87",
+    "viewerPage": 87,
+    "printedPage": 89,
+    "startCharacter": 0,
+    "endCharacter": 1210,
+    "sha256": "e4ea7e2213642cf7d6615c0ffffb8ddc608c9db6422eb8cf638fffb6787c919e"
+  },
+  {
+    "ordinal": 104,
+    "sourceUrl": "https://shamela.ws/book/21812/88",
+    "viewerPage": 88,
+    "printedPage": 90,
+    "startCharacter": 0,
+    "endCharacter": 1271,
+    "sha256": "3d6407d9db81b89ff1dffadddfadeb35bf38e431257e5e3c21684ee189cd0546"
+  },
+  {
+    "ordinal": 105,
+    "sourceUrl": "https://shamela.ws/book/21812/89",
+    "viewerPage": 89,
+    "printedPage": 91,
+    "startCharacter": 0,
+    "endCharacter": 1336,
+    "sha256": "69fa636fa920dc3418f45b10f3e510fb855da6bed617183170e9f3126886a156"
+  },
+  {
+    "ordinal": 106,
+    "sourceUrl": "https://shamela.ws/book/21812/90",
+    "viewerPage": 90,
+    "printedPage": 92,
+    "startCharacter": 0,
+    "endCharacter": 1329,
+    "sha256": "275d69afa9754e738612110898eba716e8aa809d0fed1e104af7f6e2ffc2c357"
+  },
+  {
+    "ordinal": 107,
+    "sourceUrl": "https://shamela.ws/book/21812/91",
+    "viewerPage": 91,
+    "printedPage": 93,
+    "startCharacter": 0,
+    "endCharacter": 1469,
+    "sha256": "3ade29fea7461287b7cf33361a72dfeebd9f30f61b8002f0288568853b06503a"
+  },
+  {
+    "ordinal": 108,
+    "sourceUrl": "https://shamela.ws/book/21812/92",
+    "viewerPage": 92,
+    "printedPage": 94,
+    "startCharacter": 0,
+    "endCharacter": 1113,
+    "sha256": "e4dbe6b7e039c99cb3753abf9618de1bc84e20133df869147bb7fc5969a456d8"
+  },
+  {
+    "ordinal": 109,
+    "sourceUrl": "https://shamela.ws/book/21812/93",
+    "viewerPage": 93,
+    "printedPage": 95,
+    "startCharacter": 0,
+    "endCharacter": 157,
+    "sha256": "9b36e1d317085ed3718ce80a29707be04747b36380032dd1d1d1085ddaea844d"
+  },
+  {
+    "ordinal": 110,
+    "sourceUrl": "https://shamela.ws/book/21812/94",
+    "viewerPage": 94,
+    "printedPage": 96,
+    "startCharacter": 0,
+    "endCharacter": 1164,
+    "sha256": "18cfc0367564fce5d95ce6dfd8ad71f1e9505d245e93fad25129d5064dbbf28c"
+  },
+  {
+    "ordinal": 111,
+    "sourceUrl": "https://shamela.ws/book/21812/95",
+    "viewerPage": 95,
+    "printedPage": 97,
+    "startCharacter": 0,
+    "endCharacter": 1404,
+    "sha256": "abb7672120f3754238b2ff5eedf3a471c647a127ca61d2c9a301efb0db83e666"
+  },
+  {
+    "ordinal": 112,
+    "sourceUrl": "https://shamela.ws/book/21812/96",
+    "viewerPage": 96,
+    "printedPage": 98,
+    "startCharacter": 0,
+    "endCharacter": 982,
+    "sha256": "682832ea4eba85d4f481f994b3c1b37f1117b751c6d7d83ac5eb0977b22c054f"
+  },
+  {
+    "ordinal": 113,
+    "sourceUrl": "https://shamela.ws/book/21812/97",
+    "viewerPage": 97,
+    "printedPage": 99,
+    "startCharacter": 0,
+    "endCharacter": 1359,
+    "sha256": "d3e8664e42913c8ffcd7f75947c6850bdf0e51b767f9f5da628500dd30f21a83"
+  },
+  {
+    "ordinal": 114,
+    "sourceUrl": "https://shamela.ws/book/21812/98",
+    "viewerPage": 98,
+    "printedPage": 100,
+    "startCharacter": 0,
+    "endCharacter": 1476,
+    "sha256": "7a16dcce5384798def27348c2b024bb4c0de53b66ba59e8cc6089ddf9beb41d8"
+  },
+  {
+    "ordinal": 115,
+    "sourceUrl": "https://shamela.ws/book/21812/99",
+    "viewerPage": 99,
+    "printedPage": 101,
+    "startCharacter": 0,
+    "endCharacter": 1325,
+    "sha256": "980abc2e6c822c027deb8a32a4197fd0fc5706521f6b3614b788ba1a7a4e9438"
+  },
+  {
+    "ordinal": 116,
+    "sourceUrl": "https://shamela.ws/book/21812/100",
+    "viewerPage": 100,
+    "printedPage": 102,
+    "startCharacter": 0,
+    "endCharacter": 1472,
+    "sha256": "02f78ee445e6ed6eaf5a20f37ee5078932b54d2bc37838601781ec8309dccc0c"
+  },
+  {
+    "ordinal": 117,
+    "sourceUrl": "https://shamela.ws/book/21812/101",
+    "viewerPage": 101,
+    "printedPage": 103,
+    "startCharacter": 0,
+    "endCharacter": 1283,
+    "sha256": "c47c86c126eb1e0a133adfce7686c89296aa1727ea29ccac77b410df330a7c47"
+  },
+  {
+    "ordinal": 118,
+    "sourceUrl": "https://shamela.ws/book/21812/102",
+    "viewerPage": 102,
+    "printedPage": 104,
+    "startCharacter": 0,
+    "endCharacter": 824,
+    "sha256": "805d5f41530ea3df7115335c68ed901d7bf4c13f411912d69f9251d00b7dd182"
+  },
+  {
+    "ordinal": 119,
+    "sourceUrl": "https://shamela.ws/book/21812/103",
+    "viewerPage": 103,
+    "printedPage": 105,
+    "startCharacter": 0,
+    "endCharacter": 1257,
+    "sha256": "2aa963b52c8bb07562318c830eb24808e21f7de008779b43801a0afec1223cbf"
+  },
+  {
+    "ordinal": 120,
+    "sourceUrl": "https://shamela.ws/book/21812/104",
+    "viewerPage": 104,
+    "printedPage": 106,
+    "startCharacter": 0,
+    "endCharacter": 1052,
+    "sha256": "fc9f8fb51d92f19589ee7210529bdeb41d34499e2a07be8d159e9176b5dda51b"
+  },
+  {
+    "ordinal": 121,
+    "sourceUrl": "https://shamela.ws/book/21812/105",
+    "viewerPage": 105,
+    "printedPage": 107,
+    "startCharacter": 0,
+    "endCharacter": 1280,
+    "sha256": "32846f8006d91f502dbaaf5486920ba0ad35caff15c7f14b4c9ecc2c45f1f84b"
+  },
+  {
+    "ordinal": 122,
+    "sourceUrl": "https://shamela.ws/book/21812/106",
+    "viewerPage": 106,
+    "printedPage": 108,
+    "startCharacter": 0,
+    "endCharacter": 1252,
+    "sha256": "a14d794fb0cd92a146efa0f096b9d2fc77eaa752cd0a60d1a0e202e1e42d4467"
+  },
+  {
+    "ordinal": 123,
+    "sourceUrl": "https://shamela.ws/book/21812/107",
+    "viewerPage": 107,
+    "printedPage": 109,
+    "startCharacter": 0,
+    "endCharacter": 1035,
+    "sha256": "1eec60cb4e70f30c6f5f057b9cf31873064da5cb8a5accfd9acb2ac076f4053c"
+  },
+  {
+    "ordinal": 124,
+    "sourceUrl": "https://shamela.ws/book/21812/108",
+    "viewerPage": 108,
+    "printedPage": 110,
+    "startCharacter": 0,
+    "endCharacter": 1432,
+    "sha256": "37e8cca82e323881578e7ef2b4fb316495e17b1e75628891ec56c088aa41a41c"
+  },
+  {
+    "ordinal": 125,
+    "sourceUrl": "https://shamela.ws/book/21812/109",
+    "viewerPage": 109,
+    "printedPage": 111,
+    "startCharacter": 0,
+    "endCharacter": 1446,
+    "sha256": "e9cac7c78626c846d4c9df66cf59b0cff06755b59e5f4b03aafa61bbb1c524ed"
+  },
+  {
+    "ordinal": 126,
+    "sourceUrl": "https://shamela.ws/book/21812/110",
+    "viewerPage": 110,
+    "printedPage": 112,
+    "startCharacter": 0,
+    "endCharacter": 1229,
+    "sha256": "c934ba8eb2dd163d6e61c7fc22b2e82208f9ed2a23b55f586d27289659fe5893"
+  },
+  {
+    "ordinal": 127,
+    "sourceUrl": "https://shamela.ws/book/21812/111",
+    "viewerPage": 111,
+    "printedPage": 113,
+    "startCharacter": 0,
+    "endCharacter": 1546,
+    "sha256": "f1288fc145de08ea05ffd39c2a906372c4ab30e6a98ed4838c8ab14c54b9543d"
+  },
+  {
+    "ordinal": 128,
+    "sourceUrl": "https://shamela.ws/book/21812/112",
+    "viewerPage": 112,
+    "printedPage": 114,
+    "startCharacter": 0,
+    "endCharacter": 993,
+    "sha256": "271d8aeceeef0a2c96cdd25eee04c4716ea3a14cf5324430202cde1e611d0f0c"
+  },
+  {
+    "ordinal": 129,
+    "sourceUrl": "https://shamela.ws/book/21812/113",
+    "viewerPage": 113,
+    "printedPage": 115,
+    "startCharacter": 0,
+    "endCharacter": 1083,
+    "sha256": "b9c4d37319f7792ab03d607c78b7ea373d5a5c965f337779289f00c028c26a44"
+  },
+  {
+    "ordinal": 130,
+    "sourceUrl": "https://shamela.ws/book/21812/114",
+    "viewerPage": 114,
+    "printedPage": 116,
+    "startCharacter": 0,
+    "endCharacter": 1179,
+    "sha256": "327fb3d86fe2c8161df2c8c5b12ea6fe095f6a44564a6b71d9c8565f8340738f"
+  },
+  {
+    "ordinal": 131,
+    "sourceUrl": "https://shamela.ws/book/21812/115",
+    "viewerPage": 115,
+    "printedPage": 117,
+    "startCharacter": 0,
+    "endCharacter": 1309,
+    "sha256": "d6cb714e46e2b5055af3de2df374462d7d6672e804a935e421397c21ff00dfdc"
+  },
+  {
+    "ordinal": 132,
+    "sourceUrl": "https://shamela.ws/book/21812/116",
+    "viewerPage": 116,
+    "printedPage": 118,
+    "startCharacter": 0,
+    "endCharacter": 1212,
+    "sha256": "c260b29d77fc3ddd23b38e948b3ae325f3eaedc8c95e3750fc2c60c7a2147b24"
+  },
+  {
+    "ordinal": 133,
+    "sourceUrl": "https://shamela.ws/book/21812/117",
+    "viewerPage": 117,
+    "printedPage": 119,
+    "startCharacter": 0,
+    "endCharacter": 1457,
+    "sha256": "a0fae3040c646f19c6e7a1d6cc1ccd01b666ab45bc66b966ab7af2f38c6812d2"
+  },
+  {
+    "ordinal": 134,
+    "sourceUrl": "https://shamela.ws/book/21812/118",
+    "viewerPage": 118,
+    "printedPage": 120,
+    "startCharacter": 0,
+    "endCharacter": 1387,
+    "sha256": "90bcce2cb8426f0c946b541b16ed2bdbad2925bdd6b98bcd05ed16371dc6803a"
+  },
+  {
+    "ordinal": 135,
+    "sourceUrl": "https://shamela.ws/book/21812/119",
+    "viewerPage": 119,
+    "printedPage": 121,
+    "startCharacter": 0,
+    "endCharacter": 1308,
+    "sha256": "f594101cb24f459ab6c195f421405bc655cf5fc7c8ea8d3d2d9ddc17404046f5"
+  },
+  {
+    "ordinal": 136,
+    "sourceUrl": "https://shamela.ws/book/21812/120",
+    "viewerPage": 120,
+    "printedPage": 122,
+    "startCharacter": 0,
+    "endCharacter": 1141,
+    "sha256": "202d71e0db9ec2c014eda4b5721a0bb87981b6614832508fa3776cd261cc2526"
+  },
+  {
+    "ordinal": 137,
+    "sourceUrl": "https://shamela.ws/book/21812/121",
+    "viewerPage": 121,
+    "printedPage": 123,
+    "startCharacter": 0,
+    "endCharacter": 1302,
+    "sha256": "74d46eca7e47208bc2c13511f4eacf735a101407ccacbb62bb55d685340ca006"
+  },
+  {
+    "ordinal": 138,
+    "sourceUrl": "https://shamela.ws/book/21812/122",
+    "viewerPage": 122,
+    "printedPage": 124,
+    "startCharacter": 0,
+    "endCharacter": 891,
+    "sha256": "63a07c632ec382c6ccc88a2155e5b636e69dd8fc5f114efb220c79fbba9bc095"
+  },
+  {
+    "ordinal": 139,
+    "sourceUrl": "https://shamela.ws/book/21812/123",
+    "viewerPage": 123,
+    "printedPage": 125,
+    "startCharacter": 0,
+    "endCharacter": 1281,
+    "sha256": "08d6d2778e82fb80cfede9b85577dc2478e91e634fa5656ccdba13daa8b3e0e7"
+  },
+  {
+    "ordinal": 140,
+    "sourceUrl": "https://shamela.ws/book/21812/124",
+    "viewerPage": 124,
+    "printedPage": 126,
+    "startCharacter": 0,
+    "endCharacter": 1408,
+    "sha256": "62e39bed3218a1fb420d7efec8238546d4e1e065e470653621fef2d0d493b4cc"
+  },
+  {
+    "ordinal": 141,
+    "sourceUrl": "https://shamela.ws/book/21812/125",
+    "viewerPage": 125,
+    "printedPage": 127,
+    "startCharacter": 0,
+    "endCharacter": 1308,
+    "sha256": "bdbf90f0aadb33041081324708ffc0babbea45016f8f25961dbe717effa7c625"
+  },
+  {
+    "ordinal": 142,
+    "sourceUrl": "https://shamela.ws/book/21812/126",
+    "viewerPage": 126,
+    "printedPage": 128,
+    "startCharacter": 0,
+    "endCharacter": 1035,
+    "sha256": "3f94f014bcd545d180f694ebab3f94fd3006595bc0c2cbc647b35e279c0fde7c"
+  },
+  {
+    "ordinal": 143,
+    "sourceUrl": "https://shamela.ws/book/21812/127",
+    "viewerPage": 127,
+    "printedPage": 129,
+    "startCharacter": 0,
+    "endCharacter": 1487,
+    "sha256": "fab69af52eb8c3ff0e3bdd3c1446534f29fdd0a4f95988cb199ba5e87c362116"
+  },
+  {
+    "ordinal": 144,
+    "sourceUrl": "https://shamela.ws/book/21812/128",
+    "viewerPage": 128,
+    "printedPage": 130,
+    "startCharacter": 0,
+    "endCharacter": 1482,
+    "sha256": "89cb3c665d80ce05f7ebcb53f0f08e802bb72ce8b0a2f90a3a098ce93e9489da"
+  },
+  {
+    "ordinal": 145,
+    "sourceUrl": "https://shamela.ws/book/21812/129",
+    "viewerPage": 129,
+    "printedPage": 131,
+    "startCharacter": 0,
+    "endCharacter": 1649,
+    "sha256": "6651354836f8c20eb51256384c33beaeab0c3deff72f28e814bc40405506d3b7"
+  },
+  {
+    "ordinal": 146,
+    "sourceUrl": "https://shamela.ws/book/21812/129",
+    "viewerPage": 129,
+    "printedPage": 131,
+    "startCharacter": 1649,
+    "endCharacter": 1903,
+    "sha256": "5103955f89e85be5b007cd38f609ddc8004ca4fb908120a575e280802e6a1a0f"
+  },
+  {
+    "ordinal": 147,
+    "sourceUrl": "https://shamela.ws/book/21812/130",
+    "viewerPage": 130,
+    "printedPage": 132,
+    "startCharacter": 0,
+    "endCharacter": 783,
+    "sha256": "8e7b5f0a5abb404a0b3102ed5cdc6a84b87b28476425a8a32eba68ea26955852"
+  },
+  {
+    "ordinal": 148,
+    "sourceUrl": "https://shamela.ws/book/21812/131",
+    "viewerPage": 131,
+    "printedPage": 133,
+    "startCharacter": 0,
+    "endCharacter": 1216,
+    "sha256": "83a341585bcdd7602816725d8fcd1de4d8d09fedd2ee7ce674a6203050fec432"
+  },
+  {
+    "ordinal": 149,
+    "sourceUrl": "https://shamela.ws/book/21812/132",
+    "viewerPage": 132,
+    "printedPage": 134,
+    "startCharacter": 0,
+    "endCharacter": 1437,
+    "sha256": "e765ef75ae96e6b632e1d59217aef643c858ae4e38702c7edc6f80ca0d582f09"
+  },
+  {
+    "ordinal": 150,
+    "sourceUrl": "https://shamela.ws/book/21812/133",
+    "viewerPage": 133,
+    "printedPage": 135,
+    "startCharacter": 0,
+    "endCharacter": 1335,
+    "sha256": "abc7bf0812e63d16f6267ed474d7c3216dbc595644551312bea4629ba7fc5c79"
+  },
+  {
+    "ordinal": 151,
+    "sourceUrl": "https://shamela.ws/book/21812/134",
+    "viewerPage": 134,
+    "printedPage": 136,
+    "startCharacter": 0,
+    "endCharacter": 1363,
+    "sha256": "34b0c0474fa546382abc1c873287fdd2473a6497fbac3faea3bd7afcbc039cb9"
+  },
+  {
+    "ordinal": 152,
+    "sourceUrl": "https://shamela.ws/book/21812/135",
+    "viewerPage": 135,
+    "printedPage": 137,
+    "startCharacter": 0,
+    "endCharacter": 1240,
+    "sha256": "a706861c7656abd16801a20bef915ae5a0609335bd7039aae8150dda10d5e7ce"
+  },
+  {
+    "ordinal": 153,
+    "sourceUrl": "https://shamela.ws/book/21812/136",
+    "viewerPage": 136,
+    "printedPage": 138,
+    "startCharacter": 0,
+    "endCharacter": 1409,
+    "sha256": "f65b9f6baa3710c07087aec8b7830e9f6529f47e5450160061313dceca59a190"
+  },
+  {
+    "ordinal": 154,
+    "sourceUrl": "https://shamela.ws/book/21812/137",
+    "viewerPage": 137,
+    "printedPage": 139,
+    "startCharacter": 0,
+    "endCharacter": 1490,
+    "sha256": "40d5109c70a274cc5184d11212d7b781f6af429f6cbee552b696946f586511a5"
+  },
+  {
+    "ordinal": 155,
+    "sourceUrl": "https://shamela.ws/book/21812/138",
+    "viewerPage": 138,
+    "printedPage": 140,
+    "startCharacter": 0,
+    "endCharacter": 169,
+    "sha256": "a76ebda074ab4c2e6432b072b77fe67db1e8bd09c774247ba26285bafa8b6986"
+  },
+  {
+    "ordinal": 156,
+    "sourceUrl": "https://shamela.ws/book/21812/139",
+    "viewerPage": 139,
+    "printedPage": 141,
+    "startCharacter": 0,
+    "endCharacter": 1528,
+    "sha256": "9d7418e14ba213abffa3cd68573135cbbdadaa06aba5e429b7497849664d68e4"
+  },
+  {
+    "ordinal": 157,
+    "sourceUrl": "https://shamela.ws/book/21812/140",
+    "viewerPage": 140,
+    "printedPage": 142,
+    "startCharacter": 0,
+    "endCharacter": 1453,
+    "sha256": "f2c43fff72924e2c41fe74010d17decac10dae131fd02ee27c089edfe904b5e5"
+  },
+  {
+    "ordinal": 158,
+    "sourceUrl": "https://shamela.ws/book/21812/141",
+    "viewerPage": 141,
+    "printedPage": 143,
+    "startCharacter": 0,
+    "endCharacter": 1377,
+    "sha256": "34ab78a33963e8e80687dfbde6de2e589d9602fd6f1c4725fd7b9260790d7d63"
+  },
+  {
+    "ordinal": 159,
+    "sourceUrl": "https://shamela.ws/book/21812/142",
+    "viewerPage": 142,
+    "printedPage": 144,
+    "startCharacter": 0,
+    "endCharacter": 1300,
+    "sha256": "a5eb3a5a2841cf7f88ec50cfbf8377fffceca6775a9f6c908c13adcb9a6cbab1"
+  },
+  {
+    "ordinal": 160,
+    "sourceUrl": "https://shamela.ws/book/21812/143",
+    "viewerPage": 143,
+    "printedPage": 145,
+    "startCharacter": 0,
+    "endCharacter": 1527,
+    "sha256": "aeefbb6568bbe0e0690c3ba4b5c5133ac724becfb0ef217f05eff1778962b7f1"
+  },
+  {
+    "ordinal": 161,
+    "sourceUrl": "https://shamela.ws/book/21812/143",
+    "viewerPage": 143,
+    "printedPage": 145,
+    "startCharacter": 1527,
+    "endCharacter": 1767,
+    "sha256": "8366f78821d09838b90ce01f4a946148128f4351f85b380f26d4e71af1b53e64"
+  },
+  {
+    "ordinal": 162,
+    "sourceUrl": "https://shamela.ws/book/21812/144",
+    "viewerPage": 144,
+    "printedPage": 146,
+    "startCharacter": 0,
+    "endCharacter": 1550,
+    "sha256": "d927b14b6d68a4d89c68efa7b235652b91679f026ffc0328ae762b9a21425b89"
+  },
+  {
+    "ordinal": 163,
+    "sourceUrl": "https://shamela.ws/book/21812/145",
+    "viewerPage": 145,
+    "printedPage": 147,
+    "startCharacter": 0,
+    "endCharacter": 1481,
+    "sha256": "8e2309cc7cdb47d9c9247511adf876a59eec067ff86ba5ccb0235408d6445313"
+  },
+  {
+    "ordinal": 164,
+    "sourceUrl": "https://shamela.ws/book/21812/146",
+    "viewerPage": 146,
+    "printedPage": 148,
+    "startCharacter": 0,
+    "endCharacter": 1574,
+    "sha256": "91485b2301171fcf10818f5f9da64e2d123a8902a2b112eb347ef42f09050f4c"
+  },
+  {
+    "ordinal": 165,
+    "sourceUrl": "https://shamela.ws/book/21812/147",
+    "viewerPage": 147,
+    "printedPage": 149,
+    "startCharacter": 0,
+    "endCharacter": 1277,
+    "sha256": "86708d32284efddb34ff860a8b8b65d9ff42e0aa3aa0e5832bf37b6c09066937"
+  },
+  {
+    "ordinal": 166,
+    "sourceUrl": "https://shamela.ws/book/21812/148",
+    "viewerPage": 148,
+    "printedPage": 150,
+    "startCharacter": 0,
+    "endCharacter": 1597,
+    "sha256": "c5cee591b2d6f339841cd1275453e9b6eb92f6c13059df7616f9f726d29ff65e"
+  },
+  {
+    "ordinal": 167,
+    "sourceUrl": "https://shamela.ws/book/21812/149",
+    "viewerPage": 149,
+    "printedPage": 151,
+    "startCharacter": 0,
+    "endCharacter": 1474,
+    "sha256": "69538fb29c85c810aca77240eedd862e5da6bf82c36fb190b9bc0ddc2f2769ab"
+  },
+  {
+    "ordinal": 168,
+    "sourceUrl": "https://shamela.ws/book/21812/150",
+    "viewerPage": 150,
+    "printedPage": 152,
+    "startCharacter": 0,
+    "endCharacter": 936,
+    "sha256": "e6b051090bf2cb18272f817c39815f507ace7cd01cec1363948665f873fe129e"
+  },
+  {
+    "ordinal": 169,
+    "sourceUrl": "https://shamela.ws/book/21812/151",
+    "viewerPage": 151,
+    "printedPage": 153,
+    "startCharacter": 0,
+    "endCharacter": 1293,
+    "sha256": "f1ca0423327ca5af45b2f8641508373ad910d550760bfe0302563a9004dccf34"
+  },
+  {
+    "ordinal": 170,
+    "sourceUrl": "https://shamela.ws/book/21812/152",
+    "viewerPage": 152,
+    "printedPage": 154,
+    "startCharacter": 0,
+    "endCharacter": 1270,
+    "sha256": "36ae366fe888d4f7a7319ed7ab8534590f86bdebc327b6a973c41b902bac664d"
+  },
+  {
+    "ordinal": 171,
+    "sourceUrl": "https://shamela.ws/book/21812/153",
+    "viewerPage": 153,
+    "printedPage": 155,
+    "startCharacter": 0,
+    "endCharacter": 1448,
+    "sha256": "4075fada9772c236544d164f7005543e61f3a3f663df3a9228e64d95a9f8d6a1"
+  },
+  {
+    "ordinal": 172,
+    "sourceUrl": "https://shamela.ws/book/21812/154",
+    "viewerPage": 154,
+    "printedPage": 156,
+    "startCharacter": 0,
+    "endCharacter": 1066,
+    "sha256": "5dc9e3d0e7d9d04e6c4c9d5ed32826d283bccd260f66f97b11b06b69537da8e6"
+  },
+  {
+    "ordinal": 173,
+    "sourceUrl": "https://shamela.ws/book/21812/155",
+    "viewerPage": 155,
+    "printedPage": 157,
+    "startCharacter": 0,
+    "endCharacter": 153,
+    "sha256": "1d7014adfb7845142e42851b1082992d6e3488246a08c3fcc4d1a6281cdf8c58"
+  },
+  {
+    "ordinal": 174,
+    "sourceUrl": "https://shamela.ws/book/21812/156",
+    "viewerPage": 156,
+    "printedPage": 158,
+    "startCharacter": 0,
+    "endCharacter": 1226,
+    "sha256": "cefa4d2acaf3dc6393e4f9ab6b2b52de234bd45904e4cf6615c0f96fdcad8980"
+  },
+  {
+    "ordinal": 175,
+    "sourceUrl": "https://shamela.ws/book/21812/157",
+    "viewerPage": 157,
+    "printedPage": 159,
+    "startCharacter": 0,
+    "endCharacter": 1220,
+    "sha256": "64b2cfacad5c4a07adba29b69bf77310613d84bf141564527e905464b9b794b0"
+  },
+  {
+    "ordinal": 176,
+    "sourceUrl": "https://shamela.ws/book/21812/158",
+    "viewerPage": 158,
+    "printedPage": 160,
+    "startCharacter": 0,
+    "endCharacter": 1260,
+    "sha256": "9bd6ab8cdfaa1fcabbf15117e443dd89196b2b3efcd6a06533101913732b353f"
+  },
+  {
+    "ordinal": 177,
+    "sourceUrl": "https://shamela.ws/book/21812/159",
+    "viewerPage": 159,
+    "printedPage": 161,
+    "startCharacter": 0,
+    "endCharacter": 1404,
+    "sha256": "2513861d70aee7eeffa8861b8441693afb1129ca72908449302b6639c19734f3"
+  },
+  {
+    "ordinal": 178,
+    "sourceUrl": "https://shamela.ws/book/21812/160",
+    "viewerPage": 160,
+    "printedPage": 162,
+    "startCharacter": 0,
+    "endCharacter": 1451,
+    "sha256": "6264c2a68c7ad8b9a272d76df4b0d01b48eb2d2e3a1eaf4dacf95b978578ed84"
+  },
+  {
+    "ordinal": 179,
+    "sourceUrl": "https://shamela.ws/book/21812/161",
+    "viewerPage": 161,
+    "printedPage": 163,
+    "startCharacter": 0,
+    "endCharacter": 1435,
+    "sha256": "4a60f00b69f613c830d3ab59db11bfb02ddb003dc5def72d20faf87b1cb128da"
+  },
+  {
+    "ordinal": 180,
+    "sourceUrl": "https://shamela.ws/book/21812/162",
+    "viewerPage": 162,
+    "printedPage": 164,
+    "startCharacter": 0,
+    "endCharacter": 1062,
+    "sha256": "de0737edfd3e25af5fa4844aeaa0b683fc9facd19b2bfe9970753498516486e4"
+  },
+  {
+    "ordinal": 181,
+    "sourceUrl": "https://shamela.ws/book/21812/163",
+    "viewerPage": 163,
+    "printedPage": 165,
+    "startCharacter": 0,
+    "endCharacter": 1237,
+    "sha256": "50bef17cc7a9577e00daf2fd62cdccddc60eac450363eb29cc875c07923b6fc8"
+  },
+  {
+    "ordinal": 182,
+    "sourceUrl": "https://shamela.ws/book/21812/164",
+    "viewerPage": 164,
+    "printedPage": 166,
+    "startCharacter": 0,
+    "endCharacter": 1165,
+    "sha256": "08aaf3a26f3dd5c24b265e240b99e8c4afb7adb52fda8a3c5bf2dddfe5e45d7e"
+  },
+  {
+    "ordinal": 183,
+    "sourceUrl": "https://shamela.ws/book/21812/165",
+    "viewerPage": 165,
+    "printedPage": 167,
+    "startCharacter": 0,
+    "endCharacter": 1322,
+    "sha256": "746a297b6e7032a5115291b271c393b996ea6066de8dc1823a3b3f955a17b44a"
+  },
+  {
+    "ordinal": 184,
+    "sourceUrl": "https://shamela.ws/book/21812/166",
+    "viewerPage": 166,
+    "printedPage": 168,
+    "startCharacter": 0,
+    "endCharacter": 1495,
+    "sha256": "00912ee487a427ce1bd3c972f5f1d6c059f8649c050d01f51accf7d9e4ae326d"
+  },
+  {
+    "ordinal": 185,
+    "sourceUrl": "https://shamela.ws/book/21812/167",
+    "viewerPage": 167,
+    "printedPage": 169,
+    "startCharacter": 0,
+    "endCharacter": 1512,
+    "sha256": "cf7f8933a10c81ddc8197deb4b7c8eeca797900b9fb94d214dff8526fbe03033"
+  },
+  {
+    "ordinal": 186,
+    "sourceUrl": "https://shamela.ws/book/21812/168",
+    "viewerPage": 168,
+    "printedPage": 170,
+    "startCharacter": 0,
+    "endCharacter": 1330,
+    "sha256": "97923bf78f73d1f15647422598bec45092f285e279f90923546cae141a5dabcb"
+  },
+  {
+    "ordinal": 187,
+    "sourceUrl": "https://shamela.ws/book/21812/169",
+    "viewerPage": 169,
+    "printedPage": 171,
+    "startCharacter": 0,
+    "endCharacter": 1368,
+    "sha256": "c4643d574782d3fcbc6d51be94a13bb8dc3020d1267fcda13a15fc9aa9bbf569"
+  },
+  {
+    "ordinal": 188,
+    "sourceUrl": "https://shamela.ws/book/21812/170",
+    "viewerPage": 170,
+    "printedPage": 172,
+    "startCharacter": 0,
+    "endCharacter": 1510,
+    "sha256": "cb03e63c610fb092e83490d4fe6069de2e32a81edaac9efabc930e3be8629ca5"
+  },
+  {
+    "ordinal": 189,
+    "sourceUrl": "https://shamela.ws/book/21812/171",
+    "viewerPage": 171,
+    "printedPage": 173,
+    "startCharacter": 0,
+    "endCharacter": 1263,
+    "sha256": "3759943b8a8637e0f323d55184bfda43fe887a95db5d8ef42a9e4da9425cdafa"
+  },
+  {
+    "ordinal": 190,
+    "sourceUrl": "https://shamela.ws/book/21812/172",
+    "viewerPage": 172,
+    "printedPage": 174,
+    "startCharacter": 0,
+    "endCharacter": 1539,
+    "sha256": "1df6868643b480fc13576e13a8a03b8034abc4096c846c7655f1149a3742e4f1"
+  },
+  {
+    "ordinal": 191,
+    "sourceUrl": "https://shamela.ws/book/21812/172",
+    "viewerPage": 172,
+    "printedPage": 174,
+    "startCharacter": 1539,
+    "endCharacter": 1730,
+    "sha256": "2a68dd1f8ad9b586a65a158ca78bcf4d7c19456c8460c59e28b8deb58b0f5a74"
+  },
+  {
+    "ordinal": 192,
+    "sourceUrl": "https://shamela.ws/book/21812/173",
+    "viewerPage": 173,
+    "printedPage": 175,
+    "startCharacter": 0,
+    "endCharacter": 1030,
+    "sha256": "141d5ce21d692ea88555166afac188b44207a8667c1e33bf9faf46db82b5fcd1"
+  },
+  {
+    "ordinal": 193,
+    "sourceUrl": "https://shamela.ws/book/21812/174",
+    "viewerPage": 174,
+    "printedPage": 176,
+    "startCharacter": 0,
+    "endCharacter": 1061,
+    "sha256": "1d35d63f18e2a8345f98acf258cfe6c9a074a118e480884ba6528683ed19b591"
+  },
+  {
+    "ordinal": 194,
+    "sourceUrl": "https://shamela.ws/book/21812/175",
+    "viewerPage": 175,
+    "printedPage": 177,
+    "startCharacter": 0,
+    "endCharacter": 1404,
+    "sha256": "cde5df1dd8849cb6719b0ca5e3c5f7e9f48c608657b3afbcde8d40d618805a57"
+  },
+  {
+    "ordinal": 195,
+    "sourceUrl": "https://shamela.ws/book/21812/176",
+    "viewerPage": 176,
+    "printedPage": 178,
+    "startCharacter": 0,
+    "endCharacter": 1262,
+    "sha256": "126b721363705688b3ad39b6a7b01ddaf8e7b3e313f10c584c974bb082f379f4"
+  },
+  {
+    "ordinal": 196,
+    "sourceUrl": "https://shamela.ws/book/21812/177",
+    "viewerPage": 177,
+    "printedPage": 179,
+    "startCharacter": 0,
+    "endCharacter": 1370,
+    "sha256": "0139e28fa10c73e2182d33724440c9c9803ce994bc50d6885318caceffa3deec"
+  },
+  {
+    "ordinal": 197,
+    "sourceUrl": "https://shamela.ws/book/21812/177",
+    "viewerPage": 177,
+    "printedPage": 179,
+    "startCharacter": 1370,
+    "endCharacter": 1719,
+    "sha256": "93bdd641a87fb7ece215dd5a5971278279783eae12454fddce180ab9e067ce0f"
+  },
+  {
+    "ordinal": 198,
+    "sourceUrl": "https://shamela.ws/book/21812/178",
+    "viewerPage": 178,
+    "printedPage": 180,
+    "startCharacter": 0,
+    "endCharacter": 193,
+    "sha256": "18ad31e06f7b10c525ca89682a8607e2d5690c68eb599cb30f1d924f30c41a66"
+  },
+  {
+    "ordinal": 199,
+    "sourceUrl": "https://shamela.ws/book/21812/179",
+    "viewerPage": 179,
+    "printedPage": 181,
+    "startCharacter": 0,
+    "endCharacter": 1165,
+    "sha256": "a8659c36ba3418838958006939d30053c8236bc933fc451b0b745053e8ff3047"
+  },
+  {
+    "ordinal": 200,
+    "sourceUrl": "https://shamela.ws/book/21812/180",
+    "viewerPage": 180,
+    "printedPage": 182,
+    "startCharacter": 0,
+    "endCharacter": 1198,
+    "sha256": "01c038873e79f094c8416ed784f55243fc2cd1ec31361035c1b8696abea310fc"
+  },
+  {
+    "ordinal": 201,
+    "sourceUrl": "https://shamela.ws/book/21812/181",
+    "viewerPage": 181,
+    "printedPage": 183,
+    "startCharacter": 0,
+    "endCharacter": 1435,
+    "sha256": "7b3f81e02ad8e92845c8ff929459ab5b8b1d5246ec01748b9b6c5b23499258e3"
+  },
+  {
+    "ordinal": 202,
+    "sourceUrl": "https://shamela.ws/book/21812/182",
+    "viewerPage": 182,
+    "printedPage": 184,
+    "startCharacter": 0,
+    "endCharacter": 738,
+    "sha256": "79272f0754ee2116541f0a7ef558c598b60258947e4e4098c4f3c167a2c0132f"
+  },
+  {
+    "ordinal": 203,
+    "sourceUrl": "https://shamela.ws/book/21812/183",
+    "viewerPage": 183,
+    "printedPage": 185,
+    "startCharacter": 0,
+    "endCharacter": 1152,
+    "sha256": "4f307371f4565d31c6753d4eb5d87bd9b25f078ed0bd14bbd81fe8d526cb1c37"
+  },
+  {
+    "ordinal": 204,
+    "sourceUrl": "https://shamela.ws/book/21812/184",
+    "viewerPage": 184,
+    "printedPage": 186,
+    "startCharacter": 0,
+    "endCharacter": 1428,
+    "sha256": "e347f1f8f488a2fcfcaf2eca9655cf777da379a6ddb423b197e8a40e072c56a6"
+  },
+  {
+    "ordinal": 205,
+    "sourceUrl": "https://shamela.ws/book/21812/185",
+    "viewerPage": 185,
+    "printedPage": 187,
+    "startCharacter": 0,
+    "endCharacter": 1209,
+    "sha256": "f436c46524324905c358803fa05f31004635034ecf0518f67a509dfff4f1951a"
+  },
+  {
+    "ordinal": 206,
+    "sourceUrl": "https://shamela.ws/book/21812/186",
+    "viewerPage": 186,
+    "printedPage": 188,
+    "startCharacter": 0,
+    "endCharacter": 1658,
+    "sha256": "f42759c5e4e0fff727675361209a75827ef5d51682257cbe0910bda302030d80"
+  },
+  {
+    "ordinal": 207,
+    "sourceUrl": "https://shamela.ws/book/21812/187",
+    "viewerPage": 187,
+    "printedPage": 189,
+    "startCharacter": 0,
+    "endCharacter": 1322,
+    "sha256": "c8eabc32a4fb5de1a45a3db87ffbbf36bc78372e28bb270f882bd5746d80d493"
+  },
+  {
+    "ordinal": 208,
+    "sourceUrl": "https://shamela.ws/book/21812/188",
+    "viewerPage": 188,
+    "printedPage": 190,
+    "startCharacter": 0,
+    "endCharacter": 1502,
+    "sha256": "ee4239c37f368da958e81b52c893d2fb7f1517843c385eb62483c16fdce5bad1"
+  },
+  {
+    "ordinal": 209,
+    "sourceUrl": "https://shamela.ws/book/21812/189",
+    "viewerPage": 189,
+    "printedPage": 191,
+    "startCharacter": 0,
+    "endCharacter": 1435,
+    "sha256": "d408aa6f11fd97136b5f1e5e02926de61b3764615c05144b53e4af96df27570f"
+  },
+  {
+    "ordinal": 210,
+    "sourceUrl": "https://shamela.ws/book/21812/190",
+    "viewerPage": 190,
+    "printedPage": 192,
+    "startCharacter": 0,
+    "endCharacter": 1071,
+    "sha256": "2a6ab573b4b52dd3160d74400a054a309a16f8885ea7b071ddf5be60a5bacc48"
+  },
+  {
+    "ordinal": 211,
+    "sourceUrl": "https://shamela.ws/book/21812/191",
+    "viewerPage": 191,
+    "printedPage": 193,
+    "startCharacter": 0,
+    "endCharacter": 1286,
+    "sha256": "0ce07cd4d414bf400d34e922b724fc07dfe495a700c6c502543c1ce9e2d1d06d"
+  },
+  {
+    "ordinal": 212,
+    "sourceUrl": "https://shamela.ws/book/21812/192",
+    "viewerPage": 192,
+    "printedPage": 194,
+    "startCharacter": 0,
+    "endCharacter": 149,
+    "sha256": "25465ce17e47788301b578c7bae3c49286cf33f7be8c4d21715005f92caa57fc"
+  },
+  {
+    "ordinal": 213,
+    "sourceUrl": "https://shamela.ws/book/21812/193",
+    "viewerPage": 193,
+    "printedPage": 195,
+    "startCharacter": 0,
+    "endCharacter": 1075,
+    "sha256": "fcb87e9bc4a62b550fc1e8bfc38ad84786c121aa5748762ffb0a3a99f36440c0"
+  },
+  {
+    "ordinal": 214,
+    "sourceUrl": "https://shamela.ws/book/21812/194",
+    "viewerPage": 194,
+    "printedPage": 196,
+    "startCharacter": 0,
+    "endCharacter": 1219,
+    "sha256": "2b6df66df56e6c6aa5a01842ec5b405af89e92aa510d1ae5da74bba1ddbb0cf0"
+  },
+  {
+    "ordinal": 215,
+    "sourceUrl": "https://shamela.ws/book/21812/195",
+    "viewerPage": 195,
+    "printedPage": 197,
+    "startCharacter": 0,
+    "endCharacter": 1309,
+    "sha256": "e0b522489922f30fae047c6ec29943b600bcba8dcf1312415d30a8d358257946"
+  },
+  {
+    "ordinal": 216,
+    "sourceUrl": "https://shamela.ws/book/21812/196",
+    "viewerPage": 196,
+    "printedPage": 198,
+    "startCharacter": 0,
+    "endCharacter": 1481,
+    "sha256": "5e016a071e7548c9bfb317a82cb4cd78060bc216bfdefba267a87ff0a98ece3f"
+  },
+  {
+    "ordinal": 217,
+    "sourceUrl": "https://shamela.ws/book/21812/197",
+    "viewerPage": 197,
+    "printedPage": 199,
+    "startCharacter": 0,
+    "endCharacter": 1006,
+    "sha256": "562b0c669300f20fe16e169c3573d88364426cba47e86dcda165217631e976e1"
+  },
+  {
+    "ordinal": 218,
+    "sourceUrl": "https://shamela.ws/book/21812/198",
+    "viewerPage": 198,
+    "printedPage": 200,
+    "startCharacter": 0,
+    "endCharacter": 1345,
+    "sha256": "f059c89b660c94a99a354384a7e6b125b80e4c107af87e5609e4a88c0ccdf2df"
+  },
+  {
+    "ordinal": 219,
+    "sourceUrl": "https://shamela.ws/book/21812/199",
+    "viewerPage": 199,
+    "printedPage": 201,
+    "startCharacter": 0,
+    "endCharacter": 1675,
+    "sha256": "8f0176e3def81c5a3bd83cd9edd8aeff2ad6e213f790652da1ef047712f569da"
+  },
+  {
+    "ordinal": 220,
+    "sourceUrl": "https://shamela.ws/book/21812/200",
+    "viewerPage": 200,
+    "printedPage": 202,
+    "startCharacter": 0,
+    "endCharacter": 1447,
+    "sha256": "578d1fbca03c43ce82698c4c175e7b015d67bad8dc61e0133f98a5bc0ce09dfc"
+  },
+  {
+    "ordinal": 221,
+    "sourceUrl": "https://shamela.ws/book/21812/200",
+    "viewerPage": 200,
+    "printedPage": 202,
+    "startCharacter": 1447,
+    "endCharacter": 1701,
+    "sha256": "758a1d0132b17578a107bae41f221e2f2623ee0451527ab9ea4b8fdcf2b0867a"
+  },
+  {
+    "ordinal": 222,
+    "sourceUrl": "https://shamela.ws/book/21812/201",
+    "viewerPage": 201,
+    "printedPage": 203,
+    "startCharacter": 0,
+    "endCharacter": 1318,
+    "sha256": "c83c65a56b987b1fe71d120d8918903a7ddf69c3096943cb82695d149e371d43"
+  },
+  {
+    "ordinal": 223,
+    "sourceUrl": "https://shamela.ws/book/21812/201",
+    "viewerPage": 201,
+    "printedPage": 203,
+    "startCharacter": 1318,
+    "endCharacter": 1749,
+    "sha256": "4f3b7c9c525716f72ae4a44b0a26cb3eeb6c0c8828dc0452e2f7d7cf0e80e4c5"
+  },
+  {
+    "ordinal": 224,
+    "sourceUrl": "https://shamela.ws/book/21812/202",
+    "viewerPage": 202,
+    "printedPage": 204,
+    "startCharacter": 0,
+    "endCharacter": 1348,
+    "sha256": "8180d8818ccff664b5c9e9ce893e4b1d653bae7020ade2b404f80628ec494140"
+  },
+  {
+    "ordinal": 225,
+    "sourceUrl": "https://shamela.ws/book/21812/203",
+    "viewerPage": 203,
+    "printedPage": 205,
+    "startCharacter": 0,
+    "endCharacter": 856,
+    "sha256": "9b3618389e3f25f9bac7c15f179216d59591680cc6141366c154d8389cf0f403"
+  },
+  {
+    "ordinal": 226,
+    "sourceUrl": "https://shamela.ws/book/21812/204",
+    "viewerPage": 204,
+    "printedPage": 206,
+    "startCharacter": 0,
+    "endCharacter": 1053,
+    "sha256": "f5243f721b341e8aca36cbbf1fac48d204e3ad8fa5df7f56aeb15d9e801d97c5"
+  },
+  {
+    "ordinal": 227,
+    "sourceUrl": "https://shamela.ws/book/21812/205",
+    "viewerPage": 205,
+    "printedPage": 207,
+    "startCharacter": 0,
+    "endCharacter": 1175,
+    "sha256": "d16a09fef2f11f55a99375db40ec99a32f5e2ad55830d4957792716f699fbe98"
+  },
+  {
+    "ordinal": 228,
+    "sourceUrl": "https://shamela.ws/book/21812/206",
+    "viewerPage": 206,
+    "printedPage": 208,
+    "startCharacter": 0,
+    "endCharacter": 1520,
+    "sha256": "c6aaa96cb2e8838e125befcefa6ef9eb93c632408646f133f2b6413413e36db5"
+  },
+  {
+    "ordinal": 229,
+    "sourceUrl": "https://shamela.ws/book/21812/207",
+    "viewerPage": 207,
+    "printedPage": 209,
+    "startCharacter": 0,
+    "endCharacter": 1240,
+    "sha256": "eedad75d9f5855fc6f15d9de95d118d04f64b9e146085474883b2b48a3365758"
+  },
+  {
+    "ordinal": 230,
+    "sourceUrl": "https://shamela.ws/book/21812/208",
+    "viewerPage": 208,
+    "printedPage": 210,
+    "startCharacter": 0,
+    "endCharacter": 1191,
+    "sha256": "dea7cea925f0d466c8a2fbe669f074b0135f407e1063c18f62dd02aa5a390c23"
+  },
+  {
+    "ordinal": 231,
+    "sourceUrl": "https://shamela.ws/book/21812/209",
+    "viewerPage": 209,
+    "printedPage": 211,
+    "startCharacter": 0,
+    "endCharacter": 356,
+    "sha256": "7da9f89cdef194dc330ba492fe119bdcabbbfca3b6770cf993bebecb35cd1416"
+  },
+  {
+    "ordinal": 232,
+    "sourceUrl": "https://shamela.ws/book/21812/210",
+    "viewerPage": 210,
+    "printedPage": 212,
+    "startCharacter": 0,
+    "endCharacter": 889,
+    "sha256": "2dc2fb71cef7d50127aefd26906e996167731f2a3f2d4f8f247657557aec62ee"
+  },
+  {
+    "ordinal": 233,
+    "sourceUrl": "https://shamela.ws/book/21812/211",
+    "viewerPage": 211,
+    "printedPage": 213,
+    "startCharacter": 0,
+    "endCharacter": 1342,
+    "sha256": "2eb9f6680914a6b496141890b9ca6950800aa53d44ee0f2bc7a24bbc1348b551"
+  },
+  {
+    "ordinal": 234,
+    "sourceUrl": "https://shamela.ws/book/21812/212",
+    "viewerPage": 212,
+    "printedPage": 214,
+    "startCharacter": 0,
+    "endCharacter": 998,
+    "sha256": "328e2c9a4a073a21e1804fe15bb4e3722eb7d265b35f4d7398d03424e68e756c"
+  },
+  {
+    "ordinal": 235,
+    "sourceUrl": "https://shamela.ws/book/21812/213",
+    "viewerPage": 213,
+    "printedPage": 215,
+    "startCharacter": 0,
+    "endCharacter": 1080,
+    "sha256": "25254ffe075c77f30b8ec8bb405d040ecf07a10a3e981dd65c8de43c103944f5"
+  },
+  {
+    "ordinal": 236,
+    "sourceUrl": "https://shamela.ws/book/21812/214",
+    "viewerPage": 214,
+    "printedPage": 216,
+    "startCharacter": 0,
+    "endCharacter": 1417,
+    "sha256": "da4443e7fdaa718d2f2d4096439a813e08c4ce264793b60c038bdda7771304b9"
+  },
+  {
+    "ordinal": 237,
+    "sourceUrl": "https://shamela.ws/book/21812/215",
+    "viewerPage": 215,
+    "printedPage": 217,
+    "startCharacter": 0,
+    "endCharacter": 1280,
+    "sha256": "8b9e24e0c7748cedff409b7b826a7c4832fb1cff85a50d96a19d2ad483bfbc3c"
+  },
+  {
+    "ordinal": 238,
+    "sourceUrl": "https://shamela.ws/book/21812/216",
+    "viewerPage": 216,
+    "printedPage": 218,
+    "startCharacter": 0,
+    "endCharacter": 1452,
+    "sha256": "870fd267a0290f348e32d3ddb5fcc02640618e5ddde260f9a35805c420161eee"
+  },
+  {
+    "ordinal": 239,
+    "sourceUrl": "https://shamela.ws/book/21812/217",
+    "viewerPage": 217,
+    "printedPage": 219,
+    "startCharacter": 0,
+    "endCharacter": 887,
+    "sha256": "7c724744b462ee6ed6fb07915464d411995c27d35e5d999f9bcbea06b1279aa2"
+  },
+  {
+    "ordinal": 240,
+    "sourceUrl": "https://shamela.ws/book/21812/218",
+    "viewerPage": 218,
+    "printedPage": 220,
+    "startCharacter": 0,
+    "endCharacter": 1073,
+    "sha256": "e82819632e6f17ebe5d573dfbc7620a8e73af97d941a9ddda6fc927bcadb76aa"
+  },
+  {
+    "ordinal": 241,
+    "sourceUrl": "https://shamela.ws/book/21812/219",
+    "viewerPage": 219,
+    "printedPage": 221,
+    "startCharacter": 0,
+    "endCharacter": 1555,
+    "sha256": "ef19cc4ac825555ae6338bfc66b961bf9496524997b91a8efbef06a1199e7cd4"
+  },
+  {
+    "ordinal": 242,
+    "sourceUrl": "https://shamela.ws/book/21812/220",
+    "viewerPage": 220,
+    "printedPage": 222,
+    "startCharacter": 0,
+    "endCharacter": 1180,
+    "sha256": "04563aea7e02aa1b6feb21bd59ecb992a593221cbc5d037537813d339555d390"
+  },
+  {
+    "ordinal": 243,
+    "sourceUrl": "https://shamela.ws/book/21812/221",
+    "viewerPage": 221,
+    "printedPage": 223,
+    "startCharacter": 0,
+    "endCharacter": 1419,
+    "sha256": "f690d4346115ef50357ca937f95dc02112cd30540da4f890ed1d7cf790e9b6d9"
+  },
+  {
+    "ordinal": 244,
+    "sourceUrl": "https://shamela.ws/book/21812/222",
+    "viewerPage": 222,
+    "printedPage": 224,
+    "startCharacter": 0,
+    "endCharacter": 1182,
+    "sha256": "59cde753ffa4c7bc6facbd20b34759e7d58f0f1dfa2931e5e14da4ea10364254"
+  },
+  {
+    "ordinal": 245,
+    "sourceUrl": "https://shamela.ws/book/21812/223",
+    "viewerPage": 223,
+    "printedPage": 225,
+    "startCharacter": 0,
+    "endCharacter": 1354,
+    "sha256": "6a0a680a35c6215dd89b57367894caedc77f053367ec549cc846382b6736920a"
+  },
+  {
+    "ordinal": 246,
+    "sourceUrl": "https://shamela.ws/book/21812/224",
+    "viewerPage": 224,
+    "printedPage": 226,
+    "startCharacter": 0,
+    "endCharacter": 1531,
+    "sha256": "8e0faf11ba3741599f808e9b756c9e7c84d41effb4de589c7a9feb8d8e64a9f1"
+  },
+  {
+    "ordinal": 247,
+    "sourceUrl": "https://shamela.ws/book/21812/225",
+    "viewerPage": 225,
+    "printedPage": 227,
+    "startCharacter": 0,
+    "endCharacter": 1421,
+    "sha256": "d4d6a46df6c45eb6f49334b5e21acd0821a9335e7ec6ef5f7ab87a248c1bcaad"
+  },
+  {
+    "ordinal": 248,
+    "sourceUrl": "https://shamela.ws/book/21812/226",
+    "viewerPage": 226,
+    "printedPage": 228,
+    "startCharacter": 0,
+    "endCharacter": 1552,
+    "sha256": "e3b6c2b56f7c1a3f909e7c4546ff2036207103811256581779f876ddc044623e"
+  },
+  {
+    "ordinal": 249,
+    "sourceUrl": "https://shamela.ws/book/21812/226",
+    "viewerPage": 226,
+    "printedPage": 228,
+    "startCharacter": 1552,
+    "endCharacter": 1701,
+    "sha256": "90ccab3be2851933371b38937a31e157e4ef4a52e647bf77ceb9782d350be9d0"
+  },
+  {
+    "ordinal": 250,
+    "sourceUrl": "https://shamela.ws/book/21812/227",
+    "viewerPage": 227,
+    "printedPage": 229,
+    "startCharacter": 0,
+    "endCharacter": 1339,
+    "sha256": "3c2d1e74074e841cd80c56387f83a6ecb4b4cf21d376ac34c99349f1dc2b4624"
+  },
+  {
+    "ordinal": 251,
+    "sourceUrl": "https://shamela.ws/book/21812/228",
+    "viewerPage": 228,
+    "printedPage": 230,
+    "startCharacter": 0,
+    "endCharacter": 1407,
+    "sha256": "4d303cf981216170288adedf178153215cfd8d3f8ec52c4f5b9e6386e86205e1"
+  },
+  {
+    "ordinal": 252,
+    "sourceUrl": "https://shamela.ws/book/21812/229",
+    "viewerPage": 229,
+    "printedPage": 231,
+    "startCharacter": 0,
+    "endCharacter": 1219,
+    "sha256": "2f16dd23d19cfa593e58ded35c0dceb0a86887696e3803633e4109aaa3b518a5"
+  },
+  {
+    "ordinal": 253,
+    "sourceUrl": "https://shamela.ws/book/21812/230",
+    "viewerPage": 230,
+    "printedPage": 232,
+    "startCharacter": 0,
+    "endCharacter": 1433,
+    "sha256": "ef21a15570c65f22ad7e9adae404e5e297fad86322e7371f3615993f63ca7618"
+  },
+  {
+    "ordinal": 254,
+    "sourceUrl": "https://shamela.ws/book/21812/231",
+    "viewerPage": 231,
+    "printedPage": 233,
+    "startCharacter": 0,
+    "endCharacter": 1125,
+    "sha256": "afcccafa41476ce8d6564f0505e83a0c321a4f18f89964d22ff4ea4c9809127a"
+  },
+  {
+    "ordinal": 255,
+    "sourceUrl": "https://shamela.ws/book/21812/232",
+    "viewerPage": 232,
+    "printedPage": 234,
+    "startCharacter": 0,
+    "endCharacter": 307,
+    "sha256": "3b4419a8c3564facea71cdc39a1f4d719f90f2b900612ffc555f6f3f46f19ac6"
+  },
+  {
+    "ordinal": 256,
+    "sourceUrl": "https://shamela.ws/book/21812/233",
+    "viewerPage": 233,
+    "printedPage": 235,
+    "startCharacter": 0,
+    "endCharacter": 1652,
+    "sha256": "bb0e30ef46dc0dce1f0997a14cead550d0e200be57885e4356afb93d015c7b6a"
+  },
+  {
+    "ordinal": 257,
+    "sourceUrl": "https://shamela.ws/book/21812/233",
+    "viewerPage": 233,
+    "printedPage": 235,
+    "startCharacter": 1652,
+    "endCharacter": 1725,
+    "sha256": "f44205398115ac7c3237fe2290c89dd79964e86d339bd78e64b4879f4595f542"
+  },
+  {
+    "ordinal": 258,
+    "sourceUrl": "https://shamela.ws/book/21812/234",
+    "viewerPage": 234,
+    "printedPage": 236,
+    "startCharacter": 0,
+    "endCharacter": 1612,
+    "sha256": "d566cfdfa3d76e9b98cbbb2a8f230aee86cf1161f1afef60821b9ba7b6438785"
+  },
+  {
+    "ordinal": 259,
+    "sourceUrl": "https://shamela.ws/book/21812/235",
+    "viewerPage": 235,
+    "printedPage": 237,
+    "startCharacter": 0,
+    "endCharacter": 1446,
+    "sha256": "a1f14222f2157e92a3e4e566be311b4f19d8b6b7230495322388802c9b452140"
+  },
+  {
+    "ordinal": 260,
+    "sourceUrl": "https://shamela.ws/book/21812/236",
+    "viewerPage": 236,
+    "printedPage": 238,
+    "startCharacter": 0,
+    "endCharacter": 1490,
+    "sha256": "c253aa626141dcab8feb04937db616cb70fad96ae6ae6853c03593208fbf5c0c"
+  },
+  {
+    "ordinal": 261,
+    "sourceUrl": "https://shamela.ws/book/21812/237",
+    "viewerPage": 237,
+    "printedPage": 239,
+    "startCharacter": 0,
+    "endCharacter": 1607,
+    "sha256": "314fe0d7a2135e9ba624501a1cadb15550be0b62fd429efd05ce3eacab41c1c6"
+  },
+  {
+    "ordinal": 262,
+    "sourceUrl": "https://shamela.ws/book/21812/237",
+    "viewerPage": 237,
+    "printedPage": 239,
+    "startCharacter": 1607,
+    "endCharacter": 1860,
+    "sha256": "1da6b5121fe446b46296c9ce78968dd5b8ad4b4940709102eb0f4c775a8a8ca0"
+  },
+  {
+    "ordinal": 263,
+    "sourceUrl": "https://shamela.ws/book/21812/238",
+    "viewerPage": 238,
+    "printedPage": 240,
+    "startCharacter": 0,
+    "endCharacter": 1580,
+    "sha256": "991d6510c0bd70d8cc56b291711d07aa73d5deaf74aa5d74181e420bfd9b8731"
+  },
+  {
+    "ordinal": 264,
+    "sourceUrl": "https://shamela.ws/book/21812/239",
+    "viewerPage": 239,
+    "printedPage": 241,
+    "startCharacter": 0,
+    "endCharacter": 1669,
+    "sha256": "9bf18d44ceb400b46ec0dc07b28486a027fa1ec96935a70a8f5c41dfd1f9f6b6"
+  },
+  {
+    "ordinal": 265,
+    "sourceUrl": "https://shamela.ws/book/21812/239",
+    "viewerPage": 239,
+    "printedPage": 241,
+    "startCharacter": 1669,
+    "endCharacter": 1820,
+    "sha256": "0a1204b0d61ae807024b3a9511f2163d4e5bd3b9ccb545b90f9b0c865daecc61"
+  },
+  {
+    "ordinal": 266,
+    "sourceUrl": "https://shamela.ws/book/21812/240",
+    "viewerPage": 240,
+    "printedPage": 242,
+    "startCharacter": 0,
+    "endCharacter": 1468,
+    "sha256": "e3b064fe461e2635206f22e279956eab108eac13336424dafdc9278e43c69eef"
+  },
+  {
+    "ordinal": 267,
+    "sourceUrl": "https://shamela.ws/book/21812/241",
+    "viewerPage": 241,
+    "printedPage": 243,
+    "startCharacter": 0,
+    "endCharacter": 1429,
+    "sha256": "9261a578ef047b680bcbac3476dbac8005da467bff044d37db84c94d3b5ac95e"
+  },
+  {
+    "ordinal": 268,
+    "sourceUrl": "https://shamela.ws/book/21812/242",
+    "viewerPage": 242,
+    "printedPage": 244,
+    "startCharacter": 0,
+    "endCharacter": 1450,
+    "sha256": "9aca180bb39eaa3398747c0f4c1202fd4f0dcbcd47854b76bfd95212d7476998"
+  },
+  {
+    "ordinal": 269,
+    "sourceUrl": "https://shamela.ws/book/21812/243",
+    "viewerPage": 243,
+    "printedPage": 245,
+    "startCharacter": 0,
+    "endCharacter": 1424,
+    "sha256": "182d05462740ba8e0f6e4519a9cb61d674650242271cbdf99931caddfd6c5a72"
+  },
+  {
+    "ordinal": 270,
+    "sourceUrl": "https://shamela.ws/book/21812/244",
+    "viewerPage": 244,
+    "printedPage": 246,
+    "startCharacter": 0,
+    "endCharacter": 1433,
+    "sha256": "ec995fcf4c584adc5293bc451e9deae95fbb3838c72def8c06bccd783d8ad4a6"
+  },
+  {
+    "ordinal": 271,
+    "sourceUrl": "https://shamela.ws/book/21812/245",
+    "viewerPage": 245,
+    "printedPage": 247,
+    "startCharacter": 0,
+    "endCharacter": 1477,
+    "sha256": "0551a1aa32787efbeffd04f570dd24e97ca518e73749d4f047586d0e7c7e3949"
+  },
+  {
+    "ordinal": 272,
+    "sourceUrl": "https://shamela.ws/book/21812/245",
+    "viewerPage": 245,
+    "printedPage": 247,
+    "startCharacter": 1477,
+    "endCharacter": 1701,
+    "sha256": "de94279c5ae6a8bfea9b24e84f1c5420b68ce46bdacda77a3e8f573cff6c6bb1"
+  },
+  {
+    "ordinal": 273,
+    "sourceUrl": "https://shamela.ws/book/21812/246",
+    "viewerPage": 246,
+    "printedPage": 248,
+    "startCharacter": 0,
+    "endCharacter": 1520,
+    "sha256": "917145c78561148d516da89a5dff245f6a38a82941fa298f760f9e677edfd3cb"
+  },
+  {
+    "ordinal": 274,
+    "sourceUrl": "https://shamela.ws/book/21812/247",
+    "viewerPage": 247,
+    "printedPage": 249,
+    "startCharacter": 0,
+    "endCharacter": 1586,
+    "sha256": "77125ab4494cfcc92ac0d3ced8d324dca65ba2ed5afc0f91cc5692226bae87a8"
+  },
+  {
+    "ordinal": 275,
+    "sourceUrl": "https://shamela.ws/book/21812/248",
+    "viewerPage": 248,
+    "printedPage": 250,
+    "startCharacter": 0,
+    "endCharacter": 1405,
+    "sha256": "95ebe0e0959d6f4a13125e526de61f97126a9d33794620f541a98159e213cfc0"
+  },
+  {
+    "ordinal": 276,
+    "sourceUrl": "https://shamela.ws/book/21812/249",
+    "viewerPage": 249,
+    "printedPage": 251,
+    "startCharacter": 0,
+    "endCharacter": 1387,
+    "sha256": "7a7c2b6fe375b1f31100420554f5ac685173bc59649fb65a84eb78e5d1e43023"
+  },
+  {
+    "ordinal": 277,
+    "sourceUrl": "https://shamela.ws/book/21812/250",
+    "viewerPage": 250,
+    "printedPage": 252,
+    "startCharacter": 0,
+    "endCharacter": 1360,
+    "sha256": "6f9171adf44b078e1d3b58ad411235fd70aefbb044947af5fec5fcc156fb1bc7"
+  },
+  {
+    "ordinal": 278,
+    "sourceUrl": "https://shamela.ws/book/21812/251",
+    "viewerPage": 251,
+    "printedPage": 253,
+    "startCharacter": 0,
+    "endCharacter": 1168,
+    "sha256": "c15c4862157fd272827642a9cbea4345de1d72af4f6c3298cd6b418b8c325d50"
+  },
+  {
+    "ordinal": 279,
+    "sourceUrl": "https://shamela.ws/book/21812/252",
+    "viewerPage": 252,
+    "printedPage": 254,
+    "startCharacter": 0,
+    "endCharacter": 1457,
+    "sha256": "c8ae1a74789e278843a8c1f4de1c93ec747fca703771a6366891e969dac06c36"
+  },
+  {
+    "ordinal": 280,
+    "sourceUrl": "https://shamela.ws/book/21812/253",
+    "viewerPage": 253,
+    "printedPage": 255,
+    "startCharacter": 0,
+    "endCharacter": 1105,
+    "sha256": "a0b595a7ec6834354c36a4b1b32ba4b893974f81057e82d2e19da2f62c726e0f"
+  },
+  {
+    "ordinal": 281,
+    "sourceUrl": "https://shamela.ws/book/21812/254",
+    "viewerPage": 254,
+    "printedPage": 256,
+    "startCharacter": 0,
+    "endCharacter": 1595,
+    "sha256": "aba8a4d51c71b3972f2e8af70d4d0f06a2b01714c2b796cdbf625597af79c2ef"
+  },
+  {
+    "ordinal": 282,
+    "sourceUrl": "https://shamela.ws/book/21812/255",
+    "viewerPage": 255,
+    "printedPage": 257,
+    "startCharacter": 0,
+    "endCharacter": 1233,
+    "sha256": "15a4607c80c6693dd5ae7eae5a9fc703c8da9cb1acf5204e62e6f2d34dec02bc"
+  },
+  {
+    "ordinal": 283,
+    "sourceUrl": "https://shamela.ws/book/21812/256",
+    "viewerPage": 256,
+    "printedPage": 258,
+    "startCharacter": 0,
+    "endCharacter": 1319,
+    "sha256": "b0be6a53381a519812194120e139a0383d8e6b833ec964f8c310a7d7b089ec7d"
+  },
+  {
+    "ordinal": 284,
+    "sourceUrl": "https://shamela.ws/book/21812/257",
+    "viewerPage": 257,
+    "printedPage": 259,
+    "startCharacter": 0,
+    "endCharacter": 1333,
+    "sha256": "aab3ff7935e61d05733d6503925df127cea13632625a91917b0aa26b3982f57e"
+  },
+  {
+    "ordinal": 285,
+    "sourceUrl": "https://shamela.ws/book/21812/258",
+    "viewerPage": 258,
+    "printedPage": 260,
+    "startCharacter": 0,
+    "endCharacter": 1414,
+    "sha256": "03769c92a4270cd5993f34001b1611752aa0b7a183494d03b0a5ec95becc510c"
+  },
+  {
+    "ordinal": 286,
+    "sourceUrl": "https://shamela.ws/book/21812/259",
+    "viewerPage": 259,
+    "printedPage": 261,
+    "startCharacter": 0,
+    "endCharacter": 1388,
+    "sha256": "94abd9777b1f2b1665ce7bdb90c76c65a8f2fe93e32d6e4bff7291a987a2e87d"
+  },
+  {
+    "ordinal": 287,
+    "sourceUrl": "https://shamela.ws/book/21812/260",
+    "viewerPage": 260,
+    "printedPage": 262,
+    "startCharacter": 0,
+    "endCharacter": 1192,
+    "sha256": "0238431bac0c68cd84c46402898fd6202fbe49bcbdaf854d3cb86f0e32bd6f16"
+  },
+  {
+    "ordinal": 288,
+    "sourceUrl": "https://shamela.ws/book/21812/261",
+    "viewerPage": 261,
+    "printedPage": 263,
+    "startCharacter": 0,
+    "endCharacter": 1585,
+    "sha256": "c652b8ae19720007716911f3f8e3558e5020c742a14c5cc22fea43eeebc5be27"
+  },
+  {
+    "ordinal": 289,
+    "sourceUrl": "https://shamela.ws/book/21812/262",
+    "viewerPage": 262,
+    "printedPage": 264,
+    "startCharacter": 0,
+    "endCharacter": 1349,
+    "sha256": "86457b38e3c350c09760575ef8c2eef3c55361ab3998960c2b5770c4ebbfbb4e"
+  },
+  {
+    "ordinal": 290,
+    "sourceUrl": "https://shamela.ws/book/21812/263",
+    "viewerPage": 263,
+    "printedPage": 265,
+    "startCharacter": 0,
+    "endCharacter": 1326,
+    "sha256": "df1501544051810a2cfe10ceff6ad710ff63e67975fced0a4980cd98738285aa"
+  },
+  {
+    "ordinal": 291,
+    "sourceUrl": "https://shamela.ws/book/21812/264",
+    "viewerPage": 264,
+    "printedPage": 266,
+    "startCharacter": 0,
+    "endCharacter": 1267,
+    "sha256": "c487c61485b33142177e7b0653192f2a45ae23bba8ce7e5257dd7217446f76e5"
+  },
+  {
+    "ordinal": 292,
+    "sourceUrl": "https://shamela.ws/book/21812/265",
+    "viewerPage": 265,
+    "printedPage": 267,
+    "startCharacter": 0,
+    "endCharacter": 1086,
+    "sha256": "066dc2aa88b00ea1353d9e8556a5b3c5f12d7332a96269666e431c805b828aee"
+  },
+  {
+    "ordinal": 293,
+    "sourceUrl": "https://shamela.ws/book/21812/266",
+    "viewerPage": 266,
+    "printedPage": 268,
+    "startCharacter": 0,
+    "endCharacter": 1290,
+    "sha256": "79736cf422eaaaaa0c54a770ac7db86c6bd285b956f09af000537fe003adade5"
+  },
+  {
+    "ordinal": 294,
+    "sourceUrl": "https://shamela.ws/book/21812/267",
+    "viewerPage": 267,
+    "printedPage": 269,
+    "startCharacter": 0,
+    "endCharacter": 1613,
+    "sha256": "8fca3c2e364a23705c1b35cca8c10964e4ff34023d0adadf6947080e73c2d822"
+  },
+  {
+    "ordinal": 295,
+    "sourceUrl": "https://shamela.ws/book/21812/268",
+    "viewerPage": 268,
+    "printedPage": 270,
+    "startCharacter": 0,
+    "endCharacter": 1578,
+    "sha256": "a1be65b0e105becc4ec1b641871b505f74190f2f957405696000366517102133"
+  },
+  {
+    "ordinal": 296,
+    "sourceUrl": "https://shamela.ws/book/21812/269",
+    "viewerPage": 269,
+    "printedPage": 271,
+    "startCharacter": 0,
+    "endCharacter": 1573,
+    "sha256": "1e34601687bd585ab90f4664b865a6ff23fe67f28b34db0917455050af51a2b4"
+  },
+  {
+    "ordinal": 297,
+    "sourceUrl": "https://shamela.ws/book/21812/270",
+    "viewerPage": 270,
+    "printedPage": 272,
+    "startCharacter": 0,
+    "endCharacter": 1134,
+    "sha256": "8e66b1851a306dba94d4908323eddb63642e289ddf077744db50d6d1de18809d"
+  },
+  {
+    "ordinal": 298,
+    "sourceUrl": "https://shamela.ws/book/21812/271",
+    "viewerPage": 271,
+    "printedPage": 273,
+    "startCharacter": 0,
+    "endCharacter": 238,
+    "sha256": "50aceb3923c3f7f3515d1c15bd7f3213be7b4e86e9187967207d7aeb41a2b556"
+  },
+  {
+    "ordinal": 299,
+    "sourceUrl": "https://shamela.ws/book/21812/272",
+    "viewerPage": 272,
+    "printedPage": 274,
+    "startCharacter": 0,
+    "endCharacter": 1374,
+    "sha256": "76b296dd4ef57e225c9c26266436c7f81506b63452787e8c0527e3a89a56fe61"
+  },
+  {
+    "ordinal": 300,
+    "sourceUrl": "https://shamela.ws/book/21812/273",
+    "viewerPage": 273,
+    "printedPage": 275,
+    "startCharacter": 0,
+    "endCharacter": 1284,
+    "sha256": "05fabdb639bddb5872dccadaedc4a34a38115b1b4f371c93fe399a0935b0c51b"
+  },
+  {
+    "ordinal": 301,
+    "sourceUrl": "https://shamela.ws/book/21812/274",
+    "viewerPage": 274,
+    "printedPage": 276,
+    "startCharacter": 0,
+    "endCharacter": 1660,
+    "sha256": "ce4b7ec0814b8b12cce3087fc166ddce0d12bb5dd30a7d32438ccd03a9969c08"
+  },
+  {
+    "ordinal": 302,
+    "sourceUrl": "https://shamela.ws/book/21812/274",
+    "viewerPage": 274,
+    "printedPage": 276,
+    "startCharacter": 1660,
+    "endCharacter": 1905,
+    "sha256": "048ff79ab3a0b47f5c0a96e753b72db9c189ffda127e886c5ad96857d9d94687"
+  },
+  {
+    "ordinal": 303,
+    "sourceUrl": "https://shamela.ws/book/21812/275",
+    "viewerPage": 275,
+    "printedPage": 277,
+    "startCharacter": 0,
+    "endCharacter": 1343,
+    "sha256": "758d30512fbbb12285ff1c9f30548bbb44edf82750fdfa07848bae48b818e772"
+  },
+  {
+    "ordinal": 304,
+    "sourceUrl": "https://shamela.ws/book/21812/276",
+    "viewerPage": 276,
+    "printedPage": 278,
+    "startCharacter": 0,
+    "endCharacter": 1233,
+    "sha256": "b9ab998d55994185bc372a22a28814332c93e81c8cd002e1b469b46b76eb84bd"
+  },
+  {
+    "ordinal": 305,
+    "sourceUrl": "https://shamela.ws/book/21812/277",
+    "viewerPage": 277,
+    "printedPage": 279,
+    "startCharacter": 0,
+    "endCharacter": 1537,
+    "sha256": "d12deb09a7e299ef1d348873b10c086098f73c085d93ea38b9d7ddc38f0e2dcb"
+  },
+  {
+    "ordinal": 306,
+    "sourceUrl": "https://shamela.ws/book/21812/278",
+    "viewerPage": 278,
+    "printedPage": 280,
+    "startCharacter": 0,
+    "endCharacter": 1413,
+    "sha256": "ee0a11db283efb33e4f8af56ac117185a29ee7ac997ce919480244d0e107be47"
+  },
+  {
+    "ordinal": 307,
+    "sourceUrl": "https://shamela.ws/book/21812/279",
+    "viewerPage": 279,
+    "printedPage": 281,
+    "startCharacter": 0,
+    "endCharacter": 1481,
+    "sha256": "252e39c54b05a592f1fcf98a0e2a6b30db2dd1cff6d73a88232b93923b06ecaf"
+  },
+  {
+    "ordinal": 308,
+    "sourceUrl": "https://shamela.ws/book/21812/280",
+    "viewerPage": 280,
+    "printedPage": 282,
+    "startCharacter": 0,
+    "endCharacter": 1547,
+    "sha256": "c16624e2ac302e7f306c666d7d8af0b6da3795141e5a81f0fac9d29d7732fbf2"
+  },
+  {
+    "ordinal": 309,
+    "sourceUrl": "https://shamela.ws/book/21812/281",
+    "viewerPage": 281,
+    "printedPage": 283,
+    "startCharacter": 0,
+    "endCharacter": 1589,
+    "sha256": "2161fbd3b25c1fb9fd0160bf7015e27bf259cd571172275413384b4f824b55bf"
+  },
+  {
+    "ordinal": 310,
+    "sourceUrl": "https://shamela.ws/book/21812/282",
+    "viewerPage": 282,
+    "printedPage": 284,
+    "startCharacter": 0,
+    "endCharacter": 1538,
+    "sha256": "07ffda1766ca25d3f8514ce147875bc5a5e2499986b30133c58d0bffd6612759"
+  },
+  {
+    "ordinal": 311,
+    "sourceUrl": "https://shamela.ws/book/21812/283",
+    "viewerPage": 283,
+    "printedPage": 285,
+    "startCharacter": 0,
+    "endCharacter": 1419,
+    "sha256": "9c536670ec71c53b42fee2b199998324d0c9278550f03cd98ad5d4720abdb0da"
+  },
+  {
+    "ordinal": 312,
+    "sourceUrl": "https://shamela.ws/book/21812/284",
+    "viewerPage": 284,
+    "printedPage": 286,
+    "startCharacter": 0,
+    "endCharacter": 1221,
+    "sha256": "b993c4b78edad5092bc0913976b8c099e8e150998ec8f0d07dccdef8f05bff74"
+  },
+  {
+    "ordinal": 313,
+    "sourceUrl": "https://shamela.ws/book/21812/285",
+    "viewerPage": 285,
+    "printedPage": 287,
+    "startCharacter": 0,
+    "endCharacter": 1633,
+    "sha256": "b1afa551b7ab3883a497c846436888dc63bb0797039d673e569da080d2b577fa"
+  },
+  {
+    "ordinal": 314,
+    "sourceUrl": "https://shamela.ws/book/21812/286",
+    "viewerPage": 286,
+    "printedPage": 288,
+    "startCharacter": 0,
+    "endCharacter": 1374,
+    "sha256": "c9ee4e31c70bea33d5eae3b2e37188990a382b8866b4ba19ffdfa575c61b5e92"
+  },
+  {
+    "ordinal": 315,
+    "sourceUrl": "https://shamela.ws/book/21812/287",
+    "viewerPage": 287,
+    "printedPage": 289,
+    "startCharacter": 0,
+    "endCharacter": 1324,
+    "sha256": "ea277cfd6d299ae67671df9d41c610765d99589fb760049fe0b6bfca0346c0e7"
+  },
+  {
+    "ordinal": 316,
+    "sourceUrl": "https://shamela.ws/book/21812/288",
+    "viewerPage": 288,
+    "printedPage": 290,
+    "startCharacter": 0,
+    "endCharacter": 1172,
+    "sha256": "0665e349c5e30cf05b189fbca3b85662b353914cd57e72868cc62d6e378affc6"
+  },
+  {
+    "ordinal": 317,
+    "sourceUrl": "https://shamela.ws/book/21812/289",
+    "viewerPage": 289,
+    "printedPage": 291,
+    "startCharacter": 0,
+    "endCharacter": 1370,
+    "sha256": "f5152b5ea5320b786c32a08d95a59a89bdd3707c208fa5e9f1d114c475d7e045"
+  },
+  {
+    "ordinal": 318,
+    "sourceUrl": "https://shamela.ws/book/21812/290",
+    "viewerPage": 290,
+    "printedPage": 292,
+    "startCharacter": 0,
+    "endCharacter": 1681,
+    "sha256": "480eb1740ce50464af48cbcdd9bebe04c5ad92ae2c7dca212a7fda3c2b12ee15"
+  },
+  {
+    "ordinal": 319,
+    "sourceUrl": "https://shamela.ws/book/21812/290",
+    "viewerPage": 290,
+    "printedPage": 292,
+    "startCharacter": 1681,
+    "endCharacter": 1888,
+    "sha256": "2ff8877ba27febc03e7de940d0b7c247142162e1acc6ce67cad80dd11fa51b9a"
+  },
+  {
+    "ordinal": 320,
+    "sourceUrl": "https://shamela.ws/book/21812/291",
+    "viewerPage": 291,
+    "printedPage": 293,
+    "startCharacter": 0,
+    "endCharacter": 1158,
+    "sha256": "3ab1b32564bd23eab2392f1ed81360f34477fae69b9f7b973bb25f4cfcb69bd0"
+  },
+  {
+    "ordinal": 321,
+    "sourceUrl": "https://shamela.ws/book/21812/292",
+    "viewerPage": 292,
+    "printedPage": 294,
+    "startCharacter": 0,
+    "endCharacter": 1687,
+    "sha256": "88a251e7eacdc7870f929e8607538ffbaa1eda49984cad23960df510396aacf5"
+  },
+  {
+    "ordinal": 322,
+    "sourceUrl": "https://shamela.ws/book/21812/292",
+    "viewerPage": 292,
+    "printedPage": 294,
+    "startCharacter": 1687,
+    "endCharacter": 1918,
+    "sha256": "6f326d2b21ef0cef4d43338e6068a58d1a1282ef4f0477b6bca2f02a7353a387"
+  },
+  {
+    "ordinal": 323,
+    "sourceUrl": "https://shamela.ws/book/21812/293",
+    "viewerPage": 293,
+    "printedPage": 295,
+    "startCharacter": 0,
+    "endCharacter": 1657,
+    "sha256": "a40521037bd2a53309fe6171ee3d153842c0f715075113765af133e6f10c0ba9"
+  },
+  {
+    "ordinal": 324,
+    "sourceUrl": "https://shamela.ws/book/21812/294",
+    "viewerPage": 294,
+    "printedPage": 296,
+    "startCharacter": 0,
+    "endCharacter": 1264,
+    "sha256": "8d4aa86fb56bf6193c9a75be6679209953a44404904b1ac8375a6bf225fee3fc"
+  },
+  {
+    "ordinal": 325,
+    "sourceUrl": "https://shamela.ws/book/21812/295",
+    "viewerPage": 295,
+    "printedPage": 297,
+    "startCharacter": 0,
+    "endCharacter": 1476,
+    "sha256": "0227598f78631868e009c7a4bcaa2da4ec666131b1a9f2d8b522fb00252a0766"
+  },
+  {
+    "ordinal": 326,
+    "sourceUrl": "https://shamela.ws/book/21812/296",
+    "viewerPage": 296,
+    "printedPage": 298,
+    "startCharacter": 0,
+    "endCharacter": 1602,
+    "sha256": "d329c9d20411fdaa0cdc2e55e7dc9b435a574583ad3730998a0e24ff629843ce"
+  },
+  {
+    "ordinal": 327,
+    "sourceUrl": "https://shamela.ws/book/21812/297",
+    "viewerPage": 297,
+    "printedPage": 299,
+    "startCharacter": 0,
+    "endCharacter": 1634,
+    "sha256": "ce2d64cf65e23de146c36b79e2c5c3a6d23e983f0a1838dbeb640b880314af6d"
+  },
+  {
+    "ordinal": 328,
+    "sourceUrl": "https://shamela.ws/book/21812/297",
+    "viewerPage": 297,
+    "printedPage": 299,
+    "startCharacter": 1634,
+    "endCharacter": 1743,
+    "sha256": "da71109078652282868bfbc1f3779d458029e4f55565760d1c915eb08eb2c5cf"
+  },
+  {
+    "ordinal": 329,
+    "sourceUrl": "https://shamela.ws/book/21812/298",
+    "viewerPage": 298,
+    "printedPage": 300,
+    "startCharacter": 0,
+    "endCharacter": 1464,
+    "sha256": "0f03d873a4b85e782a424d044b2998ee9f9f76de306bb8b1bceaaf8d042859a9"
+  },
+  {
+    "ordinal": 330,
+    "sourceUrl": "https://shamela.ws/book/21812/299",
+    "viewerPage": 299,
+    "printedPage": 301,
+    "startCharacter": 0,
+    "endCharacter": 1621,
+    "sha256": "a89393e1085b3f031dd392a713025ce3e2dedf6972c0ecca387bc698f19ed186"
+  },
+  {
+    "ordinal": 331,
+    "sourceUrl": "https://shamela.ws/book/21812/299",
+    "viewerPage": 299,
+    "printedPage": 301,
+    "startCharacter": 1621,
+    "endCharacter": 1701,
+    "sha256": "dfcfea7d87ccd135d2d7545378e537822a1c6c3298190fe66d6f90ad3d2ea8e4"
+  },
+  {
+    "ordinal": 332,
+    "sourceUrl": "https://shamela.ws/book/21812/300",
+    "viewerPage": 300,
+    "printedPage": 302,
+    "startCharacter": 0,
+    "endCharacter": 1295,
+    "sha256": "30149a2b73bee794e72563477813118271e7d14d2246daa5e2a40aa7bd4953a3"
+  },
+  {
+    "ordinal": 333,
+    "sourceUrl": "https://shamela.ws/book/21812/301",
+    "viewerPage": 301,
+    "printedPage": 303,
+    "startCharacter": 0,
+    "endCharacter": 1378,
+    "sha256": "48343becd5d2240544cd6ddc308be28faf7b13292877bcb888c4bc96c5866b9c"
+  },
+  {
+    "ordinal": 334,
+    "sourceUrl": "https://shamela.ws/book/21812/302",
+    "viewerPage": 302,
+    "printedPage": 304,
+    "startCharacter": 0,
+    "endCharacter": 1371,
+    "sha256": "ed7a20edb438fa57180962e7c3d860352c0c712888f50a29e77723e3f5e3135a"
+  },
+  {
+    "ordinal": 335,
+    "sourceUrl": "https://shamela.ws/book/21812/303",
+    "viewerPage": 303,
+    "printedPage": 305,
+    "startCharacter": 0,
+    "endCharacter": 1405,
+    "sha256": "ca0c1c33061567a7ec0978d0e8cb1ed50cab41e4a190e297b00581a263b694fe"
+  },
+  {
+    "ordinal": 336,
+    "sourceUrl": "https://shamela.ws/book/21812/304",
+    "viewerPage": 304,
+    "printedPage": 306,
+    "startCharacter": 0,
+    "endCharacter": 1533,
+    "sha256": "a4536dbfda979cc5586bc5b1b680ff3e8c08a0b12cb0ff72fbfc54fcc158f2f3"
+  },
+  {
+    "ordinal": 337,
+    "sourceUrl": "https://shamela.ws/book/21812/305",
+    "viewerPage": 305,
+    "printedPage": 307,
+    "startCharacter": 0,
+    "endCharacter": 1687,
+    "sha256": "35df8467b9f5a52fdc13fa3f0c5e13dbc632dac2fb99c41f34042f778290ca11"
+  },
+  {
+    "ordinal": 338,
+    "sourceUrl": "https://shamela.ws/book/21812/306",
+    "viewerPage": 306,
+    "printedPage": 308,
+    "startCharacter": 0,
+    "endCharacter": 147,
+    "sha256": "0ff05556c3349b416ee49d62c3b325f2e09cb89436853b438f6a7583903d977f"
+  },
+  {
+    "ordinal": 339,
+    "sourceUrl": "https://shamela.ws/book/21812/307",
+    "viewerPage": 307,
+    "printedPage": 309,
+    "startCharacter": 0,
+    "endCharacter": 927,
+    "sha256": "8b52df4e7b4a7e09df5b9b1bc1676f390f265fdce6d7297e11701384c77370bf"
+  },
+  {
+    "ordinal": 340,
+    "sourceUrl": "https://shamela.ws/book/21812/308",
+    "viewerPage": 308,
+    "printedPage": 310,
+    "startCharacter": 0,
+    "endCharacter": 1111,
+    "sha256": "956f9e6093675e5671a6483eb33f7243c66e9640e56d4960b11f8b51613fb660"
+  },
+  {
+    "ordinal": 341,
+    "sourceUrl": "https://shamela.ws/book/21812/309",
+    "viewerPage": 309,
+    "printedPage": 311,
+    "startCharacter": 0,
+    "endCharacter": 1134,
+    "sha256": "840d5836f53c4ddd6ea19d5c6dd781ef1626e5f690e51a4b479e9a79aa23ac93"
+  },
+  {
+    "ordinal": 342,
+    "sourceUrl": "https://shamela.ws/book/21812/310",
+    "viewerPage": 310,
+    "printedPage": 312,
+    "startCharacter": 0,
+    "endCharacter": 1204,
+    "sha256": "d9c5857b1205556adc623f5496a1b92f90213f8afa9a013303daa20e34bbfefa"
+  },
+  {
+    "ordinal": 343,
+    "sourceUrl": "https://shamela.ws/book/21812/311",
+    "viewerPage": 311,
+    "printedPage": 313,
+    "startCharacter": 0,
+    "endCharacter": 1206,
+    "sha256": "4511605925b47eacdecbd75d748c2785acdccea5ab8e9f1b55cd49fd237c888a"
+  },
+  {
+    "ordinal": 344,
+    "sourceUrl": "https://shamela.ws/book/21812/312",
+    "viewerPage": 312,
+    "printedPage": 314,
+    "startCharacter": 0,
+    "endCharacter": 1475,
+    "sha256": "2c90cfa19a5431886adeb0460bfb9d2bc9db74bbfb59bdf30801259a944460fa"
+  },
+  {
+    "ordinal": 345,
+    "sourceUrl": "https://shamela.ws/book/21812/313",
+    "viewerPage": 313,
+    "printedPage": 315,
+    "startCharacter": 0,
+    "endCharacter": 1536,
+    "sha256": "243ffaadcc9876d35d8d49eb5b7d7367798b93b304db7c75992be9fd416002a5"
+  },
+  {
+    "ordinal": 346,
+    "sourceUrl": "https://shamela.ws/book/21812/314",
+    "viewerPage": 314,
+    "printedPage": 316,
+    "startCharacter": 0,
+    "endCharacter": 1469,
+    "sha256": "2e1dfa1ca11139f01cac23b418cd57ae947fc8c39e19dc598a37ac584e3614bd"
+  },
+  {
+    "ordinal": 347,
+    "sourceUrl": "https://shamela.ws/book/21812/315",
+    "viewerPage": 315,
+    "printedPage": 317,
+    "startCharacter": 0,
+    "endCharacter": 1254,
+    "sha256": "20d4447022ea1470922419c9a1cce36a3bb14104349623e5f6d3a19322436d33"
+  },
+  {
+    "ordinal": 348,
+    "sourceUrl": "https://shamela.ws/book/21812/316",
+    "viewerPage": 316,
+    "printedPage": 318,
+    "startCharacter": 0,
+    "endCharacter": 1219,
+    "sha256": "78057382793f11edc4920971a3e58c50c668cfd44fe84d7ba5d081f756a1a6f7"
+  },
+  {
+    "ordinal": 349,
+    "sourceUrl": "https://shamela.ws/book/21812/317",
+    "viewerPage": 317,
+    "printedPage": 319,
+    "startCharacter": 0,
+    "endCharacter": 1339,
+    "sha256": "c1328d431ba96fe9326ac0e0240f32d57051167df945f3585d4cf24f2c331384"
+  },
+  {
+    "ordinal": 350,
+    "sourceUrl": "https://shamela.ws/book/21812/318",
+    "viewerPage": 318,
+    "printedPage": 320,
+    "startCharacter": 0,
+    "endCharacter": 1044,
+    "sha256": "652361c600d40b24089854d48752b1ca5a5f1290fa9594ebd4b1deffe1b2ec17"
+  },
+  {
+    "ordinal": 351,
+    "sourceUrl": "https://shamela.ws/book/21812/319",
+    "viewerPage": 319,
+    "printedPage": 321,
+    "startCharacter": 0,
+    "endCharacter": 1556,
+    "sha256": "ddac05159d81cd2b4548df998438a273abd8024e89e842cf79b5705da001f95f"
+  },
+  {
+    "ordinal": 352,
+    "sourceUrl": "https://shamela.ws/book/21812/320",
+    "viewerPage": 320,
+    "printedPage": 322,
+    "startCharacter": 0,
+    "endCharacter": 1467,
+    "sha256": "9ec476a2ba30602eda76cf52627200f7b69e6d0ae8a12d37fc91aaf2f874757e"
+  },
+  {
+    "ordinal": 353,
+    "sourceUrl": "https://shamela.ws/book/21812/320",
+    "viewerPage": 320,
+    "printedPage": 322,
+    "startCharacter": 1467,
+    "endCharacter": 1776,
+    "sha256": "b1f9c0a28c0079966baa8b614c2114e321ffe740cc7b6ca4a3901d9ad33817c0"
+  },
+  {
+    "ordinal": 354,
+    "sourceUrl": "https://shamela.ws/book/21812/321",
+    "viewerPage": 321,
+    "printedPage": 323,
+    "startCharacter": 0,
+    "endCharacter": 1446,
+    "sha256": "b99082234ae3b1d39090f7fded58c27b3b9446dc6ed33a8768c78c6b71147df5"
+  },
+  {
+    "ordinal": 355,
+    "sourceUrl": "https://shamela.ws/book/21812/322",
+    "viewerPage": 322,
+    "printedPage": 324,
+    "startCharacter": 0,
+    "endCharacter": 236,
+    "sha256": "27a0aa7d69321b04b6db931dc0207fda8fd2682b6997bbb13a3ca1627cdc3fd3"
+  },
+  {
+    "ordinal": 356,
+    "sourceUrl": "https://shamela.ws/book/21812/323",
+    "viewerPage": 323,
+    "printedPage": 325,
+    "startCharacter": 0,
+    "endCharacter": 1036,
+    "sha256": "ced5626fe1a29e5980ac370b81a7f42d70533ddb3cfc8f67eb21ef7f9a8f8b4b"
+  },
+  {
+    "ordinal": 357,
+    "sourceUrl": "https://shamela.ws/book/21812/324",
+    "viewerPage": 324,
+    "printedPage": 326,
+    "startCharacter": 0,
+    "endCharacter": 1391,
+    "sha256": "b86c9a89fd120a9895fa4b0f0cbd05ff6e2d8d236c95e539d2a13ce578977598"
+  },
+  {
+    "ordinal": 358,
+    "sourceUrl": "https://shamela.ws/book/21812/325",
+    "viewerPage": 325,
+    "printedPage": 327,
+    "startCharacter": 0,
+    "endCharacter": 670,
+    "sha256": "e51415818c766ffce8946c881cab6f3f72b35e6620879160a109ca75ee7026bf"
+  },
+  {
+    "ordinal": 359,
+    "sourceUrl": "https://shamela.ws/book/21812/326",
+    "viewerPage": 326,
+    "printedPage": 328,
+    "startCharacter": 0,
+    "endCharacter": 1100,
+    "sha256": "e9a9c9d5268cda8810cc597635606bf666c50a961f23f6be881e6f759b7f96b0"
+  },
+  {
+    "ordinal": 360,
+    "sourceUrl": "https://shamela.ws/book/21812/327",
+    "viewerPage": 327,
+    "printedPage": 329,
+    "startCharacter": 0,
+    "endCharacter": 1261,
+    "sha256": "c94ad234ebc9da002e54d1f2f00384cddb68ca97e74180a559450f44446d612b"
+  },
+  {
+    "ordinal": 361,
+    "sourceUrl": "https://shamela.ws/book/21812/328",
+    "viewerPage": 328,
+    "printedPage": 330,
+    "startCharacter": 0,
+    "endCharacter": 1522,
+    "sha256": "a6c7a23cbeaeba2c5abf837fbac4f8de6661e504a2f3f87680232cadef3c4397"
+  },
+  {
+    "ordinal": 362,
+    "sourceUrl": "https://shamela.ws/book/21812/329",
+    "viewerPage": 329,
+    "printedPage": 331,
+    "startCharacter": 0,
+    "endCharacter": 1527,
+    "sha256": "bd73a73828d5e0e2446ef8782287ce01b05e75370addcf046f34d225efb54a7c"
+  },
+  {
+    "ordinal": 363,
+    "sourceUrl": "https://shamela.ws/book/21812/330",
+    "viewerPage": 330,
+    "printedPage": 332,
+    "startCharacter": 0,
+    "endCharacter": 1302,
+    "sha256": "acb303c6c2a1110d3f0e3c482ec4c046ba0da7a1e6b73516220149d8fba6f9cc"
+  },
+  {
+    "ordinal": 364,
+    "sourceUrl": "https://shamela.ws/book/21812/331",
+    "viewerPage": 331,
+    "printedPage": 333,
+    "startCharacter": 0,
+    "endCharacter": 986,
+    "sha256": "9009e677f2e17b31a0aa6d1f79f67e04dde67e22d1eea515960212e58c7a07a8"
+  },
+  {
+    "ordinal": 365,
+    "sourceUrl": "https://shamela.ws/book/21812/332",
+    "viewerPage": 332,
+    "printedPage": 334,
+    "startCharacter": 0,
+    "endCharacter": 1166,
+    "sha256": "cf277a5c7df39355a91960a763e892266c2c734c0b792c4b2ab472c32e53770d"
+  },
+  {
+    "ordinal": 366,
+    "sourceUrl": "https://shamela.ws/book/21812/333",
+    "viewerPage": 333,
+    "printedPage": 335,
+    "startCharacter": 0,
+    "endCharacter": 1215,
+    "sha256": "f63fbabec4030a9777e2d97f7f2ca1c3b770c62f2c4127ae997b37e752a6e11b"
+  },
+  {
+    "ordinal": 367,
+    "sourceUrl": "https://shamela.ws/book/21812/334",
+    "viewerPage": 334,
+    "printedPage": 336,
+    "startCharacter": 0,
+    "endCharacter": 1540,
+    "sha256": "d65478b54de4114b6fe81ffa6076cd227b06de6f58af7043ec3071af4b9e62b9"
+  },
+  {
+    "ordinal": 368,
+    "sourceUrl": "https://shamela.ws/book/21812/335",
+    "viewerPage": 335,
+    "printedPage": 337,
+    "startCharacter": 0,
+    "endCharacter": 1438,
+    "sha256": "9e68877748f212e695ee9fb3d1249b89f11705cff2203bcd8a7c0a51d739c5c9"
+  },
+  {
+    "ordinal": 369,
+    "sourceUrl": "https://shamela.ws/book/21812/336",
+    "viewerPage": 336,
+    "printedPage": 338,
+    "startCharacter": 0,
+    "endCharacter": 881,
+    "sha256": "3c75f088b221bf591ee3879c4e5c254aa346a1bf4237ec852aeb4b51fdbf4c80"
+  },
+  {
+    "ordinal": 370,
+    "sourceUrl": "https://shamela.ws/book/21812/337",
+    "viewerPage": 337,
+    "printedPage": 339,
+    "startCharacter": 0,
+    "endCharacter": 1105,
+    "sha256": "2f0324104e64ec718e382e946f3a5de0de80797014e4b5f9cb324baf8c5b7b78"
+  },
+  {
+    "ordinal": 371,
+    "sourceUrl": "https://shamela.ws/book/21812/338",
+    "viewerPage": 338,
+    "printedPage": 340,
+    "startCharacter": 0,
+    "endCharacter": 1244,
+    "sha256": "6278bcaadcaa0b8f021530dcd569732893ae0e6c28295f95830dc6b826e091c3"
+  },
+  {
+    "ordinal": 372,
+    "sourceUrl": "https://shamela.ws/book/21812/339",
+    "viewerPage": 339,
+    "printedPage": 341,
+    "startCharacter": 0,
+    "endCharacter": 1281,
+    "sha256": "0fb7ec3b969c98f59ca369de1356491e21756e533fd862d23e9a1860746b455b"
+  },
+  {
+    "ordinal": 373,
+    "sourceUrl": "https://shamela.ws/book/21812/340",
+    "viewerPage": 340,
+    "printedPage": 342,
+    "startCharacter": 0,
+    "endCharacter": 1347,
+    "sha256": "03789fbbf5d0b017249c89611992aee928adf461d5f29418431e006d7cb03c48"
+  },
+  {
+    "ordinal": 374,
+    "sourceUrl": "https://shamela.ws/book/21812/341",
+    "viewerPage": 341,
+    "printedPage": 343,
+    "startCharacter": 0,
+    "endCharacter": 1328,
+    "sha256": "e206ace1abc9c54364c147cfc0ae3611472f0abf0e2095846eebe077a039f5f8"
+  },
+  {
+    "ordinal": 375,
+    "sourceUrl": "https://shamela.ws/book/21812/342",
+    "viewerPage": 342,
+    "printedPage": 344,
+    "startCharacter": 0,
+    "endCharacter": 1475,
+    "sha256": "4ad68b1683086aa79bc21aa2d8878ab5fc485a2e8839c675d1df223c2c10dee0"
+  },
+  {
+    "ordinal": 376,
+    "sourceUrl": "https://shamela.ws/book/21812/343",
+    "viewerPage": 343,
+    "printedPage": 345,
+    "startCharacter": 0,
+    "endCharacter": 1198,
+    "sha256": "b75f9f0882573872c41d05d44e113ee2e9f6d1ba885a5da659cb78a8bba762c4"
+  },
+  {
+    "ordinal": 377,
+    "sourceUrl": "https://shamela.ws/book/21812/344",
+    "viewerPage": 344,
+    "printedPage": 346,
+    "startCharacter": 0,
+    "endCharacter": 1167,
+    "sha256": "827a94596f5a40a711df878a7a2c8b9a7d77cffc0faf4eb5cf653a5aa38e1b54"
+  },
+  {
+    "ordinal": 378,
+    "sourceUrl": "https://shamela.ws/book/21812/345",
+    "viewerPage": 345,
+    "printedPage": 347,
+    "startCharacter": 0,
+    "endCharacter": 1178,
+    "sha256": "2a6c8c506661490bc769d87ff8212c5a138b0ed2125b0e9b5828af91bf8cf787"
+  },
+  {
+    "ordinal": 379,
+    "sourceUrl": "https://shamela.ws/book/21812/346",
+    "viewerPage": 346,
+    "printedPage": 348,
+    "startCharacter": 0,
+    "endCharacter": 1200,
+    "sha256": "5a5fd97b46067013200e9aa95276a07cc84dc5dd59e0239da52614ada1e1d354"
+  },
+  {
+    "ordinal": 380,
+    "sourceUrl": "https://shamela.ws/book/21812/347",
+    "viewerPage": 347,
+    "printedPage": 349,
+    "startCharacter": 0,
+    "endCharacter": 1433,
+    "sha256": "9022e09681af2365d9becaf47e1d877a22c2e9d02c200f2c865e87003b5fca21"
+  },
+  {
+    "ordinal": 381,
+    "sourceUrl": "https://shamela.ws/book/21812/348",
+    "viewerPage": 348,
+    "printedPage": 350,
+    "startCharacter": 0,
+    "endCharacter": 1177,
+    "sha256": "fad52cff63a716fda609878d4ae493d0ed9d6e8238ebe351c0c4063407e770a4"
+  },
+  {
+    "ordinal": 382,
+    "sourceUrl": "https://shamela.ws/book/21812/349",
+    "viewerPage": 349,
+    "printedPage": 351,
+    "startCharacter": 0,
+    "endCharacter": 1286,
+    "sha256": "8d21aec43d63955507d84465bfc18e8386c3316e6d9088344f7b8690bdd46923"
+  },
+  {
+    "ordinal": 383,
+    "sourceUrl": "https://shamela.ws/book/21812/350",
+    "viewerPage": 350,
+    "printedPage": 352,
+    "startCharacter": 0,
+    "endCharacter": 1597,
+    "sha256": "4ec4a64e4f34e0cfc30e011cd83beb4134eccc5acf2c29e705ed56f017f8ed67"
+  },
+  {
+    "ordinal": 384,
+    "sourceUrl": "https://shamela.ws/book/21812/351",
+    "viewerPage": 351,
+    "printedPage": 353,
+    "startCharacter": 0,
+    "endCharacter": 1418,
+    "sha256": "d0be27e2adf42a1d1bf7210f570add4ff6030b84b041e5547454e23d5a331c5d"
+  },
+  {
+    "ordinal": 385,
+    "sourceUrl": "https://shamela.ws/book/21812/352",
+    "viewerPage": 352,
+    "printedPage": 354,
+    "startCharacter": 0,
+    "endCharacter": 533,
+    "sha256": "30966d3b300c7aae80d6d68aeace8f28cad0cd5bd5e86da16f02488e651d3eb4"
+  },
+  {
+    "ordinal": 386,
+    "sourceUrl": "https://shamela.ws/book/21812/353",
+    "viewerPage": 353,
+    "printedPage": 355,
+    "startCharacter": 0,
+    "endCharacter": 1266,
+    "sha256": "b1035588f845e7d8fd896968771c0cbe7721aa09fd9c321223438e95509c641b"
+  },
+  {
+    "ordinal": 387,
+    "sourceUrl": "https://shamela.ws/book/21812/354",
+    "viewerPage": 354,
+    "printedPage": 356,
+    "startCharacter": 0,
+    "endCharacter": 1260,
+    "sha256": "e2ddbdde50b129a8f382d7a07d790faf298bf77d2cf71e1d186ed23dab4378ec"
+  },
+  {
+    "ordinal": 388,
+    "sourceUrl": "https://shamela.ws/book/21812/355",
+    "viewerPage": 355,
+    "printedPage": 357,
+    "startCharacter": 0,
+    "endCharacter": 1368,
+    "sha256": "fcb4dcb947926e03080faeb5649fb9105e4bf7f992796a4ca1f4997298461800"
+  },
+  {
+    "ordinal": 389,
+    "sourceUrl": "https://shamela.ws/book/21812/356",
+    "viewerPage": 356,
+    "printedPage": 358,
+    "startCharacter": 0,
+    "endCharacter": 1305,
+    "sha256": "e392b9b8ae000396f1c643c79439132252ca65090a8c1e899513eebb880ce6a7"
+  },
+  {
+    "ordinal": 390,
+    "sourceUrl": "https://shamela.ws/book/21812/357",
+    "viewerPage": 357,
+    "printedPage": 359,
+    "startCharacter": 0,
+    "endCharacter": 1474,
+    "sha256": "009da91f6d96cdab9a4866e9c234a474dfda7ec86ae47aa0fd699350ba5911df"
+  },
+  {
+    "ordinal": 391,
+    "sourceUrl": "https://shamela.ws/book/21812/358",
+    "viewerPage": 358,
+    "printedPage": 360,
+    "startCharacter": 0,
+    "endCharacter": 1330,
+    "sha256": "71867ef4e3f5d52dc3ef0ed0ace207780c88dc132a5906638b97d2922f36f496"
+  },
+  {
+    "ordinal": 392,
+    "sourceUrl": "https://shamela.ws/book/21812/359",
+    "viewerPage": 359,
+    "printedPage": 361,
+    "startCharacter": 0,
+    "endCharacter": 1498,
+    "sha256": "356430eb37a6c2b6c73d8354c2877268408c5b2949ee890fe563398218f5dbc1"
+  },
+  {
+    "ordinal": 393,
+    "sourceUrl": "https://shamela.ws/book/21812/360",
+    "viewerPage": 360,
+    "printedPage": 362,
+    "startCharacter": 0,
+    "endCharacter": 1532,
+    "sha256": "b3e2da34eb5a2369a96ed6385a3cbb8969f73f45c1adfd9851d37179abd35e30"
+  },
+  {
+    "ordinal": 394,
+    "sourceUrl": "https://shamela.ws/book/21812/361",
+    "viewerPage": 361,
+    "printedPage": 363,
+    "startCharacter": 0,
+    "endCharacter": 1306,
+    "sha256": "b2ba8b2f6cf79805f35e053fd42d55031d576276955709f493e139bc36a17eb0"
+  },
+  {
+    "ordinal": 395,
+    "sourceUrl": "https://shamela.ws/book/21812/362",
+    "viewerPage": 362,
+    "printedPage": 364,
+    "startCharacter": 0,
+    "endCharacter": 1451,
+    "sha256": "02c1b44b1cb9f85262cbd7d72cd098f05aa33f8063dd0cd5ccea15055bb32677"
+  },
+  {
+    "ordinal": 396,
+    "sourceUrl": "https://shamela.ws/book/21812/363",
+    "viewerPage": 363,
+    "printedPage": 365,
+    "startCharacter": 0,
+    "endCharacter": 1341,
+    "sha256": "0d35a29917a85be4f04a34af4cef934dbf8bd08a16dabfa28bc40668416dbf58"
+  },
+  {
+    "ordinal": 397,
+    "sourceUrl": "https://shamela.ws/book/21812/364",
+    "viewerPage": 364,
+    "printedPage": 366,
+    "startCharacter": 0,
+    "endCharacter": 1443,
+    "sha256": "79c5a326bd62be7ab6f70fd5245b174b38815a3fe5381e89bbae336b01d0cd59"
+  },
+  {
+    "ordinal": 398,
+    "sourceUrl": "https://shamela.ws/book/21812/365",
+    "viewerPage": 365,
+    "printedPage": 367,
+    "startCharacter": 0,
+    "endCharacter": 418,
+    "sha256": "b74bcd375a68fcd3449053b30711b357d2683c417bd6f24740b185b23ea8bf87"
+  },
+  {
+    "ordinal": 399,
+    "sourceUrl": "https://shamela.ws/book/21812/366",
+    "viewerPage": 366,
+    "printedPage": 368,
+    "startCharacter": 0,
+    "endCharacter": 1156,
+    "sha256": "95729939e700cc6ec206dc1800f7606ef453fcac4e99b59875749966b683fe2c"
+  },
+  {
+    "ordinal": 400,
+    "sourceUrl": "https://shamela.ws/book/21812/367",
+    "viewerPage": 367,
+    "printedPage": 369,
+    "startCharacter": 0,
+    "endCharacter": 1441,
+    "sha256": "e35057babe33859738916ea640991ae9454ba799dc6f0264ccfebe23b162269a"
+  },
+  {
+    "ordinal": 401,
+    "sourceUrl": "https://shamela.ws/book/21812/368",
+    "viewerPage": 368,
+    "printedPage": 370,
+    "startCharacter": 0,
+    "endCharacter": 1331,
+    "sha256": "c207a639b14165554933cd4aa26c041c0a4a1c17482fd24b94b3077a12633589"
+  },
+  {
+    "ordinal": 402,
+    "sourceUrl": "https://shamela.ws/book/21812/369",
+    "viewerPage": 369,
+    "printedPage": 371,
+    "startCharacter": 0,
+    "endCharacter": 1485,
+    "sha256": "b8b6d88d4c24184eacb6835e728724e4a0a514f4b34f94602b8c84ae1839d915"
+  },
+  {
+    "ordinal": 403,
+    "sourceUrl": "https://shamela.ws/book/21812/370",
+    "viewerPage": 370,
+    "printedPage": 372,
+    "startCharacter": 0,
+    "endCharacter": 1179,
+    "sha256": "dd56c6f68a945585a873b0d19aa6fa84693926429ec11273dc833b1693da00cc"
+  },
+  {
+    "ordinal": 404,
+    "sourceUrl": "https://shamela.ws/book/21812/371",
+    "viewerPage": 371,
+    "printedPage": 373,
+    "startCharacter": 0,
+    "endCharacter": 1365,
+    "sha256": "a6c398529decd96aff01bf38fde832e956c29ebb6a89ebe918adacc9224afd8f"
+  },
+  {
+    "ordinal": 405,
+    "sourceUrl": "https://shamela.ws/book/21812/372",
+    "viewerPage": 372,
+    "printedPage": 374,
+    "startCharacter": 0,
+    "endCharacter": 1522,
+    "sha256": "667f7a8f6c0b6b9eebee9822cacc986f28ef835470924a7c69d1d090efdc112c"
+  },
+  {
+    "ordinal": 406,
+    "sourceUrl": "https://shamela.ws/book/21812/373",
+    "viewerPage": 373,
+    "printedPage": 375,
+    "startCharacter": 0,
+    "endCharacter": 1571,
+    "sha256": "6d51773d784adc23d34e79b0f1b9acbe08811287309f46dc449ad4d724a30874"
+  },
+  {
+    "ordinal": 407,
+    "sourceUrl": "https://shamela.ws/book/21812/374",
+    "viewerPage": 374,
+    "printedPage": 376,
+    "startCharacter": 0,
+    "endCharacter": 1274,
+    "sha256": "e37f9052176ae97044ac8204561f88b027cbeaa0cf8cb1d72d3c55e8f49e215d"
+  },
+  {
+    "ordinal": 408,
+    "sourceUrl": "https://shamela.ws/book/21812/375",
+    "viewerPage": 375,
+    "printedPage": 377,
+    "startCharacter": 0,
+    "endCharacter": 1284,
+    "sha256": "63705f4dfa195baae709bef4c6dda4718128b68029a953c244ef30e40f3c1ce5"
+  },
+  {
+    "ordinal": 409,
+    "sourceUrl": "https://shamela.ws/book/21812/376",
+    "viewerPage": 376,
+    "printedPage": 378,
+    "startCharacter": 0,
+    "endCharacter": 1444,
+    "sha256": "4dad91292a299e640d0c38e3c07db7d628bb2e270f3b18ec5b1b915877e3d9e1"
+  },
+  {
+    "ordinal": 410,
+    "sourceUrl": "https://shamela.ws/book/21812/377",
+    "viewerPage": 377,
+    "printedPage": 379,
+    "startCharacter": 0,
+    "endCharacter": 1572,
+    "sha256": "6df213afa84e36b7e407703ed6db24d3bad05b387a5ddbcfa38b6507373db323"
+  },
+  {
+    "ordinal": 411,
+    "sourceUrl": "https://shamela.ws/book/21812/378",
+    "viewerPage": 378,
+    "printedPage": 380,
+    "startCharacter": 0,
+    "endCharacter": 1312,
+    "sha256": "4ed946afcb2d994f9885e49ef1cd65f4452d174c04b3e26f63ad0d036502e87c"
+  },
+  {
+    "ordinal": 412,
+    "sourceUrl": "https://shamela.ws/book/21812/379",
+    "viewerPage": 379,
+    "printedPage": 381,
+    "startCharacter": 0,
+    "endCharacter": 933,
+    "sha256": "a0367cf3db627a9c327bd0bfc1a93121a603517dee9514911f0eb4107277bc20"
+  },
+  {
+    "ordinal": 413,
+    "sourceUrl": "https://shamela.ws/book/21812/380",
+    "viewerPage": 380,
+    "printedPage": 382,
+    "startCharacter": 0,
+    "endCharacter": 1178,
+    "sha256": "a234860469c0d0be8d541b106d4559a1de04b5b1c15c4f1bafea1aaee85b678e"
+  },
+  {
+    "ordinal": 414,
+    "sourceUrl": "https://shamela.ws/book/21812/381",
+    "viewerPage": 381,
+    "printedPage": 383,
+    "startCharacter": 0,
+    "endCharacter": 1159,
+    "sha256": "f71c9ff3620a4b12e9eec2a110ae78322810d24a621d5439bd0759663c2fdf5b"
+  },
+  {
+    "ordinal": 415,
+    "sourceUrl": "https://shamela.ws/book/21812/382",
+    "viewerPage": 382,
+    "printedPage": 384,
+    "startCharacter": 0,
+    "endCharacter": 1505,
+    "sha256": "8817128749df84391580e10c1d672fdeec1077b179c774cfcc56e43e64f21caf"
+  },
+  {
+    "ordinal": 416,
+    "sourceUrl": "https://shamela.ws/book/21812/383",
+    "viewerPage": 383,
+    "printedPage": 385,
+    "startCharacter": 0,
+    "endCharacter": 1387,
+    "sha256": "ed10299720506893e144e26dd1a59694006fdec5dc9b1dc3de5be1ad8f056760"
+  },
+  {
+    "ordinal": 417,
+    "sourceUrl": "https://shamela.ws/book/21812/384",
+    "viewerPage": 384,
+    "printedPage": 386,
+    "startCharacter": 0,
+    "endCharacter": 1495,
+    "sha256": "cd8ebb1f99e5f1f6980ca6ccd42e924cfadf1f38d433ccc3145accc2a5f53fa7"
+  },
+  {
+    "ordinal": 418,
+    "sourceUrl": "https://shamela.ws/book/21812/385",
+    "viewerPage": 385,
+    "printedPage": 387,
+    "startCharacter": 0,
+    "endCharacter": 1507,
+    "sha256": "fd9a5fb0a02ac161216b51f89e25516112bbe774100d12b8ecc97c88c5a68e6d"
+  },
+  {
+    "ordinal": 419,
+    "sourceUrl": "https://shamela.ws/book/21812/386",
+    "viewerPage": 386,
+    "printedPage": 388,
+    "startCharacter": 0,
+    "endCharacter": 1356,
+    "sha256": "7bc86719713d011c144f56ab3a4f0a71832282664ac59c655988a44d28fbc49f"
+  },
+  {
+    "ordinal": 420,
+    "sourceUrl": "https://shamela.ws/book/21812/387",
+    "viewerPage": 387,
+    "printedPage": 389,
+    "startCharacter": 0,
+    "endCharacter": 1369,
+    "sha256": "2aae62da60d8640ca0ebe3ef3d0df13eb41f20e085cd252568a14790b0aadc82"
+  },
+  {
+    "ordinal": 421,
+    "sourceUrl": "https://shamela.ws/book/21812/388",
+    "viewerPage": 388,
+    "printedPage": 390,
+    "startCharacter": 0,
+    "endCharacter": 1128,
+    "sha256": "7ea92821bddb5b5aafffdc9c05f2cb0cbd442d4df4bdf29e12a4073a78854f83"
+  },
+  {
+    "ordinal": 422,
+    "sourceUrl": "https://shamela.ws/book/21812/389",
+    "viewerPage": 389,
+    "printedPage": 391,
+    "startCharacter": 0,
+    "endCharacter": 1460,
+    "sha256": "efd6268889d50af2736986fe4baaddb54934d45ab3a39e2935aba4ae781352a6"
+  },
+  {
+    "ordinal": 423,
+    "sourceUrl": "https://shamela.ws/book/21812/390",
+    "viewerPage": 390,
+    "printedPage": 392,
+    "startCharacter": 0,
+    "endCharacter": 1220,
+    "sha256": "522ea895cc3257f52e6723845a384b875c75857cead69650d9fb5fca2dfad8ec"
+  },
+  {
+    "ordinal": 424,
+    "sourceUrl": "https://shamela.ws/book/21812/391",
+    "viewerPage": 391,
+    "printedPage": 393,
+    "startCharacter": 0,
+    "endCharacter": 508,
+    "sha256": "ff90080574b8157fe026dd055970fb16c23fd4856c442e61013b9b3816096f58"
+  },
+  {
+    "ordinal": 425,
+    "sourceUrl": "https://shamela.ws/book/21812/392",
+    "viewerPage": 392,
+    "printedPage": 394,
+    "startCharacter": 0,
+    "endCharacter": 1066,
+    "sha256": "6caa84210a7c56a1f0bc87f2c2158fe391709e02a682db549a8fd42ce007eace"
+  },
+  {
+    "ordinal": 426,
+    "sourceUrl": "https://shamela.ws/book/21812/393",
+    "viewerPage": 393,
+    "printedPage": 395,
+    "startCharacter": 0,
+    "endCharacter": 1238,
+    "sha256": "10442b532544482775d231f9fd62b40841213960813746440b5e3f0ba80fad67"
+  },
+  {
+    "ordinal": 427,
+    "sourceUrl": "https://shamela.ws/book/21812/394",
+    "viewerPage": 394,
+    "printedPage": 396,
+    "startCharacter": 0,
+    "endCharacter": 775,
+    "sha256": "e0f94acd0372313fb266b11cbeb854862cda8bf73117c0369a6182ff8a662f0e"
+  },
+  {
+    "ordinal": 428,
+    "sourceUrl": "https://shamela.ws/book/21812/395",
+    "viewerPage": 395,
+    "printedPage": 397,
+    "startCharacter": 0,
+    "endCharacter": 1091,
+    "sha256": "da1a073a41f2ea61056f0ff25b49a8f9c2120613ec86b1c5f07411f73268c5a8"
+  },
+  {
+    "ordinal": 429,
+    "sourceUrl": "https://shamela.ws/book/21812/396",
+    "viewerPage": 396,
+    "printedPage": 398,
+    "startCharacter": 0,
+    "endCharacter": 1623,
+    "sha256": "c557cc16637cd2ab1c2c6ccfb0ce3ee437be84caddb3d0ebc9c6d0046ae4ee32"
+  },
+  {
+    "ordinal": 430,
+    "sourceUrl": "https://shamela.ws/book/21812/397",
+    "viewerPage": 397,
+    "printedPage": 399,
+    "startCharacter": 0,
+    "endCharacter": 1542,
+    "sha256": "ce298b715392f512fe256fe5eb3dd96576655761f985917c74f1ba3f93b770ef"
+  },
+  {
+    "ordinal": 431,
+    "sourceUrl": "https://shamela.ws/book/21812/398",
+    "viewerPage": 398,
+    "printedPage": 400,
+    "startCharacter": 0,
+    "endCharacter": 1431,
+    "sha256": "7dded6edf8407205039a55eacc3ce8b5ca04372ac3cd3920cd64713f9adef507"
+  },
+  {
+    "ordinal": 432,
+    "sourceUrl": "https://shamela.ws/book/21812/399",
+    "viewerPage": 399,
+    "printedPage": 401,
+    "startCharacter": 0,
+    "endCharacter": 1198,
+    "sha256": "a249c2af3ae5398539525f55112f82384b9cce5e6ce3b23bba9c8db850004090"
+  },
+  {
+    "ordinal": 433,
+    "sourceUrl": "https://shamela.ws/book/21812/400",
+    "viewerPage": 400,
+    "printedPage": 402,
+    "startCharacter": 0,
+    "endCharacter": 1265,
+    "sha256": "8d39d8d23d72044e706bdae88bfe0db5d15673ef9b5a97d9ad639e056a8c7a5f"
+  },
+  {
+    "ordinal": 434,
+    "sourceUrl": "https://shamela.ws/book/21812/401",
+    "viewerPage": 401,
+    "printedPage": 403,
+    "startCharacter": 0,
+    "endCharacter": 1147,
+    "sha256": "c308e46a571141703a12f537635a8925116ac38eb5a842a556adfb0043e7dbd0"
+  },
+  {
+    "ordinal": 435,
+    "sourceUrl": "https://shamela.ws/book/21812/402",
+    "viewerPage": 402,
+    "printedPage": 404,
+    "startCharacter": 0,
+    "endCharacter": 1602,
+    "sha256": "ebcb3d2adbdb29ccdf65af5cb6d1d2dc4aae8e8a74b0fe1325597801c137d552"
+  },
+  {
+    "ordinal": 436,
+    "sourceUrl": "https://shamela.ws/book/21812/403",
+    "viewerPage": 403,
+    "printedPage": 405,
+    "startCharacter": 0,
+    "endCharacter": 1415,
+    "sha256": "c3f1ba266ca3b5cec33bc8ebb119bd8ad99ba081f2d7b6204ec1d5796a349bdb"
+  }
+]

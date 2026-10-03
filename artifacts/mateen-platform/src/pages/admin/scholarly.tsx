@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PrivatePreview from '@/components/scholarly/PrivatePreview';
 import { useQueryClient } from '@tanstack/react-query';
 import { getGetScholarlyConfigQueryKey, getListScholarlyAuditQueryKey, getListScholarlyIssuesQueryKey, getListScholarlySourcesQueryKey, useCreateScholarlyPassage, useCreateScholarlySource, useGetScholarlyConfig, useListScholarlyAudit, useListScholarlyIssues, useListScholarlySources, useModerateScholarlyIssue, useRecordScholarlyEvaluation, useReviewScholarlySource, useUpdateScholarlyConfig, useWithdrawScholarlySource } from '@workspace/api-client-react';
 import type { ScholarlySource } from '@workspace/api-client-react';
@@ -191,7 +192,7 @@ function Audit() {
   return <ul className="space-y-3">{q.data.map((e) => <li key={e.id} className="paper-card p-4 font-ui text-sm" data-testid={`row-audit-${e.id}`}><b>{e.action}</b> · {e.targetType}{e.targetId && ` (${e.targetId})`}<span className="block text-muted-foreground">{e.reason} — {e.actorId} — {fmtDate(e.createdAt)}</span></li>)}</ul>;
 }
 
-const TABS = [['sources', 'المصادر', Sources], ['config', 'المساعد والتقييم', Config], ['issues', 'البلاغات', Issues], ['audit', 'السجل', Audit]] as const;
+const TABS = [['sources', 'المصادر', Sources], ['config', 'المساعد والتقييم', Config], ['preview', 'تجربة خاصة', PrivatePreview], ['issues', 'البلاغات', Issues], ['audit', 'السجل', Audit]] as const;
 
 function AdminScholarlyInner() {
   usePageMeta('إدارة المصادر العلمية | مَتِين', 'مصادر المساعد، تقييمه، البلاغات وسجل القرارات.');

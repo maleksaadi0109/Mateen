@@ -4,6 +4,8 @@ import {
   CreateScholarlySourceBody,
   CreateScholarlySourceResponse,
   GetScholarlyConfigResponse,
+  GenerateScholarlyPreviewBody,
+  GenerateScholarlyPreviewResponse,
   IndexScholarlySourceBody,
   IndexScholarlySourceParams,
   IndexScholarlySourceResponse,
@@ -40,8 +42,11 @@ import {
 import { and, count, desc, eq, ne } from "drizzle-orm";
 import { Router } from "express";
 import {
+  generateNvidiaScholarlyPreview,
   isScholarlyProviderConfigured,
+  NVIDIA_SCHOLARLY_MODEL,
   runArabicModelEvaluation,
+  ScholarlyProviderUnavailableError,
   type ScholarlyModel,
 } from "../lib/scholarly";
 import {
@@ -60,6 +65,43 @@ import {
 } from "./scholarly.shared";
 
 const adminRouter = Router();
+
+adminRouter.post(
+  "/mateen/admin/scholarly/preview",
+  sameOrigin,
+  authenticationRequired,
+  rateLimit(5, 60_000),
+  async (req: AuthedRequest, res) => {
+    res.set("Cache-Control", "no-store");
+    if (!await requireAdmin(req, res)) return;
+    const body = GenerateScholarlyPreviewBody.safeParse(req.body);
+    if (!body.success || !hasOnlyKeys(req.body, ["question"]) ||
+        !body.data.question.trim() || body.data.question.trim().length < 3) {
+      res.status(400).json({ error: "A question of 3–2000 characters is required" });
+      return;
+    }
+    let answer: string;
+    try {
+      answer = await generateNvidiaScholarlyPreview(body.data.question.trim());
+    } catch (error) {
+      if (!(error instanceof ScholarlyProviderUnavailableError)) throw error;
+      res.status(503).json({ error: "تعذّر توليد المسودة من NVIDIA. لم تُحفظ إجابة ولم تتغير حالة التقييم؛ حاول لاحقاً." });
+      return;
+    }
+    // A reviewer may lose access while the external request is in flight.
+    if (!await requireAdmin(req, res)) return;
+    await writeAudit(req.scholarlyUserId!, "private_preview_generated", "assistant_preview", null,
+      "Private unreviewed draft; not a scientific evaluation or student answer",
+      { model: NVIDIA_SCHOLARLY_MODEL, sourceGrounded: false });
+    res.json(GenerateScholarlyPreviewResponse.parse({
+      answer,
+      model: NVIDIA_SCHOLARLY_MODEL,
+      reviewStatus: "unreviewed",
+      sourceGrounded: false,
+      generatedAt: new Date().toISOString(),
+    }));
+  },
+);
 
 async function writeAudit(
   actorId: string,

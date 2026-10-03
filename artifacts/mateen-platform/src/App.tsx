@@ -16,6 +16,7 @@ import TracksPage from '@/pages/student/tracks';
 import StudyPage from '@/pages/student/study';
 import ReviewsPage from '@/pages/student/reviews';
 import ScholarsPage from '@/pages/student/scholars';
+import ScholarProfilePage from '@/pages/student/scholar-profile';
 import MessagesPage from '@/pages/student/messages';
 import AssistantPage from '@/pages/student/assistant';
 import ScholarlyAdminPage from '@/pages/admin/scholarly';
@@ -157,6 +158,7 @@ function Routes() {
           <Route path="/student/study/:textId"><Portal role="student"><StudyPage /></Portal></Route>
           <Route path="/student/reviews"><Portal role="student"><ReviewsPage /></Portal></Route>
           <Route path="/student/scholars"><Portal role="student"><ScholarsPage /></Portal></Route>
+          <Route path="/student/scholars/:teacherId"><Portal role="student"><ScholarProfilePage /></Portal></Route>
           <Route path="/student/messages"><Portal role="student"><MessagesPage /></Portal></Route>
           <Route path="/student/assistant"><Portal role="student"><AssistantPage /></Portal></Route>
           <Route path="/student/exams"><Portal role="student"><ExamsPage /></Portal></Route>

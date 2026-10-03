@@ -1010,6 +1010,40 @@ export interface ScholarlyConfigInput {
   model: ScholarlyConfigInputModel;
 }
 
+export interface ScholarlyPreviewInput {
+  /**
+     * @minLength 3
+     * @maxLength 2000
+     */
+  question: string;
+}
+
+export type ScholarlyPreviewModel = typeof ScholarlyPreviewModel[keyof typeof ScholarlyPreviewModel];
+
+
+export const ScholarlyPreviewModel = {
+  'nvidia/nemotron-35-lightning-30b-a3b': 'nvidia/nemotron-3.5-lightning-30b-a3b',
+} as const;
+
+export type ScholarlyPreviewReviewStatus = typeof ScholarlyPreviewReviewStatus[keyof typeof ScholarlyPreviewReviewStatus];
+
+
+export const ScholarlyPreviewReviewStatus = {
+  unreviewed: 'unreviewed',
+} as const;
+
+export interface ScholarlyPreview {
+  /**
+     * @minLength 1
+     * @maxLength 6000
+     */
+  answer: string;
+  model: ScholarlyPreviewModel;
+  reviewStatus: ScholarlyPreviewReviewStatus;
+  sourceGrounded: false;
+  generatedAt: string;
+}
+
 export type ScholarlyEvaluationInputModel = typeof ScholarlyEvaluationInputModel[keyof typeof ScholarlyEvaluationInputModel];
 
 
