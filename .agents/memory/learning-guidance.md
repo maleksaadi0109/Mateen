@@ -3,6 +3,12 @@ name: Learning and guidance boundaries
 description: User-defined boundaries for assessment progression and teacher duties.
 ---
 
+The user requested replacing the study experience with a Talqeeen-like blank page whose text is revealed progressively with recitation/listening, starting with page images of الأربعون النووية.
+
+**Why:** They explicitly asked to change the study system completely rather than just restyle the existing reader, and requested finding and downloading the book as images first.
+
+**How to apply:** Treat progressive text reveal as the study redesign's central behavior, not as another question-and-answer view. Keep scan provenance and speech-recognition uncertainty distinct from scholarly approval.
+
 Students may attempt a level assessment either after studying its content or directly to advance; study completion alone must not unlock the next level. Both oral and written components are required. Oral assessment is word-level memorization only; written completion does not require diacritics. The user specified 30 questions (15 oral, 15 written), 30 minutes total, success at 25 marks, and retry 24 hours after a failed test. Interpret marks as 25/30 with one mark per question; no separate section minimum has been authorized.
 
 **Why:** The user wants already-proficient students to avoid redundant study while retaining an assessment gate.
