@@ -9,11 +9,11 @@ Keep the PyTorch CPU package index scoped to PyTorch, rather than all packages t
 
 **How to apply:** Inspect source mappings after installing Python speech libraries. Keep a Linux-marked CPU source for PyTorch and resolve unrelated packages from their normal index. Preserve the managed Python environment rather than creating a second environment.
 
-Prefer an explicit PyPI source for Transformers when publishing alongside CPU PyTorch.
+An explicit PyPI source for Transformers does not prevent the publishing installer from injecting an additional CPU source.
 
-**Why:** Publishing reported the pinned Transformers release unavailable while the same release existed on PyPI and resolved locally. Implicit index selection therefore cannot be assumed equivalent between development and publishing. A successful local lock check is not proof that the next publish succeeded.
+**Why:** Publishing first reported a Transformers release unavailable despite its presence on PyPI. After an explicit PyPI mapping was added, a subsequent publishing log showed the installer appending a Linux-only CPU mapping to it, causing a multi-source TOML error. The appended mapping was absent from the workspace. The explicit PyPI workaround was withdrawn.
 
-**How to apply:** Verify the release at its intended registry and use explicit index ownership before changing package versions; confirm the outcome in the subsequent publishing logs.
+**How to apply:** Diagnose the publishing-side rewrite rather than repeating explicit-source changes or downgrading Transformers blindly. Local `uv lock` and dry-run success do not reproduce this installer step. A supported installer correction or separately verified installation path is needed; do not remove Python speech dependencies merely to make publishing pass.
 
 The managed installer expects existing package-source mappings to be arrays.
 
