@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { BookOpen, ChevronLeft, ChevronRight, Eye, Lightbulb, Mic, Pause, RotateCcw, ShieldAlert } from 'lucide-react';
+import { BookOpen, ChevronLeft, ChevronRight, Eye, Lightbulb, Mic, MoreHorizontal, Pause, RotateCcw, ShieldAlert } from 'lucide-react';
 import { useLiveRecitation } from '@/hooks/use-live-recitation';
 import { buildRecitationBook } from '@/lib/recitation-book';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -39,6 +39,7 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
   const [agree, setAgree] = useState(false);
   const [manual, setManual] = useState(false);
   const [hint, setHint] = useState(false);
+  const [more, setMore] = useState(false);
 
   const seekRef = useRef(r.seek);
   seekRef.current = r.seek;
@@ -93,20 +94,20 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
   return (
     <div className="space-y-4" data-testid="recitation-book">
       {/* Navigator */}
-      <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border bg-card/80 px-2 py-1.5 font-ui text-xs shadow-sm" data-testid="book-navigator">
-        <div className="flex items-center gap-1">
-          <button onClick={() => goPage(pageIdx - 1)} disabled={pageIdx === 0} aria-label="الصفحة السابقة" className="grid h-9 w-9 place-items-center rounded-full border disabled:opacity-40" data-testid="button-book-prev-page"><ChevronRight size={16} /></button>
+      <div className="sticky top-2 z-20 mx-auto flex max-w-[860px] flex-col-reverse items-stretch gap-2 rounded-2xl border bg-card/90 p-2 font-ui text-xs shadow-sm backdrop-blur sm:flex-row sm:items-center sm:justify-between" data-testid="book-navigator">
+        <div className="flex items-center justify-between gap-1">
+          <button onClick={() => goPage(pageIdx - 1)} disabled={pageIdx === 0} aria-label="الصفحة السابقة" className="grid h-10 w-10 place-items-center rounded-full border bg-background hover:border-secondary/60 disabled:opacity-40" data-testid="button-book-prev-page"><ChevronRight size={16} /></button>
           <span className="min-w-[7.5rem] text-center font-bold" aria-live="polite" data-testid="text-book-page">صفحة {num(page.number)} من {num(book.pages.length)}</span>
-          <button onClick={() => goPage(pageIdx + 1)} disabled={pageIdx >= book.pages.length - 1} aria-label="الصفحة التالية" className="grid h-9 w-9 place-items-center rounded-full border disabled:opacity-40" data-testid="button-book-next-page"><ChevronLeft size={16} /></button>
+          <button onClick={() => goPage(pageIdx + 1)} disabled={pageIdx >= book.pages.length - 1} aria-label="الصفحة التالية" className="grid h-10 w-10 place-items-center rounded-full border bg-background hover:border-secondary/60 disabled:opacity-40" data-testid="button-book-next-page"><ChevronLeft size={16} /></button>
         </div>
         <select value={currentHadith?.hadithId ?? ''} onChange={(e) => { const id = Number(e.target.value); jumpTo(book.hadithStarts[id] ?? 0); }}
-          aria-label="انتقل إلى حديث" className="min-h-9 min-w-0 max-w-full flex-1 truncate rounded-full border bg-background px-3 font-bold outline-none focus:border-secondary sm:max-w-xs" data-testid="select-book-hadith">
+          aria-label="انتقل إلى حديث" className="min-h-10 min-w-0 max-w-full flex-1 truncate rounded-full border bg-background px-3 font-bold outline-none focus:border-secondary sm:max-w-xs" data-testid="select-book-hadith">
           {hadiths.map((h) => <option key={h.id} value={h.id}>{num(h.number)}. {h.title}</option>)}
         </select>
       </div>
 
-      {/* Controls */}
-      <div className="flex flex-wrap items-center justify-center gap-2">
+      {/* Controls: one primary action, quiet secondary actions */}
+      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-3" role="toolbar" aria-label="أدوات التسميع">
         {reading ? (
           unsupported ? (
             <div className="flex max-w-xl gap-2 rounded-xl border bg-muted/50 p-3 font-ui text-xs" data-testid="text-book-unsupported">
@@ -115,7 +116,7 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
             </div>
           ) : (
             <button type="button" onClick={requestStart} disabled={r.supported === null || finished}
-              className="group inline-flex min-h-12 items-center gap-3 rounded-full bg-primary py-3 pl-7 pr-3 font-ui text-base font-bold text-primary-foreground shadow-[0_14px_30px_-14px_hsl(var(--primary)/0.8)] transition-transform hover:-translate-y-0.5 disabled:opacity-40 motion-reduce:transition-none"
+              className="group inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-full bg-primary py-3 pl-7 pr-3 font-ui text-base font-bold text-primary-foreground shadow-[0_14px_30px_-14px_hsl(var(--primary)/0.8)] transition-transform hover:-translate-y-0.5 disabled:opacity-40 motion-reduce:transition-none sm:w-auto"
               data-testid="button-book-start">
               <span className="grid h-9 w-9 place-items-center rounded-full bg-secondary text-secondary-foreground"><Mic size={18} /></span>
               سمّع من هذا الموضع
@@ -123,36 +124,49 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
           )
         ) : (
           <>
-            <button type="button" onClick={backToReading} className="inline-flex min-h-10 items-center gap-2 rounded-full border px-4 font-ui text-xs font-bold" data-testid="button-book-read"><BookOpen size={14} />القراءة</button>
-            {r.listening
-              ? <button type="button" onClick={r.stop} className="inline-flex min-h-10 items-center gap-2 rounded-full bg-secondary px-5 font-ui text-xs font-bold text-secondary-foreground" data-testid="button-book-pause"><Pause size={14} />إيقاف مؤقت</button>
-              : <button type="button" onClick={requestStart} disabled={unsupported || manual || finished} className="inline-flex min-h-10 items-center gap-2 rounded-full bg-primary px-5 font-ui text-xs font-bold text-primary-foreground disabled:opacity-40" data-testid="button-book-resume"><Mic size={14} />متابعة</button>}
-            <button type="button" onClick={resetPage} className="inline-flex min-h-10 items-center gap-2 rounded-full border px-4 font-ui text-xs font-bold" data-testid="button-book-reset"><RotateCcw size={14} />إعادة الصفحة</button>
-            <button type="button" onClick={revealPage} disabled={manual} className="inline-flex min-h-10 items-center gap-2 rounded-full border border-dashed px-4 font-ui text-xs font-bold text-muted-foreground disabled:opacity-40" data-testid="button-book-reveal"><Eye size={14} />إظهار الصفحة</button>
-            {r.listening && <span className="inline-flex items-center gap-1.5 font-ui text-xs font-bold text-secondary" role="status" data-testid="status-book-listening"><span className="h-2 w-2 animate-pulse rounded-full bg-secondary motion-reduce:animate-none" />يستمع الآن</span>}
+            <div className="flex w-full items-center justify-center gap-3">
+              {r.listening
+                ? <button type="button" onClick={r.stop} className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-secondary px-6 font-ui text-sm font-bold text-secondary-foreground shadow-[0_14px_30px_-16px_hsl(var(--secondary)/0.9)] sm:flex-none" data-testid="button-book-pause"><Pause size={16} />إيقاف مؤقت</button>
+                : <button type="button" onClick={requestStart} disabled={unsupported || manual || finished} className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-primary px-6 font-ui text-sm font-bold text-primary-foreground shadow-[0_14px_30px_-16px_hsl(var(--primary)/0.8)] disabled:opacity-40 sm:flex-none" data-testid="button-book-resume"><Mic size={16} />متابعة التسميع</button>}
+              {r.listening && <span className="inline-flex items-center gap-1.5 font-ui text-xs font-bold text-secondary" role="status" data-testid="status-book-listening"><span className="h-2 w-2 animate-pulse rounded-full bg-secondary motion-reduce:animate-none" />يستمع الآن</span>}
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-1 font-ui text-xs font-bold text-muted-foreground">
+              <button type="button" onClick={resetPage} className="inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 hover:bg-muted hover:text-foreground" data-testid="button-book-reset"><RotateCcw size={14} />إعادة الصفحة</button>
+              <button type="button" onClick={backToReading} className="inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 hover:bg-muted hover:text-foreground" data-testid="button-book-read"><BookOpen size={14} />القراءة</button>
+              <button type="button" onClick={() => setMore((v) => !v)} aria-expanded={more} aria-controls="book-more-actions" className="inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 hover:bg-muted hover:text-foreground" data-testid="button-book-more"><MoreHorizontal size={14} />{more ? 'أقل' : 'المزيد'}</button>
+            </div>
+            {more && (
+              <div id="book-more-actions" className="flex w-full max-w-md flex-col items-center gap-2 rounded-2xl border border-dashed bg-card/60 p-3 text-center font-ui text-[11px] text-muted-foreground">
+                <button type="button" onClick={revealPage} disabled={manual} className="inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-xs font-bold text-foreground disabled:opacity-40" data-testid="button-book-reveal"><Eye size={14} />إظهار الصفحة كاملة</button>
+                <p>الإظهار اليدوي يوقف التسميع ولا يُحتسب تسميعاً.</p>
+              </div>
+            )}
           </>
         )}
       </div>
       {reading && <p className="text-center font-ui text-xs text-muted-foreground" data-testid="text-book-read-first">اقرأ الصفحة أولاً، ثم سمّع السند والمتن والتخريج من حفظك.</p>}
 
-      {!reading && r.mismatchIndex != null && (
-        <div className="rounded-xl border-2 border-red-700 bg-red-50 p-3 text-center font-ui text-red-800 dark:border-red-400 dark:bg-red-950 dark:text-red-200" role="alert" data-testid="alert-book-mismatch">
-          <p className="font-arabic text-sm font-bold">تنبيه تجريبي: لم يتطابق المسموع عند الكلمة {num(r.mismatchIndex + 1)}. أعد من الموضع نفسه.</p>
-          <p className="mt-1 text-[11px] opacity-80">قد يكون السبب خطأً في التعرّف الآلي على الصوت، فهذا ليس حكماً على حفظك ولا درجة.</p>
-          {hint
-            ? <p className="hadith-text mt-2 text-xl" data-testid="text-book-hint">{r.words[r.mismatchIndex]}</p>
-            : <button type="button" onClick={() => setHint(true)} className="mt-2 inline-flex min-h-9 items-center gap-1.5 rounded-full border border-red-700/40 px-3 text-xs font-bold" data-testid="button-book-hint"><Lightbulb size={13} />أظهر الكلمة المتوقعة</button>}
+      {!reading && !manual && r.mismatchIndex != null && (
+        <div className="mx-auto flex max-w-xl items-start gap-3 rounded-2xl border border-amber-300/70 bg-amber-50/80 p-4 font-ui text-amber-950 dark:border-amber-500/40 dark:bg-amber-950/40 dark:text-amber-100" role="status" aria-live="polite" data-testid="alert-book-mismatch">
+          <RotateCcw size={18} className="mt-1 shrink-0 text-amber-700 dark:text-amber-300" aria-hidden />
+          <div className="flex-1 text-right">
+            <p className="text-sm font-bold">لم يتّضح المسموع عند الكلمة {num(r.mismatchIndex + 1)}، أعد المحاولة بهدوء من هنا.</p>
+            <p className="mt-1 text-[11px] leading-relaxed opacity-80">قد يكون السبب التعرّف الآلي على الصوت؛ هذا ليس حكماً على حفظك ولا درجة.</p>
+            {hint
+              ? <p className="hadith-text mt-2 text-xl" data-testid="text-book-hint">{r.words[r.mismatchIndex]}</p>
+              : <button type="button" onClick={() => setHint(true)} className="mt-2 inline-flex min-h-9 items-center gap-1.5 rounded-full border border-amber-700/30 bg-card/60 px-3 text-xs font-bold hover:bg-card" data-testid="button-book-hint"><Lightbulb size={13} />أظهر الكلمة المتوقعة</button>}
+          </div>
         </div>
       )}
-      {!reading && r.error && <p className="rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-center font-ui text-xs text-destructive" role="alert" data-testid="text-book-error">{r.error}</p>}
-      {!reading && manual && <p className="rounded-lg border bg-muted/50 px-3 py-2 text-center font-ui text-xs" role="status" data-testid="text-book-manual">أظهرتَ الصفحة يدوياً؛ هذا ليس تسميعاً. أعد الصفحة لتسمّعها.</p>}
+      {!reading && r.error && <p className="mx-auto max-w-xl rounded-xl border border-destructive/30 bg-destructive/5 px-3 py-2 text-center font-ui text-xs text-destructive" role="alert" data-testid="text-book-error">{r.error}</p>}
+      {!reading && manual && <p className="mx-auto max-w-xl rounded-xl border bg-muted/50 px-3 py-2 text-center font-ui text-xs" role="status" data-testid="text-book-manual">أظهرتَ الصفحة يدوياً؛ هذا ليس تسميعاً. أعد الصفحة لتسمّعها.</p>}
       {finished && <p className="rounded-xl border border-secondary/40 bg-secondary/10 px-4 py-3 text-center font-ui text-sm font-bold" role="status" data-testid="text-book-complete">بلغتَ نهاية الأحاديث المتاحة. هذا انتهاء للمقطع وليس درجة أو إثباتاً لتسميع الصفحات التي تجاوزتها.</p>}
 
       {/* Page */}
-      <article ref={articleRef} key={page.number} className="relative mx-auto max-w-[860px] scroll-mt-24 animate-in fade-in slide-in-from-left-4 duration-500 rounded-[1.75rem] border bg-card/80 px-5 py-8 shadow-[0_30px_60px_-40px_hsl(var(--primary)/0.5)] motion-reduce:animate-none sm:px-12 sm:py-12" aria-label={`صفحة ${num(page.number)}`} data-testid={`book-page-${page.number}`}>
-        <div className="mb-6 flex items-center justify-between font-ui text-[11px] font-bold text-muted-foreground">
+      <article ref={articleRef} key={page.number} className="relative mx-auto max-w-[860px] scroll-mt-24 animate-in fade-in slide-in-from-left-4 duration-500 rounded-[1.75rem] border bg-card px-4 py-7 ring-1 ring-secondary/10 ring-inset shadow-[0_30px_60px_-40px_hsl(var(--primary)/0.5)] motion-reduce:animate-none sm:px-12 sm:py-12" aria-label={`صفحة ${num(page.number)}`} data-testid={`book-page-${page.number}`}>
+        <div className="ornament mb-6 font-ui text-[11px] font-bold text-muted-foreground">
           <span>{reading ? 'وضع القراءة' : `ظهر ${num(pageRead)} من ${num(pageLen)} كلمة في هذه الصفحة`}</span>
-          <span>{num(page.number)}</span>
+          <span className="text-secondary">{num(page.number)}</span>
         </div>
         {page.segments.map((s) => (
           <section key={`${s.hadithId}-${s.start}`} className="mb-8 last:mb-0" data-testid={`book-segment-${s.hadithNumber}-${page.number}`}>
@@ -161,19 +175,19 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
               <h3 className="font-display text-lg font-bold leading-snug sm:text-xl">{s.title}</h3>
               {s.continued && <span className="rounded-full bg-muted px-2 py-0.5 font-ui text-[10px] text-muted-foreground">تتمة</span>}
             </header>
-            <p className="hadith-text select-none text-foreground" style={{ fontSize: 'clamp(22px, 2.6vw, 30px)', lineHeight: 2.3 }} data-testid={`text-book-segment-${s.hadithNumber}-${page.number}`}>
+            <p className="hadith-text select-none text-foreground" style={{ fontSize: 'clamp(21px, 2.6vw, 30px)', lineHeight: 2.25, textAlign: 'justify', textAlignLast: 'right' }} data-testid={`text-book-segment-${s.hadithNumber}-${page.number}`}>
               {r.words.slice(s.start, s.end).map((w, k) => {
                 const i = s.start + k;
                 const on = reading || manual || r.revealed[i];
                 const prov = !on && interim.has(i);
-                const bad = !reading && r.mismatchIndex === i;
+                const bad = !reading && !manual && r.mismatchIndex === i;
                 const visible = on || prov;
                 return (
                   <span key={i}>
                     <span aria-hidden={visible ? undefined : true} data-testid={`book-word-${i}`}
                       className={cn('inline-block transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none',
                         on ? 'translate-y-0 opacity-100' : prov ? 'translate-y-0 text-secondary opacity-60' : 'invisible translate-y-1 opacity-0',
-                        bad && 'visible rounded-md text-transparent opacity-100 ring-2 ring-red-600')}>{w}</span>{' '}
+                        bad && 'visible rounded-md bg-amber-100/70 text-transparent opacity-100 ring-2 ring-amber-400/80 dark:bg-amber-900/30')}>{w}</span>{' '}
                   </span>
                 );
               })}

@@ -52,3 +52,17 @@ and activate it later.
 **How to apply:** Preserve the prepared measurement tools and consent/review
 requirements for later. Deferral is not permission to enable automatic grades;
 continue with human oral grading and experimental practice feedback.
+
+Live recitation disagreements must be presented as uncertain recognition, not
+as a confirmed learner mistake. Choose recognition alternatives by the
+recognizer's evidence, not by their similarity to the expected text.
+
+**Why:** The user reports false alerts on correct reading and identifies
+recitation quality and ease of use as the product's highest priority. Choosing
+the hypothesis closest to the matn would conceal genuine errors rather than
+improve recognition.
+
+**How to apply:** Preserve strict checks for missing/replaced words while
+tolerating exact Arabic whitespace variations and safely anchored repetitions
+of already revealed context. Do not claim a larger local model improves the
+live browser recognizer unless it is actually integrated and measured.

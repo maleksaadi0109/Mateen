@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { BookOpen, Eye, Mic, Pause, RotateCcw, ShieldAlert, X } from 'lucide-react';
+import { BookOpen, Eye, Mic, MoreHorizontal, Pause, RotateCcw, ShieldAlert, X } from 'lucide-react';
 import { getGetNawawiBookQueryKey, getGetRecitationPagesQueryKey, useGetNawawiBook, useGetRecitationPages } from '@workspace/api-client-react';
 import { useLiveRecitation } from '@/hooks/use-live-recitation';
 import { BookReader } from '@/components/mateen/book-reader';
@@ -34,6 +34,7 @@ export default function LiveRecitation({ text, fontSize, hadithId, title, onMode
   const [consentOpen, setConsentOpen] = useState(false);
   const [agree, setAgree] = useState(false);
   const [manual, setManual] = useState(false);
+  const [more, setMore] = useState(false);
   const stopRef = useRef(r.stop);
   stopRef.current = r.stop;
   useEffect(() => () => stopRef.current(), []);
@@ -69,7 +70,7 @@ export default function LiveRecitation({ text, fontSize, hadithId, title, onMode
               </div>
             ) : (
               <button type="button" onClick={requestStart} disabled={r.supported === null || startBlocked}
-                className="group relative inline-flex min-h-12 items-center gap-3 rounded-full bg-primary py-3 pl-7 pr-3 font-ui text-base font-bold text-primary-foreground shadow-[0_14px_30px_-14px_hsl(var(--primary)/0.8)] transition-transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-40"
+                className="group relative inline-flex min-h-12 w-full items-center justify-center gap-3 sm:w-auto rounded-full bg-primary py-3 pl-7 pr-3 font-ui text-base font-bold text-primary-foreground shadow-[0_14px_30px_-14px_hsl(var(--primary)/0.8)] transition-transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-40"
                 data-testid="button-live-start">
                 <span className="grid h-9 w-9 place-items-center rounded-full bg-secondary text-secondary-foreground transition-transform group-hover:scale-110"><Mic size={18} /></span>
                 {sanadPending && matnPractice ? 'ابدأ تدريب المتن وحده' : 'ابدأ التسميع'}
@@ -94,23 +95,35 @@ export default function LiveRecitation({ text, fontSize, hadithId, title, onMode
 
       {!reading && (
         <div className="space-y-4">
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            {pagesEnabled && <button type="button" onClick={backToReading} className="inline-flex min-h-10 items-center gap-2 rounded-full border px-4 font-ui text-xs font-bold" data-testid="button-back-to-reading"><BookOpen size={14} />العودة إلى القراءة</button>}
-            {r.listening ? (
-              <button type="button" onClick={r.stop} className="inline-flex min-h-10 items-center gap-2 rounded-full bg-secondary px-5 font-ui text-xs font-bold text-secondary-foreground" data-testid="button-live-pause"><Pause size={14} />إيقاف مؤقت</button>
-            ) : (
-              <button type="button" onClick={begin} disabled={unsupported || manual || startBlocked} className="inline-flex min-h-10 items-center gap-2 rounded-full bg-primary px-5 font-ui text-xs font-bold text-primary-foreground disabled:opacity-40" data-testid="button-live-resume"><Mic size={14} />{shown > 0 ? 'متابعة التسميع' : 'ابدأ التسميع'}</button>
+          <div className="mx-auto flex max-w-[820px] flex-col items-center gap-3" role="toolbar" aria-label="أدوات التسميع">
+            <div className="flex w-full items-center justify-center gap-3">
+              {r.listening ? (
+                <button type="button" onClick={r.stop} className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-secondary px-6 font-ui text-sm font-bold text-secondary-foreground shadow-[0_14px_30px_-16px_hsl(var(--secondary)/0.9)] sm:flex-none" data-testid="button-live-pause"><Pause size={16} />إيقاف مؤقت</button>
+              ) : (
+                <button type="button" onClick={begin} disabled={unsupported || manual || startBlocked} className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-primary px-6 font-ui text-sm font-bold text-primary-foreground shadow-[0_14px_30px_-16px_hsl(var(--primary)/0.8)] disabled:opacity-40 sm:flex-none" data-testid="button-live-resume"><Mic size={16} />{shown > 0 ? 'متابعة التسميع' : 'ابدأ التسميع'}</button>
+              )}
+              {r.listening && <span className="inline-flex items-center gap-1.5 font-ui text-xs font-bold text-secondary" role="status"><span className="h-2 w-2 animate-pulse rounded-full bg-secondary motion-reduce:animate-none" />يستمع الآن</span>}
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-1 font-ui text-xs font-bold text-muted-foreground">
+              <button type="button" onClick={doReset} disabled={shown === 0 && !r.listening && !manual} className="inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 hover:bg-muted hover:text-foreground disabled:opacity-40" data-testid="button-live-reset"><RotateCcw size={14} />مسح الصفحة</button>
+              {pagesEnabled && <button type="button" onClick={backToReading} className="inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 hover:bg-muted hover:text-foreground" data-testid="button-back-to-reading"><BookOpen size={14} />العودة إلى القراءة</button>}
+              <button type="button" onClick={() => setMore((v) => !v)} aria-expanded={more} aria-controls="live-more-actions" className="inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 hover:bg-muted hover:text-foreground" data-testid="button-live-more"><MoreHorizontal size={14} />{more ? 'أقل' : 'المزيد'}</button>
+            </div>
+            {more && (
+              <div id="live-more-actions" className="flex w-full max-w-md flex-col items-center gap-2 rounded-2xl border border-dashed bg-card/60 p-3 text-center font-ui text-[11px] text-muted-foreground">
+                <button type="button" onClick={doReveal} disabled={manual} className="inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-xs font-bold text-foreground disabled:opacity-40" data-testid="button-live-reveal"><Eye size={14} />إظهار النص</button>
+                <p>الإظهار اليدوي يوقف التسميع ولا يُحتسب تسميعاً.</p>
+              </div>
             )}
-            <button type="button" onClick={doReset} disabled={shown === 0 && !r.listening && !manual} className="inline-flex min-h-10 items-center gap-2 rounded-full border px-4 font-ui text-xs font-bold disabled:opacity-40" data-testid="button-live-reset"><RotateCcw size={14} />مسح الصفحة</button>
-            <button type="button" onClick={doReveal} disabled={manual} className="inline-flex min-h-10 items-center gap-2 rounded-full border border-dashed px-4 font-ui text-xs font-bold text-muted-foreground disabled:opacity-40" data-testid="button-live-reveal"><Eye size={14} />إظهار النص</button>
-            {r.listening && <span className="inline-flex items-center gap-1.5 font-ui text-xs font-bold text-secondary" role="status"><span className="h-2 w-2 animate-pulse rounded-full bg-secondary" />يستمع الآن</span>}
           </div>
 
-          {mismatchIndex != null && (
-            <p dir="rtl" className="rounded-xl border border-red-700 bg-red-50 p-3 text-center font-arabic text-sm font-bold text-red-700 dark:border-red-400 dark:bg-red-950 dark:text-red-300" role="alert" data-testid="text-mismatch">
-              عدم تطابق عند الكلمة {num(mismatchIndex + 1)}. أعد من الموضع نفسه.
-              <span className="block font-ui text-[11px] font-normal opacity-80">التعرّف في المتصفح صارم وقد يخطئ؛ هذا تنبيه وليس درجة.</span>
-            </p>
+          {!manual && mismatchIndex != null && (
+            <div dir="rtl" className="mx-auto flex max-w-xl items-start gap-3 rounded-2xl border border-amber-300/70 bg-amber-50/80 p-4 font-ui text-amber-950 dark:border-amber-500/40 dark:bg-amber-950/40 dark:text-amber-100" role="status" aria-live="polite" data-testid="text-mismatch">
+              <RotateCcw size={18} className="mt-1 shrink-0 text-amber-700 dark:text-amber-300" aria-hidden />
+              <p className="text-sm font-bold">لم يتّضح المسموع عند الكلمة {num(mismatchIndex + 1)}، أعد المحاولة بهدوء من هنا.
+                <span className="mt-1 block text-[11px] font-normal leading-relaxed opacity-80">التعرّف الآلي في المتصفح قد يخطئ؛ هذه إشارة للمحاولة مجدداً، لا حكم على حفظك ولا درجة.</span>
+              </p>
+            </div>
           )}
           {gate.kind !== 'idle' && gate.kind !== 'ready' && (
             <p className="rounded-lg border bg-muted/40 px-3 py-2 text-center font-ui text-[11px] text-muted-foreground" role="status" data-testid={`status-scan-${gate.kind}`}>
@@ -124,11 +137,11 @@ export default function LiveRecitation({ text, fontSize, hadithId, title, onMode
           {r.error && <p className="rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 font-ui text-xs text-destructive" role="alert">{r.error}</p>}
 
           {showScan && gate.kind === 'ready' && <ScannedPages data={gate.data} revealed={r.revealed} onImageError={() => setImageFailed(true)} idPrefix={`h${hadithId}`} />}
-          <div hidden={showScan} className="relative mx-auto max-w-[820px] rounded-2xl border border-dashed border-secondary/40 bg-card/70 px-5 py-8 sm:px-10 sm:py-12">
-            <span className="pointer-events-none absolute right-4 top-3 font-ui text-[11px] font-bold text-muted-foreground">
+          <div hidden={showScan} className="relative mx-auto max-w-[820px] rounded-[1.75rem] border bg-card px-4 pb-8 pt-12 shadow-[0_30px_60px_-40px_hsl(var(--primary)/0.5)] ring-1 ring-inset ring-secondary/10 sm:px-12 sm:pb-12 sm:pt-14">
+            <span className="pointer-events-none absolute right-5 top-4 font-ui text-[11px] font-bold text-muted-foreground">
               {shown === 0 ? (sanadPending ? 'تدريب المتن وحده؛ ابدأ من حفظك' : 'الصفحة فارغة؛ ابدأ بالسند') : `ظهر ${num(shown)} من ${num(total)} كلمة`}
             </span>
-            <p className="hadith-text select-none text-foreground" style={{ fontSize, lineHeight: 2.3, minHeight: '6em' }} data-testid="text-live-recitation">
+            <p className="hadith-text select-none text-foreground" style={{ fontSize: `clamp(20px, 5vw, ${fontSize}px)`, lineHeight: 2.25, minHeight: '6em', textAlign: 'justify', textAlignLast: 'right' }} data-testid="text-live-recitation">
               {r.words.map((w, i) => {
                 const on = r.revealed[i];
                 const pending = !on && interim.has(i);
@@ -148,8 +161,8 @@ export default function LiveRecitation({ text, fontSize, hadithId, title, onMode
       )}
 
       {consentOpen && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-foreground/40 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="consent-title" data-testid="dialog-consent">
-          <div className="w-full max-w-md rounded-2xl border bg-card p-5 shadow-xl">
+        <div className="fixed inset-0 z-50 grid items-end justify-items-center sm:place-items-center bg-foreground/40 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="consent-title" data-testid="dialog-consent">
+          <div className="w-full max-w-md rounded-t-3xl border bg-card p-5 shadow-xl sm:rounded-2xl">
             <div className="flex items-start justify-between gap-3">
               <h3 id="consent-title" className="font-display text-xl font-bold">{sanadPending && matnPractice ? 'قبل تدريب المتن وحده دون السند' : 'قبل بدء التسميع'}</h3>
               <button type="button" onClick={() => setConsentOpen(false)} aria-label="إغلاق" className="rounded-full p-1.5 hover:bg-muted" data-testid="button-consent-close"><X size={16} /></button>

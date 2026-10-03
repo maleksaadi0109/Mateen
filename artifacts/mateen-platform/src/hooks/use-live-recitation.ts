@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { matchRecitation, recitationWords } from '@/lib/live-recitation';
 
-type SpeechResult = { isFinal: boolean; [index: number]: { transcript: string } };
+type SpeechResult = { isFinal: boolean; length?: number; [index: number]: { transcript: string; confidence?: number } };
 type SpeechEvent = { results: { length: number; [index: number]: SpeechResult } };
 type Recognition = {
   lang: string;
@@ -92,7 +92,7 @@ export function useLiveRecitation(text: string) {
     active.lang = 'ar-SA';
     active.continuous = true;
     active.interimResults = true;
-    active.maxAlternatives = 1;
+    active.maxAlternatives = 3;
     recognition.current = active;
     setError('');
     setMismatchIndex(null);
@@ -103,7 +103,21 @@ export function useLiveRecitation(text: string) {
       let interim = '';
       for (let i = 0; i < event.results.length; i++) {
         const result = event.results[i];
-        const value = typeof result[0]?.transcript === 'string' ? result[0].transcript.slice(0,250_001) : '';
+        let value = typeof result[0]?.transcript === 'string' ? result[0].transcript.slice(0,250_001) : '';
+        // Prefer only a more confident actual ASR hypothesis, independently of
+        // the target. Selecting by reference similarity would hide real mistakes.
+        if (result.isFinal) {
+          let confidence = result[0]?.confidence;
+          if (Number.isFinite(confidence) && confidence! >= 0 && confidence! <= 1) {
+            for (let a = 1; a < Math.min(result.length ?? 1, 3); a++) {
+              const alternate = result[a];
+              if (typeof alternate?.transcript !== 'string' || alternate.transcript.length > 250_000 ||
+                  !Number.isFinite(alternate.confidence) || alternate.confidence! > 1 || alternate.confidence! <= confidence!) continue;
+                value = alternate.transcript;
+                confidence = alternate.confidence;
+            }
+          }
+        }
         if (result.isFinal) final += ` ${value}`;
         else interim += ` ${value}`;
         if (final.length + interim.length > 250_000) break;

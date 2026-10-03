@@ -49,6 +49,7 @@ test('reading first, explicit start, clipped reveal and return after manual reve
     assert.equal(container.querySelector('[data-testid="scan-image"]'),null);
     await act(async () => first.emit());
     assert.equal(container.querySelectorAll('[data-testid="scan-clip-rect"]').length,1);
+    await act(async () => button('button-live-more').click());
     await act(async () => button('button-live-reveal').click());
     assert.equal(first.aborted,true);
     assert.ok(container.querySelector('[data-testid="text-manual-reveal"]'));

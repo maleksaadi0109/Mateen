@@ -31,6 +31,13 @@ class FakeRecognition {
 }
 let state: ReturnType<typeof useLiveRecitation>;
 const reference = 'إنما الأعمال بالنيات وإنما لكل امرئ ما نوى';
+test('Arabic whitespace variations do not become substitutions, without forgiving missing words', () => {
+  assert.equal(matchRecitation(recitationWords('وإنما لكل امرئ'), 'و إنما لكل امرئ').mismatchIndex, null);
+  assert.equal(matchRecitation(recitationWords('عبد الله'), 'عبدالله').mismatchIndex, null);
+  assert.equal(matchRecitation(recitationWords('إنما الأعمال بالنيات'), 'إنما بالنيات').mismatchIndex, 1);
+  assert.deepEqual(matchRecitation(recitationWords(reference), 'الأعمال بالنيات وإنما لكل امرئ', 3).indices, [3, 4, 5]);
+  assert.equal(matchRecitation(recitationWords(reference), 'الأعمال بالنيات لكل امرئ', 3).mismatchIndex, 3);
+});
 function Harness() { state = useLiveRecitation(reference); return null; }
 let container: HTMLDivElement;
 let root: ReturnType<typeof createRoot>;
@@ -241,6 +248,27 @@ test('permission denial stops listening with a clear error and no automatic retr
   assert.match(state.error, /الميكروفون/);
   assert.equal(FakeRecognition.latest, recognizer);
   assert.equal(recognizer.aborted, true);
+});
+
+test('alternative selection follows recognizer confidence, not expected text', async () => {
+  await act(async () => state.start());
+  await act(async () => FakeRecognition.latest.onresult?.({ results: [{
+    isFinal: true, length: 2,
+    0: { transcript: 'إنما الأقوال', confidence: 0.9 },
+    1: { transcript: 'إنما الأعمال', confidence: 0.5 },
+  } as any] }));
+  assert.equal(state.mismatchIndex, 1);
+  assert.equal(state.revealed[1], false);
+  await act(async () => state.reset());
+  await act(async () => state.start());
+  await act(async () => FakeRecognition.latest.onresult?.({ results: [{
+    isFinal: true, length: 2,
+    0: { transcript: 'إنما الأقوال', confidence: 0.5 },
+    1: { transcript: 'إنما الأعمال', confidence: 0.9 },
+  } as any] }));
+  assert.equal(state.mismatchIndex, null);
+  assert.equal(state.revealed[1], true);
+  assert.equal(state.revealed[2], false);
 });
 
 test('unsupported browser is explicit; unmount releases the microphone', async () => {

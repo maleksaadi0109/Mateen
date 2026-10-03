@@ -24,12 +24,36 @@ export function matchRecitation(
   const heard = recitationWords(transcript.slice(0, 250_000)).map(normalizeRecitationWord).filter(Boolean);
   const indices: number[] = [];
   let cursor = Math.max(0, start);
-  for (let i = 0; i < heard.length && cursor < target.length; i++) {
+  let offset = 0;
+  // On resume readers often repeat the last few already revealed words.
+  // Accept that context only with two exact following words as an anchor;
+  // never advance over an unheard source word.
+  if (cursor > 0 && heard[0] !== target[cursor]) {
+    for (let count = Math.min(cursor, 4); count > 0; count--) {
+      if (heard.length >= count + 2 &&
+          heard.slice(0, count).every((word, i) => word === target[cursor - count + i]) &&
+          heard[count] === target[cursor] && heard[count + 1] === target[cursor + 1]) {
+        offset = count;
+        break;
+      }
+    }
+  }
+  for (let i = offset; i < heard.length && cursor < target.length; i++) {
     // Punctuation-only source tokens do not need to be spoken.
     while (cursor < target.length && !target[cursor]) indices.push(cursor++);
     if (cursor >= target.length) break;
     // Never jump over a word, even when a later phrase is recognizable.
-    if (target[cursor] !== heard[i]) return {indices, cursor, mismatchIndex:cursor};
+    if (target[cursor] !== heard[i]) {
+      // Arabic ASR may separate a clitic or join adjacent words. Accept only
+      // exact concatenation, never fuzzy spelling or skipping a source word.
+      if (heard[i + 1] && target[cursor] === heard[i] + heard[i + 1]) {
+        indices.push(cursor++); i++; continue;
+      }
+      if (target[cursor + 1] && heard[i] === target[cursor] + target[cursor + 1]) {
+        indices.push(cursor, cursor + 1); cursor += 2; continue;
+      }
+      return {indices, cursor, mismatchIndex:cursor};
+    }
     indices.push(cursor);
     cursor++;
   }
