@@ -13,7 +13,7 @@ An explicit PyPI source for Transformers does not prevent the publishing install
 
 **Why:** Publishing first reported a Transformers release unavailable despite its presence on PyPI. After an explicit PyPI mapping was added, a subsequent publishing log showed the installer appending a Linux-only CPU mapping to it, causing a multi-source TOML error. The appended mapping was absent from the workspace. The explicit PyPI workaround was withdrawn.
 
-**How to apply:** Diagnose the publishing-side rewrite rather than repeating explicit-source changes or downgrading Transformers blindly. Local `uv lock` and dry-run success do not reproduce this installer step. A supported installer correction or separately verified installation path is needed; do not remove Python speech dependencies merely to make publishing pass.
+**How to apply:** Diagnose the publishing-side rewrite rather than repeating explicit-source changes or downgrading Transformers blindly. Keep automatic package discovery separate from the explicit, locked Python installation during the API build (operating instructions are in `replit.md`). Verify discovery as well as resolution: local `uv lock` success alone does not exercise the publishing installer. Do not remove Python speech dependencies merely to make publishing pass.
 
 The managed installer expects existing package-source mappings to be arrays.
 

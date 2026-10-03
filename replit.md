@@ -10,6 +10,7 @@ Arabic RTL platform for studying Islamic scholarly texts. The approved full prod
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm --filter @workspace/api-server run test:scholarly` — safety helpers plus isolated HTTP/PostgreSQL participant regressions; see `docs/scholarly-regression-tests.md`.
 - `pnpm run build` — typecheck + build all packages
+- Python dependencies are installed directly by the API build; see `scripts/PYTHON_RUNTIME.md`. Do not recreate root `pyproject.toml` / `uv.lock`, which re-enables the publishing installer's incorrect CPU-index rewrite.
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
 - `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
 - For a manual frontend build, supply the artifact's non-secret runtime settings: `PORT=24832 BASE_PATH=/ pnpm --filter @workspace/mateen-platform run build`.

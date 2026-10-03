@@ -31,11 +31,11 @@ class LocalRecitationValidationTests(unittest.TestCase):
 
     def test_rejects_file_outside_upload_directory(self):
         with self.assertRaisesRegex(ValueError, "attached_assets"):
-            experiment.validate_sample(ROOT / "pyproject.toml")
+            experiment.validate_sample(ROOT / "python-runtime.toml")
 
     def test_rejects_symlink_to_outside_upload_directory(self):
         self.path.unlink()
-        self.path.symlink_to(ROOT / "pyproject.toml")
+        self.path.symlink_to(ROOT / "python-runtime.toml")
         with self.assertRaisesRegex(ValueError, "attached_assets"):
             experiment.validate_sample(self.path)
 
