@@ -78,3 +78,20 @@ to award assessment grades from ASR.
 **How to apply:** Label the percentage as approximate word matching in the
 attempted passage, exclude unspoken suffixes, keep differences provisional,
 and keep practice history separate from exam scores and advancement.
+
+On 2026-10-03 the user explicitly authorized browser-service alert measurement
+and transmission of audio for that purpose, without saving new recordings or
+transcripts in the project. This permission covers that narrow measurement,
+not the expanded grading benchmark.
+
+**Why:** Purpose-specific consent was requested and granted after the earlier
+deferral; asking for the same consent again would ignore that decision.
+
+**How to apply:** If this measurement is resumed, do not repeat the consent
+question. Keep its new audio/transcripts out of persistent artifacts and logs,
+and retain its prohibition on grades and pronunciation/diacritics assessment.
+This measurement-specific restriction does not overwrite the separate practice
+presentation request above. Browser API availability and microphone permission
+do not prove the remote recognition service is usable; require real service
+results before measurement. The user accepted stopping at the documented
+blocker, which is not confirmation of measured accuracy.
