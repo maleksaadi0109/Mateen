@@ -3,11 +3,18 @@ name: Learning and guidance boundaries
 description: User-defined boundaries for assessment progression and teacher duties.
 ---
 
-The user requested replacing the study experience with a Talqeeen-like blank page whose text is revealed progressively as the student recites aloud from memory, starting with page images of الأربعون النووية. They explicitly chose their own voice, not listening to a recording.
+The current learning journey is Duolingo-like: choose a track, enter a map with
+one hadith per stage, study it with clickable word meanings and a contextual
+assistant, practise reciting, then explicitly start a stage recitation exam.
+The user confirmed on 2026-10-03 that approximate 90% stage success opens the
+next hadith while the existing comprehensive oral/written level exam remains separate.
 
-**Why:** They explicitly asked to change the study system completely rather than just restyle the existing reader, and requested finding and downloading the book as images first.
+**Why:** The user explicitly selected per-hadith stages PLUS the comprehensive
+exam, not replacement of the formal assessment policy.
 
-**How to apply:** Treat progressive text reveal as the study redesign's central behavior, not as another question-and-answer view. Keep scan provenance and speech-recognition uncertainty distinct from scholarly approval.
+**How to apply:** Use progressive reveal for practice, not as the entire study
+experience. Keep stage advancement distinct from certified assessment grades;
+preserve previous study progress and full-book practice.
 
 Do not silently replace the canonical study text with a newly downloaded edition or claim scan coordinates match the text without alignment.
 

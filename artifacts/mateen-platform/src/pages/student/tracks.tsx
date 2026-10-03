@@ -26,13 +26,13 @@ export default function TracksPage() {
                 <p className="mt-3 font-arabic text-base leading-loose text-muted-foreground">{t.description}</p>
                 <div className="mt-5 flex items-center justify-between">
                   <span className="font-ui text-sm text-muted-foreground">{open ? `${num(t.hadithCount)} موضعاً` : ''}</span>
-                  {open ? <span className="inline-flex items-center gap-1.5 font-ui text-sm font-bold text-secondary">ادخل <ArrowLeft size={15} /></span>
+                  {open ? <span className="inline-flex items-center gap-1.5 font-ui text-sm font-bold text-secondary">خريطة المراحل <ArrowLeft size={15} /></span>
                     : <span className="rounded-full border border-dashed border-muted-foreground/50 px-3 py-1 font-ui text-xs font-bold text-muted-foreground">قريباً</span>}
                 </div>
               </>
             );
             return open ? (
-              <Link key={t.id} href={`/student/study/${t.id}`} className="paper-card block p-7 transition hover:-translate-y-1" data-testid={`card-track-${t.id}`}>{body}</Link>
+              <Link key={t.id} href={t.id === 'nawawi' ? '/student/learn/nawawi' : `/student/study/${t.id}`} className="paper-card block p-7 transition hover:-translate-y-1" data-testid={`card-track-${t.id}`}>{body}</Link>
             ) : (
               <div key={t.id} aria-disabled="true" className={cn('paper-card p-7 opacity-70')} data-testid={`card-track-${t.id}`}>{body}</div>
             );

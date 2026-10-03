@@ -258,7 +258,7 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
         <p className="break-words">المصدر النصي: {Array.from(new Set(page.segments.map((s) => s.sourceUrl))).map((u, i) => <a key={u} href={u} target="_blank" rel="noreferrer" className="mx-1 underline underline-offset-2" data-testid="link-book-source">مرجع النص {num(i + 1)}</a>)}
           {' '}· بداية الحديث في المصدر: {Array.from(new Set(page.segments.map((s) => num(s.sourcePage)))).join('، ')}</p>
         <p>ترقيم الصفحات هنا رقمي للتسميع وليس ترقيم الطبعة المطبوعة.</p>
-        <p>يشمل السند والمتن والعزو في الأحاديث الـ٤٢ المتاحة؛ لا يشمل مقدمة المؤلف أو هوامش الطبعة المصوّرة.</p>
+        <p>يشمل السند والمتن والعزو في الأحاديث المعروضة ({num(hadiths.length)})؛ لا يشمل مقدمة المؤلف أو هوامش الطبعة المصوّرة.</p>
         {pending && <p className="font-bold text-secondary" data-testid="text-book-pending">النص قيد المراجعة العلمية، فالتسميع تجريبي.</p>}
       </footer>
 
@@ -274,7 +274,7 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
             <DialogDescription className="font-ui text-sm">تدريب تجريبي لإظهار الكلمات، لا تقييم للنطق أو التشكيل أو الحفظ.</DialogDescription>
             <label className="mt-4 flex cursor-pointer gap-3 rounded-xl border bg-background p-3 font-ui text-sm leading-relaxed">
               <input type="checkbox" className="mt-1 h-4 w-4 accent-[hsl(var(--secondary))]" checked={agree} onChange={(e) => setAgree(e.target.checked)} data-testid="checkbox-book-consent" />
-              <span>أوافق على استخدام الميكروفون. قد ترسل خدمة التعرّف في المتصفح صوتي إلى مزوّد خارجي. لا تحفظ المنصة تسجيلاً صوتياً ولا النص المسموع كاملاً، ولا تُرسل نتائج إلى الخادم. بعد إنهاء المحاولة يمكنك اختيارياً «حفظ النتيجة» (نسبة التطابق التقريبية والكلمات المختلفة) على هذا المتصفح فقط لحسابك، ويمكنك مسحها في أي وقت.</span>
+              <span>أوافق على استخدام الميكروفون. قد ترسل خدمة التعرّف في المتصفح صوتي إلى مزوّد خارجي. لا تحفظ المنصة تسجيلاً صوتياً ولا النص المسموع كاملاً، ولا ترفع نتائج التدريب تلقائيًا. بعد إنهاء المحاولة يمكنك اختيار حفظ النتيجة على هذا المتصفح فقط، أو الموافقة بشكل منفصل على حفظ التقرير في حسابك، ويمكنك حذفه لاحقًا.</span>
             </label>
             <div className="mt-4 flex justify-end gap-2">
               <button type="button" onClick={() => setConsentOpen(false)} className="min-h-10 rounded-full border px-5 font-ui text-sm font-bold" data-testid="button-book-consent-cancel">إلغاء</button>

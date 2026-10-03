@@ -24,5 +24,6 @@ export * from "./reviews";
 export * from "./source-versions";
 export * from "./practice-recitations";
 export * from "./practice-reports";
+export * from "./learning-stages";
 export * from "./scholarly";
 export * from "./assessments";

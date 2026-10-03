@@ -38,9 +38,13 @@ export default function StudentHome() {
             {started ? `الحديث رقم ${num(d.lastHadith)}` : 'الحديث الأول: إنما الأعمال بالنيات'}
           </p>
           {d.lastStudiedAt && <p className="mt-1 font-ui text-sm text-muted-foreground">آخر دراسة: {fmtDate(d.lastStudiedAt)}</p>}
-          <Link href={`/student/study/nawawi?h=${started ? Math.max(1, d.lastHadith) : 1}`} className="mt-7 inline-flex items-center gap-2 rounded-full bg-secondary px-7 py-3 font-ui font-bold text-secondary-foreground" data-testid="button-continue">
+          <Link href={started ? `/student/study/nawawi?h=${Math.max(1, d.lastHadith)}` : '/student/learn/nawawi'} className="mt-7 inline-flex items-center gap-2 rounded-full bg-secondary px-7 py-3 font-ui font-bold text-secondary-foreground" data-testid="button-continue">
             {started ? 'متابعة الدراسة' : 'ابدأ الدراسة'} <ArrowLeft size={17} />
           </Link>
+          <div className="mt-4 flex flex-wrap gap-4 font-ui text-sm font-bold">
+            <Link href="/student/learn/nawawi" className="text-secondary hover:underline" data-testid="link-resume-map">خريطة المراحل والامتحانات</Link>
+            <Link href="/student/tracks" className="text-muted-foreground hover:underline" data-testid="link-tracks">اختيار المسار</Link>
+          </div>
         </section>
 
         <section className="paper-card flex flex-col items-center p-8 text-center" aria-label="ما درسته">

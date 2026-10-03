@@ -11,6 +11,62 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /mateen/learning/{textId}:
+    parameters:
+      - { name: textId, in: path, required: true, schema: { type: string, enum: [nawawi] } }
+    get:
+      operationId: getLearningMap
+      tags: [Mateen]
+      responses:
+        "200":
+          description: Account-owned practice milestones; not formal assessment results
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/LearningMap" }
+  /mateen/learning/{textId}/stages/{stageNumber}/attempts:
+    parameters:
+      - { name: textId, in: path, required: true, schema: { type: string, enum: [nawawi] } }
+      - { name: stageNumber, in: path, required: true, schema: { type: integer, minimum: 1, maximum: 42 } }
+    post:
+      operationId: startStageAttempt
+      tags: [Mateen]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageStartInput"
+      responses:
+        "201":
+          description: Source-bound stage attempt
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [id, stageNumber, expiresAt, sourceHash]
+                properties:
+                  id: { type: string, format: uuid }
+                  stageNumber: { type: integer }
+                  expiresAt: { type: string, format: date-time }
+                  sourceHash: { type: string, pattern: "^[a-f0-9]{64}$" }
+  /mateen/learning/attempts/{attemptId}/finish:
+    parameters:
+      - { name: attemptId, in: path, required: true, schema: { type: string, format: uuid } }
+    post:
+      operationId: finishStageAttempt
+      tags: [Mateen]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StageFinishInput"
+      responses:
+        "200":
+          description: Approximate stage outcome, computed against the entire hadith
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StageOutcome" }
   /mateen/practice-reports:
     get:
       operationId: listPracticeReports
@@ -1251,6 +1307,57 @@ components:
             properties:
               error: { type: string }
   schemas:
+    StageStartInput:
+      type: object
+      required: [requestId, consent]
+      properties:
+        requestId: { type: string, format: uuid }
+        consent: { type: boolean, const: true }
+    StageFinishInput:
+      type: object
+      required: [matchedIndices, issues]
+      properties:
+        matchedIndices:
+          type: array
+          maxItems: 3000
+          items: { type: integer, minimum: 0, maximum: 2999 }
+        issues:
+          type: array
+          maxItems: 3000
+          items:
+            type: object
+            required: [index, kind]
+            properties:
+              index: { type: integer, minimum: 0, maximum: 2999 }
+              kind: { type: string, enum: [substitution, omission, extra] }
+    LearningMap:
+      type: object
+      required: [textId, threshold, stages]
+      properties:
+        textId: { type: string, enum: [nawawi] }
+        threshold: { type: integer }
+        stages:
+          type: array
+          items:
+            type: object
+            required: [number, title, status, bestPercent]
+            properties:
+              number: { type: integer }
+              title: { type: string }
+              status: { type: string, enum: [locked, current, passed] }
+              bestPercent: { type: [number, "null"] }
+    StageOutcome:
+      type: object
+      required: [stageNumber, passed, complete, percent, matched, total, extras, nextStage]
+      properties:
+        stageNumber: { type: integer }
+        passed: { type: boolean }
+        complete: { type: boolean }
+        percent: { type: number }
+        matched: { type: integer }
+        total: { type: integer }
+        extras: { type: integer }
+        nextStage: { type: [integer, "null"] }
     PracticeReportIssue:
       type: object
       additionalProperties: false

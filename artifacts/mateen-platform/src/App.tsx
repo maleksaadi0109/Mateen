@@ -14,6 +14,8 @@ import NotFound from '@/pages/not-found';
 import StudentHome from '@/pages/student/home';
 import TracksPage from '@/pages/student/tracks';
 import StudyPage from '@/pages/student/study';
+import LearningMapPage from '@/pages/student/learning-map';
+import LearningStagePage from '@/pages/student/learning-stage';
 import ReviewsPage from '@/pages/student/reviews';
 import ScholarsPage from '@/pages/student/scholars';
 import ScholarProfilePage from '@/pages/student/scholar-profile';
@@ -154,6 +156,8 @@ function Routes() {
           <Route path="/onboarding" component={OnboardingPage} />
           <Route path="/student"><Portal role="student"><StudentHome /></Portal></Route>
           <Route path="/student/tracks"><Portal role="student"><TracksPage /></Portal></Route>
+          <Route path="/student/learn/:textId"><Portal role="student"><LearningMapPage /></Portal></Route>
+          <Route path="/student/learn/:textId/:stageNumber"><Portal role="student"><LearningStagePage /></Portal></Route>
           <Route path="/student/study"><Redirect to="/student/study/nawawi" /></Route>
           <Route path="/student/study/:textId"><Portal role="student"><StudyPage /></Portal></Route>
           <Route path="/student/reviews"><Portal role="student"><ReviewsPage /></Portal></Route>

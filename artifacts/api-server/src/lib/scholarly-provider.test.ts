@@ -59,6 +59,22 @@ it("generates labelled study answers without accessing administrator previews or
   }
 });
 
+it("unverified scriptural attribution is withheld rather than displayed as an educational answer", async () => {
+  const originalFetch = globalThis.fetch;
+  const saved = process.env.NVIDIA_API_KEY;
+  process.env.NVIDIA_API_KEY = "synthetic-nvidia-test-key";
+  try {
+    globalThis.fetch = async () => new Response(JSON.stringify({
+      choices: [{ message: { content: JSON.stringify({ answer: "قال تعالى: ﴿عبارة مولدة غير موثقة﴾", needsTeacher: false }) } }],
+    }));
+    assert.equal(await generateStudyAnswer("هل النية في القلب؟", "إنما الأعمال بالنيات", NVIDIA_SCHOLARLY_MODEL), null);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (saved === undefined) delete process.env.NVIDIA_API_KEY;
+    else process.env.NVIDIA_API_KEY = saved;
+  }
+});
+
 it("model uncertainty requests a teacher with no generated refusal claims, retaining dialogue context", async () => {
   const originalFetch = globalThis.fetch;
   const saved = process.env.NVIDIA_API_KEY;

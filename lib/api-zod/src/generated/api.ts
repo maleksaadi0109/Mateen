@@ -8,6 +8,83 @@
 import * as zod from 'zod';
 
 
+export const GetLearningMapParams = zod.object({
+  "textId": zod.enum(['nawawi'])
+})
+
+export const GetLearningMapResponse = zod.object({
+  "textId": zod.enum(['nawawi']),
+  "threshold": zod.number().int(),
+  "stages": zod.array(zod.object({
+  "number": zod.number().int(),
+  "title": zod.string(),
+  "status": zod.enum(['locked', 'current', 'passed']),
+  "bestPercent": zod.number().nullable()
+}))
+})
+
+
+export const startStageAttemptPathStageNumberMax = 42;
+
+
+
+export const StartStageAttemptParams = zod.object({
+  "textId": zod.enum(['nawawi']),
+  "stageNumber": zod.coerce.number().int().min(1).max(startStageAttemptPathStageNumberMax)
+})
+
+export const StartStageAttemptBody = zod.object({
+  "requestId": zod.string().uuid(),
+  "consent": zod.literal(true)
+})
+
+export const startStageAttemptResponseSourceHashRegExp = new RegExp('^[a-f0-9]{64}$');
+
+
+export const StartStageAttemptResponse = zod.object({
+  "id": zod.string().uuid(),
+  "stageNumber": zod.number().int(),
+  "expiresAt": zod.coerce.date(),
+  "sourceHash": zod.string().regex(startStageAttemptResponseSourceHashRegExp)
+})
+
+
+export const FinishStageAttemptParams = zod.object({
+  "attemptId": zod.coerce.string().uuid()
+})
+
+export const finishStageAttemptBodyMatchedIndicesItemMin = 0;
+export const finishStageAttemptBodyMatchedIndicesItemMax = 2999;
+
+export const finishStageAttemptBodyMatchedIndicesMax = 3000;
+
+export const finishStageAttemptBodyIssuesItemIndexMin = 0;
+export const finishStageAttemptBodyIssuesItemIndexMax = 2999;
+
+export const finishStageAttemptBodyIssuesMax = 3000;
+
+
+
+export const FinishStageAttemptBody = zod.object({
+  "matchedIndices": zod.array(zod.number().int().min(finishStageAttemptBodyMatchedIndicesItemMin).max(finishStageAttemptBodyMatchedIndicesItemMax)).max(finishStageAttemptBodyMatchedIndicesMax),
+  "issues": zod.array(zod.object({
+  "index": zod.number().int().min(finishStageAttemptBodyIssuesItemIndexMin).max(finishStageAttemptBodyIssuesItemIndexMax),
+  "kind": zod.enum(['substitution', 'omission', 'extra'])
+})).max(finishStageAttemptBodyIssuesMax)
+})
+
+export const FinishStageAttemptResponse = zod.object({
+  "stageNumber": zod.number().int(),
+  "passed": zod.boolean(),
+  "complete": zod.boolean(),
+  "percent": zod.number(),
+  "matched": zod.number().int(),
+  "total": zod.number().int(),
+  "extras": zod.number().int(),
+  "nextStage": zod.number().int().nullable()
+})
+
+
 export const listPracticeReportsQueryOffsetDefault = 0;
 export const listPracticeReportsQueryOffsetMin = 0;
 export const listPracticeReportsQueryOffsetMax = 100000;

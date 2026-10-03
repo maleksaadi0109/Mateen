@@ -3,6 +3,12 @@ name: Scholarly grounding boundaries
 description: Why citation validation alone is insufficient for religious explanations.
 ---
 
+An educational model can misattribute hadith wording as Quran even when its instructions explicitly prohibit invented evidence. An “unreviewed” label does not make this acceptable.
+
+**Why:** A live contextual follow-up produced Quran-style brackets and “قال تعالى” around hadith-like wording while otherwise answering the student's question.
+
+**How to apply:** Treat scriptural attribution as a separate trust boundary and withhold unsupported attribution for human review. Pattern checks are only partial protection, not proof that the remaining explanation is scientifically correct.
+
 Checking that a citation and quotation exist does not establish that generated explanatory prose is supported. For answers presented as scientifically verified, prefer verified exact source quotations rather than unconstrained model prose.
 
 **Why:** The product explicitly forbids unsupported religious answers. A model can cite a genuine passage while adding an unrelated ruling; a valid citation would not catch that.

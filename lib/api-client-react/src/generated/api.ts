@@ -42,6 +42,7 @@ import type {
   GetMateenTeacherReferralsParams,
   GetPracticeReportWords200,
   HealthStatus,
+  LearningMap,
   ListPracticeReports200,
   ListPracticeReportsParams,
   ListScholarlyIssuesParams,
@@ -94,7 +95,11 @@ import type {
   SourceDecisionInput,
   SourceVersion,
   SourceVersionInput,
+  StageFinishInput,
+  StageOutcome,
+  StageStartInput,
   StartAssessmentInput,
+  StartStageAttempt201,
   StudentAssessmentSummary,
   StudyProgress,
   StudyText,
@@ -132,6 +137,245 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   }
   return result;
 };
+
+export const getGetLearningMapUrl = (textId: 'nawawi',) => {
+
+
+
+
+  return `/api/mateen/learning/${textId}`
+}
+
+export const getLearningMap = async (textId: 'nawawi', options?: Parameters<typeof customFetch>[1]): Promise<LearningMap> => {
+
+  return customFetch<LearningMap>(getGetLearningMapUrl(textId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetLearningMapQueryKey = (textId: 'nawawi',) => {
+    return [
+    `/api/mateen/learning/${textId}`
+    ] as const;
+    }
+
+
+export const getGetLearningMapQueryOptions = <TData = Awaited<ReturnType<typeof getLearningMap>>, TError = ErrorType<unknown>>(textId: 'nawawi', options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getLearningMap>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetLearningMapQueryKey(textId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLearningMap>>> = ({ signal }) => getLearningMap(textId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: textId !== null && textId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getLearningMap>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetLearningMapQueryResult = NonNullable<Awaited<ReturnType<typeof getLearningMap>>>
+export type GetLearningMapQueryError = ErrorType<unknown>
+
+
+
+export function useGetLearningMap<TData = Awaited<ReturnType<typeof getLearningMap>>, TError = ErrorType<unknown>>(
+ textId: 'nawawi', options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getLearningMap>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetLearningMapQueryOptions(textId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getStartStageAttemptUrl = (textId: 'nawawi',
+    stageNumber: number,) => {
+
+
+
+
+  return `/api/mateen/learning/${textId}/stages/${stageNumber}/attempts`
+}
+
+export const startStageAttempt = async (textId: 'nawawi',
+    stageNumber: number,
+    stageStartInput: StageStartInput, options?: Parameters<typeof customFetch>[1]): Promise<StartStageAttempt201> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<StartStageAttempt201>(getStartStageAttemptUrl(textId,stageNumber),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(stageStartInput)
+  }
+);}
+
+
+
+
+
+export const getStartStageAttemptMutationKey = () => ['startStageAttempt'] as const;
+
+export const getStartStageAttemptMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startStageAttempt>>, TError,StartStageAttemptMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof startStageAttempt>>, TError,StartStageAttemptMutationVariables, TContext> => {
+
+const mutationKey = getStartStageAttemptMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof startStageAttempt>>, StartStageAttemptMutationVariables> = (props) => {
+          const {textId,stageNumber,data} = props ?? {};
+
+          return  startStageAttempt(textId,stageNumber,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type StartStageAttemptMutationResult = NonNullable<Awaited<ReturnType<typeof startStageAttempt>>>
+    export type StartStageAttemptMutationBody = BodyType<StageStartInput>
+    export type StartStageAttemptMutationError = ErrorType<unknown>
+    export type StartStageAttemptMutationVariables = {textId: 'nawawi';stageNumber: number;data: BodyType<StageStartInput>}
+
+    export const useStartStageAttempt = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startStageAttempt>>, TError,StartStageAttemptMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof startStageAttempt>>,
+        TError,
+        StartStageAttemptMutationVariables,
+        TContext
+      > => {
+      return useMutation(getStartStageAttemptMutationOptions(options));
+    }
+
+export const getFinishStageAttemptUrl = (attemptId: string,) => {
+
+
+
+
+  return `/api/mateen/learning/attempts/${attemptId}/finish`
+}
+
+export const finishStageAttempt = async (attemptId: string,
+    stageFinishInput: StageFinishInput, options?: Parameters<typeof customFetch>[1]): Promise<StageOutcome> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<StageOutcome>(getFinishStageAttemptUrl(attemptId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(stageFinishInput)
+  }
+);}
+
+
+
+
+
+export const getFinishStageAttemptMutationKey = () => ['finishStageAttempt'] as const;
+
+export const getFinishStageAttemptMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof finishStageAttempt>>, TError,FinishStageAttemptMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof finishStageAttempt>>, TError,FinishStageAttemptMutationVariables, TContext> => {
+
+const mutationKey = getFinishStageAttemptMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof finishStageAttempt>>, FinishStageAttemptMutationVariables> = (props) => {
+          const {attemptId,data} = props ?? {};
+
+          return  finishStageAttempt(attemptId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type FinishStageAttemptMutationResult = NonNullable<Awaited<ReturnType<typeof finishStageAttempt>>>
+    export type FinishStageAttemptMutationBody = BodyType<StageFinishInput>
+    export type FinishStageAttemptMutationError = ErrorType<unknown>
+    export type FinishStageAttemptMutationVariables = {attemptId: string;data: BodyType<StageFinishInput>}
+
+    export const useFinishStageAttempt = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof finishStageAttempt>>, TError,FinishStageAttemptMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof finishStageAttempt>>,
+        TError,
+        FinishStageAttemptMutationVariables,
+        TContext
+      > => {
+      return useMutation(getFinishStageAttemptMutationOptions(options));
+    }
 
 export const getListPracticeReportsUrl = (params?: ListPracticeReportsParams,) => {
   const normalizedParams = new URLSearchParams();

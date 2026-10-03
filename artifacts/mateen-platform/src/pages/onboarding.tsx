@@ -41,7 +41,7 @@ export default function OnboardingPage() {
       onSuccess: (p) => {
         sessionStorage.removeItem(TEACHER_INTENT_KEY);
         [getGetProfileQueryKey(), getGetDashboardQueryKey(), getGetProgressQueryKey(), getGetTeacherQueryKey(), getGetReferralsQueryKey()].forEach((k) => qc.invalidateQueries({ queryKey: k }));
-        setLocation(p.role === 'teacher' ? '/teacher' : '/student');
+        setLocation(p.role === 'teacher' ? '/teacher' : '/student/tracks');
       },
       onError: () => toast({ title: 'تعذّر حفظ البيانات', description: 'حاول مرة أخرى.', variant: 'destructive' }),
     });

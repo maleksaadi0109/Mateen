@@ -5,6 +5,82 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+export interface StageStartInput {
+  requestId: string;
+  consent: true;
+}
+
+export type StageFinishInputIssuesItemKind = typeof StageFinishInputIssuesItemKind[keyof typeof StageFinishInputIssuesItemKind];
+
+
+export const StageFinishInputIssuesItemKind = {
+  substitution: 'substitution',
+  omission: 'omission',
+  extra: 'extra',
+} as const;
+
+export type StageFinishInputIssuesItem = {
+  /**
+     * @minimum 0
+     * @maximum 2999
+     */
+  index: number;
+  kind: StageFinishInputIssuesItemKind;
+};
+
+export interface StageFinishInput {
+  /**
+     * @maxItems 3000
+     * @items.minimum 0
+     * @items.maximum 2999
+     */
+  matchedIndices: number[];
+  /** @maxItems 3000 */
+  issues: StageFinishInputIssuesItem[];
+}
+
+export type LearningMapTextId = typeof LearningMapTextId[keyof typeof LearningMapTextId];
+
+
+export const LearningMapTextId = {
+  nawawi: 'nawawi',
+} as const;
+
+export type LearningMapStagesItemStatus = typeof LearningMapStagesItemStatus[keyof typeof LearningMapStagesItemStatus];
+
+
+export const LearningMapStagesItemStatus = {
+  locked: 'locked',
+  current: 'current',
+  passed: 'passed',
+} as const;
+
+export type LearningMapStagesItem = {
+  number: number;
+  title: string;
+  status: LearningMapStagesItemStatus;
+  /** @nullable */
+  bestPercent: number | null;
+};
+
+export interface LearningMap {
+  textId: LearningMapTextId;
+  threshold: number;
+  stages: LearningMapStagesItem[];
+}
+
+export interface StageOutcome {
+  stageNumber: number;
+  passed: boolean;
+  complete: boolean;
+  percent: number;
+  matched: number;
+  total: number;
+  extras: number;
+  /** @nullable */
+  nextStage: number | null;
+}
+
 export type PracticeReportIssueKind = typeof PracticeReportIssueKind[keyof typeof PracticeReportIssueKind];
 
 
@@ -1673,6 +1749,14 @@ export interface CompleteScheduledReviewInput {
 
 export type PracticeReportErrorResponse = {
   error: string;
+};
+
+export type StartStageAttempt201 = {
+  id: string;
+  stageNumber: number;
+  expiresAt: string;
+  /** @pattern ^[a-f0-9]{64}$ */
+  sourceHash: string;
 };
 
 export type ListPracticeReportsParams = {
