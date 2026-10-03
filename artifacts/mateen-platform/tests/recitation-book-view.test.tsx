@@ -4,6 +4,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import RecitationBook from '../src/components/mateen/recitation-book';
 import nawawi from '../../api-server/src/data/nawawi.json';
 import { buildRecitationBook } from '../src/lib/recitation-book';
+import { analyzeRecitation } from '../src/lib/recitation-analysis';
+import { RecitationReport } from '../src/components/mateen/recitation-report';
 
 test('full-book entry renders real text, all hadith choices and digital source disclosure without scan images', () => {
   const html = renderToStaticMarkup(<RecitationBook hadiths={nawawi} sourceStatus="retrieved_pending_review" />);
@@ -30,4 +32,21 @@ test('untrusted source links fail explicitly instead of producing executable lin
   const html = renderToStaticMarkup(<RecitationBook hadiths={[{ ...nawawi[0], sourceUrl: 'javascript:alert(1)' }]} />);
   assert.match(html, /role="alert"/);
   assert.doesNotMatch(html, /javascript:|recitation-book"/);
+});
+
+test('full-page analysis shows every current difference without strikethrough or dialog truncation', () => {
+  const book = buildRecitationBook(nawawi);
+  const issues = book.words.slice(0, 110).map((expected, index) =>
+    ({ index, expected, heard: index === 0 ? 'الله' : 'مختلف', kind: 'substitution' as const }));
+  const report = { attemptId: 'synthetic-report', matched: 0, attempted: issues.length,
+    issues, priorCounts: new Map<string, number>(), analyses: analyzeRecitation(book, [], issues) };
+  const speech = { available: false, checked: true, error: '', speak() {}, cancel() {} };
+  const html = renderToStaticMarkup(<RecitationReport report={report} onClose={() => {}} onSave={() => ({ ok: true })}
+    canSave={true} alreadySaved={false} speech={speech} />);
+  assert.match(html, /data-testid="full-page-recitation-report"/);
+  assert.match(html, /data-testid="hadith-analysis-1"/);
+  assert.match(html, /في الحديث/);
+  assert.equal((html.match(/data-testid="report-issue-/g) ?? []).length, 110);
+  assert.match(html, /text-red-700/);
+  assert.doesNotMatch(html, /line-through|role="dialog"/);
 });

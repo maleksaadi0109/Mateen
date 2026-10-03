@@ -3,6 +3,7 @@ import { useUser } from '@clerk/react';
 import { Flag, BookOpen, ChevronLeft, ChevronRight, Eye, Lightbulb, Mic, MoreHorizontal, Pause, RotateCcw, ShieldAlert } from 'lucide-react';
 import { useLiveRecitation } from '@/hooks/use-live-recitation';
 import { buildRecitationBook } from '@/lib/recitation-book';
+import { analyzeRecitation } from '@/lib/recitation-analysis';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { num } from '@/lib/mateen';
 import { cn } from '@/lib/utils';
@@ -95,7 +96,8 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
     speech.cancel();
     const summary = await r.finish();
     if (!summary) return;
-    setReport({ attemptId, priorCounts: history.countsExcluding(attemptId), matched: summary.matchedCount, attempted: summary.attemptedCount, issues: summary.issues.slice(0, 100) });
+    setReport({ attemptId, priorCounts: history.countsExcluding(attemptId), matched: summary.matchedCount, attempted: summary.attemptedCount, issues: summary.issues,
+      analyses: analyzeRecitation(book, summary.matchedIndices, summary.issues) });
   };
   const discardReport = () => setReport(null);
   const freshAttempt = () => { setReport(null); setAttemptId(newAttemptId()); };
@@ -114,14 +116,24 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
   const resetPage = () => { freshAttempt(); speech.cancel(); if (page) { r.seek(page.start); setManual(false); } };
   const revealPage = () => { r.stop(); setManual(true); };
   const backToReading = () => { r.seek(page.start); speech.cancel(); freshAttempt(); setManual(false); setMode('read'); };
+  const stored = report ? report.issues.slice(0, 100) : [];
   const reportSaved = !!report && history.entries.some(e =>
     e.attemptId === report.attemptId && e.matched === report.matched && e.attempted === report.attempted &&
-    e.issues.length === report.issues.length && e.issues.every((issue, i) =>
-      issue.index === report.issues[i].index && issue.kind === report.issues[i].kind &&
-      issue.expected === report.issues[i].expected.slice(0, 60) && issue.heard === report.issues[i].heard.slice(0, 60)));
+    e.issues.length === stored.length && e.issues.every((issue, i) =>
+      issue.index === stored[i].index && issue.kind === stored[i].kind &&
+      issue.expected === stored[i].expected.slice(0, 60) && issue.heard === stored[i].heard.slice(0, 60)));
   const currentHadith = page?.segments.find(s => r.cursor >= s.start && r.cursor < s.end) ?? page?.segments[0];
 
   if (!page) return null;
+
+  if (report) {
+    return (
+      <RecitationReport report={report} onClose={discardReport} canSave={!!userId && !manual && !!report.attempted} alreadySaved={reportSaved} speech={speech}
+        onSave={() => history.save({ attemptId: report.attemptId, matched: report.matched, attempted: report.attempted,
+          issues: stored.map(({ index, expected, heard, kind }) => ({ index, expected, heard, kind })),
+          analyses: report.analyses.map(({ issues: _issues, ...summary }) => summary) })} />
+    );
+  }
 
   return (
     <div className="space-y-4" data-testid="recitation-book">
@@ -249,8 +261,6 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
 
       <RecitationHistory entries={history.entries} onClear={history.clear} signedIn={!!userId} speech={speech} />
       {r.finishing && <p role="status" className="text-center font-ui text-sm">جارٍ انتظار آخر كلمات الميكروفون قبل إعداد المراجعة…</p>}
-      <RecitationReport report={report} onClose={discardReport} canSave={!!userId && !manual && !!report?.attempted} alreadySaved={reportSaved} speech={speech}
-        onSave={() => report ? history.save({ attemptId: report.attemptId, matched: report.matched, attempted: report.attempted, issues: report.issues.map(({ index, expected, heard, kind }) => ({ index, expected, heard, kind })) }) : { ok: false }} />
 
       <Dialog open={consentOpen} onOpenChange={setConsentOpen}>
           <DialogContent className="w-[calc(100%-2rem)] max-w-md rounded-2xl p-5" dir="rtl" data-testid="dialog-book-consent">

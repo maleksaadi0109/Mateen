@@ -41,12 +41,13 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
   const cursor = useRef(0);
   const [issues, setIssues] = useState<RecitationIssue[]>([]);
   const issuesRef = useRef<RecitationIssue[]>([]);
-  type Summary = { matchedCount: number; attemptedCount: number; issues: RecitationIssue[] };
+  type Summary = { matchedCount: number; attemptedCount: number; issues: RecitationIssue[]; matchedIndices: number[] };
   const [finishing, setFinishing] = useState(false);
   const pendingFinish = useRef<{ resolve: (value: Summary | null) => void; timer: number } | null>(null);
   const snapshot = (): Summary => {
     const matchedCount = committed.current.reduce((n, visible, i) => n + (visible && normalizeRecitationWord(words[i]) ? 1 : 0), 0);
-    return { matchedCount, attemptedCount: matchedCount + issuesRef.current.length, issues: [...issuesRef.current] };
+    const matchedIndices = committed.current.flatMap((visible, i) => visible && normalizeRecitationWord(words[i]) ? [i] : []);
+    return { matchedCount, attemptedCount: matchedCount + issuesRef.current.length, issues: [...issuesRef.current], matchedIndices };
   };
   const settleFinish = (keep: boolean) => {
     const pending = pendingFinish.current;

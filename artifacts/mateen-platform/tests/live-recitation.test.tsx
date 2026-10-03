@@ -5,6 +5,7 @@ import { act } from 'react';
 import { useLiveRecitation } from '../src/hooks/use-live-recitation';
 import { matchRecitation, matchContinuousRecitation, recitationWords } from '../src/lib/live-recitation';
 import { buildRecitationBook } from '../src/lib/recitation-book';
+import { analyzeRecitation } from '../src/lib/recitation-analysis';
 import { useRecitationHistory, useArabicSpeech } from '../src/components/mateen/recitation-history';
 import nawawi from '../../api-server/src/data/nawawi.json';
 
@@ -64,6 +65,50 @@ afterEach(async () => {
   globalThis.fetch = originalFetch;
 });
 after(() => dom.window.close());
+
+test('hadith analysis groups cross-page words, distinguishes omitted versus heard and excludes untouched hadiths', () => {
+  const book = buildRecitationBook(nawawi, 20);
+  const second = book.hadithStarts[nawawi[1].id];
+  const results = analyzeRecitation(book, [0, 1, 1, second], [
+    { index: 2, expected: book.words[2], heard: 'بديل', kind: 'substitution' },
+    { index: 3, expected: book.words[3], heard: '', kind: 'omission' },
+    { index: second, expected: book.words[second], heard: 'زائد', kind: 'extra' },
+  ]);
+  assert.equal(results.length, 2);
+  assert.equal(results[0].start, 0);
+  assert.equal(results[0].end, second);
+  assert.equal(results[0].matched, 2);
+  assert.equal(results[0].attempted, 4);
+  assert.equal(results[0].heard, 3);
+  assert.equal(results[0].omissions, 1);
+  assert.equal(results[0].successPercent, 50);
+  assert.equal(results[0].differencePercent, 50);
+  assert.equal(results[1].heard, 2);
+  assert.equal(results[1].covered, 1);
+  assert.equal(results[1].extras, 1);
+  assert.equal(results[1].issues[0].index, second);
+  assert.deepEqual(analyzeRecitation(book, [], []), []);
+});
+
+test('analytical history retains per-hadith figures and drops malformed metadata without losing older attempts', async () => {
+  dom.window.localStorage.clear();
+  await act(async () => root.render(<HistoryHarness user="synthetic-analysis" />));
+  const book = buildRecitationBook(nawawi);
+  const analyses = analyzeRecitation(book, [0, 1], []);
+  await act(async () => { historyState.save({ attemptId: 'analysis-1', matched: 2, attempted: 2, issues: [], analyses }); });
+  await act(async () => root.render(<HistoryHarness user="other" />));
+  await act(async () => root.render(<HistoryHarness user="synthetic-analysis" />));
+  assert.equal(historyState.entries[0].analyses?.[0].matched, 2);
+  assert.equal(historyState.entries[0].analyses?.[0].successPercent, 100);
+  const key = 'mateen:recitation-history:v1:synthetic-analysis';
+  const stored = JSON.parse(dom.window.localStorage.getItem(key)!);
+  stored[0].analyses[0].heard = -5;
+  dom.window.localStorage.setItem(key, JSON.stringify(stored));
+  await act(async () => root.render(<HistoryHarness user="other" />));
+  await act(async () => root.render(<HistoryHarness user="synthetic-analysis" />));
+  assert.equal(historyState.entries.length, 1);
+  assert.equal(historyState.entries[0].analyses, undefined);
+});
 
 test('finishing requests the final native result, while reset cancels an unfinished review', async () => {
   await act(async () => root.render(<ContinuousHarness />));

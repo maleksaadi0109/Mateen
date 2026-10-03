@@ -2,10 +2,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Trash2, Volume2, VolumeX } from 'lucide-react';
 import { num } from '@/lib/mateen';
 import { normalizeRecitationWord } from '@/lib/live-recitation';
+import type { HadithSummary } from '@/lib/recitation-analysis';
 
 export type RecitationIssue = { index: number; expected: string; heard: string; kind: 'substitution' | 'omission' | 'extra' };
 export type StoredIssue = { index?: number; expected: string; heard: string; kind: RecitationIssue['kind'] };
-export type HistoryEntry = { id: string; attemptId?: string; at: number; matched: number; attempted: number; issues: StoredIssue[] };
+export type HistoryEntry = { id: string; attemptId?: string; at: number; matched: number; attempted: number; issues: StoredIssue[]; analyses?: HadithSummary[] };
 
 export const HISTORY_CAP = 50;
 export const MAX_ISSUES = 100;
@@ -18,6 +19,35 @@ export function normalizeWord(w: string) {
 }
 const clip = (s: unknown) => (typeof s === 'string' ? s.slice(0, MAX_WORD) : '');
 const count = (n: unknown) => (typeof n === 'number' && Number.isSafeInteger(n) && n >= 0 && n <= 1_000_000 ? n : null);
+
+function sanitizeAnalyses(raw: unknown, totalMatched: number, totalAttempted: number): HadithSummary[] | undefined {
+  if (!Array.isArray(raw) || raw.length > 42 || !raw.length) return undefined;
+  const out: HadithSummary[] = [];
+  const seen = new Set<number>();
+  for (const value of raw) {
+    if (!value || typeof value !== 'object') return undefined;
+    const o = value as Record<string, unknown>;
+    const keys = ['id', 'number', 'start', 'end', 'totalWords', 'matched', 'substitutions', 'omissions', 'extras', 'attempted', 'heard', 'covered'] as const;
+    const fields: Record<string, number> = {};
+    for (const key of keys) {
+      const n = count(o[key]);
+      if (n == null) return undefined;
+      fields[key] = n;
+    }
+    if (!fields.id || fields.number < 1 || fields.number > 42 || seen.has(fields.id) ||
+        fields.end <= fields.start || fields.covered > fields.totalWords || fields.matched > fields.covered ||
+        fields.totalWords > fields.end - fields.start || !fields.attempted ||
+        fields.attempted !== fields.matched + fields.substitutions + fields.omissions + fields.extras ||
+        fields.heard !== fields.matched + fields.substitutions + fields.extras ||
+        typeof o.title !== 'string' || o.title.length > 500) return undefined;
+    seen.add(fields.id);
+    const successPercent = Math.round(100 * fields.matched / fields.attempted);
+    out.push({ ...fields, title: o.title, successPercent, differencePercent: 100 - successPercent } as HadithSummary);
+  }
+  if (out.reduce((n, h) => n + h.matched, 0) !== totalMatched ||
+      out.reduce((n, h) => n + h.attempted, 0) !== totalAttempted) return undefined;
+  return out;
+}
 
 function sanitize(raw: unknown): HistoryEntry[] {
   if (!Array.isArray(raw)) return [];
@@ -37,7 +67,8 @@ function sanitize(raw: unknown): HistoryEntry[] {
       issues.push({ ...(idx != null ? { index: idx } : {}), expected: clip(ii.expected), heard: clip(ii.heard), kind: ii.kind as StoredIssue['kind'] });
     }
     const attemptId = typeof o.attemptId === 'string' && o.attemptId.length <= 64 ? o.attemptId : undefined;
-    out.push({ id: o.id, ...(attemptId ? { attemptId } : {}), at, matched, attempted, issues });
+    const analyses = sanitizeAnalyses(o.analyses, matched, attempted);
+    out.push({ id: o.id, ...(attemptId ? { attemptId } : {}), at, matched, attempted, issues, ...(analyses ? { analyses } : {}) });
   }
   return out;
 }
@@ -61,8 +92,10 @@ export function useRecitationHistory(userId: string | null) {
     const previous = existing.find(e => e.attemptId === entry.attemptId);
     const fresh: HistoryEntry = { id: previous?.id ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`, at: previous?.at ?? Date.now(), ...entry };
     const next = sanitize([fresh, ...existing.filter(e => e.id !== previous?.id)]).slice(0, HISTORY_CAP);
+    const serialized = JSON.stringify(next);
+    if (serialized.length > 1_000_000) return { ok: false, message: 'بلغ السجل المحلي حد الحجم؛ لم تُحفظ النتيجة ولم يُحذف السجل السابق.' };
     for (;;) {
-      try { window.localStorage.setItem(keyFor(userId), JSON.stringify(next)); break; }
+      try { window.localStorage.setItem(keyFor(userId), serialized); break; }
       catch {
         return { ok: false, message: 'مساحة التخزين في المتصفح ممتلئة أو غير متاحة، فلم تُحفظ النتيجة ولم يُحذف سجلك السابق.' };
       }
@@ -177,8 +210,15 @@ export function RecitationHistory({ entries, onClear, signedIn, speech }: { entr
                 <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-2 rounded-lg px-1 py-1 hover:bg-muted/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-secondary">
                 <time dateTime={new Date(e.at).toISOString()} className="text-muted-foreground">{new Date(e.at).toLocaleString('ar', { dateStyle: 'medium', timeStyle: 'short' })}</time>
                 <span className="font-bold">تطابق تقريبي {num(e.attempted ? Math.round((e.matched / e.attempted) * 100) : 0)}٪ <span className="font-normal text-muted-foreground">({num(e.matched)} من {num(e.attempted)} كلمة)</span></span>
-                <span className="text-muted-foreground">{num(e.issues.length)} اختلاف محتمل <span className="text-secondary group-open:hidden">· عرض</span></span>
+                <span className="text-muted-foreground">{num(e.attempted - e.matched)} اختلاف محتمل <span className="text-secondary group-open:hidden">· عرض</span></span>
                 </summary>
+                {e.analyses?.length ? <ul className="mt-3 space-y-2" data-testid="history-hadith-analyses">
+                  {e.analyses.map(h => <li key={h.id} className="rounded-lg border p-3 leading-relaxed" data-testid={`history-hadith-${h.number}`}>
+                    <p className="font-bold">الحديث {num(h.number)} · {h.title}</p>
+                    <p>مطابقة تقريبية {num(h.successPercent)}٪ · اختلاف {num(h.differencePercent)}٪</p>
+                    <p className="text-muted-foreground">التقط المتصفح {num(h.heard)} كلمة · طابق {num(h.matched)} · اختلافات {num(h.substitutions + h.omissions + h.extras)} · الجزء المُغطّى {num(h.covered)} من {num(h.totalWords)}</p>
+                  </li>)}
+                </ul> : <p className="mt-2 text-muted-foreground">لا يوجد تفصيل حسب الحديث لهذه المحاولة السابقة.</p>}
                 {e.issues.length === 0 ? <p className="mt-2 text-muted-foreground">لا اختلافات محفوظة.</p> : (
                   <ul className="mt-2 space-y-1.5">
                     {e.issues.map((i, k) => (

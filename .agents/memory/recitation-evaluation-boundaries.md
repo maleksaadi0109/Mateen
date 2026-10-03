@@ -89,6 +89,15 @@ explicitly rejected a strike-through on «الله».
 **How to apply:** Keep the canonical text readable; retain review/history and
 uncertainty explanations without adding the removed live panel back.
 
+Practice review must break results down by individual hadith as well as the
+overall attempted passage, on a full-page review rather than only a popup.
+
+**Why:** The user wants to identify which hadith and which exact words need
+practice, not rely on one percentage for the whole attempt.
+
+**How to apply:** Keep each hadith's counts, heard/omitted distinctions and
+approximate percentages explicit; unreached hadiths are not failures.
+
 On 2026-10-03 the user explicitly authorized browser-service alert measurement
 and transmission of audio for that purpose, without saving new recordings or
 transcripts in the project. This permission covers that narrow measurement,
