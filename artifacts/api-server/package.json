@@ -15,6 +15,7 @@
     "test:scholarly": "node ./test-scholarly.mjs && node ./test-scholarly-http.mjs && pnpm run test:scholarly:preview",
     "test:scholarly:preview": "node ./test-scholarly-http.mjs --preview && pnpm --filter @workspace/mateen-platform run test:scholarly:preview",
     "test:scholarly:http": "node ./test-scholarly-http.mjs",
+    "evaluate:scholarly:content": "tsx scripts/evaluate-scholarly-content.ts",
     "test:assessment:integration": "node ./test-assessment-audio-integration.mjs"
   },
   "dependencies": {

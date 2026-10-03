@@ -154,3 +154,17 @@ mtime_ms = 1791012667649
 storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/7bf167ca-63fa-4dc8-965f-8195e6156828/4762d598-5db0-4120-892a-9e8f482376fc"
 storage_version_token = "1791012697947920"
 content_type = "text/plain"
+
+[[outputs]]
+id = "8lx0qB0emgrtJSmaB1-Ls"
+uri = "file://deliverables/scholarly-content/report-2026-10-03.html"
+type = "html"
+title = "مراجعة جودة الشروح المطوّلة للأحاديث"
+description = "تقرير عربي يقارن أربع عشرة حالة بالشرح المرجعي، ويفصل الأخطاء العلمية عن المسودات المرفوضة وفشل الاتصال. ليس اعتماداً علمياً."
+logical_id = "30a6cbee-8df5-4c3c-867f-59e408ed8beb"
+content_hash = "sha256:b47ca6279e7d53237da5c21df758364a49aba984e849443837047310c9e1b1bc"
+size = 41060
+mtime_ms = 1791023355438
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/30a6cbee-8df5-4c3c-867f-59e408ed8beb/8b6e2c02-b0ec-49df-985d-8ba876c83693"
+storage_version_token = "1791023398263116"
+content_type = "text/html"

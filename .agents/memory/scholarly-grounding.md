@@ -74,3 +74,9 @@ NVIDIA transport timeouts can be transient even when configuration is valid.
 **Why:** Repeated deadline expirations were followed by a successful fast response without replacing the credential or model. Neither configuration presence nor a failed request alone establishes provider availability or Arabic quality.
 
 **How to apply:** Distinguish missing configuration, transport failure and scientific suitability. Use bounded retries for diagnostic generation; do not switch providers, change credentials, or score scientific quality from a timeout.
+
+Quality audits of generated explanations are diagnostic, not approval exercises or requests to replace generation with source excerpts.
+
+**Why:** The user explicitly separated content-quality review from the approval journey and asked to record false claims in the existing long-form explanations without granting automatic approval or substituting excerpts.
+
+**How to apply:** Compare saved outputs against the selected commentary at claim level. Keep delivered answers, rejected provider drafts and transport failures distinct. Technical rejection is not proof of scientific safety, and an audit's observations are not an authorized specialist's approval. Do not infer a mode change from an audit request.
