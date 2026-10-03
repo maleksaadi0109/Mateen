@@ -31,6 +31,12 @@ it("generates labelled study answers without accessing administrator previews or
     globalThis.fetch = async (_url, options) => {
       const body = JSON.parse(String(options?.body));
       assert.match(body.messages[0].content, /do not claim verification or invent citations/);
+      assert.match(body.messages[0].content, /in-depth but accessible lesson/);
+      assert.match(body.messages[0].content, /explain each relevant phrase and how the phrases connect/);
+      assert.match(body.messages[0].content, /450 to 650 Arabic words/);
+      assert.match(body.messages[0].content, /if the student explicitly requests a shorter explanation/);
+      assert.doesNotMatch(body.messages[0].content, /no more than 250 words/);
+      assert.equal(body.max_tokens, 4500);
       assert.deepEqual(JSON.parse(body.messages[1].content), {
         question: "ما معنى الحديث الأول؟", studyContext: null,
         selectedBook: "الأربعون النووية",

@@ -57,6 +57,12 @@ Student-facing explanations must use Arabic throughout, including hadith termino
 
 **How to apply:** Use plain Arabic paragraphs and headings, not Markdown emphasis or star bullets. Enforce the language boundary on generated text rather than relying on the prompt alone. Language clarity does not replace commentary grounding or scientific review.
 
+Hadith explanation requests should receive an in-depth, accessible lesson by default, not just a short meaning and one example.
+
+**Why:** The user explicitly asked for deeper generated explanations after receiving the short intentions-hadith answer.
+
+**How to apply:** Explain important terms and phrases, their relationships, lessons, practical examples and misunderstandings. Depth should add reasoning, not repetition. Preserve Arabic-only plain text, no source lists by default, the unreviewed warning and personal-fatwa boundaries. Honor an explicit request for a shorter answer.
+
 For Nawawi explanations, the user chose short source excerpts with their references rather than model-written simplified explanations.
 
 **Why:** Unrestricted answers were unclear and insufficiently grounded; the user explicitly selected direct excerpts after comparing both approaches.
