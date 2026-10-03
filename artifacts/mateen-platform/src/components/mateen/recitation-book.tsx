@@ -6,7 +6,7 @@ import { buildRecitationBook } from '@/lib/recitation-book';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { num } from '@/lib/mateen';
 import { cn } from '@/lib/utils';
-import { useRecitationHistory, useArabicSpeech, RecitationHistory, normalizeWord, PronounceButton, SpeechError } from './recitation-history';
+import { useRecitationHistory, useArabicSpeech, RecitationHistory } from './recitation-history';
 import { RecitationReport, type ReportSnapshot } from './recitation-report';
 
 type BookHadith = { id: number; number: number; title: string; text: string; sourceUrl: string; sourcePage: number; reviewStatus?: string };
@@ -31,10 +31,8 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
   const [attemptId, setAttemptId] = useState(newAttemptId);
   const stopMicRef = useRef<() => void>(() => {});
   const speech = useArabicSpeech(() => stopMicRef.current());
-  const livePrior = useMemo(() => history.countsExcluding(attemptId), [history.countsExcluding, attemptId]);
   const [report, setReport] = useState<ReportSnapshot | null>(null);
   const issueAt = useMemo(() => { const m = new Map<number, typeof r.issues[number]>(); for (const i of r.issues) m.set(i.index, i); return m; }, [r.issues]);
-  const latestIssues = r.issues.slice(-3).reverse();
   const total = r.words.length;
   const pageOf = (i: number) => Math.max(0, book.pages.findIndex((p) => i >= p.start && i < p.end));
 
@@ -196,23 +194,6 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
           </div>
         </div>
       )}
-      {!reading && !manual && latestIssues.length > 0 && (
-        <div className="mx-auto max-w-xl rounded-2xl border border-amber-300/70 bg-amber-50/70 p-4 font-ui text-amber-950 dark:border-amber-500/40 dark:bg-amber-950/40 dark:text-amber-100" role="status" aria-live="polite" data-testid="panel-book-live-issues">
-          <p className="text-xs font-bold">اختلافات محتملة في التعرّف — غير مؤكدة، {r.listening ? 'والاستماع مستمر' : 'والميكروفون متوقف'}</p>
-          <ul className="mt-2 space-y-2">
-            {latestIssues.map((i) => (
-              <li key={`${i.index}-${i.kind}`} className="flex flex-wrap items-center gap-3" data-testid={`live-issue-${i.index}`}>
-                <span className="text-[11px] opacity-70">الكلمة {num(i.index + 1)}</span>
-                {i.kind !== 'omission' && i.heard && <span className="hadith-text text-lg text-red-700 dark:text-red-400 line-through decoration-1"><span className="sr-only">المسموع: </span>{i.heard}</span>}
-                {i.kind !== 'extra' && <span className="hadith-text text-lg"><span className="sr-only">المتوقع: </span>{i.expected}</span>}
-                <span className="text-[11px] opacity-70">{(livePrior.get(normalizeWord(i.expected)) ?? 0) ? `في ${num(livePrior.get(normalizeWord(i.expected)) ?? 0)} محاولة سابقة` : ''}</span>
-                {i.kind !== 'extra' && i.expected && <PronounceButton word={i.expected} speech={speech} />}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-2"><SpeechError speech={speech} /></div>
-        </div>
-      )}
       {!reading && r.error && <p className="mx-auto max-w-xl rounded-xl border border-destructive/30 bg-destructive/5 px-3 py-2 text-center font-ui text-xs text-destructive" role="alert" data-testid="text-book-error">{r.error}</p>}
       {!reading && manual && <p className="mx-auto max-w-xl rounded-xl border bg-muted/50 px-3 py-2 text-center font-ui text-xs" role="status" data-testid="text-book-manual">أظهرتَ الصفحة يدوياً؛ هذا ليس تسميعاً. أعد الصفحة لتسمّعها.</p>}
       {finished && !report && <div className="flex justify-center"><button type="button" onClick={finishReview} disabled={!canFinish} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 font-ui text-sm font-bold text-primary-foreground disabled:opacity-40" data-testid="button-book-finish-complete"><Flag size={15} />مراجعة المحاولة</button></div>}
@@ -241,7 +222,7 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
                 const iss = !reading && !manual ? issueAt.get(i) : undefined;
                 return (
                   <span key={i}>
-                    {iss && iss.kind !== 'omission' && iss.heard && <span className="mx-0.5 inline-block rounded bg-red-50 dark:bg-red-950/30 px-1 text-[0.7em] text-red-700 dark:text-red-400 line-through decoration-1" data-testid={`book-heard-${i}`}><span className="sr-only">سُمع على وجه غير مؤكد: </span>{iss.heard}</span>}
+                    {iss && iss.kind !== 'omission' && iss.heard && <span className="mx-0.5 inline-block rounded bg-red-50 dark:bg-red-950/30 px-1 text-[0.7em] text-red-700 dark:text-red-400" data-testid={`book-heard-${i}`}><span className="sr-only">سُمع على وجه غير مؤكد: </span>{iss.heard}</span>}
                     <span aria-hidden={visible ? undefined : true} data-testid={`book-word-${i}`}
                       className={cn('inline-block transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none',
                         on ? 'translate-y-0 opacity-100' : prov ? 'translate-y-0 text-secondary opacity-60' : 'invisible translate-y-1 opacity-0',

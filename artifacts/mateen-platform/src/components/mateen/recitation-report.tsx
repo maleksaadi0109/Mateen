@@ -13,7 +13,7 @@ export function IssueRow({ issue, prior, speech }: { issue: RecitationIssue; pri
       <span className="font-ui text-[11px] text-muted-foreground">الكلمة {num(issue.index + 1)}</span>
       <div className="flex flex-1 flex-wrap items-baseline gap-3">
         {issue.kind !== 'extra' && <span className="hadith-text text-xl text-foreground" data-testid="text-issue-expected">{issue.expected}</span>}
-        {issue.kind !== 'omission' && issue.heard && <span className="hadith-text text-lg text-red-700 dark:text-red-400 line-through decoration-1" data-testid="text-issue-heard"><span className="sr-only">المسموع: </span>{issue.heard}</span>}
+        {issue.kind !== 'omission' && issue.heard && <span className="hadith-text text-lg text-red-700 dark:text-red-400" data-testid="text-issue-heard"><span className="sr-only">المسموع: </span>{issue.heard}</span>}
         <span className="font-ui text-[11px] text-muted-foreground">{KIND[issue.kind]}</span>
       </div>
       <span className="font-ui text-[11px] text-muted-foreground" data-testid="text-issue-prior">{prior ? `ظهرت في ${num(prior)} محاولة سابقة` : 'لم تظهر سابقاً'}</span>

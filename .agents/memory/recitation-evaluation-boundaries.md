@@ -79,6 +79,16 @@ to award assessment grades from ASR.
 attempted passage, exclude unspoken suffixes, keep differences provisional,
 and keep practice history separate from exam scores and advancement.
 
+Display practice differences in red without striking through words, particularly
+the name «الله». Do not restore the separate live list of recent differences;
+use inline feedback and the end review instead.
+
+**Why:** On 2026-10-03 the user called the separate live panel unnecessary and
+explicitly rejected a strike-through on «الله».
+
+**How to apply:** Keep the canonical text readable; retain review/history and
+uncertainty explanations without adding the removed live panel back.
+
 On 2026-10-03 the user explicitly authorized browser-service alert measurement
 and transmission of audio for that purpose, without saving new recordings or
 transcripts in the project. This permission covers that narrow measurement,

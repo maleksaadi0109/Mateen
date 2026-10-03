@@ -185,7 +185,7 @@ export function RecitationHistory({ entries, onClear, signedIn, speech }: { entr
                       <li key={k} className="flex flex-wrap items-center gap-3 rounded-lg border bg-background/70 px-3 py-2" data-testid={`history-issue-${e.id}-${k}`}>
                         {i.index != null && <span className="text-[11px] text-muted-foreground">الكلمة {num(i.index + 1)}</span>}
                         {i.kind !== 'extra' && <span className="hadith-text text-lg"><span className="sr-only">المتوقع: </span>{i.expected}</span>}
-                        {i.kind !== 'omission' && i.heard && <span className="hadith-text text-base text-red-700 dark:text-red-400 line-through decoration-1"><span className="sr-only">المسموع: </span>{i.heard}</span>}
+                        {i.kind !== 'omission' && i.heard && <span className="hadith-text text-base text-red-700 dark:text-red-400"><span className="sr-only">المسموع: </span>{i.heard}</span>}
                         {i.kind !== 'extra' && i.expected && <PronounceButton word={i.expected} speech={speech} />}
                       </li>
                     ))}
