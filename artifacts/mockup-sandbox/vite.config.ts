@@ -61,6 +61,7 @@ export default defineConfig({
     allowedHosts: true,
     fs: {
       strict: true,
+      deny: ['.env', '.env.*', '*.{crt,pem}', '**/.git/**', '**/attached_assets/nawawi-page-source/**', '**/.agents/outputs/nawawi/**'],
     },
   },
   preview: {

@@ -51,10 +51,24 @@ after(() => dom.window.close());
 test('normalizes Arabic but never reveals skipped or invented source words', () => {
   const words = recitationWords('إِنَّمَا الأعمالُ بالنيات وإنما لكل امرئ');
   assert.deepEqual(matchRecitation(words, 'انما الاعمال بالنيات').indices, [0, 1, 2]);
-  assert.deepEqual(matchRecitation(words, 'إنما بالنيات وإنما').indices, [0, 2, 3]);
+  assert.deepEqual(matchRecitation(words, 'إنما بالنيات وإنما'), {indices:[0],cursor:1,mismatchIndex:1});
   assert.deepEqual(matchRecitation(words, 'شيء لا يوجد في النص').indices, []);
   assert.deepEqual(matchRecitation(recitationWords('إلى الله ورسوله فهجرته إلى الله ورسوله'), 'الله').indices, []);
   assert.equal(recitationWords('﵌').join(' '), 'صلى الله عليه وآله وسلم');
+});
+
+test('confirmed mismatch stops at the expected word and correction resumes without skipping', async () => {
+  await act(async () => state.start());
+  const first=FakeRecognition.latest;
+  await act(async () => first.emit('إنما الأقوال بالنيات وإنما',true));
+  assert.equal(state.mismatchIndex,1);
+  assert.equal(state.listening,false);
+  assert.equal(first.aborted,true);
+  assert.deepEqual(state.revealed,[true,false,false,false,false,false,false,false]);
+  await act(async () => state.start());
+  await act(async () => FakeRecognition.latest.emit('الأعمال بالنيات',true));
+  assert.equal(state.mismatchIndex,null);
+  assert.deepEqual(state.revealed,[true,true,true,false,false,false,false,false]);
 });
 
 test('starts blank, retracts revised interim matches, commits final words and resumes without exposing the suffix', async () => {

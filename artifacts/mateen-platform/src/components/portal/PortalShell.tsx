@@ -76,6 +76,14 @@ function Shell({ nav: navProp, name, role, children }: { nav: typeof studentNav;
   }
   const active = (n: (typeof nav)[number]) => (n.exact ? loc === n.href : loc.startsWith(n.href));
   const base = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
+  // Focused reading route: no portal chrome, just the book.
+  if (role === 'student' && loc.startsWith('/student/study/')) {
+    return (
+      <div className="min-h-[100dvh] bg-background text-foreground" data-testid="focused-study-shell">
+        <main className="mx-auto max-w-4xl px-3 py-3 sm:px-6 sm:py-5">{children}</main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[100dvh] bg-background text-foreground md:flex">

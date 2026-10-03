@@ -11,6 +11,58 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /mateen/nawawi-book:
+    get:
+      operationId: getNawawiBook
+      tags: [mateen]
+      responses:
+        "200":
+          description: Owner-authorized scanned edition for reading and choosing a hadith
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NawawiBook"
+        "401":
+          description: Authentication required
+        "403":
+          description: Image use not authorized
+  /mateen/recitation-pages/{hadithId}:
+    get:
+      operationId: getRecitationPages
+      tags: [mateen]
+      parameters:
+        - in: path
+          name: hadithId
+          required: true
+          schema: { type: integer, minimum: 1, maximum: 42 }
+      responses:
+        "200":
+          description: Edition-specific practice mapping; blocked responses contain no page URLs.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecitationPages"
+        "401":
+          description: Authentication required
+  /mateen/recitation-page-images/{page}:
+    get:
+      operationId: getRecitationPageImage
+      tags: [mateen]
+      parameters:
+        - in: path
+          name: page
+          required: true
+          schema: { type: integer, minimum: 1, maximum: 32 }
+      responses:
+        "200":
+          description: Rights-cleared immutable edition page
+          content:
+            image/webp:
+              schema: { type: string, format: binary }
+        "403":
+          description: Page republication not cleared
+        "401":
+          description: Authentication required
   /mateen/review-access:
     get:
       operationId: getReviewAccess
@@ -1100,6 +1152,77 @@ paths:
                 items: { $ref: "#/components/schemas/PracticeRecitation" }
 components:
   schemas:
+    NawawiBook:
+      type: object
+      required: [edition, sourceUrl, pages, hadithPages]
+      properties:
+        edition: { type: string }
+        sourceUrl: { type: string }
+        pages:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecitationPage"
+        hadithPages:
+          type: array
+          items:
+            type: object
+            required: [hadithId, firstPage, lastPage]
+            properties:
+              hadithId: { type: integer }
+              firstPage: { type: integer }
+              lastPage: { type: integer }
+    RecitationPage:
+      type: object
+      required: [page, width, height, imageUrl]
+      properties:
+        page: { type: integer }
+        width: { type: integer }
+        height: { type: integer }
+        imageUrl: { type: string }
+    RecitationPageRegion:
+      type: object
+      required: [page, wordIndices, x, y, width, height]
+      properties:
+        page: { type: integer }
+        wordIndices:
+          type: array
+          items: { type: integer }
+        x: { type: number }
+        y: { type: number }
+        width: { type: number }
+        height: { type: number }
+    RecitationPages:
+      type: object
+      required: [status, message, text, pages, regions, unmappedIndices]
+      properties:
+        status:
+          type: string
+          enum: [available, rights_pending, mapping_pending]
+        message: { type: string }
+        text: { type: string }
+        title: { type: string }
+        heading:
+          $ref: "#/components/schemas/RecitationHeading"
+        pages:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecitationPage"
+        regions:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecitationPageRegion"
+        unmappedIndices:
+          type: array
+          items: { type: integer }
+    RecitationHeading:
+      type: object
+      required: [page, x, y, width, height]
+      properties:
+        page: { type: integer }
+        x: { type: number }
+        y: { type: number }
+        width: { type: number }
+        height: { type: number }
     CatalogText:
       type: object
       required: [id, title, track, level, status, description, hadithCount]

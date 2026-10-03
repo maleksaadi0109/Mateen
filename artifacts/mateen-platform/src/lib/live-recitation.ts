@@ -19,7 +19,7 @@ export function matchRecitation(
   words: string[],
   transcript: string,
   start = 0,
-): { indices: number[]; cursor: number } {
+): { indices: number[]; cursor: number; mismatchIndex: number | null } {
   const target = words.map(normalizeRecitationWord);
   const heard = recitationWords(transcript.slice(0, 30_000)).map(normalizeRecitationWord).filter(Boolean);
   const indices: number[] = [];
@@ -28,19 +28,10 @@ export function matchRecitation(
     // Punctuation-only source tokens do not need to be spoken.
     while (cursor < target.length && !target[cursor]) cursor++;
     if (cursor >= target.length) break;
-    let found = -1;
-    for (let j = cursor; j < Math.min(target.length, cursor + 7); j++) {
-      if (target[j] !== heard[i]) continue;
-      // Skipping a source word needs a two-word anchor, not one common word.
-      // Unmatched source words remain hidden; they are not graded as omissions.
-      if (j !== cursor && (!heard[i + 1] || target[j + 1] !== heard[i + 1])) continue;
-      found = j;
-      break;
-    }
-    if (found >= 0) {
-      indices.push(found);
-      cursor = found + 1;
-    }
+    // Never jump over a word, even when a later phrase is recognizable.
+    if (target[cursor] !== heard[i]) return {indices, cursor, mismatchIndex:cursor};
+    indices.push(cursor);
+    cursor++;
   }
-  return { indices, cursor };
+  return { indices, cursor, mismatchIndex:null };
 }

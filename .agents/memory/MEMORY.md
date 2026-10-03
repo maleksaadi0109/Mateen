@@ -14,3 +14,6 @@
 - [Managed Python entrypoints](managed-python-entrypoints.md) — Preserve the managed interpreter path; resolving its symlink can lose workspace package discovery.
 - [Signed upload immutability](signed-upload-immutability.md) — Commit validated media to never-signed private objects; track temporary keys until reusable PUT links expire.
 - [OpenAPI YAML compatibility](openapi-yaml-compatibility.md) — Orval does not expand YAML merge keys; keep contract mappings explicit when combining APIs.
+- [Scanned Nawawi edition](nawawi-scan-rights.md) — The supplied Dar al-Salam scan reserves publication rights; image permission must be separate from text and scientific review.
+- [Reading before recitation](book-reading-first.md) — Enter with visible original book pages; hide words only after explicit recitation start.
+- [Arabic scanned-word alignment](arabic-page-alignment.md) — OCR text matches and detected document blocks do not establish reliable word geometry.

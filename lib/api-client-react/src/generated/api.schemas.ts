@@ -5,6 +5,63 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+export type NawawiBookHadithPagesItem = {
+  hadithId: number;
+  firstPage: number;
+  lastPage: number;
+};
+
+export interface RecitationPage {
+  page: number;
+  width: number;
+  height: number;
+  imageUrl: string;
+}
+
+export interface NawawiBook {
+  edition: string;
+  sourceUrl: string;
+  pages: RecitationPage[];
+  hadithPages: NawawiBookHadithPagesItem[];
+}
+
+export interface RecitationPageRegion {
+  page: number;
+  wordIndices: number[];
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export type RecitationPagesStatus = typeof RecitationPagesStatus[keyof typeof RecitationPagesStatus];
+
+
+export const RecitationPagesStatus = {
+  available: 'available',
+  rights_pending: 'rights_pending',
+  mapping_pending: 'mapping_pending',
+} as const;
+
+export interface RecitationHeading {
+  page: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface RecitationPages {
+  status: RecitationPagesStatus;
+  message: string;
+  text: string;
+  title?: string;
+  heading?: RecitationHeading;
+  pages: RecitationPage[];
+  regions: RecitationPageRegion[];
+  unmappedIndices: number[];
+}
+
 export type CatalogTextStatus = typeof CatalogTextStatus[keyof typeof CatalogTextStatus];
 
 

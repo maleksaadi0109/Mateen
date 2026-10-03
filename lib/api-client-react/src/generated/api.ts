@@ -42,6 +42,7 @@ import type {
   GetMateenTeacherReferralsParams,
   HealthStatus,
   ListScholarlyIssuesParams,
+  NawawiBook,
   NotificationState,
   PracticeRecitation,
   Profile,
@@ -50,6 +51,7 @@ import type {
   QualificationDocument,
   QualificationUpload,
   QualificationUploadInput,
+  RecitationPages,
   RecitationPracticeInput,
   RecitationUpload,
   Referral,
@@ -124,6 +126,219 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   }
   return result;
 };
+
+export const getGetNawawiBookUrl = () => {
+
+
+
+
+  return `/api/mateen/nawawi-book`
+}
+
+export const getNawawiBook = async ( options?: Parameters<typeof customFetch>[1]): Promise<NawawiBook> => {
+
+  return customFetch<NawawiBook>(getGetNawawiBookUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetNawawiBookQueryKey = () => {
+    return [
+    `/api/mateen/nawawi-book`
+    ] as const;
+    }
+
+
+export const getGetNawawiBookQueryOptions = <TData = Awaited<ReturnType<typeof getNawawiBook>>, TError = ErrorType<void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getNawawiBook>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetNawawiBookQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNawawiBook>>> = ({ signal }) => getNawawiBook({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNawawiBook>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetNawawiBookQueryResult = NonNullable<Awaited<ReturnType<typeof getNawawiBook>>>
+export type GetNawawiBookQueryError = ErrorType<void>
+
+
+
+export function useGetNawawiBook<TData = Awaited<ReturnType<typeof getNawawiBook>>, TError = ErrorType<void>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getNawawiBook>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetNawawiBookQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetRecitationPagesUrl = (hadithId: number,) => {
+
+
+
+
+  return `/api/mateen/recitation-pages/${hadithId}`
+}
+
+export const getRecitationPages = async (hadithId: number, options?: Parameters<typeof customFetch>[1]): Promise<RecitationPages> => {
+
+  return customFetch<RecitationPages>(getGetRecitationPagesUrl(hadithId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetRecitationPagesQueryKey = (hadithId: number,) => {
+    return [
+    `/api/mateen/recitation-pages/${hadithId}`
+    ] as const;
+    }
+
+
+export const getGetRecitationPagesQueryOptions = <TData = Awaited<ReturnType<typeof getRecitationPages>>, TError = ErrorType<void>>(hadithId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getRecitationPages>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRecitationPagesQueryKey(hadithId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRecitationPages>>> = ({ signal }) => getRecitationPages(hadithId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: hadithId !== null && hadithId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getRecitationPages>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetRecitationPagesQueryResult = NonNullable<Awaited<ReturnType<typeof getRecitationPages>>>
+export type GetRecitationPagesQueryError = ErrorType<void>
+
+
+
+export function useGetRecitationPages<TData = Awaited<ReturnType<typeof getRecitationPages>>, TError = ErrorType<void>>(
+ hadithId: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getRecitationPages>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetRecitationPagesQueryOptions(hadithId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetRecitationPageImageUrl = (page: number,) => {
+
+
+
+
+  return `/api/mateen/recitation-page-images/${page}`
+}
+
+export const getRecitationPageImage = async (page: number, options?: Parameters<typeof customFetch>[1]): Promise<Blob> => {
+
+  return customFetch<Blob>(getGetRecitationPageImageUrl(page),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetRecitationPageImageQueryKey = (page: number,) => {
+    return [
+    `/api/mateen/recitation-page-images/${page}`
+    ] as const;
+    }
+
+
+export const getGetRecitationPageImageQueryOptions = <TData = Awaited<ReturnType<typeof getRecitationPageImage>>, TError = ErrorType<void>>(page: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getRecitationPageImage>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRecitationPageImageQueryKey(page);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRecitationPageImage>>> = ({ signal }) => getRecitationPageImage(page, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: page !== null && page !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getRecitationPageImage>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetRecitationPageImageQueryResult = NonNullable<Awaited<ReturnType<typeof getRecitationPageImage>>>
+export type GetRecitationPageImageQueryError = ErrorType<void>
+
+
+
+export function useGetRecitationPageImage<TData = Awaited<ReturnType<typeof getRecitationPageImage>>, TError = ErrorType<void>>(
+ page: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getRecitationPageImage>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetRecitationPageImageQueryOptions(page,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
 
 export const getGetReviewAccessUrl = () => {
 

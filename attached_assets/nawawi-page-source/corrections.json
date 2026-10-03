@@ -1,0 +1,511 @@
+{
+  "1": {
+    "verification": "visually-checked",
+    "note": "31 matn-only crops on PDF page 3 inspected in the local crop proof sheet against the exact training tokens; no sanad, attribution, or footnotes included. Geometry review only, not scientific approval or rights clearance.",
+    "regions": [
+      {
+        "page": 3,
+        "x": 437,
+        "y": 302,
+        "width": 32,
+        "height": 44,
+        "wordIndices": [
+          0
+        ]
+      },
+      {
+        "page": 3,
+        "x": 391,
+        "y": 301,
+        "width": 37,
+        "height": 44,
+        "wordIndices": [
+          1
+        ]
+      },
+      {
+        "page": 3,
+        "x": 315,
+        "y": 302,
+        "width": 65,
+        "height": 43,
+        "wordIndices": [
+          2
+        ]
+      },
+      {
+        "page": 3,
+        "x": 274,
+        "y": 299,
+        "width": 31,
+        "height": 47,
+        "wordIndices": [
+          3
+        ]
+      },
+      {
+        "page": 3,
+        "x": 202,
+        "y": 303,
+        "width": 55,
+        "height": 42,
+        "wordIndices": [
+          4
+        ]
+      },
+      {
+        "page": 3,
+        "x": 144,
+        "y": 302,
+        "width": 51,
+        "height": 43,
+        "wordIndices": [
+          5
+        ]
+      },
+      {
+        "page": 3,
+        "x": 108,
+        "y": 305,
+        "width": 27,
+        "height": 41,
+        "wordIndices": [
+          6
+        ]
+      },
+      {
+        "page": 3,
+        "x": 493,
+        "y": 344,
+        "width": 69,
+        "height": 42,
+        "wordIndices": [
+          7
+        ]
+      },
+      {
+        "page": 3,
+        "x": 422,
+        "y": 349,
+        "width": 50,
+        "height": 37,
+        "wordIndices": [
+          8
+        ]
+      },
+      {
+        "page": 3,
+        "x": 389,
+        "y": 343,
+        "width": 30,
+        "height": 43,
+        "wordIndices": [
+          9
+        ]
+      },
+      {
+        "page": 3,
+        "x": 340,
+        "y": 349,
+        "width": 46,
+        "height": 37,
+        "wordIndices": [
+          10
+        ]
+      },
+      {
+        "page": 3,
+        "x": 305,
+        "y": 353,
+        "width": 33,
+        "height": 30,
+        "wordIndices": [
+          11
+        ]
+      },
+      {
+        "page": 3,
+        "x": 248,
+        "y": 347,
+        "width": 33,
+        "height": 36,
+        "wordIndices": [
+          12
+        ]
+      },
+      {
+        "page": 3,
+        "x": 167,
+        "y": 346,
+        "width": 65,
+        "height": 36,
+        "wordIndices": [
+          13
+        ]
+      },
+      {
+        "page": 3,
+        "x": 109,
+        "y": 345,
+        "width": 54,
+        "height": 42,
+        "wordIndices": [
+          14
+        ]
+      },
+      {
+        "page": 3,
+        "x": 532,
+        "y": 389,
+        "width": 29,
+        "height": 39,
+        "wordIndices": [
+          15
+        ]
+      },
+      {
+        "page": 3,
+        "x": 489,
+        "y": 390,
+        "width": 38,
+        "height": 37,
+        "wordIndices": [
+          16,
+          17,
+          18,
+          19
+        ]
+      },
+      {
+        "page": 3,
+        "x": 435,
+        "y": 390,
+        "width": 45,
+        "height": 39,
+        "wordIndices": [
+          20
+        ]
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          21
+        ],
+        "x": 355,
+        "y": 383,
+        "width": 40,
+        "height": 43
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          22
+        ],
+        "x": 283,
+        "y": 383,
+        "width": 68,
+        "height": 43
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          23
+        ],
+        "x": 211,
+        "y": 383,
+        "width": 67,
+        "height": 43
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          24
+        ],
+        "x": 155,
+        "y": 383,
+        "width": 42,
+        "height": 43
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          25
+        ],
+        "x": 108,
+        "y": 383,
+        "width": 42,
+        "height": 43
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          26
+        ],
+        "x": 514,
+        "y": 428,
+        "width": 47,
+        "height": 37
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          27
+        ],
+        "x": 488,
+        "y": 428,
+        "width": 25,
+        "height": 37
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          28
+        ],
+        "x": 442,
+        "y": 428,
+        "width": 43,
+        "height": 37
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          29
+        ],
+        "x": 389,
+        "y": 428,
+        "width": 42,
+        "height": 37
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          30
+        ],
+        "x": 332,
+        "y": 428,
+        "width": 51,
+        "height": 37
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          31
+        ],
+        "x": 266,
+        "y": 428,
+        "width": 61,
+        "height": 37
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          32
+        ],
+        "x": 231,
+        "y": 428,
+        "width": 30,
+        "height": 37
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          33
+        ],
+        "x": 195,
+        "y": 428,
+        "width": 31,
+        "height": 37
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          34
+        ],
+        "x": 126,
+        "y": 428,
+        "width": 63,
+        "height": 37
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          35
+        ],
+        "x": 494,
+        "y": 466,
+        "width": 69,
+        "height": 43
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          36
+        ],
+        "x": 456,
+        "y": 466,
+        "width": 33,
+        "height": 43
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          37
+        ],
+        "x": 419,
+        "y": 466,
+        "width": 31,
+        "height": 43
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          38
+        ],
+        "x": 347,
+        "y": 466,
+        "width": 68,
+        "height": 43
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          39
+        ],
+        "x": 282,
+        "y": 466,
+        "width": 40,
+        "height": 43
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          40
+        ],
+        "x": 225,
+        "y": 466,
+        "width": 51,
+        "height": 43
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          41
+        ],
+        "x": 158,
+        "y": 466,
+        "width": 61,
+        "height": 43
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          42
+        ],
+        "x": 109,
+        "y": 466,
+        "width": 42,
+        "height": 43
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          43
+        ],
+        "x": 503,
+        "y": 511,
+        "width": 60,
+        "height": 44
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          44
+        ],
+        "x": 478,
+        "y": 511,
+        "width": 22,
+        "height": 44
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          45
+        ],
+        "x": 437,
+        "y": 511,
+        "width": 39,
+        "height": 44
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          46
+        ],
+        "x": 368,
+        "y": 511,
+        "width": 66,
+        "height": 44
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          47
+        ],
+        "x": 281,
+        "y": 511,
+        "width": 65,
+        "height": 44
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          48
+        ],
+        "x": 247,
+        "y": 511,
+        "width": 30,
+        "height": 44
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          49
+        ],
+        "x": 226,
+        "y": 511,
+        "width": 19,
+        "height": 44
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          50
+        ],
+        "x": 177,
+        "y": 511,
+        "width": 46,
+        "height": 44
+      },
+      {
+        "page": 3,
+        "wordIndices": [
+          51
+        ],
+        "x": 145,
+        "y": 511,
+        "width": 30,
+        "height": 44
+      }
+    ],
+    "text": "عن أمير المؤمنين أبي حفص عمر بن الخطاب رضي الله تعالى عنه قال سمعت رسول الله صلى الله عليه وسلم يقول إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى، فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله، ومن كانت هجرته لدنيا يصيبها أو امرأة ينكحها فهجرته إلى ما هاجر إليه",
+    "canonicalText": "إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى، فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله، ومن كانت هجرته لدنيا يصيبها أو امرأة ينكحها فهجرته إلى ما هاجر إليه",
+    "title": "لا عمل إلا بنية",
+    "heading": {
+      "page": 3,
+      "x": 211,
+      "y": 216,
+      "width": 245,
+      "height": 69
+    }
+  }
+}

@@ -8,6 +8,72 @@
 import * as zod from 'zod';
 
 
+export const GetNawawiBookResponse = zod.object({
+  "edition": zod.string(),
+  "sourceUrl": zod.string(),
+  "pages": zod.array(zod.object({
+  "page": zod.number().int(),
+  "width": zod.number().int(),
+  "height": zod.number().int(),
+  "imageUrl": zod.string()
+})),
+  "hadithPages": zod.array(zod.object({
+  "hadithId": zod.number().int(),
+  "firstPage": zod.number().int(),
+  "lastPage": zod.number().int()
+}))
+})
+
+
+export const getRecitationPagesPathHadithIdMax = 42;
+
+
+
+export const GetRecitationPagesParams = zod.object({
+  "hadithId": zod.coerce.number().int().min(1).max(getRecitationPagesPathHadithIdMax)
+})
+
+export const GetRecitationPagesResponse = zod.object({
+  "status": zod.enum(['available', 'rights_pending', 'mapping_pending']),
+  "message": zod.string(),
+  "text": zod.string(),
+  "title": zod.string().optional(),
+  "heading": zod.object({
+  "page": zod.number().int(),
+  "x": zod.number(),
+  "y": zod.number(),
+  "width": zod.number(),
+  "height": zod.number()
+}).optional(),
+  "pages": zod.array(zod.object({
+  "page": zod.number().int(),
+  "width": zod.number().int(),
+  "height": zod.number().int(),
+  "imageUrl": zod.string()
+})),
+  "regions": zod.array(zod.object({
+  "page": zod.number().int(),
+  "wordIndices": zod.array(zod.number().int()),
+  "x": zod.number(),
+  "y": zod.number(),
+  "width": zod.number(),
+  "height": zod.number()
+})),
+  "unmappedIndices": zod.array(zod.number().int())
+})
+
+
+export const getRecitationPageImagePathPageMax = 32;
+
+
+
+export const GetRecitationPageImageParams = zod.object({
+  "page": zod.coerce.number().int().min(1).max(getRecitationPageImagePathPageMax)
+})
+
+export const GetRecitationPageImageResponse = zod.unknown()
+
+
 export const GetReviewAccessResponse = zod.object({
   "contentReviewer": zod.boolean(),
   "qualificationReviewer": zod.boolean(),

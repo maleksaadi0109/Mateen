@@ -1,0 +1,6444 @@
+{
+  "edition": "دار السلام — الطبعة الرابعة ١٤٢٨هـ / ٢٠٠٧م",
+  "sourcePdfHash": "69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00",
+  "rightsSourceVersionId": null,
+  "pages": [
+    {
+      "page": 1,
+      "file": "page-001.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "ae35f3ec3364372bb334cb42fb47f7b45ade5b4f67315af228839a7a466d26bc",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/ae35f3ec3364372bb334cb42fb47f7b45ade5b4f67315af228839a7a466d26bc.webp"
+    },
+    {
+      "page": 2,
+      "file": "page-002.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "cb775e5adff1132823053d5a092f1cd26c4061fa86246048bf5bf14f18811100",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/cb775e5adff1132823053d5a092f1cd26c4061fa86246048bf5bf14f18811100.webp"
+    },
+    {
+      "page": 3,
+      "file": "page-003.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "44fb4361755eab861417823c98cdb7c467bf812d6db51dff2bf63761eddaf4ae",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/44fb4361755eab861417823c98cdb7c467bf812d6db51dff2bf63761eddaf4ae.webp"
+    },
+    {
+      "page": 4,
+      "file": "page-004.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "0480d666155aa2cb5ad38062910b039b5bfba186cee151f8e1e885ce47852a7e",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/0480d666155aa2cb5ad38062910b039b5bfba186cee151f8e1e885ce47852a7e.webp"
+    },
+    {
+      "page": 5,
+      "file": "page-005.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "8277441879da0bec75f0ba03d336ade180ab2568d057dae927817d595e7ec259",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/8277441879da0bec75f0ba03d336ade180ab2568d057dae927817d595e7ec259.webp"
+    },
+    {
+      "page": 6,
+      "file": "page-006.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "247edbe929108a67bd133c3dfb49bc8f7108b9688fadc72e29e8fe87fcf36bc3",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/247edbe929108a67bd133c3dfb49bc8f7108b9688fadc72e29e8fe87fcf36bc3.webp"
+    },
+    {
+      "page": 7,
+      "file": "page-007.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "1f731fc0cce8c7d2e4f5a9516b7fc900a1d4c28491ac9ef020741093dc12c28e",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/1f731fc0cce8c7d2e4f5a9516b7fc900a1d4c28491ac9ef020741093dc12c28e.webp"
+    },
+    {
+      "page": 8,
+      "file": "page-008.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "1ad71a1cc6679d7163e0337d5d3297a03bfc1bb7a194b241ad46e04f909dab09",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/1ad71a1cc6679d7163e0337d5d3297a03bfc1bb7a194b241ad46e04f909dab09.webp"
+    },
+    {
+      "page": 9,
+      "file": "page-009.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "95f2653e9c56dee10bba1f31ebd48da359c7ca2b3f4e74b4349e5e089c620358",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/95f2653e9c56dee10bba1f31ebd48da359c7ca2b3f4e74b4349e5e089c620358.webp"
+    },
+    {
+      "page": 10,
+      "file": "page-010.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "8eec3df9646383b224893e4997aa50aaa646349912500b26517b3436d3f9bd49",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/8eec3df9646383b224893e4997aa50aaa646349912500b26517b3436d3f9bd49.webp"
+    },
+    {
+      "page": 11,
+      "file": "page-011.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "3524e186fcaf3fd8c7007eb521eaf87fea2e869bbce4a879eda8a7249aac974e",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/3524e186fcaf3fd8c7007eb521eaf87fea2e869bbce4a879eda8a7249aac974e.webp"
+    },
+    {
+      "page": 12,
+      "file": "page-012.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "f13e8c7efa39ad2d4e18b19c72ca6411ca33bfb7fb22817c740be7376ef67107",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/f13e8c7efa39ad2d4e18b19c72ca6411ca33bfb7fb22817c740be7376ef67107.webp"
+    },
+    {
+      "page": 13,
+      "file": "page-013.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "ed7d78fbb85de0403d80ab6122ff5bbef87a6d942a6635d2c386c7e2be0ab648",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/ed7d78fbb85de0403d80ab6122ff5bbef87a6d942a6635d2c386c7e2be0ab648.webp"
+    },
+    {
+      "page": 14,
+      "file": "page-014.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "0301308d32cca71c2b008547c4354d1f03f635713d52255db0eb8a04547cccb6",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/0301308d32cca71c2b008547c4354d1f03f635713d52255db0eb8a04547cccb6.webp"
+    },
+    {
+      "page": 15,
+      "file": "page-015.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "aa761ea2d176b34437f18ee713972aa322e38f89b848c1545326955bd3da1e1c",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/aa761ea2d176b34437f18ee713972aa322e38f89b848c1545326955bd3da1e1c.webp"
+    },
+    {
+      "page": 16,
+      "file": "page-016.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "ace543ba74dd0e2895b8b82be9810dd7b8f3db0d1adcf7344888dbbe34519348",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/ace543ba74dd0e2895b8b82be9810dd7b8f3db0d1adcf7344888dbbe34519348.webp"
+    },
+    {
+      "page": 17,
+      "file": "page-017.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "6517c9e996ed025ba87f9fd49ca6d3c7be5a8110e39ff7f52e0b4f243a3114dc",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/6517c9e996ed025ba87f9fd49ca6d3c7be5a8110e39ff7f52e0b4f243a3114dc.webp"
+    },
+    {
+      "page": 18,
+      "file": "page-018.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "0b26b36e7181975d559a648ecce3a7e496ef33a02b428630c294e0646c4e5748",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/0b26b36e7181975d559a648ecce3a7e496ef33a02b428630c294e0646c4e5748.webp"
+    },
+    {
+      "page": 19,
+      "file": "page-019.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "e65ca7eee8a32ecbe6f65f6719ee6dbef502a58e1b85f30fc9c5822b746b057e",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/e65ca7eee8a32ecbe6f65f6719ee6dbef502a58e1b85f30fc9c5822b746b057e.webp"
+    },
+    {
+      "page": 20,
+      "file": "page-020.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "4a647802bbba87f56a3b1e577100fe2330ce723c35df9dae08e603fa21f79de9",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/4a647802bbba87f56a3b1e577100fe2330ce723c35df9dae08e603fa21f79de9.webp"
+    },
+    {
+      "page": 21,
+      "file": "page-021.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "3a965b3caf806fb03407470f2aef35b6ecb36f82adf3f3498ba2f504cd18d95c",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/3a965b3caf806fb03407470f2aef35b6ecb36f82adf3f3498ba2f504cd18d95c.webp"
+    },
+    {
+      "page": 22,
+      "file": "page-022.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "c9227bc80d1cc9f72a02f8802c651b4e71a6f4fb992b3ce659eb3d25470f68b5",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/c9227bc80d1cc9f72a02f8802c651b4e71a6f4fb992b3ce659eb3d25470f68b5.webp"
+    },
+    {
+      "page": 23,
+      "file": "page-023.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "28f75337bec86df2aa5222116d2753282e12ba08e785c2b514d420b67dc88e1b",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/28f75337bec86df2aa5222116d2753282e12ba08e785c2b514d420b67dc88e1b.webp"
+    },
+    {
+      "page": 24,
+      "file": "page-024.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "c393360d61c8bc7b5e1f91a1c8c596703fa8534eb6154a9434de4e6dea5e6774",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/c393360d61c8bc7b5e1f91a1c8c596703fa8534eb6154a9434de4e6dea5e6774.webp"
+    },
+    {
+      "page": 25,
+      "file": "page-025.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "05eb17a20c4d4758e33676dd2efe110f848d241bab661705bf407115c4788b9d",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/05eb17a20c4d4758e33676dd2efe110f848d241bab661705bf407115c4788b9d.webp"
+    },
+    {
+      "page": 26,
+      "file": "page-026.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "2d97221c47d29cfa582c1cd1338883653fd54cbdfd65b3462a986bf9c3d0db18",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/2d97221c47d29cfa582c1cd1338883653fd54cbdfd65b3462a986bf9c3d0db18.webp"
+    },
+    {
+      "page": 27,
+      "file": "page-027.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "703d9d7ae868249d7c37452df97e65a9073d1fcc710faac5418e7dc63f864cae",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/703d9d7ae868249d7c37452df97e65a9073d1fcc710faac5418e7dc63f864cae.webp"
+    },
+    {
+      "page": 28,
+      "file": "page-028.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "25a23695eceb2c1f48936388b2968df1f7c0d944623fa9404b5a360c01f6d0aa",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/25a23695eceb2c1f48936388b2968df1f7c0d944623fa9404b5a360c01f6d0aa.webp"
+    },
+    {
+      "page": 29,
+      "file": "page-029.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "5b1fbd8b88c47ecc72f1d853befc6119b6c75e7a01542a4d17329b781d2126b9",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/5b1fbd8b88c47ecc72f1d853befc6119b6c75e7a01542a4d17329b781d2126b9.webp"
+    },
+    {
+      "page": 30,
+      "file": "page-030.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "ef33a4251d0a28c2683cd7075fac8923ef49bbf3e67f7da754ca32011b75bb98",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/ef33a4251d0a28c2683cd7075fac8923ef49bbf3e67f7da754ca32011b75bb98.webp"
+    },
+    {
+      "page": 31,
+      "file": "page-031.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "701c8621fb59713a69dce946ee2e5d6bd80aa21c2a3c8b1d0bfeddc7c1222641",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/701c8621fb59713a69dce946ee2e5d6bd80aa21c2a3c8b1d0bfeddc7c1222641.webp"
+    },
+    {
+      "page": 32,
+      "file": "page-032.webp",
+      "width": 652,
+      "height": 964,
+      "sha256": "755a9f07c138220d57c6243edc065bc3f8f447e8a1d563047eab90810e82c7b5",
+      "objectPath": "/objects/nawawi-scans/69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00/755a9f07c138220d57c6243edc065bc3f8f447e8a1d563047eab90810e82c7b5.webp"
+    }
+  ],
+  "hadiths": [
+    {
+      "hadithId": 1,
+      "text": "عن أمير المؤمنين أبي حفص عمر بن الخطاب رضي الله تعالى عنه قال سمعت رسول الله صلى الله عليه وسلم يقول إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى، فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله، ومن كانت هجرته لدنيا يصيبها أو امرأة ينكحها فهجرته إلى ما هاجر إليه",
+      "textHash": "6c9e63e3f964f40cda0790fecbfc402a4c9c1a7a2602ddf317d8087f9ba8423b",
+      "pageRange": [
+        3,
+        3
+      ],
+      "candidates": [
+        {
+          "page": 3,
+          "text": "إلى",
+          "x": 253.33,
+          "y": 512.67,
+          "width": 21.33,
+          "height": 47.33,
+          "wordIndices": [
+            27
+          ]
+        },
+        {
+          "page": 3,
+          "text": "مَا",
+          "x": 229.33,
+          "y": 512.67,
+          "width": 18.67,
+          "height": 47.33,
+          "wordIndices": [
+            28
+          ]
+        },
+        {
+          "page": 3,
+          "text": "هَاجَرَ",
+          "x": 176,
+          "y": 512.67,
+          "width": 48,
+          "height": 47.33,
+          "wordIndices": [
+            29
+          ]
+        },
+        {
+          "page": 3,
+          "text": "إليه",
+          "x": 143.33,
+          "y": 512.67,
+          "width": 27.33,
+          "height": 47.33,
+          "wordIndices": [
+            30
+          ]
+        }
+      ],
+      "regions": [
+        {
+          "page": 3,
+          "x": 437,
+          "y": 302,
+          "width": 32,
+          "height": 44,
+          "wordIndices": [
+            0
+          ]
+        },
+        {
+          "page": 3,
+          "x": 391,
+          "y": 301,
+          "width": 37,
+          "height": 44,
+          "wordIndices": [
+            1
+          ]
+        },
+        {
+          "page": 3,
+          "x": 315,
+          "y": 302,
+          "width": 65,
+          "height": 43,
+          "wordIndices": [
+            2
+          ]
+        },
+        {
+          "page": 3,
+          "x": 274,
+          "y": 299,
+          "width": 31,
+          "height": 47,
+          "wordIndices": [
+            3
+          ]
+        },
+        {
+          "page": 3,
+          "x": 202,
+          "y": 303,
+          "width": 55,
+          "height": 42,
+          "wordIndices": [
+            4
+          ]
+        },
+        {
+          "page": 3,
+          "x": 144,
+          "y": 302,
+          "width": 51,
+          "height": 43,
+          "wordIndices": [
+            5
+          ]
+        },
+        {
+          "page": 3,
+          "x": 108,
+          "y": 305,
+          "width": 27,
+          "height": 41,
+          "wordIndices": [
+            6
+          ]
+        },
+        {
+          "page": 3,
+          "x": 493,
+          "y": 344,
+          "width": 69,
+          "height": 42,
+          "wordIndices": [
+            7
+          ]
+        },
+        {
+          "page": 3,
+          "x": 422,
+          "y": 349,
+          "width": 50,
+          "height": 37,
+          "wordIndices": [
+            8
+          ]
+        },
+        {
+          "page": 3,
+          "x": 389,
+          "y": 343,
+          "width": 30,
+          "height": 43,
+          "wordIndices": [
+            9
+          ]
+        },
+        {
+          "page": 3,
+          "x": 340,
+          "y": 349,
+          "width": 46,
+          "height": 37,
+          "wordIndices": [
+            10
+          ]
+        },
+        {
+          "page": 3,
+          "x": 305,
+          "y": 353,
+          "width": 33,
+          "height": 30,
+          "wordIndices": [
+            11
+          ]
+        },
+        {
+          "page": 3,
+          "x": 248,
+          "y": 347,
+          "width": 33,
+          "height": 36,
+          "wordIndices": [
+            12
+          ]
+        },
+        {
+          "page": 3,
+          "x": 167,
+          "y": 346,
+          "width": 65,
+          "height": 36,
+          "wordIndices": [
+            13
+          ]
+        },
+        {
+          "page": 3,
+          "x": 109,
+          "y": 345,
+          "width": 54,
+          "height": 42,
+          "wordIndices": [
+            14
+          ]
+        },
+        {
+          "page": 3,
+          "x": 532,
+          "y": 389,
+          "width": 29,
+          "height": 39,
+          "wordIndices": [
+            15
+          ]
+        },
+        {
+          "page": 3,
+          "x": 489,
+          "y": 390,
+          "width": 38,
+          "height": 37,
+          "wordIndices": [
+            16,
+            17,
+            18,
+            19
+          ]
+        },
+        {
+          "page": 3,
+          "x": 435,
+          "y": 390,
+          "width": 45,
+          "height": 39,
+          "wordIndices": [
+            20
+          ]
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            21
+          ],
+          "x": 355,
+          "y": 383,
+          "width": 40,
+          "height": 43
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            22
+          ],
+          "x": 283,
+          "y": 383,
+          "width": 68,
+          "height": 43
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            23
+          ],
+          "x": 211,
+          "y": 383,
+          "width": 67,
+          "height": 43
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            24
+          ],
+          "x": 155,
+          "y": 383,
+          "width": 42,
+          "height": 43
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            25
+          ],
+          "x": 108,
+          "y": 383,
+          "width": 42,
+          "height": 43
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            26
+          ],
+          "x": 514,
+          "y": 428,
+          "width": 47,
+          "height": 37
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            27
+          ],
+          "x": 488,
+          "y": 428,
+          "width": 25,
+          "height": 37
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            28
+          ],
+          "x": 442,
+          "y": 428,
+          "width": 43,
+          "height": 37
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            29
+          ],
+          "x": 389,
+          "y": 428,
+          "width": 42,
+          "height": 37
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            30
+          ],
+          "x": 332,
+          "y": 428,
+          "width": 51,
+          "height": 37
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            31
+          ],
+          "x": 266,
+          "y": 428,
+          "width": 61,
+          "height": 37
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            32
+          ],
+          "x": 231,
+          "y": 428,
+          "width": 30,
+          "height": 37
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            33
+          ],
+          "x": 195,
+          "y": 428,
+          "width": 31,
+          "height": 37
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            34
+          ],
+          "x": 126,
+          "y": 428,
+          "width": 63,
+          "height": 37
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            35
+          ],
+          "x": 494,
+          "y": 466,
+          "width": 69,
+          "height": 43
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            36
+          ],
+          "x": 456,
+          "y": 466,
+          "width": 33,
+          "height": 43
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            37
+          ],
+          "x": 419,
+          "y": 466,
+          "width": 31,
+          "height": 43
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            38
+          ],
+          "x": 347,
+          "y": 466,
+          "width": 68,
+          "height": 43
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            39
+          ],
+          "x": 282,
+          "y": 466,
+          "width": 40,
+          "height": 43
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            40
+          ],
+          "x": 225,
+          "y": 466,
+          "width": 51,
+          "height": 43
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            41
+          ],
+          "x": 158,
+          "y": 466,
+          "width": 61,
+          "height": 43
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            42
+          ],
+          "x": 109,
+          "y": 466,
+          "width": 42,
+          "height": 43
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            43
+          ],
+          "x": 503,
+          "y": 511,
+          "width": 60,
+          "height": 44
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            44
+          ],
+          "x": 478,
+          "y": 511,
+          "width": 22,
+          "height": 44
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            45
+          ],
+          "x": 437,
+          "y": 511,
+          "width": 39,
+          "height": 44
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            46
+          ],
+          "x": 368,
+          "y": 511,
+          "width": 66,
+          "height": 44
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            47
+          ],
+          "x": 281,
+          "y": 511,
+          "width": 65,
+          "height": 44
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            48
+          ],
+          "x": 247,
+          "y": 511,
+          "width": 30,
+          "height": 44
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            49
+          ],
+          "x": 226,
+          "y": 511,
+          "width": 19,
+          "height": 44
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            50
+          ],
+          "x": 177,
+          "y": 511,
+          "width": 46,
+          "height": 44
+        },
+        {
+          "page": 3,
+          "wordIndices": [
+            51
+          ],
+          "x": 145,
+          "y": 511,
+          "width": 30,
+          "height": 44
+        }
+      ],
+      "verification": "visually-checked",
+      "unmappedIndices": [],
+      "canonicalText": "إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى، فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله، ومن كانت هجرته لدنيا يصيبها أو امرأة ينكحها فهجرته إلى ما هاجر إليه",
+      "title": "لا عمل إلا بنية",
+      "heading": {
+        "page": 3,
+        "x": 211,
+        "y": 216,
+        "width": 245,
+        "height": 69
+      }
+    },
+    {
+      "hadithId": 2,
+      "text": "بينما نحن جلوس عند رسول الله ﵌ ذات يوم إذ طلع علينا رجل شديد بياض الثياب شديد سواد الشعر لا يرى عليه أثر السفر ولا يعرفه منا أحد، حتى جلس إلى النبي ﵌ فأسند ركبتيه إلى ركبتيه ووضع كفيه على فخذيه وقال: يا محمد أخبرني عن الإسلام،\nفقال رسول الله ﵌: الإسلام أن تشهد أن لا إله إلا الله وأن محمدًا رسول الله، وتقيم الصلاة، وتؤتي الزكاة، وتصوم رمضان، وتحج البيت إن استطعت إليه سبيلًا قال: صدقت، فعجبنا له يسأله ويصدقه.\nقال: فأخبرني عن الإيمان، قال أن تؤمن بالله وملائكته وكتبه ورسله واليوم الآخر، وتؤمن بالقدر خيره وشره، قال: صدقت، قال: فأخبرني عن الإحسان، قال أن تعبد الله كأنك تراه، فإن لم تكن تراه فإنه يراك،\nقال: فأخبرني عن الساعة، قال ما المسئول عنها بأعلم من السائل، قال: فأخبرني عن أماراتها، قال أن تلد الأمة ربتها، وأن ترى الحفاة العراة العالة رعاء الشاء يتطاولون في البنيان\nثم انطلق فلبثت مليًا ثم قال يا عمر أتدري من السائل؟ قلت: الله ورسوله أعلم، قال فإنه جبريل أتاكم يعلمكم دينكم",
+      "textHash": "6801080e01b7bdcb33d2565ecf196010dc479f3628e91818b9afe897a1f5af67",
+      "pageRange": [
+        4,
+        5
+      ],
+      "candidates": [
+        {
+          "page": 4,
+          "text": "ذاتٌ",
+          "x": 343.33,
+          "y": 306.67,
+          "width": 32.67,
+          "height": 51.33,
+          "wordIndices": [
+            11
+          ]
+        },
+        {
+          "page": 4,
+          "text": "يوم",
+          "x": 311.33,
+          "y": 324.67,
+          "width": 20.67,
+          "height": 26,
+          "wordIndices": [
+            12
+          ]
+        },
+        {
+          "page": 4,
+          "text": "إذ",
+          "x": 289.33,
+          "y": 317.33,
+          "width": 12,
+          "height": 38,
+          "wordIndices": [
+            13
+          ]
+        },
+        {
+          "page": 4,
+          "text": "طَلَعَ",
+          "x": 244,
+          "y": 306.67,
+          "width": 36,
+          "height": 51.33,
+          "wordIndices": [
+            14
+          ]
+        },
+        {
+          "page": 4,
+          "text": "عَلينا",
+          "x": 199.33,
+          "y": 306.67,
+          "width": 37.33,
+          "height": 51.33,
+          "wordIndices": [
+            15
+          ]
+        },
+        {
+          "page": 4,
+          "text": "إلى",
+          "x": 397.33,
+          "y": 441.33,
+          "width": 26,
+          "height": 33.33,
+          "wordIndices": [
+            43
+          ]
+        },
+        {
+          "page": 4,
+          "text": "ركبتيه",
+          "x": 329.33,
+          "y": 430.67,
+          "width": 53.33,
+          "height": 52,
+          "wordIndices": [
+            44
+          ]
+        },
+        {
+          "page": 4,
+          "text": "ووضعٌ",
+          "x": 270.67,
+          "y": 445.33,
+          "width": 46.67,
+          "height": 26,
+          "wordIndices": [
+            45
+          ]
+        },
+        {
+          "page": 4,
+          "text": "وقال",
+          "x": 511.33,
+          "y": 475.33,
+          "width": 35.33,
+          "height": 46,
+          "wordIndices": [
+            49
+          ]
+        },
+        {
+          "page": 4,
+          "text": "يا",
+          "x": 476.67,
+          "y": 484.67,
+          "width": 9.33,
+          "height": 20,
+          "wordIndices": [
+            50
+          ]
+        },
+        {
+          "page": 4,
+          "text": "مُحمدُ",
+          "x": 416,
+          "y": 470.67,
+          "width": 48,
+          "height": 50.67,
+          "wordIndices": [
+            51
+          ]
+        },
+        {
+          "page": 4,
+          "text": "عن",
+          "x": 298.67,
+          "y": 484.67,
+          "width": 18,
+          "height": 24,
+          "wordIndices": [
+            53
+          ]
+        },
+        {
+          "page": 4,
+          "text": "الإسلام",
+          "x": 223.33,
+          "y": 470.67,
+          "width": 58,
+          "height": 50.67,
+          "wordIndices": [
+            54
+          ]
+        },
+        {
+          "page": 4,
+          "text": "فقال",
+          "x": 162.67,
+          "y": 470.67,
+          "width": 31.33,
+          "height": 50.67,
+          "wordIndices": [
+            55
+          ]
+        },
+        {
+          "page": 4,
+          "text": "رَسُولٌ",
+          "x": 99.33,
+          "y": 470.67,
+          "width": 53.33,
+          "height": 50.67,
+          "wordIndices": [
+            56
+          ]
+        },
+        {
+          "page": 4,
+          "text": "أن",
+          "x": 346.67,
+          "y": 515.33,
+          "width": 15.33,
+          "height": 32,
+          "wordIndices": [
+            64
+          ]
+        },
+        {
+          "page": 4,
+          "text": "تَشْهَدَ",
+          "x": 285.33,
+          "y": 512.67,
+          "width": 50.67,
+          "height": 59.33,
+          "wordIndices": [
+            65
+          ]
+        },
+        {
+          "page": 4,
+          "text": "أن",
+          "x": 258,
+          "y": 515.33,
+          "width": 16.67,
+          "height": 32,
+          "wordIndices": [
+            66
+          ]
+        },
+        {
+          "page": 4,
+          "text": "لا",
+          "x": 232,
+          "y": 512.67,
+          "width": 15.33,
+          "height": 59.33,
+          "wordIndices": [
+            67
+          ]
+        },
+        {
+          "page": 4,
+          "text": "إلة",
+          "x": 206,
+          "y": 512.67,
+          "width": 19.33,
+          "height": 59.33,
+          "wordIndices": [
+            68
+          ]
+        },
+        {
+          "page": 4,
+          "text": "إلا",
+          "x": 176,
+          "y": 512.67,
+          "width": 18,
+          "height": 59.33,
+          "wordIndices": [
+            69
+          ]
+        },
+        {
+          "page": 4,
+          "text": "الله",
+          "x": 135.33,
+          "y": 512.67,
+          "width": 28.67,
+          "height": 59.33,
+          "wordIndices": [
+            70
+          ]
+        },
+        {
+          "page": 4,
+          "text": "محمَّدًا",
+          "x": 495.33,
+          "y": 562.67,
+          "width": 52,
+          "height": 22.67,
+          "wordIndices": [
+            72
+          ]
+        },
+        {
+          "page": 4,
+          "text": "رسولٌ",
+          "x": 434.67,
+          "y": 555.33,
+          "width": 46.67,
+          "height": 39.33,
+          "wordIndices": [
+            73
+          ]
+        },
+        {
+          "page": 4,
+          "text": "الله",
+          "x": 394.67,
+          "y": 554.67,
+          "width": 26,
+          "height": 37.33,
+          "wordIndices": [
+            74
+          ]
+        },
+        {
+          "page": 4,
+          "text": "وتقيمّ",
+          "x": 323.33,
+          "y": 568.67,
+          "width": 40.67,
+          "height": 26.67,
+          "wordIndices": [
+            75
+          ]
+        },
+        {
+          "page": 4,
+          "text": "الصَّلاة",
+          "x": 258,
+          "y": 559.33,
+          "width": 52,
+          "height": 33.33,
+          "wordIndices": [
+            76
+          ]
+        },
+        {
+          "page": 4,
+          "text": "عن",
+          "x": 441.33,
+          "y": 694,
+          "width": 20,
+          "height": 37.33,
+          "wordIndices": [
+            95
+          ]
+        },
+        {
+          "page": 4,
+          "text": "الإيمانٍ",
+          "x": 370.67,
+          "y": 677.33,
+          "width": 60.67,
+          "height": 56.67,
+          "wordIndices": [
+            96
+          ]
+        },
+        {
+          "page": 4,
+          "text": "قال",
+          "x": 301.33,
+          "y": 677.33,
+          "width": 25.33,
+          "height": 56.67,
+          "wordIndices": [
+            97
+          ]
+        },
+        {
+          "page": 5,
+          "text": "العالةٌ",
+          "x": 330.67,
+          "y": 274,
+          "width": 38.67,
+          "height": 24,
+          "wordIndices": [
+            152
+          ]
+        },
+        {
+          "page": 5,
+          "text": "رعاءً",
+          "x": 282,
+          "y": 281.33,
+          "width": 34,
+          "height": 28.67,
+          "wordIndices": [
+            153
+          ]
+        },
+        {
+          "page": 5,
+          "text": "الشَّاءٍ",
+          "x": 225.33,
+          "y": 273.33,
+          "width": 40,
+          "height": 31.33,
+          "wordIndices": [
+            154
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175,
+        176,
+        177,
+        178
+      ]
+    },
+    {
+      "hadithId": 3,
+      "text": "بني الإسلام على خمس: شهادة أن لا إله إلا الله وأن محمدًا رسول الله، وإقام الصلاة، وإيتاء الزكاة، وحج البيت، وصوم رمضان",
+      "textHash": "022a5fb7d743ebff4016033654970aa25af9ef6e2bd81bc916fa4f9c00391ac4",
+      "pageRange": [
+        5,
+        5
+      ],
+      "candidates": [
+        {
+          "page": 5,
+          "text": "على",
+          "x": 288,
+          "y": 599.33,
+          "width": 26,
+          "height": 50.67,
+          "wordIndices": [
+            2
+          ]
+        },
+        {
+          "page": 5,
+          "text": "خَمْسٍ",
+          "x": 231.33,
+          "y": 599.33,
+          "width": 46.67,
+          "height": 50.67,
+          "wordIndices": [
+            3
+          ]
+        },
+        {
+          "page": 5,
+          "text": "شهادةٍ",
+          "x": 168.67,
+          "y": 595.33,
+          "width": 44,
+          "height": 39.33,
+          "wordIndices": [
+            4
+          ]
+        },
+        {
+          "page": 5,
+          "text": "أَنْ",
+          "x": 144.67,
+          "y": 595.33,
+          "width": 16.67,
+          "height": 39.33,
+          "wordIndices": [
+            5
+          ]
+        },
+        {
+          "page": 5,
+          "text": "لا",
+          "x": 127.33,
+          "y": 595.33,
+          "width": 12.67,
+          "height": 39.33,
+          "wordIndices": [
+            6
+          ]
+        },
+        {
+          "page": 5,
+          "text": "محمّدًا",
+          "x": 412.67,
+          "y": 642.67,
+          "width": 48.67,
+          "height": 31.33,
+          "wordIndices": [
+            11
+          ]
+        },
+        {
+          "page": 5,
+          "text": "رسول",
+          "x": 361.33,
+          "y": 638,
+          "width": 42.67,
+          "height": 38.67,
+          "wordIndices": [
+            12
+          ]
+        },
+        {
+          "page": 5,
+          "text": "الله",
+          "x": 330.67,
+          "y": 639.33,
+          "width": 22,
+          "height": 36,
+          "wordIndices": [
+            13
+          ]
+        },
+        {
+          "page": 5,
+          "text": "وإقام",
+          "x": 275.33,
+          "y": 646,
+          "width": 37.33,
+          "height": 39.33,
+          "wordIndices": [
+            14
+          ]
+        },
+        {
+          "page": 5,
+          "text": "الصَّلَاةٍ",
+          "x": 216,
+          "y": 641.33,
+          "width": 51.33,
+          "height": 35.33,
+          "wordIndices": [
+            15
+          ]
+        },
+        {
+          "page": 5,
+          "text": "وإيتاءٍ",
+          "x": 161.33,
+          "y": 641.33,
+          "width": 39.33,
+          "height": 35.33,
+          "wordIndices": [
+            16
+          ]
+        },
+        {
+          "page": 5,
+          "text": "وحَجٌّ",
+          "x": 512,
+          "y": 693.33,
+          "width": 35.33,
+          "height": 26.67,
+          "wordIndices": [
+            18
+          ]
+        },
+        {
+          "page": 5,
+          "text": "البيتِ",
+          "x": 464,
+          "y": 690,
+          "width": 56.67,
+          "height": 25.33,
+          "wordIndices": [
+            19
+          ]
+        },
+        {
+          "page": 5,
+          "text": "وصَومٍ",
+          "x": 395.33,
+          "y": 693.33,
+          "width": 43.33,
+          "height": 30.67,
+          "wordIndices": [
+            20
+          ]
+        },
+        {
+          "page": 5,
+          "text": "رَمَضَّانَ",
+          "x": 324,
+          "y": 690,
+          "width": 62,
+          "height": 26,
+          "wordIndices": [
+            21
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ]
+    },
+    {
+      "hadithId": 4,
+      "text": "إن أحدكم يجمع خلقه في بطن أمه أربعين يومًا نطفة، ثم يكون علقة مثل ذلك، ثم يكون مضغة مثل ذلك، ثم يرسل إليه الملك فينفخ فيه الروح ويؤمر بأربع كلمات: بكتب رزقه، وأجله، وعمله، وشقي أو سعيد،\nفو الله الذي لا إله غيره إن أحدكم ليعمل بعمل أهل الجنة حتى ما يكون بينه وبينها إلا ذراع فيسبق عليه الكتاب فيعمل بعمل أهل النار فيدخلها، وإن أحدكم ليعمل بعمل أهل النار حتى ما يكون بينه وبينها إلا ذراع فيسبق عليه الكتاب فيعمل بعمل أهل الجنة فيدخلها",
+      "textHash": "b073151e67340a6570c1a8c25aa8cc8c533339b33cbe846d7335316be04a72ed",
+      "pageRange": [
+        6,
+        6
+      ],
+      "candidates": [
+        {
+          "page": 6,
+          "text": "وعَمَلِه",
+          "x": 508,
+          "y": 476.67,
+          "width": 47.33,
+          "height": 49.33,
+          "wordIndices": [
+            33
+          ]
+        },
+        {
+          "page": 6,
+          "text": "وَشَقِيّ",
+          "x": 430,
+          "y": 476.67,
+          "width": 53.33,
+          "height": 49.33,
+          "wordIndices": [
+            34
+          ]
+        },
+        {
+          "page": 6,
+          "text": "أو",
+          "x": 404.67,
+          "y": 480,
+          "width": 16.67,
+          "height": 28.67,
+          "wordIndices": [
+            35
+          ]
+        },
+        {
+          "page": 6,
+          "text": "أَهُلٍ",
+          "x": 474.67,
+          "y": 686,
+          "width": 36.67,
+          "height": 41.33,
+          "wordIndices": [
+            82
+          ]
+        },
+        {
+          "page": 6,
+          "text": "الجنةٍ",
+          "x": 433.33,
+          "y": 692.67,
+          "width": 34,
+          "height": 23.33,
+          "wordIndices": [
+            83
+          ]
+        },
+        {
+          "page": 6,
+          "text": "فَيَدْخُلهَا",
+          "x": 364.67,
+          "y": 686.67,
+          "width": 59.33,
+          "height": 30.67,
+          "wordIndices": [
+            84
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84
+      ]
+    },
+    {
+      "hadithId": 5,
+      "text": "من أحدث في أمرنا هذا ما ليس منه فهو رد",
+      "textHash": "ba8bcf673df85d2905136a958e555e6ffb34aeb4df4e4e9918d30146465d37b9",
+      "pageRange": [
+        7,
+        7
+      ],
+      "candidates": [
+        {
+          "page": 7,
+          "text": "هذا",
+          "x": 522.67,
+          "y": 300,
+          "width": 27.33,
+          "height": 50,
+          "wordIndices": [
+            4
+          ]
+        },
+        {
+          "page": 7,
+          "text": "ما",
+          "x": 502.67,
+          "y": 300,
+          "width": 13.33,
+          "height": 50,
+          "wordIndices": [
+            5
+          ]
+        },
+        {
+          "page": 7,
+          "text": "لَيسَ",
+          "x": 462,
+          "y": 300,
+          "width": 35.33,
+          "height": 50,
+          "wordIndices": [
+            6
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "hadithId": 6,
+      "text": "إن الحلال بين وإن الحرام بين وبينهما أمور مشتبهات لا يعلمهن كثير من الناس، فمن اتقى الشبهات فقد استبرأ لدينه وعرضه، ومن وقع في الشبهات وقع في\nالحرام كالراعي يرعى حول الحمى يوشك أن يرتع فيه، ألا وإن لكل ملك حمى، ألا وإن حمى الله محارمه، ألا وإن في الجسد مضغة إذا صلحت صلح الجسد كله وإذا فسدت فسد الجسد كله ألا وهي القلب",
+      "textHash": "25b5e6c28f24abe5f487d65e1a201cfc968cde396b919199886705e5e4b40a2f",
+      "pageRange": [
+        7,
+        8
+      ],
+      "candidates": [
+        {
+          "page": 7,
+          "text": "«إنَّ",
+          "x": 517.33,
+          "y": 553.33,
+          "width": 29.33,
+          "height": 28.67,
+          "wordIndices": [
+            0
+          ]
+        },
+        {
+          "page": 7,
+          "text": "الحْلَال",
+          "x": 445.33,
+          "y": 551.33,
+          "width": 55.33,
+          "height": 28,
+          "wordIndices": [
+            1
+          ]
+        },
+        {
+          "page": 7,
+          "text": "بَيْن",
+          "x": 394,
+          "y": 560,
+          "width": 36,
+          "height": 22.67,
+          "wordIndices": [
+            2
+          ]
+        },
+        {
+          "page": 7,
+          "text": "وإنَ",
+          "x": 351.33,
+          "y": 553.33,
+          "width": 27.33,
+          "height": 28.67,
+          "wordIndices": [
+            3
+          ]
+        },
+        {
+          "page": 7,
+          "text": "مِنَ",
+          "x": 286,
+          "y": 590,
+          "width": 28.67,
+          "height": 50.67,
+          "wordIndices": [
+            12
+          ]
+        },
+        {
+          "page": 7,
+          "text": "النَاسٍ",
+          "x": 226,
+          "y": 590,
+          "width": 50.67,
+          "height": 50.67,
+          "wordIndices": [
+            13
+          ]
+        },
+        {
+          "page": 7,
+          "text": "فَمَنِ",
+          "x": 152.67,
+          "y": 590,
+          "width": 42,
+          "height": 50.67,
+          "wordIndices": [
+            14
+          ]
+        },
+        {
+          "page": 7,
+          "text": "لدينه",
+          "x": 323.33,
+          "y": 640.67,
+          "width": 36.67,
+          "height": 23.33,
+          "wordIndices": [
+            19
+          ]
+        },
+        {
+          "page": 7,
+          "text": "وعِرضِه",
+          "x": 251.33,
+          "y": 646,
+          "width": 56.67,
+          "height": 20.67,
+          "wordIndices": [
+            20
+          ]
+        },
+        {
+          "page": 7,
+          "text": "وَمَنْ",
+          "x": 181.33,
+          "y": 643.33,
+          "width": 32,
+          "height": 23.33,
+          "wordIndices": [
+            21
+          ]
+        },
+        {
+          "page": 7,
+          "text": "وَقَعَ",
+          "x": 137.33,
+          "y": 634.67,
+          "width": 28.67,
+          "height": 35.33,
+          "wordIndices": [
+            22
+          ]
+        },
+        {
+          "page": 7,
+          "text": "في",
+          "x": 102,
+          "y": 640.67,
+          "width": 19.33,
+          "height": 29.33,
+          "wordIndices": [
+            23
+          ]
+        },
+        {
+          "page": 7,
+          "text": "وَقَعَ",
+          "x": 435.33,
+          "y": 676.67,
+          "width": 32.67,
+          "height": 35.33,
+          "wordIndices": [
+            25
+          ]
+        },
+        {
+          "page": 7,
+          "text": "في",
+          "x": 411.33,
+          "y": 671.33,
+          "width": 15.33,
+          "height": 48,
+          "wordIndices": [
+            26
+          ]
+        },
+        {
+          "page": 7,
+          "text": "الحرَامٍ",
+          "x": 352.67,
+          "y": 676.67,
+          "width": 44,
+          "height": 39.33,
+          "wordIndices": [
+            27
+          ]
+        },
+        {
+          "page": 7,
+          "text": "كالرَاعِي",
+          "x": 258.67,
+          "y": 682,
+          "width": 66,
+          "height": 30,
+          "wordIndices": [
+            28
+          ]
+        },
+        {
+          "page": 7,
+          "text": "يَرْعَى",
+          "x": 207.33,
+          "y": 682.67,
+          "width": 40.67,
+          "height": 26.67,
+          "wordIndices": [
+            29
+          ]
+        },
+        {
+          "page": 7,
+          "text": "حَولَ",
+          "x": 160,
+          "y": 676.67,
+          "width": 36.67,
+          "height": 31.33,
+          "wordIndices": [
+            30
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63
+      ]
+    },
+    {
+      "hadithId": 7,
+      "text": "الدين النصيحة.\nقلنا: لمن؟ قال لله، ولكتابه، ولرسوله، ولأئمة المسلمين وعامتهم",
+      "textHash": "135e05c6a534b08a39c6b99c99e3384665f1f9de75d3fb32a5e978cad04ba2eb",
+      "pageRange": [
+        8,
+        8
+      ],
+      "candidates": [],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "hadithId": 8,
+      "text": "أمرت أن أقاتل الناس حتى يشهدوا أن لا إله إلا الله وأن محمدًا رسول الله، ويقيموا الصلاة، ويؤتوا الزكاة: فإذا فعلوا ذلك عصموا مني دماءهم وأموالهم إلا بحق الإسلام وحسابهم على الله تعالى",
+      "textHash": "1de7b0e96266a2c515507263b5cfdc4b5ab3edc2ee4fa6fc07b6105cde53b013",
+      "pageRange": [
+        8,
+        9
+      ],
+      "candidates": [
+        {
+          "page": 9,
+          "text": "يَشْهَدُوا",
+          "x": 495.33,
+          "y": 157.33,
+          "width": 58,
+          "height": 28.67,
+          "wordIndices": [
+            5
+          ]
+        },
+        {
+          "page": 9,
+          "text": "أَنْ",
+          "x": 464,
+          "y": 152,
+          "width": 17.33,
+          "height": 32,
+          "wordIndices": [
+            6
+          ]
+        },
+        {
+          "page": 9,
+          "text": "لا",
+          "x": 436.67,
+          "y": 162,
+          "width": 13.33,
+          "height": 19.33,
+          "wordIndices": [
+            7
+          ]
+        },
+        {
+          "page": 9,
+          "text": "إلة",
+          "x": 404.67,
+          "y": 156,
+          "width": 19.33,
+          "height": 30,
+          "wordIndices": [
+            8
+          ]
+        },
+        {
+          "page": 9,
+          "text": "اللَهُ",
+          "x": 334.67,
+          "y": 152,
+          "width": 24,
+          "height": 27.33,
+          "wordIndices": [
+            10
+          ]
+        },
+        {
+          "page": 9,
+          "text": "وأنَّ",
+          "x": 293.33,
+          "y": 152,
+          "width": 28,
+          "height": 34,
+          "wordIndices": [
+            11
+          ]
+        },
+        {
+          "page": 9,
+          "text": "مُحَمَّدًا",
+          "x": 227.33,
+          "y": 158,
+          "width": 52,
+          "height": 22.67,
+          "wordIndices": [
+            12
+          ]
+        },
+        {
+          "page": 9,
+          "text": "رسول",
+          "x": 174,
+          "y": 149.33,
+          "width": 37.33,
+          "height": 42,
+          "wordIndices": [
+            13
+          ]
+        },
+        {
+          "page": 9,
+          "text": "الله",
+          "x": 124,
+          "y": 152,
+          "width": 28,
+          "height": 28.67,
+          "wordIndices": [
+            14
+          ]
+        },
+        {
+          "page": 9,
+          "text": "ويقيموا",
+          "x": 498,
+          "y": 203.33,
+          "width": 55.33,
+          "height": 28.67,
+          "wordIndices": [
+            15
+          ]
+        },
+        {
+          "page": 9,
+          "text": "الصَّلَاة",
+          "x": 429.33,
+          "y": 198,
+          "width": 52,
+          "height": 24.67,
+          "wordIndices": [
+            16
+          ]
+        },
+        {
+          "page": 9,
+          "text": "فإذًا",
+          "x": 212,
+          "y": 198,
+          "width": 26.67,
+          "height": 29.33,
+          "wordIndices": [
+            19
+          ]
+        },
+        {
+          "page": 9,
+          "text": "فَعَلُوا",
+          "x": 160,
+          "y": 192.67,
+          "width": 37.33,
+          "height": 39.33,
+          "wordIndices": [
+            20
+          ]
+        },
+        {
+          "page": 9,
+          "text": "ذلك",
+          "x": 108,
+          "y": 200.67,
+          "width": 35.33,
+          "height": 33.33,
+          "wordIndices": [
+            21
+          ]
+        },
+        {
+          "page": 9,
+          "text": "على",
+          "x": 448,
+          "y": 274.67,
+          "width": 22,
+          "height": 43.33,
+          "wordIndices": [
+            30
+          ]
+        },
+        {
+          "page": 9,
+          "text": "اللَّه",
+          "x": 404.67,
+          "y": 274.67,
+          "width": 35.33,
+          "height": 43.33,
+          "wordIndices": [
+            31
+          ]
+        },
+        {
+          "page": 9,
+          "text": "تعالى",
+          "x": 355.33,
+          "y": 287.33,
+          "width": 40.67,
+          "height": 26,
+          "wordIndices": [
+            32
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ]
+    },
+    {
+      "hadithId": 9,
+      "text": "مانهيتكم عنه فاجتنبوه، وما أمرتكم به فأتوا منه ما استطعتم، فإنما أهلك الذين من قبلكم كثرة مسائلهم واختلافهم على أنبيائهم",
+      "textHash": "5a1e35fcea1cb7cba854790356a52700cbd688c63bb119359cdc4fd6b30a92f5",
+      "pageRange": [
+        9,
+        9
+      ],
+      "candidates": [
+        {
+          "page": 9,
+          "text": "أَهْلَكَ",
+          "x": 374.67,
+          "y": 528.67,
+          "width": 42.67,
+          "height": 28,
+          "wordIndices": [
+            11
+          ]
+        },
+        {
+          "page": 9,
+          "text": "الَّذِينَ",
+          "x": 320,
+          "y": 528,
+          "width": 41.33,
+          "height": 35.33,
+          "wordIndices": [
+            12
+          ]
+        },
+        {
+          "page": 9,
+          "text": "مِنْ",
+          "x": 286.67,
+          "y": 540,
+          "width": 21.33,
+          "height": 23.33,
+          "wordIndices": [
+            13
+          ]
+        },
+        {
+          "page": 9,
+          "text": "قبِلكُمْ",
+          "x": 230.67,
+          "y": 524,
+          "width": 44,
+          "height": 44.67,
+          "wordIndices": [
+            14
+          ]
+        },
+        {
+          "page": 9,
+          "text": "كَثرةٌ",
+          "x": 180.67,
+          "y": 524,
+          "width": 42,
+          "height": 44.67,
+          "wordIndices": [
+            15
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ]
+    },
+    {
+      "hadithId": 10,
+      "text": "إن الله تعالى طيب لا يقبل إلا طيبًا، وإن الله أمر المؤمنين بما أمر به المرسلين فقال تعالى ﴿يا أيها الرسل كلوا من الطيبات واعملوا صالحا﴾ وقال تعالى ﴿يا أيها الذين آمنوا كلوا من طيبات ما رزقناكم﴾ ثم ذكر الرجل يطيل السفر أشعث أغبر يمد يديه إلى السماء: يا رب يا رب، ومطعمه حرام\nوملبسه حرام وغذي بالحرام فأنى يستجاب له",
+      "textHash": "253ed6bf1f891970b405dfb85c4c9245e2b8f0389865609428e2edcc79ffcb70",
+      "pageRange": [
+        10,
+        10
+      ],
+      "candidates": [
+        {
+          "page": 10,
+          "text": "إنَّ",
+          "x": 272.67,
+          "y": 146,
+          "width": 19.33,
+          "height": 44,
+          "wordIndices": [
+            0
+          ]
+        },
+        {
+          "page": 10,
+          "text": "الله",
+          "x": 234.67,
+          "y": 146,
+          "width": 33.33,
+          "height": 44,
+          "wordIndices": [
+            1
+          ]
+        },
+        {
+          "page": 10,
+          "text": "تعالى",
+          "x": 190.67,
+          "y": 146,
+          "width": 38.67,
+          "height": 44,
+          "wordIndices": [
+            2
+          ]
+        },
+        {
+          "page": 10,
+          "text": "طَيِب",
+          "x": 135.33,
+          "y": 146,
+          "width": 47.33,
+          "height": 44,
+          "wordIndices": [
+            3
+          ]
+        },
+        {
+          "page": 10,
+          "text": "لا",
+          "x": 105.33,
+          "y": 146,
+          "width": 19.33,
+          "height": 44,
+          "wordIndices": [
+            4
+          ]
+        },
+        {
+          "page": 10,
+          "text": "طيُبًا",
+          "x": 418,
+          "y": 190,
+          "width": 36.67,
+          "height": 41.33,
+          "wordIndices": [
+            7
+          ]
+        },
+        {
+          "page": 10,
+          "text": "وَإنَ",
+          "x": 351.33,
+          "y": 190,
+          "width": 39.33,
+          "height": 41.33,
+          "wordIndices": [
+            8
+          ]
+        },
+        {
+          "page": 10,
+          "text": "اللَّهَ",
+          "x": 310,
+          "y": 190,
+          "width": 36.67,
+          "height": 41.33,
+          "wordIndices": [
+            9
+          ]
+        },
+        {
+          "page": 10,
+          "text": "أَمَرَ",
+          "x": 270.67,
+          "y": 190,
+          "width": 34.67,
+          "height": 41.33,
+          "wordIndices": [
+            10
+          ]
+        },
+        {
+          "page": 10,
+          "text": "حَرَامٌ",
+          "x": 256,
+          "y": 454,
+          "width": 41.33,
+          "height": 46.67,
+          "wordIndices": [
+            55
+          ]
+        },
+        {
+          "page": 10,
+          "text": "وغُذِيٌ",
+          "x": 182.67,
+          "y": 456.67,
+          "width": 168,
+          "height": 36,
+          "wordIndices": [
+            56
+          ]
+        },
+        {
+          "page": 10,
+          "text": "بالحرام",
+          "x": 122.67,
+          "y": 458.67,
+          "width": 50,
+          "height": 34,
+          "wordIndices": [
+            57
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
+      ]
+    },
+    {
+      "hadithId": 11,
+      "text": "دع ما يريبك إلى ما لا يريبك",
+      "textHash": "7e9dc6ff213138bc581f041b4cb3b86bc2e60e2e05e12c277fb9d6905dc5f0af",
+      "pageRange": [
+        11,
+        11
+      ],
+      "candidates": [
+        {
+          "page": 11,
+          "text": "إلى",
+          "x": 403.33,
+          "y": 148.67,
+          "width": 22,
+          "height": 40,
+          "wordIndices": [
+            3
+          ]
+        },
+        {
+          "page": 11,
+          "text": "ما",
+          "x": 380.67,
+          "y": 148.67,
+          "width": 15.33,
+          "height": 40,
+          "wordIndices": [
+            4
+          ]
+        },
+        {
+          "page": 11,
+          "text": "لا",
+          "x": 358,
+          "y": 148.67,
+          "width": 15.33,
+          "height": 40,
+          "wordIndices": [
+            5
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "hadithId": 12,
+      "text": "من حسن إسلام المرء تركه ما لا يعنيه",
+      "textHash": "250d2337d3579c95b36be38cbf871b73e6d663bc6ed57ec19772952b86090cb9",
+      "pageRange": [
+        11,
+        11
+      ],
+      "candidates": [],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "hadithId": 13,
+      "text": "لا يؤمن أحدكم حتى يحب لأخيه ما يحب لنفسه",
+      "textHash": "e81dcffa4ba2b52271e2cf044024c3481c2e9ef13ce4d2e27a1c9371eee615f0",
+      "pageRange": [
+        11,
+        11
+      ],
+      "candidates": [],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "hadithId": 14,
+      "text": "لا يحل دم امرئ مسلم إلا بإحدى ثلاث: الثيب الزاني، والنفس بالنفس، والتارك لدينه المفارق للجماعة",
+      "textHash": "889af6f8b01f36e06a49658d6794b8adf71890a160495f7737d8b9ba096cbb01",
+      "pageRange": [
+        11,
+        12
+      ],
+      "candidates": [
+        {
+          "page": 12,
+          "text": "الزَّانِي",
+          "x": 272.67,
+          "y": 305.33,
+          "width": 52.67,
+          "height": 38,
+          "wordIndices": [
+            9
+          ]
+        },
+        {
+          "page": 12,
+          "text": "والنَفُسٌ",
+          "x": 191.33,
+          "y": 303.33,
+          "width": 56.67,
+          "height": 41.33,
+          "wordIndices": [
+            10
+          ]
+        },
+        {
+          "page": 12,
+          "text": "بالنَّفُسٍ",
+          "x": 119.33,
+          "y": 303.33,
+          "width": 64.67,
+          "height": 41.33,
+          "wordIndices": [
+            11
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "hadithId": 15,
+      "text": "من كان يؤمن بالله واليوم الآخر فليقل خيرًا أو ليصمت، ومن كان يؤمن بالله واليوم الآخر فليكرم جاره، ومن كان يؤمن بالله واليوم الآخر فليكرم ضيفه",
+      "textHash": "56b32ee3d7336fa164e6d300b78127751c7070174506955c14fa8b9ec14d64a5",
+      "pageRange": [
+        12,
+        12
+      ],
+      "candidates": [
+        {
+          "page": 12,
+          "text": "جَارَهُ",
+          "x": 342,
+          "y": 593.33,
+          "width": 38,
+          "height": 36.67,
+          "wordIndices": [
+            17
+          ]
+        },
+        {
+          "page": 12,
+          "text": "وَمَنْ",
+          "x": 283.33,
+          "y": 593.33,
+          "width": 37.33,
+          "height": 36.67,
+          "wordIndices": [
+            18
+          ]
+        },
+        {
+          "page": 12,
+          "text": "كَانَ",
+          "x": 242.67,
+          "y": 593.33,
+          "width": 34,
+          "height": 36.67,
+          "wordIndices": [
+            19
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ]
+    },
+    {
+      "hadithId": 16,
+      "text": "أوصني، قال لا تغضب فردد مرارًا، قال لا تغضب",
+      "textHash": "d77a0d95e4950b95ed6b68b1454ca979ef5b406dd77de5411d0a404f71a456ba",
+      "pageRange": [
+        13,
+        13
+      ],
+      "candidates": [],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "hadithId": 17,
+      "text": "إن الله كتب الإحسان على كل شئ، فإذا قتلتم فأحسنوا القتلة وإذا ذبحتم فأحسنوا الذبحة، وليحد أحدكم شفرته وليرح ذبيحته",
+      "textHash": "a4f20416bed8499ef05ae4f85f1d3c217a8cf3ce2eaa1626c14565f0344d3c84",
+      "pageRange": [
+        13,
+        13
+      ],
+      "candidates": [],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ]
+    },
+    {
+      "hadithId": 18,
+      "text": "إتق الله حيثما كنت، وأتبع السيئة الحسنة تمحها، وخالق الناس بخلق حسن",
+      "textHash": "b5c360cc78edf96e6a916f539a8a16353170da7243f4127cf022a7e603cf3a35",
+      "pageRange": [
+        14,
+        14
+      ],
+      "candidates": [],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "hadithId": 19,
+      "text": "يا غلام، إني أعلمك كلمات: إحفظ الله يحفظك، إحفظ الله تجده تجاهك، إذا سألت فاسأل الله، وإذا استعنت فاستعن بالله، واعلم أن الأمة لو اجتمعت على أن ينفعوك بشئ لم ينفعوك إلا بشئ قد كتبه الله لك،\nوإن اجتمعوا على أن يضروك بشئ لم يضروك إلا بشئ قد كتبه الله عليك، رفعت الأقلام وجفت الصحف",
+      "textHash": "29d570f72e1154f0ec9127b13bc321fdab913b78f987f99029a614b2a8676278",
+      "pageRange": [
+        14,
+        15
+      ],
+      "candidates": [
+        {
+          "page": 14,
+          "text": "كَتبهُ",
+          "x": 515.33,
+          "y": 661.33,
+          "width": 38,
+          "height": 46,
+          "wordIndices": [
+            34
+          ]
+        },
+        {
+          "page": 14,
+          "text": "الله",
+          "x": 480.67,
+          "y": 661.33,
+          "width": 29.33,
+          "height": 46,
+          "wordIndices": [
+            35
+          ]
+        },
+        {
+          "page": 14,
+          "text": "لَك",
+          "x": 452,
+          "y": 661.33,
+          "width": 23.33,
+          "height": 46,
+          "wordIndices": [
+            36
+          ]
+        },
+        {
+          "page": 14,
+          "text": "وإن",
+          "x": 397.33,
+          "y": 661.33,
+          "width": 26,
+          "height": 46,
+          "wordIndices": [
+            37
+          ]
+        },
+        {
+          "page": 14,
+          "text": "على",
+          "x": 288,
+          "y": 661.33,
+          "width": 23.33,
+          "height": 46,
+          "wordIndices": [
+            39
+          ]
+        },
+        {
+          "page": 14,
+          "text": "أَنْ",
+          "x": 256,
+          "y": 661.33,
+          "width": 24,
+          "height": 46,
+          "wordIndices": [
+            40
+          ]
+        },
+        {
+          "page": 14,
+          "text": "يَضُرُوكَ",
+          "x": 186,
+          "y": 661.33,
+          "width": 65.33,
+          "height": 46,
+          "wordIndices": [
+            41
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54
+      ]
+    },
+    {
+      "hadithId": 20,
+      "text": "إن مما أدرك الناس من كلام النبوة الأولى: إذا لم تستح فاصنع ما شئت",
+      "textHash": "2ecacf7de6dc70294a43e4cdb31c060b646c89ae7bfbe7e39ddb783dcae3223f",
+      "pageRange": [
+        15,
+        15
+      ],
+      "candidates": [],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ]
+    },
+    {
+      "hadithId": 21,
+      "text": "قلت يا رسول الله قل لي في الإسلام قولًا لا أسال عنه أحدًا غيرك، قال قل آمنت بالله، ثم استقم",
+      "textHash": "10bc6dde7400fe665548fd03b49f23a34fb8461df120cb1fb882f39fc98bff55",
+      "pageRange": [
+        16,
+        16
+      ],
+      "candidates": [],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ]
+    },
+    {
+      "hadithId": 22,
+      "text": "أرأيت إذا صليت المكتوبات، وصمت رمضان، وأحللت الحلال، وحرمت الحرام، ولم أزد على ذلك شيئًا، أدخل الجنة؟ قال نعم",
+      "textHash": "4de535570923b6d3f4488aecbf274aaa6915113faf4f7ca1a60e18fce91c0d79",
+      "pageRange": [
+        16,
+        16
+      ],
+      "candidates": [],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    {
+      "hadithId": 23,
+      "text": "الطهور شطر الإيمان، والحمد لله تملأ الميزان، وسبحان الله والحمد لله تملآن - أو تملأ - ما بين\nالسماء والأرض، والصلاة نور، والصدقة برهان، والصبر ضياء، والقرآن حجة لك أو عليك، كل الناس يغدو: فبائع نفسه فمعتقها أو موبقها",
+      "textHash": "b7dfcbf18079cabbc225ca5c555254772d42472d0cfec938da41c38433468931",
+      "pageRange": [
+        17,
+        17
+      ],
+      "candidates": [
+        {
+          "page": 17,
+          "text": "والصَّبْرٌ",
+          "x": 106,
+          "y": 392.67,
+          "width": 60,
+          "height": 41.33,
+          "wordIndices": [
+            24
+          ]
+        },
+        {
+          "page": 17,
+          "text": "ضِيَاءٌ",
+          "x": 520,
+          "y": 430,
+          "width": 38,
+          "height": 38,
+          "wordIndices": [
+            25
+          ]
+        },
+        {
+          "page": 17,
+          "text": "والقّرْآنُ",
+          "x": 436.67,
+          "y": 430,
+          "width": 62,
+          "height": 38,
+          "wordIndices": [
+            26
+          ]
+        },
+        {
+          "page": 17,
+          "text": "حُجّةٌ",
+          "x": 389.33,
+          "y": 428,
+          "width": 42.67,
+          "height": 39.33,
+          "wordIndices": [
+            27
+          ]
+        },
+        {
+          "page": 17,
+          "text": "لَك",
+          "x": 360,
+          "y": 428,
+          "width": 22.67,
+          "height": 39.33,
+          "wordIndices": [
+            28
+          ]
+        },
+        {
+          "page": 17,
+          "text": "أو",
+          "x": 332.67,
+          "y": 430.67,
+          "width": 14,
+          "height": 33.33,
+          "wordIndices": [
+            29
+          ]
+        },
+        {
+          "page": 17,
+          "text": "عَلَيكَ",
+          "x": 269.33,
+          "y": 428,
+          "width": 54,
+          "height": 39.33,
+          "wordIndices": [
+            30
+          ]
+        },
+        {
+          "page": 17,
+          "text": "كُلَّ",
+          "x": 230.67,
+          "y": 426.67,
+          "width": 34,
+          "height": 46.67,
+          "wordIndices": [
+            31
+          ]
+        },
+        {
+          "page": 17,
+          "text": "النَاسٍ",
+          "x": 184,
+          "y": 426.67,
+          "width": 40,
+          "height": 46.67,
+          "wordIndices": [
+            32
+          ]
+        },
+        {
+          "page": 17,
+          "text": "يَغُْدُو",
+          "x": 126,
+          "y": 426.67,
+          "width": 50,
+          "height": 46.67,
+          "wordIndices": [
+            33
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38
+      ]
+    },
+    {
+      "hadithId": 24,
+      "text": "إني حرمت الظلم على نفسي وجعلته بينكم محرمًا فلا تظالموا،\nيا عبادي، كلكم ضال إلا من هديته فاستهدوني أهدكم، يا عبادي، كلكم جائع إلا من أطعمته فاستطعموني أطعمكم، يا عبادي، كلكم عار إلا من كسوته فاستكسوني أكسكم: يا عبادي، إنكم تخطئون بالليل والنهار وأنا أغفر الذنوب جميعًا فاستغفروني أغفر لكم، ياعبادي، إنكم لن تبلغوا ضري فتضروني ولن تبلغوا نفعي فتنفعوني، يا عبادي، لو أن أولكم وآخركم وإنسكم وجنكم كانوا على أتقى قلب رجل واحد منكم ما زاد ذلك في ملكي شيئًا:\nيا عبادي، لو أن أولكم وآخركم وإنسكم وجنكم كانوا على أفجر قلب رجل واحد منكم ما نقص ذلك من ملكي شيئًا: يا عبادي، لو أن أولكم وآخركم وإنسكم وجنكم قاموا في صعيد واحد فسألوني فأعطيت كل واحد مسألته ما نقص ذلك مما عندي إلا كما ينقص المخيط إذا أدخل البحر، يا عبادي، إنما هي أعمالكم أحصيها لكم ثم أوفيكم إياها فمن وجد خيرًا فليحمد الله ومن\nوجد غير ذلك فلا يلومن إلا نفسه",
+      "textHash": "7b825018a3f4e7c6de1cdad78ab6644dd13e35ae2156b531d080e0f53e65ed4b",
+      "pageRange": [
+        17,
+        18
+      ],
+      "candidates": [
+        {
+          "page": 17,
+          "text": "كُلكُمْ",
+          "x": 357.33,
+          "y": 720,
+          "width": 50,
+          "height": 46.67,
+          "wordIndices": [
+            12
+          ]
+        },
+        {
+          "page": 17,
+          "text": "ضالٌ",
+          "x": 316.67,
+          "y": 720,
+          "width": 32.67,
+          "height": 46.67,
+          "wordIndices": [
+            13
+          ]
+        },
+        {
+          "page": 17,
+          "text": "إلا",
+          "x": 293.33,
+          "y": 720,
+          "width": 16,
+          "height": 46.67,
+          "wordIndices": [
+            14
+          ]
+        },
+        {
+          "page": 17,
+          "text": "مَن",
+          "x": 266.67,
+          "y": 720,
+          "width": 18,
+          "height": 46.67,
+          "wordIndices": [
+            15
+          ]
+        },
+        {
+          "page": 18,
+          "text": "يا",
+          "x": 317.33,
+          "y": 444,
+          "width": 12.67,
+          "height": 38,
+          "wordIndices": [
+            60
+          ]
+        },
+        {
+          "page": 18,
+          "text": "عبادي",
+          "x": 272,
+          "y": 428.67,
+          "width": 39.33,
+          "height": 56,
+          "wordIndices": [
+            61
+          ]
+        },
+        {
+          "page": 18,
+          "text": "لو",
+          "x": 247.33,
+          "y": 432.67,
+          "width": 10.67,
+          "height": 34.67,
+          "wordIndices": [
+            62
+          ]
+        },
+        {
+          "page": 18,
+          "text": "أن",
+          "x": 158.67,
+          "y": 522,
+          "width": 14.67,
+          "height": 38,
+          "wordIndices": [
+            63
+          ]
+        },
+        {
+          "page": 18,
+          "text": "أَوَلكُمْ",
+          "x": 97.33,
+          "y": 508,
+          "width": 51.33,
+          "height": 54.67,
+          "wordIndices": [
+            64
+          ]
+        },
+        {
+          "page": 18,
+          "text": "وآخركم",
+          "x": 488.67,
+          "y": 554,
+          "width": 58,
+          "height": 56.67,
+          "wordIndices": [
+            65
+          ]
+        },
+        {
+          "page": 18,
+          "text": "في",
+          "x": 294,
+          "y": 554,
+          "width": 14.67,
+          "height": 56.67,
+          "wordIndices": [
+            111
+          ]
+        },
+        {
+          "page": 18,
+          "text": "صَعِيدٍ",
+          "x": 240.67,
+          "y": 554,
+          "width": 46.67,
+          "height": 56.67,
+          "wordIndices": [
+            112
+          ]
+        },
+        {
+          "page": 18,
+          "text": "واحدٍ",
+          "x": 198,
+          "y": 554,
+          "width": 36,
+          "height": 56.67,
+          "wordIndices": [
+            113
+          ]
+        },
+        {
+          "page": 18,
+          "text": "ما",
+          "x": 323.33,
+          "y": 600,
+          "width": 13.33,
+          "height": 49.33,
+          "wordIndices": [
+            119
+          ]
+        },
+        {
+          "page": 18,
+          "text": "نَقصٌ",
+          "x": 277.33,
+          "y": 600,
+          "width": 36.67,
+          "height": 49.33,
+          "wordIndices": [
+            120
+          ]
+        },
+        {
+          "page": 18,
+          "text": "ذلك",
+          "x": 240,
+          "y": 600,
+          "width": 25.33,
+          "height": 49.33,
+          "wordIndices": [
+            121
+          ]
+        },
+        {
+          "page": 18,
+          "text": "مما",
+          "x": 209.33,
+          "y": 602.67,
+          "width": 16,
+          "height": 42,
+          "wordIndices": [
+            122
+          ]
+        },
+        {
+          "page": 18,
+          "text": "عندي",
+          "x": 166,
+          "y": 600,
+          "width": 34.67,
+          "height": 49.33,
+          "wordIndices": [
+            123
+          ]
+        },
+        {
+          "page": 18,
+          "text": "إلا",
+          "x": 135.33,
+          "y": 600,
+          "width": 18.67,
+          "height": 49.33,
+          "wordIndices": [
+            124
+          ]
+        },
+        {
+          "page": 18,
+          "text": "كما",
+          "x": 98.67,
+          "y": 600,
+          "width": 28,
+          "height": 49.33,
+          "wordIndices": [
+            125
+          ]
+        },
+        {
+          "page": 18,
+          "text": "الله",
+          "x": 112,
+          "y": 678.67,
+          "width": 30.67,
+          "height": 68.67,
+          "wordIndices": [
+            145
+          ]
+        },
+        {
+          "page": 18,
+          "text": "ومَنْ",
+          "x": 519.33,
+          "y": 726.67,
+          "width": 27.33,
+          "height": 38,
+          "wordIndices": [
+            146
+          ]
+        },
+        {
+          "page": 18,
+          "text": "وَجَدَ",
+          "x": 476,
+          "y": 726.67,
+          "width": 36.67,
+          "height": 38,
+          "wordIndices": [
+            147
+          ]
+        },
+        {
+          "page": 18,
+          "text": "غير",
+          "x": 440.67,
+          "y": 730,
+          "width": 27.33,
+          "height": 30.67,
+          "wordIndices": [
+            148
+          ]
+        },
+        {
+          "page": 18,
+          "text": "ذلك",
+          "x": 410,
+          "y": 726.67,
+          "width": 22,
+          "height": 38,
+          "wordIndices": [
+            149
+          ]
+        },
+        {
+          "page": 18,
+          "text": "فلا",
+          "x": 374.67,
+          "y": 726.67,
+          "width": 20.67,
+          "height": 38,
+          "wordIndices": [
+            150
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153
+      ]
+    },
+    {
+      "hadithId": 25,
+      "text": "يا رسول الله، ذهب أهل الدثور بالأجور: يصلون كما نصلي ويصومون كما نصوم، ويتصدقون بفضول أموالهم.\nقال: أوليس قد جعل الله لكم ما تصدقون: إن بكل تسبيحة صدقة، وكل تكبيرة صدقة، وكل\nتحميدة صدقة، وكل تهليلة صدقة، وأمر بمعروف صدقة، ونهي عن منكر صدقة، وفي بضع أحدكم صدقة، قالوا: يا رسول الله، أيأتي أحدنا شهوته ويكون له فيها أجر؟ قال أرأيتم لو وضعها في حرام أكان عليه وزر؟ فكذلك إذا وضعها في الحلال كان له أجر",
+      "textHash": "c9eabf36009fed3dc67c34623f4117c280d0481c4041d9f897b0624b11c95fb0",
+      "pageRange": [
+        19,
+        19
+      ],
+      "candidates": [
+        {
+          "page": 19,
+          "text": "كما",
+          "x": 330.67,
+          "y": 358,
+          "width": 51.33,
+          "height": 20,
+          "wordIndices": [
+            11
+          ]
+        },
+        {
+          "page": 19,
+          "text": "نَصُومُ",
+          "x": 292.67,
+          "y": 344.67,
+          "width": 30.67,
+          "height": 43.33,
+          "wordIndices": [
+            12
+          ]
+        },
+        {
+          "page": 19,
+          "text": "وَيتَصَدَقُونَ",
+          "x": 174,
+          "y": 353.33,
+          "width": 80,
+          "height": 32,
+          "wordIndices": [
+            13
+          ]
+        },
+        {
+          "page": 19,
+          "text": "قد",
+          "x": 337.33,
+          "y": 395.33,
+          "width": 14.67,
+          "height": 24,
+          "wordIndices": [
+            18
+          ]
+        },
+        {
+          "page": 19,
+          "text": "جَعَلَ",
+          "x": 293.33,
+          "y": 388,
+          "width": 36,
+          "height": 45.33,
+          "wordIndices": [
+            19
+          ]
+        },
+        {
+          "page": 19,
+          "text": "الله",
+          "x": 260.67,
+          "y": 388,
+          "width": 25.33,
+          "height": 45.33,
+          "wordIndices": [
+            20
+          ]
+        },
+        {
+          "page": 19,
+          "text": "ما",
+          "x": 209.33,
+          "y": 388,
+          "width": 14.67,
+          "height": 45.33,
+          "wordIndices": [
+            22
+          ]
+        },
+        {
+          "page": 19,
+          "text": "تَصَدَقُونَ",
+          "x": 138.67,
+          "y": 388,
+          "width": 66,
+          "height": 45.33,
+          "wordIndices": [
+            23
+          ]
+        },
+        {
+          "page": 19,
+          "text": "إن‎",
+          "x": 102,
+          "y": 398,
+          "width": 17.33,
+          "height": 28,
+          "wordIndices": [
+            24
+          ]
+        },
+        {
+          "page": 19,
+          "text": "صَدَقة",
+          "x": 210,
+          "y": 429.33,
+          "width": 47.33,
+          "height": 57.33,
+          "wordIndices": [
+            30
+          ]
+        },
+        {
+          "page": 19,
+          "text": "وكل",
+          "x": 160,
+          "y": 429.33,
+          "width": 29.33,
+          "height": 57.33,
+          "wordIndices": [
+            31
+          ]
+        },
+        {
+          "page": 19,
+          "text": "تَحمِيدةٍ‎",
+          "x": 102,
+          "y": 429.33,
+          "width": 51.33,
+          "height": 57.33,
+          "wordIndices": [
+            32
+          ]
+        },
+        {
+          "page": 19,
+          "text": "في",
+          "x": 342.67,
+          "y": 610.67,
+          "width": 13.33,
+          "height": 29.33,
+          "wordIndices": [
+            63
+          ]
+        },
+        {
+          "page": 19,
+          "text": "حَرَامٍ",
+          "x": 295.33,
+          "y": 598.67,
+          "width": 38.67,
+          "height": 50.67,
+          "wordIndices": [
+            64
+          ]
+        },
+        {
+          "page": 19,
+          "text": "أكانَ",
+          "x": 252.67,
+          "y": 598.67,
+          "width": 36.67,
+          "height": 50.67,
+          "wordIndices": [
+            65
+          ]
+        },
+        {
+          "page": 19,
+          "text": "عليه",
+          "x": 216,
+          "y": 598.67,
+          "width": 29.33,
+          "height": 50.67,
+          "wordIndices": [
+            66
+          ]
+        },
+        {
+          "page": 19,
+          "text": "فكذلك",
+          "x": 102,
+          "y": 608,
+          "width": 54.67,
+          "height": 22,
+          "wordIndices": [
+            68
+          ]
+        },
+        {
+          "page": 19,
+          "text": "إذا",
+          "x": 529.33,
+          "y": 652.67,
+          "width": 18.67,
+          "height": 24,
+          "wordIndices": [
+            69
+          ]
+        },
+        {
+          "page": 19,
+          "text": "وضَعَهَا",
+          "x": 462,
+          "y": 640.67,
+          "width": 58.67,
+          "height": 44,
+          "wordIndices": [
+            70
+          ]
+        },
+        {
+          "page": 19,
+          "text": "في",
+          "x": 434,
+          "y": 657.33,
+          "width": 20,
+          "height": 24.67,
+          "wordIndices": [
+            71
+          ]
+        },
+        {
+          "page": 19,
+          "text": "كان",
+          "x": 324,
+          "y": 640.67,
+          "width": 31.33,
+          "height": 44,
+          "wordIndices": [
+            73
+          ]
+        },
+        {
+          "page": 19,
+          "text": "لهُ",
+          "x": 298,
+          "y": 640.67,
+          "width": 18.67,
+          "height": 44,
+          "wordIndices": [
+            74
+          ]
+        },
+        {
+          "page": 19,
+          "text": "أَجْرْ»",
+          "x": 244.67,
+          "y": 640.67,
+          "width": 46,
+          "height": 44,
+          "wordIndices": [
+            75
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75
+      ]
+    },
+    {
+      "hadithId": 26,
+      "text": "كل سلامى من الناس عليه صدقة كل يوم تطلع فيه الشمس: تعدل بين اثنين صدقة، وتعين الرجل في دابته فتحمله عليها أو ترفع\nله عليها متاعه صدقة، والكلمة الطيبة صدقة، وبكل خطوة تمشيها إلى الصلاة صدقة، وتميط الأذى عن الطريق",
+      "textHash": "1321310cf8466440f1e17fc82c6f189d9b380a38aa403ab373265c8a6533cb93",
+      "pageRange": [
+        20,
+        20
+      ],
+      "candidates": [
+        {
+          "page": 20,
+          "text": "إلى",
+          "x": 401.33,
+          "y": 320.67,
+          "width": 28,
+          "height": 32,
+          "wordIndices": [
+            33
+          ]
+        },
+        {
+          "page": 20,
+          "text": "الصَّلَاةٍ",
+          "x": 334.67,
+          "y": 315.33,
+          "width": 54.67,
+          "height": 35.33,
+          "wordIndices": [
+            34
+          ]
+        },
+        {
+          "page": 20,
+          "text": "صَدَقَةٌ ‏",
+          "x": 259.33,
+          "y": 316,
+          "width": 64,
+          "height": 26.67,
+          "wordIndices": [
+            35
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ]
+    },
+    {
+      "hadithId": 27,
+      "text": "البر حسن الخلق، والإثم ما حاك في نفسك وكرهت أن يطلع عليه الناس",
+      "textHash": "5009e436799488db43a3e5a1cb4eaff535d48c9fc18f5493490661169ff10e53",
+      "pageRange": [
+        20,
+        20
+      ],
+      "candidates": [
+        {
+          "page": 20,
+          "text": "ما",
+          "x": 167.33,
+          "y": 519.33,
+          "width": 10,
+          "height": 53.33,
+          "wordIndices": [
+            4
+          ]
+        },
+        {
+          "page": 20,
+          "text": "حاك",
+          "x": 130.67,
+          "y": 519.33,
+          "width": 26.67,
+          "height": 53.33,
+          "wordIndices": [
+            5
+          ]
+        },
+        {
+          "page": 20,
+          "text": "في",
+          "x": 103.33,
+          "y": 530.67,
+          "width": 17.33,
+          "height": 29.33,
+          "wordIndices": [
+            6
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "hadithId": 28,
+      "text": "أوصيكم بتقوى الله ﷿ والسمع والطاعة وإن تأمر عليكم عبد،\nفإنه من يعش منكم فسيري اختلافًا كثيرًا، فعليكم بسنتي وسنة الخلفاء الراشدين المهديين عضوا عليها بالنواجذ، وإياكم ومحدثات الأمور فإن كل بدعة ضلالة",
+      "textHash": "4baf67706725e48d015a2058c50c24599e733a57fcb2d65b843751c8316c6a3f",
+      "pageRange": [
+        21,
+        22
+      ],
+      "candidates": [
+        {
+          "page": 21,
+          "text": "وَإِيَاكُمْ",
+          "x": 372,
+          "y": 726,
+          "width": 58,
+          "height": 46,
+          "wordIndices": [
+            26
+          ]
+        },
+        {
+          "page": 21,
+          "text": "ومُحْدّثاتٍ",
+          "x": 291.33,
+          "y": 726,
+          "width": 72.67,
+          "height": 46,
+          "wordIndices": [
+            27
+          ]
+        },
+        {
+          "page": 21,
+          "text": "الأَمُورٍ",
+          "x": 230.67,
+          "y": 726,
+          "width": 55.33,
+          "height": 46,
+          "wordIndices": [
+            28
+          ]
+        },
+        {
+          "page": 21,
+          "text": "فإنّ",
+          "x": 179.33,
+          "y": 726,
+          "width": 29.33,
+          "height": 46,
+          "wordIndices": [
+            29
+          ]
+        },
+        {
+          "page": 21,
+          "text": "كل",
+          "x": 153.33,
+          "y": 726,
+          "width": 20.67,
+          "height": 46,
+          "wordIndices": [
+            30
+          ]
+        },
+        {
+          "page": 21,
+          "text": "بِدْعَةٍ",
+          "x": 104.67,
+          "y": 726,
+          "width": 40.67,
+          "height": 46,
+          "wordIndices": [
+            31
+          ]
+        },
+        {
+          "page": 22,
+          "text": "ضلالة",
+          "x": 486,
+          "y": 158.67,
+          "width": 51.33,
+          "height": 19.33,
+          "wordIndices": [
+            32
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ]
+    },
+    {
+      "hadithId": 29,
+      "text": "أخبرني بعمل يدخلني الجنة ويباعدني عن النار، قال: لقد سألت عن عظيم وإنه ليسير على من يسره الله تعالى عليه: تعبد الله لا تشرك به شيئًا، وتقيم الصلاة، وتؤتي الزكاة، وتصوم رمضان، وتحج البيت ثم قال: ألا أدلك على أبواب الخير؟: الصوم جنة، والصدقة تطفئ الخطيئة كما يطفئ الماء النار، وصلاة الرجل في جوف الليل\nثم تلا: ﴿تتجافى جنوبهم عن المضاجع﴾ ﴿حتى إذا بلغ﴾ ﴿يعملون﴾ ثم قال ألا أخبرك برأس الأمر وعموده وذروة سنامه؟ قلت: بلى يا رسول الله.\nقال رأس الأمر الإسلام، وعموده الصلاة، وذروة سنامه الجهاد\nثم قال: ألا أخبرك بملاك ذلك كله؟ قلت: بلى يا رسول الله، فأخذ بلسانه وقال كف عليك هذا قلت: يا نبي الله، وإنا لمؤاخذون بما نتكلم به؟ فقال ثكلتك أمك، وهل يكب الناس في النار على وجوههم - أو قال على مناخرهم - إلا حصائد ألسنتهم؟",
+      "textHash": "dd4f4e00c293487cd8fec3e849f9f036b5bb333c8ff43f383607ed5245fb1545",
+      "pageRange": [
+        22,
+        23
+      ],
+      "candidates": [
+        {
+          "page": 22,
+          "text": "على",
+          "x": 420.67,
+          "y": 396.67,
+          "width": 26.67,
+          "height": 52.67,
+          "wordIndices": [
+            14
+          ]
+        },
+        {
+          "page": 22,
+          "text": "مَنْ",
+          "x": 387.33,
+          "y": 396.67,
+          "width": 24,
+          "height": 52.67,
+          "wordIndices": [
+            15
+          ]
+        },
+        {
+          "page": 22,
+          "text": "يَسرَه",
+          "x": 334.67,
+          "y": 396.67,
+          "width": 47.33,
+          "height": 52.67,
+          "wordIndices": [
+            16
+          ]
+        },
+        {
+          "page": 22,
+          "text": "تعالى",
+          "x": 249.33,
+          "y": 397.33,
+          "width": 74,
+          "height": 36.67,
+          "wordIndices": [
+            18
+          ]
+        },
+        {
+          "page": 22,
+          "text": "عليه",
+          "x": 211.33,
+          "y": 394.67,
+          "width": 32,
+          "height": 42,
+          "wordIndices": [
+            19
+          ]
+        },
+        {
+          "page": 22,
+          "text": "تَعْبِدُ",
+          "x": 148,
+          "y": 398,
+          "width": 48,
+          "height": 32.67,
+          "wordIndices": [
+            20
+          ]
+        },
+        {
+          "page": 22,
+          "text": "الله",
+          "x": 111.33,
+          "y": 394.67,
+          "width": 27.33,
+          "height": 42,
+          "wordIndices": [
+            21
+          ]
+        },
+        {
+          "page": 22,
+          "text": "لا",
+          "x": 90.67,
+          "y": 394.67,
+          "width": 16,
+          "height": 42,
+          "wordIndices": [
+            22
+          ]
+        },
+        {
+          "page": 23,
+          "text": "أمُكَ",
+          "x": 360.67,
+          "y": 351.33,
+          "width": 33.33,
+          "height": 47.33,
+          "wordIndices": [
+            117
+          ]
+        },
+        {
+          "page": 23,
+          "text": "وهَلْ",
+          "x": 307.33,
+          "y": 351.33,
+          "width": 30,
+          "height": 47.33,
+          "wordIndices": [
+            118
+          ]
+        },
+        {
+          "page": 23,
+          "text": "يَكُبُ",
+          "x": 262.67,
+          "y": 351.33,
+          "width": 36,
+          "height": 47.33,
+          "wordIndices": [
+            119
+          ]
+        },
+        {
+          "page": 23,
+          "text": "النَّاسٌ",
+          "x": 209.33,
+          "y": 351.33,
+          "width": 40.67,
+          "height": 47.33,
+          "wordIndices": [
+            120
+          ]
+        },
+        {
+          "page": 23,
+          "text": "في",
+          "x": 188.67,
+          "y": 366,
+          "width": 12.67,
+          "height": 29.33,
+          "wordIndices": [
+            121
+          ]
+        },
+        {
+          "page": 23,
+          "text": "النَّار",
+          "x": 143.33,
+          "y": 351.33,
+          "width": 37.33,
+          "height": 47.33,
+          "wordIndices": [
+            122
+          ]
+        },
+        {
+          "page": 23,
+          "text": "على",
+          "x": 103.33,
+          "y": 351.33,
+          "width": 32.67,
+          "height": 47.33,
+          "wordIndices": [
+            123
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133
+      ]
+    },
+    {
+      "hadithId": 30,
+      "text": "إن الله تعالى فرض فرائض فلا تضيعوها، وحد حدودًا فلا تعتدوها، وحرم أشياء فلا تنتهكوها،\nوسكت عن أشياء رحمة لكم غير نسيان فلا تبحثوا عنها",
+      "textHash": "a09e5e818bcdd4bbd49637a94a19c0ce4f05bfe73bf49cd981a9a7ff6c06f1c8",
+      "pageRange": [
+        23,
+        24
+      ],
+      "candidates": [
+        {
+          "page": 23,
+          "text": "وَسَكَتَ",
+          "x": 140,
+          "y": 684,
+          "width": 68,
+          "height": 46.67,
+          "wordIndices": [
+            15
+          ]
+        },
+        {
+          "page": 23,
+          "text": "عن",
+          "x": 105.33,
+          "y": 704,
+          "width": 24,
+          "height": 19.33,
+          "wordIndices": [
+            16
+          ]
+        },
+        {
+          "page": 23,
+          "text": "أَشْيَاءَ",
+          "x": 512,
+          "y": 726,
+          "width": 40.67,
+          "height": 44.67,
+          "wordIndices": [
+            17
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ]
+    },
+    {
+      "hadithId": 31,
+      "text": "يا رسول الله، دلني على عمل إذا عملته أحبني الله وأحبني الناس: فقال إزهد في الدنيا يحبك الله، وازهد فيما عند الناس يحبك الناس",
+      "textHash": "9c5b55ff8df4483070971128c78adeb1df88e760848117b856f28d6885b17ca4",
+      "pageRange": [
+        24,
+        24
+      ],
+      "candidates": [
+        {
+          "page": 24,
+          "text": "الله",
+          "x": 373.33,
+          "y": 436.67,
+          "width": 36.67,
+          "height": 44,
+          "wordIndices": [
+            17
+          ]
+        },
+        {
+          "page": 24,
+          "text": "وازْهَد",
+          "x": 300,
+          "y": 439.33,
+          "width": 100.67,
+          "height": 34.67,
+          "wordIndices": [
+            18
+          ]
+        },
+        {
+          "page": 24,
+          "text": "فيما",
+          "x": 260.67,
+          "y": 436.67,
+          "width": 26.67,
+          "height": 44,
+          "wordIndices": [
+            19
+          ]
+        },
+        {
+          "page": 24,
+          "text": "عِنْدَ",
+          "x": 219.33,
+          "y": 436.67,
+          "width": 34,
+          "height": 44,
+          "wordIndices": [
+            20
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "hadithId": 32,
+      "text": "لا ضرر ولا ضرار",
+      "textHash": "e8252d82ca4735932661c021d64739bd759e7ea21bf482d5796e176d515ee14d",
+      "pageRange": [
+        24,
+        25
+      ],
+      "candidates": [
+        {
+          "page": 24,
+          "text": "لا",
+          "x": 171.33,
+          "y": 643.33,
+          "width": 20.67,
+          "height": 45.33,
+          "wordIndices": [
+            0
+          ]
+        },
+        {
+          "page": 24,
+          "text": "ضَرَرَ",
+          "x": 128.67,
+          "y": 655.33,
+          "width": 106.67,
+          "height": 26.67,
+          "wordIndices": [
+            1
+          ]
+        },
+        {
+          "page": 24,
+          "text": "ولا",
+          "x": 98,
+          "y": 656.67,
+          "width": 23.33,
+          "height": 24,
+          "wordIndices": [
+            2
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "hadithId": 33,
+      "text": "لو يعطى الناس بدعواهم لادعى رجال أموال قوم ودماءهم، لكن البينة على المدعى واليمين على من أنكر",
+      "textHash": "28a076be8d77a8df5ce6bf712d26d157fc1f0f673c7e91a8145d686e156664d4",
+      "pageRange": [
+        25,
+        25
+      ],
+      "candidates": [
+        {
+          "page": 25,
+          "text": "أَموَالَ",
+          "x": 386.67,
+          "y": 437.33,
+          "width": 44,
+          "height": 40,
+          "wordIndices": [
+            6
+          ]
+        },
+        {
+          "page": 25,
+          "text": "قوم",
+          "x": 350.67,
+          "y": 440.67,
+          "width": 25.33,
+          "height": 45.33,
+          "wordIndices": [
+            7
+          ]
+        },
+        {
+          "page": 25,
+          "text": "وَدِمَاءهُمْ",
+          "x": 270.67,
+          "y": 444.67,
+          "width": 69.33,
+          "height": 44,
+          "wordIndices": [
+            8
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    {
+      "hadithId": 34,
+      "text": "من رأى منكم منكرًا فليغيره بيده، فإن لم يستطع فبلسانه، فإن لم يستطع فبقلبه، وذلك أضعف الإيمان",
+      "textHash": "022bc64dd17b8e4b2ef07b822da9592fa9af0d9f9dd7bef4ea7b692e22fba11b",
+      "pageRange": [
+        25,
+        26
+      ],
+      "candidates": [],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    {
+      "hadithId": 35,
+      "text": "لا تحاسدوا، ولا تناجشوا ولا تباغضوا، ولا تدابروا، ولا يبع بعضكم على بيع بعض، وكونوا عباد الله إخوانًا، المسلم أخو المسلم لا يظلمه ولا يخذله ولا يكذبه ولا يحقره، التقوى ههنا - ويشير\nإلى صدور ثلاث مرات - بحسب امرئ من الشر أن يحقر أخاه المسلم، كل المسلم على المسلم حرام: دمه وماله وعرضه",
+      "textHash": "90179f1cae96227abdf10b150db461a98a0ddd06e70ac9312654abdd48bcec50",
+      "pageRange": [
+        26,
+        26
+      ],
+      "candidates": [
+        {
+          "page": 26,
+          "text": "لا",
+          "x": 534.67,
+          "y": 432,
+          "width": 10.67,
+          "height": 40.67,
+          "wordIndices": [
+            21
+          ]
+        },
+        {
+          "page": 26,
+          "text": "يَظْلِمَهُ",
+          "x": 478.67,
+          "y": 432,
+          "width": 46.67,
+          "height": 40.67,
+          "wordIndices": [
+            22
+          ]
+        },
+        {
+          "page": 26,
+          "text": "ولا",
+          "x": 435.33,
+          "y": 432,
+          "width": 22,
+          "height": 40.67,
+          "wordIndices": [
+            23
+          ]
+        },
+        {
+          "page": 26,
+          "text": "ولا",
+          "x": 334,
+          "y": 432,
+          "width": 20.67,
+          "height": 40.67,
+          "wordIndices": [
+            25
+          ]
+        },
+        {
+          "page": 26,
+          "text": "يَكُذِبُهُ",
+          "x": 275.33,
+          "y": 432,
+          "width": 54,
+          "height": 40.67,
+          "wordIndices": [
+            26
+          ]
+        },
+        {
+          "page": 26,
+          "text": "ولا",
+          "x": 232,
+          "y": 432,
+          "width": 22.67,
+          "height": 40.67,
+          "wordIndices": [
+            27
+          ]
+        },
+        {
+          "page": 26,
+          "text": "من",
+          "x": 478.67,
+          "y": 529.33,
+          "width": 16.67,
+          "height": 22,
+          "wordIndices": [
+            40
+          ]
+        },
+        {
+          "page": 26,
+          "text": "الشَّر",
+          "x": 429.33,
+          "y": 512,
+          "width": 34.67,
+          "height": 56,
+          "wordIndices": [
+            41
+          ]
+        },
+        {
+          "page": 26,
+          "text": "أنْ",
+          "x": 401.33,
+          "y": 512,
+          "width": 18.67,
+          "height": 56,
+          "wordIndices": [
+            42
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53
+      ]
+    },
+    {
+      "hadithId": 36,
+      "text": "من نفس عن مؤمن كربة من كرب الدنيا نفس الله عنه كربة من كرب يوم القيامة، ومن يسر على معسر يسر الله عليه في الدنيا والآخرة، ومن ستر مسلمًا ستره الله في الدنيا والآخرة، والله في عون العبد ما كان العبد في عون أخيه، ومن سلك طريقًا يلتمس فيه علمًا سهل الله له به طريقًا إلى الجنة، وما اجتمع قوم في بيت من بيوت الله يتلون كتاب الله ويتدارسونه بينهم إلا نزلت عليهم السكينة\nوغشيتهم الرحمة وحفتهم الملائكة وذكرهم الله فيمن عنده، ومن بطأ به عمله لم يسرع به نسبه",
+      "textHash": "fbe0da17fab2074cf23efc56871eb701f2829fafbe13e307fd1100c853cca17c",
+      "pageRange": [
+        27,
+        27
+      ],
+      "candidates": [
+        {
+          "page": 27,
+          "text": "عن",
+          "x": 306.67,
+          "y": 145.33,
+          "width": 18,
+          "height": 48,
+          "wordIndices": [
+            2
+          ]
+        },
+        {
+          "page": 27,
+          "text": "مُؤْمِنٍ",
+          "x": 249.33,
+          "y": 145.33,
+          "width": 48.67,
+          "height": 48,
+          "wordIndices": [
+            3
+          ]
+        },
+        {
+          "page": 27,
+          "text": "كُرْبَةٌ",
+          "x": 189.33,
+          "y": 145.33,
+          "width": 54.67,
+          "height": 48,
+          "wordIndices": [
+            4
+          ]
+        },
+        {
+          "page": 27,
+          "text": "من",
+          "x": 162.67,
+          "y": 158.67,
+          "width": 21.33,
+          "height": 24,
+          "wordIndices": [
+            5
+          ]
+        },
+        {
+          "page": 27,
+          "text": "كُرّبٍ",
+          "x": 108.67,
+          "y": 145.33,
+          "width": 45.33,
+          "height": 48,
+          "wordIndices": [
+            6
+          ]
+        },
+        {
+          "page": 27,
+          "text": "يَسَرَ",
+          "x": 524.67,
+          "y": 228,
+          "width": 34.67,
+          "height": 46,
+          "wordIndices": [
+            17
+          ]
+        },
+        {
+          "page": 27,
+          "text": "على",
+          "x": 492.67,
+          "y": 228,
+          "width": 24,
+          "height": 46,
+          "wordIndices": [
+            18
+          ]
+        },
+        {
+          "page": 27,
+          "text": "مُعْسرٍ",
+          "x": 432.67,
+          "y": 228,
+          "width": 52,
+          "height": 46,
+          "wordIndices": [
+            19
+          ]
+        },
+        {
+          "page": 27,
+          "text": "الله",
+          "x": 345.33,
+          "y": 228,
+          "width": 30.67,
+          "height": 50.67,
+          "wordIndices": [
+            21
+          ]
+        },
+        {
+          "page": 27,
+          "text": "عليه",
+          "x": 310.67,
+          "y": 228,
+          "width": 28.67,
+          "height": 50.67,
+          "wordIndices": [
+            22
+          ]
+        },
+        {
+          "page": 27,
+          "text": "في",
+          "x": 288,
+          "y": 240,
+          "width": 13.33,
+          "height": 30,
+          "wordIndices": [
+            23
+          ]
+        },
+        {
+          "page": 27,
+          "text": "العَبدُ",
+          "x": 373.33,
+          "y": 312,
+          "width": 42.67,
+          "height": 54.67,
+          "wordIndices": [
+            40
+          ]
+        },
+        {
+          "page": 27,
+          "text": "في",
+          "x": 349.33,
+          "y": 324,
+          "width": 14,
+          "height": 40,
+          "wordIndices": [
+            41
+          ]
+        },
+        {
+          "page": 27,
+          "text": "عُونٍ",
+          "x": 308,
+          "y": 312,
+          "width": 31.33,
+          "height": 54.67,
+          "wordIndices": [
+            42
+          ]
+        },
+        {
+          "page": 27,
+          "text": "وَمَنْ",
+          "x": 211.33,
+          "y": 315.33,
+          "width": 30.67,
+          "height": 36.67,
+          "wordIndices": [
+            44
+          ]
+        },
+        {
+          "page": 27,
+          "text": "سَلَّكٌ",
+          "x": 161.33,
+          "y": 315.33,
+          "width": 44,
+          "height": 36.67,
+          "wordIndices": [
+            45
+          ]
+        },
+        {
+          "page": 27,
+          "text": "طريقًا",
+          "x": 108.67,
+          "y": 315.33,
+          "width": 44,
+          "height": 36.67,
+          "wordIndices": [
+            46
+          ]
+        },
+        {
+          "page": 27,
+          "text": "لَه",
+          "x": 314,
+          "y": 349.33,
+          "width": 17.33,
+          "height": 59.33,
+          "wordIndices": [
+            52
+          ]
+        },
+        {
+          "page": 27,
+          "text": "به",
+          "x": 292.67,
+          "y": 372,
+          "width": 12.67,
+          "height": 21.33,
+          "wordIndices": [
+            53
+          ]
+        },
+        {
+          "page": 27,
+          "text": "طرِيقًا",
+          "x": 242,
+          "y": 349.33,
+          "width": 41.33,
+          "height": 59.33,
+          "wordIndices": [
+            54
+          ]
+        },
+        {
+          "page": 27,
+          "text": "إلى",
+          "x": 212,
+          "y": 349.33,
+          "width": 23.33,
+          "height": 59.33,
+          "wordIndices": [
+            55
+          ]
+        },
+        {
+          "page": 27,
+          "text": "بَطًا",
+          "x": 532,
+          "y": 519.33,
+          "width": 26,
+          "height": 45.33,
+          "wordIndices": [
+            83
+          ]
+        },
+        {
+          "page": 27,
+          "text": "به",
+          "x": 509.33,
+          "y": 519.33,
+          "width": 14.67,
+          "height": 45.33,
+          "wordIndices": [
+            84
+          ]
+        },
+        {
+          "page": 27,
+          "text": "عَمَلهُ",
+          "x": 464,
+          "y": 519.33,
+          "width": 40,
+          "height": 45.33,
+          "wordIndices": [
+            85
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89
+      ]
+    },
+    {
+      "hadithId": 37,
+      "text": "إن الله كتب الحسنات والسيئات ثم بين ذلك، فمن هم بحسنة فلم يعملها كتبها الله عنده حسنة كاملة، وإن هم بها فعملها كتبها الله عنده عشر حسنات إلى سبعمائة ضعف إلى أضعاف كثيرة، وإن هم بسيئة فلم يعملها كتبها الله عنده حسنة كاملة، وإن هم بها فعملها كتبها الله سيئة واحدة",
+      "textHash": "01a6f721ab77d2b33a02e120d5be5fc0c260545f8bc5c115e3c3fa3574f74d8a",
+      "pageRange": [
+        27,
+        28
+      ],
+      "candidates": [
+        {
+          "page": 27,
+          "text": "«إنَّ",
+          "x": 386.67,
+          "y": 730,
+          "width": 31.33,
+          "height": 38.67,
+          "wordIndices": [
+            0
+          ]
+        },
+        {
+          "page": 27,
+          "text": "الله",
+          "x": 348,
+          "y": 730,
+          "width": 34.67,
+          "height": 38.67,
+          "wordIndices": [
+            1
+          ]
+        },
+        {
+          "page": 27,
+          "text": "كَتَبَ",
+          "x": 304.67,
+          "y": 730,
+          "width": 39.33,
+          "height": 38.67,
+          "wordIndices": [
+            2
+          ]
+        },
+        {
+          "page": 27,
+          "text": "الحَسَنَاتٍ",
+          "x": 213.33,
+          "y": 732.67,
+          "width": 163.33,
+          "height": 31.33,
+          "wordIndices": [
+            3
+          ]
+        },
+        {
+          "page": 27,
+          "text": "والسيئاتٍ",
+          "x": 128.67,
+          "y": 740,
+          "width": 73.33,
+          "height": 24,
+          "wordIndices": [
+            4
+          ]
+        },
+        {
+          "page": 28,
+          "text": "عِنْدَهُ",
+          "x": 517.33,
+          "y": 185.33,
+          "width": 36,
+          "height": 40.67,
+          "wordIndices": [
+            15
+          ]
+        },
+        {
+          "page": 28,
+          "text": "حَسَنَةٌ",
+          "x": 462.67,
+          "y": 185.33,
+          "width": 46,
+          "height": 40.67,
+          "wordIndices": [
+            16
+          ]
+        },
+        {
+          "page": 28,
+          "text": "كَامِلَة",
+          "x": 411.33,
+          "y": 185.33,
+          "width": 46.67,
+          "height": 40.67,
+          "wordIndices": [
+            17
+          ]
+        },
+        {
+          "page": 28,
+          "text": "وإنْ",
+          "x": 366,
+          "y": 193.33,
+          "width": 26,
+          "height": 26,
+          "wordIndices": [
+            18
+          ]
+        },
+        {
+          "page": 28,
+          "text": "هَمٌ",
+          "x": 334.67,
+          "y": 185.33,
+          "width": 26.67,
+          "height": 40.67,
+          "wordIndices": [
+            19
+          ]
+        },
+        {
+          "page": 28,
+          "text": "كَتبهَا",
+          "x": 184,
+          "y": 182.67,
+          "width": 42,
+          "height": 39.33,
+          "wordIndices": [
+            22
+          ]
+        },
+        {
+          "page": 28,
+          "text": "اللَّهُ",
+          "x": 146.67,
+          "y": 182.67,
+          "width": 32.67,
+          "height": 39.33,
+          "wordIndices": [
+            23
+          ]
+        },
+        {
+          "page": 28,
+          "text": "عِنْدَهُ",
+          "x": 105.33,
+          "y": 182.67,
+          "width": 37.33,
+          "height": 39.33,
+          "wordIndices": [
+            24
+          ]
+        },
+        {
+          "page": 28,
+          "text": "عَشْرَ",
+          "x": 514.67,
+          "y": 224.67,
+          "width": 38.67,
+          "height": 46.67,
+          "wordIndices": [
+            25
+          ]
+        },
+        {
+          "page": 28,
+          "text": "حَسَناتٍ",
+          "x": 447.33,
+          "y": 224.67,
+          "width": 59.33,
+          "height": 46.67,
+          "wordIndices": [
+            26
+          ]
+        },
+        {
+          "page": 28,
+          "text": "إلى",
+          "x": 415.33,
+          "y": 224.67,
+          "width": 20,
+          "height": 46.67,
+          "wordIndices": [
+            27
+          ]
+        },
+        {
+          "page": 28,
+          "text": "كَامِلَةِ",
+          "x": 509.33,
+          "y": 308,
+          "width": 46.67,
+          "height": 46,
+          "wordIndices": [
+            42
+          ]
+        },
+        {
+          "page": 28,
+          "text": "وإنْ",
+          "x": 466.67,
+          "y": 308,
+          "width": 26,
+          "height": 46,
+          "wordIndices": [
+            43
+          ]
+        },
+        {
+          "page": 28,
+          "text": "هُمٌ",
+          "x": 429.33,
+          "y": 308,
+          "width": 32,
+          "height": 46,
+          "wordIndices": [
+            44
+          ]
+        },
+        {
+          "page": 28,
+          "text": "بها",
+          "x": 406,
+          "y": 308,
+          "width": 20.67,
+          "height": 46,
+          "wordIndices": [
+            45
+          ]
+        },
+        {
+          "page": 28,
+          "text": "فَعَمِلَها",
+          "x": 340,
+          "y": 308,
+          "width": 60.67,
+          "height": 46,
+          "wordIndices": [
+            46
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+      ]
+    },
+    {
+      "hadithId": 38,
+      "text": "من عادى لي وليًا فقد آذنته بالحرب، وما تقرب إلى عبدي بشئ أحب إلي مما افترضته عليه، ولا يزال عبدي يتقرب إلي\nبالنوافل حتى أحبه، فإذا أحببته كنت سمعه الذي يسمع به وبصره الذي يبصر به ويده التي يبطش بها ورجله التي يمشي بها، ولئن سألني لأعطينه، ولئن استعاذني لأعيذنه",
+      "textHash": "8212a3c68490e6d0c4518d25d2b7705c2a143ad839c234674780c910ee9b7f7c",
+      "pageRange": [
+        29,
+        29
+      ],
+      "candidates": [
+        {
+          "page": 29,
+          "text": ":مَنْ",
+          "x": 101.33,
+          "y": 325.33,
+          "width": 36.67,
+          "height": 32,
+          "wordIndices": [
+            0
+          ]
+        },
+        {
+          "page": 29,
+          "text": "عادى",
+          "x": 510,
+          "y": 360.67,
+          "width": 37.33,
+          "height": 52.67,
+          "wordIndices": [
+            1
+          ]
+        },
+        {
+          "page": 29,
+          "text": "لي",
+          "x": 483.33,
+          "y": 370.67,
+          "width": 12,
+          "height": 36,
+          "wordIndices": [
+            2
+          ]
+        },
+        {
+          "page": 29,
+          "text": "أحَبٌ",
+          "x": 450,
+          "y": 400.67,
+          "width": 39.33,
+          "height": 38.67,
+          "wordIndices": [
+            12
+          ]
+        },
+        {
+          "page": 29,
+          "text": "إلى",
+          "x": 411.33,
+          "y": 401.33,
+          "width": 24.67,
+          "height": 53.33,
+          "wordIndices": [
+            13
+          ]
+        },
+        {
+          "page": 29,
+          "text": "مما",
+          "x": 378,
+          "y": 401.33,
+          "width": 20,
+          "height": 53.33,
+          "wordIndices": [
+            14
+          ]
+        },
+        {
+          "page": 29,
+          "text": "عليه",
+          "x": 264.67,
+          "y": 401.33,
+          "width": 33.33,
+          "height": 53.33,
+          "wordIndices": [
+            16
+          ]
+        },
+        {
+          "page": 29,
+          "text": "ولا",
+          "x": 211.33,
+          "y": 401.33,
+          "width": 26.67,
+          "height": 53.33,
+          "wordIndices": [
+            17
+          ]
+        },
+        {
+          "page": 29,
+          "text": "يَزَالَ",
+          "x": 160.67,
+          "y": 401.33,
+          "width": 40.67,
+          "height": 53.33,
+          "wordIndices": [
+            18
+          ]
+        },
+        {
+          "page": 29,
+          "text": "عَبْدِي",
+          "x": 101.33,
+          "y": 410,
+          "width": 48.67,
+          "height": 31.33,
+          "wordIndices": [
+            19
+          ]
+        },
+        {
+          "page": 29,
+          "text": "سَمعةُ",
+          "x": 98.67,
+          "y": 436.67,
+          "width": 52,
+          "height": 52,
+          "wordIndices": [
+            28
+          ]
+        },
+        {
+          "page": 29,
+          "text": "الذي",
+          "x": 512,
+          "y": 492,
+          "width": 34.67,
+          "height": 41.33,
+          "wordIndices": [
+            29
+          ]
+        },
+        {
+          "page": 29,
+          "text": "يَسْمَعُ",
+          "x": 450,
+          "y": 492,
+          "width": 52,
+          "height": 41.33,
+          "wordIndices": [
+            30
+          ]
+        },
+        {
+          "page": 29,
+          "text": "به",
+          "x": 424.67,
+          "y": 502.67,
+          "width": 13.33,
+          "height": 16.67,
+          "wordIndices": [
+            31
+          ]
+        },
+        {
+          "page": 29,
+          "text": "به",
+          "x": 212,
+          "y": 502,
+          "width": 13.33,
+          "height": 16,
+          "wordIndices": [
+            35
+          ]
+        },
+        {
+          "page": 29,
+          "text": "وَيَدَهُ",
+          "x": 140,
+          "y": 492,
+          "width": 49.33,
+          "height": 41.33,
+          "wordIndices": [
+            36
+          ]
+        },
+        {
+          "page": 29,
+          "text": "التي",
+          "x": 101.33,
+          "y": 492,
+          "width": 30.67,
+          "height": 41.33,
+          "wordIndices": [
+            37
+          ]
+        },
+        {
+          "page": 29,
+          "text": "بها",
+          "x": 463.33,
+          "y": 528.67,
+          "width": 22,
+          "height": 46,
+          "wordIndices": [
+            39
+          ]
+        },
+        {
+          "page": 29,
+          "text": "وَرِجْلَهُ",
+          "x": 371.33,
+          "y": 528.67,
+          "width": 64,
+          "height": 46,
+          "wordIndices": [
+            40
+          ]
+        },
+        {
+          "page": 29,
+          "text": "التي",
+          "x": 334,
+          "y": 528.67,
+          "width": 27.33,
+          "height": 46,
+          "wordIndices": [
+            41
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ]
+    },
+    {
+      "hadithId": 39,
+      "text": "إن الله تجاوز لي عن أمتى الخطأ والنسيان وما اسكترهوا عليه",
+      "textHash": "9737ec6dc7d00b931dc4b9849f259a3b736874254d33080d904a316c701e5eb0",
+      "pageRange": [
+        29,
+        30
+      ],
+      "candidates": [],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "hadithId": 40,
+      "text": "كن في الدنيا كأنك غريب أو عابر سبيل",
+      "textHash": "fa5127b4d925da8556fb0d39814ca41f7a4e0ed207c91f9175d83d835aa1f64a",
+      "pageRange": [
+        30,
+        30
+      ],
+      "candidates": [
+        {
+          "page": 30,
+          "text": "كأَنَكَ",
+          "x": 513.33,
+          "y": 394,
+          "width": 47.33,
+          "height": 54.67,
+          "wordIndices": [
+            3
+          ]
+        },
+        {
+          "page": 30,
+          "text": "غَرِيبٌ",
+          "x": 458.67,
+          "y": 394,
+          "width": 45.33,
+          "height": 54.67,
+          "wordIndices": [
+            4
+          ]
+        },
+        {
+          "page": 30,
+          "text": "أو",
+          "x": 434.67,
+          "y": 398,
+          "width": 14,
+          "height": 34,
+          "wordIndices": [
+            5
+          ]
+        },
+        {
+          "page": 30,
+          "text": "عابر",
+          "x": 394,
+          "y": 394,
+          "width": 34.67,
+          "height": 54.67,
+          "wordIndices": [
+            6
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "hadithId": 41,
+      "text": "لا يؤمن أحدكم حتى يكون هواه تبعًا لما جئت به",
+      "textHash": "ffad60b349bae39e74e23bf1e299720fa07e43a4357018a6082a1954397fd823",
+      "pageRange": [
+        31,
+        31
+      ],
+      "candidates": [
+        {
+          "page": 31,
+          "text": "حَتَّى",
+          "x": 370,
+          "y": 152,
+          "width": 34,
+          "height": 40.67,
+          "wordIndices": [
+            3
+          ]
+        },
+        {
+          "page": 31,
+          "text": "يَكُونَ",
+          "x": 314,
+          "y": 157.33,
+          "width": 152,
+          "height": 32.67,
+          "wordIndices": [
+            4
+          ]
+        },
+        {
+          "page": 31,
+          "text": "هَوَاهُ",
+          "x": 268.67,
+          "y": 152,
+          "width": 38.67,
+          "height": 40.67,
+          "wordIndices": [
+            5
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "hadithId": 42,
+      "text": "يابن آدم، إنك ما دعوتني ورجوتني غفرت للك على ما كان منك ولا أبالي، يا ابن آدم لو بلغت ذنوبك عنان السماء ثم\nاستغفرتني غفرت لك، يا ابن آدم لو أتيتني بقراب الأرض خطايا ثم لقيتني لا تشرك بي شيئًا لأتيتك بقرابها مغفرة",
+      "textHash": "86dc3632aea846c7a5c836e7171f1f69256f7ef35f07a7637347f0a526651c6f",
+      "pageRange": [
+        31,
+        31
+      ],
+      "candidates": [
+        {
+          "page": 31,
+          "text": "مِنكٌ",
+          "x": 513.33,
+          "y": 448,
+          "width": 38.67,
+          "height": 34,
+          "wordIndices": [
+            11
+          ]
+        },
+        {
+          "page": 31,
+          "text": "ولا",
+          "x": 483.33,
+          "y": 441.33,
+          "width": 20.67,
+          "height": 46.67,
+          "wordIndices": [
+            12
+          ]
+        },
+        {
+          "page": 31,
+          "text": "أبالي",
+          "x": 442.67,
+          "y": 441.33,
+          "width": 32.67,
+          "height": 46.67,
+          "wordIndices": [
+            13
+          ]
+        },
+        {
+          "page": 31,
+          "text": "يا",
+          "x": 404,
+          "y": 457.33,
+          "width": 10.67,
+          "height": 21.33,
+          "wordIndices": [
+            14
+          ]
+        },
+        {
+          "page": 31,
+          "text": "ابْنَ",
+          "x": 368,
+          "y": 456.67,
+          "width": 24,
+          "height": 24.67,
+          "wordIndices": [
+            15
+          ]
+        }
+      ],
+      "regions": [],
+      "verification": "pending",
+      "unmappedIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42
+      ]
+    }
+  ]
+}

@@ -44,7 +44,30 @@ try {
     bundle: true, platform: "node", format: "esm", outfile: liveFile, jsx: "automatic",
     external: ["react", "react/*", "react-dom/*", "jsdom"],
   });
-  const child = spawn(process.execPath, ["--test", "--test-timeout=30000", outfile, answerFile, chatFile, liveFile], {
+  const scanFile = join(temp, "scanned-pages.test.mjs");
+  await build({
+    entryPoints: [join(root, "tests/scanned-pages.test.tsx")],
+    bundle: true, platform: "node", format: "esm", outfile: scanFile, jsx: "automatic",
+    external: ["react", "react/*", "react-dom", "react-dom/*", "lucide-react"],
+  });
+  const bookFile = join(temp, "book-reader.test.mjs");
+  await build({
+    entryPoints: [join(root, "tests/book-reader.test.tsx")],
+    bundle: true, platform: "node", format: "esm", outfile: bookFile, jsx: "automatic",
+    external: ["react", "react/*", "react-dom", "react-dom/*", "lucide-react"],
+  });
+  const bookFlowFile = join(temp, "book-recitation-flow.test.mjs");
+  await build({
+    entryPoints: [join(root, "tests/book-recitation-flow.test.tsx")],
+    bundle: true, platform: "node", format: "esm", outfile: bookFlowFile, jsx: "automatic",
+    external: ["react", "react/*", "react-dom", "react-dom/*", "lucide-react", "jsdom"],
+    plugins: [{name:"book-api-boundary",setup(builder) {
+      builder.onResolve({filter:/^@workspace\/api-client-react$/},() => ({
+        path:join(root,"tests/doubles/book-api.ts"),
+      }));
+    }}],
+  });
+  const child = spawn(process.execPath, ["--test", "--test-timeout=30000", outfile, answerFile, chatFile, liveFile, scanFile, bookFile, bookFlowFile], {
     stdio: "inherit",
     // Never inherit provider, application database or Clerk credentials.
     env: { PATH: process.env.PATH, NODE_ENV: "test", HOME: temp },

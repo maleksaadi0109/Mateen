@@ -6,9 +6,11 @@ import mateenRouter from "./mateen";
 import scholarlyRouter from "./scholarly";
 import recitationRouter from "./recitations";
 import assessmentRouter from "./assessments";
+import recitationPagesRouter from "./recitation-pages";
 
 const router: IRouter = Router();
 router.use(healthRouter);
+router.use(recitationPagesRouter);
 router.use(teacherReviewRouter);
 router.use(sourceReviewRouter);
 router.use(mateenRouter);

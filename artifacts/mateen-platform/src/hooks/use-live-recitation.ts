@@ -33,6 +33,7 @@ export function useLiveRecitation(text: string) {
   const [supported, setSupported] = useState<boolean | null>(null);
   const [error, setError] = useState('');
   const [heardText, setHeardText] = useState('');
+  const [mismatchIndex, setMismatchIndex] = useState<number | null>(null);
   const recognition = useRef<Recognition | null>(null);
   const committed = useRef<boolean[]>(words.map(() => false));
   const cursor = useRef(0);
@@ -58,6 +59,7 @@ export function useLiveRecitation(text: string) {
     setRevealed(committed.current);
     setInterimIndices([]);
     setHeardText('');
+    setMismatchIndex(null);
     setError('');
     return () => {
       const active = recognition.current;
@@ -91,6 +93,7 @@ export function useLiveRecitation(text: string) {
     active.maxAlternatives = 1;
     recognition.current = active;
     setError('');
+    setMismatchIndex(null);
     setHeardText('');
     active.onresult = (event) => {
       if (recognition.current !== active) return;
@@ -98,7 +101,7 @@ export function useLiveRecitation(text: string) {
       let interim = '';
       for (let i = 0; i < event.results.length; i++) {
         const result = event.results[i];
-        const value = result[0]?.transcript ?? '';
+        const value = typeof result[0]?.transcript === 'string' ? result[0].transcript.slice(0,30_000) : '';
         if (result.isFinal) final += ` ${value}`;
         else interim += ` ${value}`;
       }
@@ -107,6 +110,12 @@ export function useLiveRecitation(text: string) {
       committed.current = baseMask.map((visible, i) => visible || finalSet.has(i));
       cursor.current = aligned.cursor;
       setRevealed([...committed.current]);
+      setMismatchIndex(aligned.mismatchIndex);
+      if (aligned.mismatchIndex !== null) {
+        setHeardText(final.trim().slice(-500));
+        stop();
+        return;
+      }
       const provisional = matchRecitation(words, `${final} ${interim}`, baseCursor);
       setInterimIndices(provisional.indices.filter((i) => !committed.current[i]));
       setHeardText(`${final} ${interim}`.trim().slice(-500));
@@ -142,6 +151,7 @@ export function useLiveRecitation(text: string) {
 
   const reset = () => {
     stop();
+    setMismatchIndex(null);
     cursor.current = 0;
     committed.current = words.map(() => false);
     setRevealed([...committed.current]);
@@ -150,11 +160,12 @@ export function useLiveRecitation(text: string) {
   };
   const revealAll = () => {
     stop();
+    setMismatchIndex(null);
     cursor.current = words.length;
     committed.current = words.map(() => true);
     setRevealed([...committed.current]);
     setError('');
   };
 
-  return { words, revealed, interimIndices, listening, supported, error, heardText, start, stop, reset, revealAll };
+  return { words, revealed, interimIndices, listening, supported, error, heardText, mismatchIndex, start, stop, reset, revealAll };
 }
