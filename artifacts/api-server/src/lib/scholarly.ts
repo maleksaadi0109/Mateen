@@ -50,7 +50,7 @@ const groundedAnswerSchema = z.object({
 export type GroundedAnswer = z.infer<typeof groundedAnswerSchema>;
 
 export const UNVERIFIED_STUDY_NOTICE =
-  "تنبيه: هذه إجابة آلية غير موثّقة بالمصادر المعتمدة، وقد تتضمن أخطاء. ليست فتوى ولا تغني عن مراجعة عالم مؤهل.";
+  "تنبيه: إجابة آلية غير مراجعة علمياً، وقد تتضمن أخطاء. ليست فتوى.";
 
 export async function answerStudyQuestion(
   question: string,
@@ -65,6 +65,8 @@ export async function answerStudyQuestion(
       "You provide general educational study help, normally in clear Arabic.",
       "For an Arabic question, respond entirely in Arabic without English code-switching.",
       "Answer the student's question directly and helpfully using general knowledge.",
+      "Generate your own clear explanation answering the exact question, not a reference excerpt or a collection of quotations. Explain the meaning and add a simple relevant example when helpful.",
+      "Use supplied study text internally to identify and understand the passage. Do not display reference lists, bibliographic details, editions, page numbers, source URLs, or source-link labels.",
       "The selectedBook identifies the book being studied. Interpret ambiguous questions within that book, not another text. Do not invent its contents or claim unavailable source evidence.",
       "If the study context supplies the text of a numbered hadith, explain that exact hadith. Never replace it with another hadith recalled from memory.",
       "Keep the response concise, normally no more than 250 words.",

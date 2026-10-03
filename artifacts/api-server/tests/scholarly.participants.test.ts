@@ -11,7 +11,7 @@ import {
   startHarness, resetFixtures, question, readyCorpus, barrier, db,
   changeTeacherWhileReferring, pool,
 } from "./scholarly.harness";
-import { setCompletion, ScholarlyProviderUnavailableError, getStudyCallCount, getLastStudyInput } from "./doubles/provider";
+import { setCompletion, setStudyCompletion, ScholarlyProviderUnavailableError, getStudyCallCount, getLastStudyInput } from "./doubles/provider";
 import { setExcerptUnavailable, getExcerptCallCount } from "./doubles/excerpts";
 import { hashSourcePayload } from "../src/lib/source-review";
 import nawawi from "../src/data/nawawi.json";
@@ -273,7 +273,7 @@ test("new assistant follow-ups stay private instead of sharing an unrelated ques
   assert.equal((await counts()).notifications, 1);
 });
 
-test("HTTP numbered commentary excerpts persist without claiming source approval or model generation", async () => {
+test("HTTP numbered hadith questions generate explanations instead of reference excerpts", async () => {
   const readiness = await request("student-a", "GET", "/assistant/readiness");
   assert.equal(readiness.body.assistantEnabled, false);
   assert.equal(readiness.body.studyAnswersEnabled, true);
@@ -282,9 +282,9 @@ test("HTTP numbered commentary excerpts persist without claiming source approval
   });
   assert.equal(response.status, 201);
   assert.equal(response.body.status, "unverified");
-  assert.match(response.body.answer, /مقتطف مرجعي قصير/);
-  assert.equal(response.body.model, "reference-excerpt");
-  assert.match(response.body.answer, /رابط المرجع: https:\/\/shamela\.ws\/book\/21812\/5/);
+  assert.match(response.body.answer, /إجابة آلية غير مراجعة/);
+  assert.notEqual(response.body.model, "reference-excerpt");
+  assert.doesNotMatch(response.body.answer, /مقتطف مرجعي|رابط المرجع|الطبعة:|shamela\.ws/);
   assert.deepEqual(response.body.citations, []);
   const saved = (await db.select().from(scholarlyQuestionsTable))
     .find(row => row.id === response.body.questionId);
@@ -299,21 +299,21 @@ test("HTTP numbered commentary excerpts persist without claiming source approval
   assert.deepEqual(await db.select().from(scholarlySourcesTable), []);
 });
 
-test("HTTP unavailable excerpts privately save the question without a generated replacement", async () => {
+test("HTTP excerpt outages cannot prevent generating student explanations", async () => {
   setExcerptUnavailable(true);
   try {
     const response = await request("student-a", "POST", "/assistant/questions", {
       question: "اشرح الحديث الأول",
     });
-    assert.equal(response.status, 503);
+    assert.equal(response.status, 201);
     const [saved] = await db.select().from(scholarlyQuestionsTable)
       .where(eq(scholarlyQuestionsTable.id, response.body.questionId));
-    assert.equal(saved?.answer, null);
-    assert.equal(saved?.status, "abstained");
-    assert.equal(saved?.model, "reference-excerpt");
+    assert.match(saved!.answer!, /إجابة آلية غير مراجعة/);
+    assert.equal(saved?.status, "unverified");
+    assert.notEqual(saved?.model, "reference-excerpt");
     const messages = await db.select().from(scholarlyMessagesTable)
       .where(eq(scholarlyMessagesTable.questionId, saved.id));
-    assert.deepEqual(messages.map(message => message.role), ["student"]);
+    assert.deepEqual(messages.map(message => message.role), ["student", "assistant"]);
     assert.deepEqual(await db.select().from(scholarlySourcesTable), []);
   } finally {
     setExcerptUnavailable(false);
@@ -326,7 +326,7 @@ test("HTTP general study questions retain clearly labelled unverified educationa
   });
   assert.equal(response.status, 201);
   assert.equal(response.body.status, "unverified");
-  assert.match(response.body.answer, /إجابة آلية غير موثّقة/);
+  assert.match(response.body.answer, /إجابة آلية غير مراجعة/);
   assert.deepEqual(response.body.citations, []);
 });
 
@@ -366,12 +366,12 @@ test("HTTP recognizes number-before-hadith phrasing, quoted text, names and stud
     });
     assert.equal(response.status, 201, question);
     assert.equal(response.body.status, "unverified", question);
-    assert.equal(response.body.model, "reference-excerpt", question);
-    assert.match(response.body.answer, new RegExp(`الحديث رقم ${number}\\.`), question);
+    assert.notEqual(response.body.model, "reference-excerpt", question);
+    assert.match(getLastStudyInput()!.context!, new RegExp(`الحديث رقم ${number} `), question);
   }
 });
 
-test("HTTP conflicting references and invalid bare numbers clarify without any excerpt or model generation", async () => {
+test("HTTP ambiguous questions still reach generation without inventing a selected reference", async () => {
   await restoreStudyFixtures();
   const excerptsBefore = getExcerptCallCount();
   const studyBefore = getStudyCallCount();
@@ -384,30 +384,30 @@ test("HTTP conflicting references and invalid bare numbers clarify without any e
   ]) {
     const response = await request("student-a", "POST", "/assistant/questions", { question });
     assert.equal(response.status, 201, question);
-    assert.equal(response.body.status, "abstained", question);
-    assert.equal(response.body.answer, null, question);
-    assert.equal(response.body.model, "reference-excerpt", question);
-    assert.match(response.body.reason, /بعض ألفاظه أو عنوانه/, question);
+    assert.equal(response.body.status, "unverified", question);
+    assert.ok(response.body.answer, question);
+    assert.notEqual(response.body.model, "reference-excerpt", question);
+    assert.equal(getLastStudyInput()?.context, null, question);
     assert.deepEqual(response.body.citations, [], question);
     const messages = await db.select().from(scholarlyMessagesTable)
       .where(eq(scholarlyMessagesTable.questionId, response.body.questionId));
-    assert.deepEqual(messages.map(message => message.role), ["student"], question);
+    assert.deepEqual(messages.map(message => message.role), ["student", "assistant"], question);
   }
   assert.equal(getExcerptCallCount(), excerptsBefore);
-  assert.equal(getStudyCallCount(), studyBefore);
+  assert.equal(getStudyCallCount(), studyBefore + 8);
 });
 
-test("HTTP asks for wording or a title only when the hadith cannot be identified safely", async () => {
+test("HTTP unspecified hadith questions are handled by the educational model", async () => {
   for (const question of ["اشرح الحديث في الأربعين النووية", "اشرح الحديث رقم 99"]) {
     const response = await request("student-a", "POST", "/assistant/questions", { question });
     assert.equal(response.status, 201);
-    assert.equal(response.body.status, "abstained");
-    assert.equal(response.body.answer, null);
-    assert.match(response.body.reason, /بعض ألفاظه أو عنوانه/);
+    assert.equal(response.body.status, "unverified");
+    assert.ok(response.body.answer);
+    assert.equal(getLastStudyInput()?.context, null);
   }
 });
 
-test("HTTP completion publishes indexed-source citations when the source remains eligible", async () => {
+test("HTTP student answers remain generated explanations even when approved sources exist", async () => {
   const { source, passage } = await readyCorpus();
   setCompletion(async () => ({
     abstain: false, reason: "", answer: passage.text,
@@ -415,21 +415,21 @@ test("HTTP completion publishes indexed-source citations when the source remains
   }));
   const response = await request("student-a", "POST", "/assistant/questions", { question: "ما النية في العمل؟" });
   assert.equal(response.status, 201);
-  assert.equal(response.body.status, "answered");
-  assert.equal(response.body.answer, passage.text);
-  assert.equal(response.body.citations[0].sourceId, source.id);
+  assert.equal(response.body.status, "unverified");
+  assert.notEqual(response.body.answer, passage.text);
+  assert.deepEqual(response.body.citations, []);
   const messages = await db.select().from(scholarlyMessagesTable);
   assert.equal(messages.filter(row => row.role === "assistant").length, 1);
 });
 
-test("source withdrawal while model completion is pending persists abstention without answer or citations", async () => {
+test("general explanations do not claim approval or cite a withdrawn commentary source", async () => {
   const { source, passage } = await readyCorpus();
   const entered = barrier();
   const resume = barrier();
-  setCompletion(async () => {
+  setStudyCompletion(async () => {
     entered.release();
     await resume.promise;
-    return { abstain: false, reason: "", answer: passage.text, citations: [{ passageId: passage.id, quote: passage.text }] };
+    return "تنبيه: إجابة آلية غير مراجعة علمياً.\n\nشرح تعليمي اصطناعي مستقل.";
   });
   const pending = request("student-a", "POST", "/assistant/questions", { question: "ما النية في العمل؟" });
   try {
@@ -437,22 +437,24 @@ test("source withdrawal while model completion is pending persists abstention wi
     await db.update(scholarlySourcesTable).set({ status: "withdrawn" }).where(eq(scholarlySourcesTable.id, source.id));
   } finally { resume.release(); }
   const response = await pending;
+  setStudyCompletion(null);
   assert.equal(response.status, 201);
-  assert.equal(response.body.status, "abstained");
-  assert.equal(response.body.answer, null);
+  assert.equal(response.body.status, "unverified");
+  assert.match(response.body.answer, /شرح تعليمي/);
   assert.deepEqual(response.body.citations, []);
   const [saved] = await db.select().from(scholarlyQuestionsTable);
-  assert.equal(saved.status, "abstained");
-  assert.equal(saved.answer, null);
+  assert.equal(saved.status, "unverified");
+  assert.equal(saved.answer, response.body.answer);
   const messages = await db.select().from(scholarlyMessagesTable);
-  assert.deepEqual(messages.map(row => row.role), ["student"]);
+  assert.deepEqual(messages.map(row => row.role), ["student", "assistant"]);
   assert.deepEqual(messages[0].citations, []);
 });
 
 test("provider failure privately saves the question with no assistant message", async () => {
   await readyCorpus();
-  setCompletion(async () => { throw new ScholarlyProviderUnavailableError(); });
+  setStudyCompletion(async () => { throw new ScholarlyProviderUnavailableError(); });
   const response = await request("student-a", "POST", "/assistant/questions", { question: "ما النية في العمل؟" });
+  setStudyCompletion(null);
   assert.equal(response.status, 503);
   const [saved] = await db.select().from(scholarlyQuestionsTable);
   assert.equal(saved.id, response.body.questionId);

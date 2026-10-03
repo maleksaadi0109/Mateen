@@ -11,10 +11,12 @@ let studyCalls = 0;
 export function getStudyCallCount() { return studyCalls; }
 let lastStudyInput: { question: string; context: string | null; book: string | undefined } | null = null;
 export function getLastStudyInput() { return lastStudyInput; }
+let studyCompletion: (() => Promise<string>) | null = null;
+export function setStudyCompletion(value: (() => Promise<string>) | null) { studyCompletion = value; }
 export async function answerStudyQuestion(question: string, context: string | null, _model?: string, book?: string) {
   studyCalls++;
   lastStudyInput = { question, context, book };
-  return "تنبيه: هذه إجابة آلية غير موثّقة بالمصادر المعتمدة، وقد تتضمن أخطاء. ليست فتوى ولا تغني عن مراجعة عالم مؤهل.\n\nإجابة تعليمية اصطناعية للاختبار فقط.";
+  return studyCompletion ? studyCompletion() : "تنبيه: إجابة آلية غير مراجعة علمياً، وقد تتضمن أخطاء. ليست فتوى.\n\nإجابة تعليمية اصطناعية للاختبار فقط.";
 }
 export async function semanticRank(_question: string, passages: PassageCandidate[]) { return passages; }
 export async function answerFromPassages(

@@ -5,9 +5,8 @@ import type { AssistantQuestion } from '@workspace/api-client-react';
 import { Link } from 'wouter';
 import { ShieldAlert, Sparkles } from 'lucide-react';
 import { EmptyState, ErrorState, LoadingList, PageHeader } from '@/components/mateen/bits';
-import { CitationList, Field, NO_FATWA, StatusPill, btnGhost, btnPrimary, field, useFinitePoll } from '@/components/scholarly/shared';
+import { Field, NO_FATWA, StatusPill, btnGhost, btnPrimary, field, useFinitePoll } from '@/components/scholarly/shared';
 import { ReferralPanel } from '@/components/scholarly/ReferralPanel';
-import { AnswerText } from '@/components/scholarly/AnswerText';
 import { fmtDate, usePageMeta } from '@/lib/mateen';
 import { useToast } from '@/hooks/use-toast';
 
@@ -37,6 +36,10 @@ function IssueForm({ questionId, onDone }: { questionId: string; onDone: () => v
 }
 
 function QuestionCard({ a }: { a: AssistantQuestion }) {
+  const regenerate = useAskMateenAssistant();
+  const qc = useQueryClient();
+  const { toast } = useToast();
+  const isLegacyExcerpt = a.model === 'reference-excerpt';
   const [referral, setReferral] = useState(false);
   const [issue, setIssue] = useState(false);
   const canRefer = (a.status === 'abstained' && a.referral.status === 'not_referred') || a.referral.status === 'waiting_for_teacher';
@@ -47,13 +50,25 @@ function QuestionCard({ a }: { a: AssistantQuestion }) {
       <p className="mt-2 font-ui text-sm font-semibold" data-testid="text-question-book">الكتاب: {STUDY_BOOKS.find(book => book.id === a.textId)?.title}</p>
       <p className="mt-3 whitespace-pre-wrap font-ui text-sm font-semibold">{a.question}</p>
       {a.textContext && <p className="mt-2 whitespace-pre-wrap font-arabic text-sm text-muted-foreground">سياق الدراسة: {a.textContext}</p>}
-      {a.answer ? <AnswerText className="mt-3 font-arabic text-lg leading-loose" testId="text-answer" text={a.answer} />
+      {isLegacyExcerpt ? <p className="mt-3 font-arabic text-lg leading-loose text-muted-foreground">هذه إجابة مرجعية سابقة. يمكنك الآن طلب شرح يولّده المساعد لسؤالك، دون عرض المقتطفات والمصادر.</p>
+        : a.answer ? <p className="mt-3 whitespace-pre-wrap font-arabic text-lg leading-loose" data-testid="text-answer">{a.answer}</p>
         : <p className="mt-3 font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-abstained">{a.reason || 'لم تكفِ المصادر المراجَعة للجواب، فامتنع المساعد بدل أن يخمّن.'}</p>}
-      <CitationList citations={a.citations} />
       {a.referral.status !== 'not_referred' && (
         <p className="mt-3 font-ui text-sm" data-testid="text-referral-state">{a.referral.status === 'waiting_for_teacher' ? 'طلبك بانتظار معلم معتمد متاح.' : a.referral.status === 'answered' ? `أجاب ${a.referral.teacherName ?? 'المعلم'}.` : `أُحيل إلى ${a.referral.teacherName ?? 'معلم'} وبانتظار الرد.`} <Link href="/student/messages" className="font-bold text-secondary">الرسائل</Link></p>
       )}
       <div className="mt-4 flex flex-wrap gap-3">
+        {isLegacyExcerpt && <button className={btnPrimary} disabled={regenerate.isPending} data-testid={`button-generate-explanation-${a.questionId}`} onClick={() => regenerate.mutate({
+          data: { question: a.question, textId: a.textId, textContext: a.textContext },
+        }, {
+          onSuccess: () => {
+            qc.invalidateQueries({ queryKey: getGetMateenAssistantQuestionsQueryKey() });
+            qc.invalidateQueries({ queryKey: getGetMateenConversationsQueryKey() });
+          },
+          onError: () => {
+            toast({ title: 'تعذّر توليد الشرح الآن', description: 'أعد المحاولة؛ لم تُستبدل الإجابة القديمة أو تُحذف.', variant: 'destructive' });
+            qc.invalidateQueries({ queryKey: getGetMateenAssistantQuestionsQueryKey() });
+          },
+        })}>{regenerate.isPending ? 'جارٍ توليد الشرح' : 'ولّد شرحاً لسؤالي'}</button>}
         {canRefer && <button className={btnPrimary} onClick={() => setReferral(true)} data-testid={`button-refer-${a.questionId}`}>{a.referral.status === 'waiting_for_teacher' ? 'تحقق من توفر المعلمين' : 'اطلب معلماً'}</button>}
         <button className={btnGhost} onClick={() => setIssue((v) => !v)} data-testid={`button-report-${a.questionId}`}><ShieldAlert size={15} />أبلغ عن مشكلة</button>
       </div>
@@ -87,7 +102,7 @@ export default function AssistantPage() {
   const history = hist.data ?? [];
   return (
     <div>
-      <PageHeader eyebrow="المساعد العلمي" title="اختر الكتاب، ثم اسأل">اختر الكتاب الذي تدرسه ليُفهم سؤالك في سياقه. في الأربعين النووية، يمكنك السؤال برقم الحديث أو عنوانه أو بعض ألفاظه لعرض مقتطف من الشرح. الإجابات والمقتطفات غير المعتمدة تُميَّز بوضوح.</PageHeader>
+      <PageHeader eyebrow="المساعد العلمي" title="اختر الكتاب، ثم اسأل">اختر الكتاب واكتب سؤالك؛ يولّد المساعد شرحاً مباشراً للمعنى، مع مثال عند الحاجة، بدلاً من عرض مقتطفات المصادر. الإجابات آلية وغير مراجعة علمياً.</PageHeader>
       <p className="mb-6 rounded-2xl border border-secondary/30 bg-card p-4 font-ui text-sm" data-testid="text-no-fatwa">{NO_FATWA}</p>
       {ready.isLoading ? <LoadingList rows={1} /> : ready.isError || !ready.data ? <ErrorState message="تعذّر قراءة حالة المساعد." onRetry={() => ready.refetch()} /> : (
         <section className="paper-card mb-8 p-6" data-testid="card-readiness">
@@ -98,7 +113,7 @@ export default function AssistantPage() {
             <li data-testid="text-ready-eval">التقييم: {ready.data.evaluationPassed ? 'اجتاز' : 'لم يجتز بعد'}</li>
             <li data-testid="text-ready-model">النموذج: {ready.data.model}</li>
           </ul>
-           {!enabled && <p className="mt-4 font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-assistant-disabled">في الأربعين النووية، يمكنك طلب مقتطف مرجعي برقم الحديث أو عنوانه أو بعض ألفاظه. هذه المقتطفات لم تُعتمد علمياً داخل المنصة بعد. {ready.data.studyAnswersEnabled ? 'المساعد متاح للأسئلة العامة عن الكتاب المختار، مع التنبيه إلى أن إجاباته غير موثّقة.' : 'اتصال النموذج غير متاح للأسئلة العامة؛ لا نبدّل المقتطف بإجابة مولّدة.'}</p>}
+           {!enabled && <p className="mt-4 font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-assistant-disabled">{ready.data.studyAnswersEnabled ? 'المساعد متاح لتوليد شرح لسؤالك عن الكتاب المختار. هذه الإجابات غير مراجعة علمياً.' : 'اتصال النموذج غير متاح الآن؛ أعد المحاولة لاحقاً.'}</p>}
         </section>
       )}
       <section className="paper-card mb-8 space-y-4 p-6">
@@ -111,7 +126,7 @@ export default function AssistantPage() {
             {STUDY_BOOKS.map(book => <option key={book.id} value={book.id}>{book.title}</option>)}
           </select>
         </Field>
-        {bookId === 'usul-thalatha' && <p className="font-ui text-sm text-muted-foreground" data-testid="text-study-book-notice">الأسئلة عن الأصول الثلاثة تُجاب بإجابات تعليمية آلية غير موثّقة؛ مقتطفات الشروح المتاحة حالياً خاصة بالأربعين النووية.</p>}
+        {bookId === 'usul-thalatha' && <p className="font-ui text-sm text-muted-foreground" data-testid="text-study-book-notice">سيشرح المساعد سؤالك في سياق الأصول الثلاثة، لا الأربعين النووية.</p>}
         <Field label="سؤالك" hint="حتى ٨٠٠٠ حرف"><textarea className={`${field} font-arabic text-base`} rows={4} maxLength={8000} value={question} onChange={(e) => setQuestion(e.target.value)} disabled={!canSubmit || ask.isPending} data-testid="input-question" /></Field>
         <Field label={`سياق ${STUDY_BOOKS.find(book => book.id === bookId)?.title ?? 'الدراسة'} (اختياري)`} hint="حتى ٣٠٠٠ حرف"><textarea className={`${field} font-arabic`} rows={2} maxLength={3000} value={context} onChange={(e) => setContext(e.target.value)} disabled={!canSubmit || ask.isPending} data-testid="input-context" /></Field>
          <button className={btnPrimary} disabled={!canSubmit || !bookId || !question.trim() || ask.isPending} onClick={submit} data-testid="button-ask"><Sparkles size={15} />{ask.isPending ? 'جارٍ إعداد الإجابة' : 'اسأل'}</button>

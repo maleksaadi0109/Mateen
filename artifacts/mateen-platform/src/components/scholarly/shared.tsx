@@ -41,7 +41,7 @@ export function CitationList({ citations }: { citations: Citation[] }) {
   );
 }
 
-export const NO_FATWA = 'هذا المساعد يعين على الدراسة ولا يصدر فتوى ولا يغني عن العالم المؤهل. المقتطفات المرجعية تنقل كلام الشارح دون شرح مولّد؛ وجود المرجع لا يعني اعتماد النقل علمياً داخل المنصة. تُميَّز الإجابات غير المعتمدة عن المصادر المعتمدة.';
+export const NO_FATWA = 'هذا المساعد يولّد شروحاً تعليمية آلية قد تخطئ؛ لا يصدر فتوى ولا يغني عن العالم المؤهل.';
 
 /** Finite polling: returns interval ms until maxMs elapsed since mount/reset, then false. */
 export function useFinitePoll(ms = 8000, maxMs = 300000, resetKey: unknown = null) {

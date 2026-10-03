@@ -45,13 +45,10 @@ import {
 } from "drizzle-orm";
 import { Router } from "express";
 import {
-  answerFromPassages,
   answerStudyQuestion,
   filterTeacherConversationMessages,
   isApprovedAvailableTeacher,
-  lexicalRank,
   requiresHumanGuidance,
-  semanticRank,
   ScholarlyProviderUnavailableError,
   UNVERIFIED_STUDY_NOTICE,
 } from "../lib/scholarly";
@@ -61,8 +58,7 @@ import {
 } from "./scholarly.readiness";
 import teacherRoutes from "./scholarly.teacher";
 import { getNawawiStudyRecords } from "../lib/source-review";
-import { resolveNawawiHadith, selectNawawiReference, wantsNawawiExcerpt } from "../lib/scholarly-study-context";
-import { answerNawawiExcerpt, EXCERPT_NOTICE, ScholarlyExcerptUnavailableError } from "../lib/scholarly-excerpts";
+import { resolveNawawiHadith, selectNawawiReference } from "../lib/scholarly-study-context";
 import adminRoutes from "./scholarly.admin";
 import {
   authenticationRequired,
@@ -145,77 +141,17 @@ async function createAssistantQuestion(
     quote: string;
   }> = [];
   let reason = "";
-  let status = "answered";
+  let status = "unverified";
   let providerFailed = false;
   let responseModel: string = gate.model;
   const requiredGuidance = requiresHumanGuidance(question);
-  const resolution = requiredGuidance || !isNawawi
-    ? { number: null, requested: isNawawi && wantsNawawiExcerpt(question) }
-    : resolveNawawiHadith(question, (await getNawawiStudyRecords()).hadiths, textContext);
-  const excerptNumber = resolution.number;
-  const excerptRequested = resolution.requested;
-  if (requiredGuidance) {
-    status = "abstained";
-    reason = requiredGuidance;
-  } else if (excerptNumber !== null) {
-    responseModel = "reference-excerpt";
-    try {
-      answer = await answerNawawiExcerpt(question, excerptNumber);
-      status = "unverified";
-      reason = EXCERPT_NOTICE;
-    } catch (error) {
-      if (!(error instanceof ScholarlyExcerptUnavailableError)) throw error;
-      status = "abstained";
-      reason = "تعذّر جلب المقتطف من الشرح والتحقق من موضعه. لم نستبدله بإجابة مولّدة؛ أعد المحاولة أو اطلب إحالة.";
-      providerFailed = true;
-    }
-  } else if (excerptRequested) {
-    responseModel = "reference-excerpt";
-    status = "abstained";
-    reason = "لم أستطع تحديد حديث واحد من سؤالك. اكتب بعض ألفاظه أو عنوانه، ويمكنك ذكر رقمه أيضاً، حتى أعرض المقتطف الصحيح دون تخمين.";
-  } else if (!gate.assistantEnabled || !isNawawi) {
-    status = "abstained";
-    reason = "تعذّر الاتصال بالمساعد الآن؛ يمكنك إعادة المحاولة أو طلب إحالة.";
-  } else {
-    try {
-      const lexical = lexicalRank(question, gate.corpus.passages);
-      const ranked = await semanticRank(question, lexical, gate.model);
-      const result = await answerFromPassages(question, textContext, ranked, gate.model);
-      if (result.abstain) {
-        status = "abstained";
-        reason = result.reason;
-      } else {
-        answer = result.answer;
-        citations = result.citations.flatMap((citation) => {
-          const passage = ranked.find((item) => item.id === citation.passageId);
-          if (!passage) return [];
-          return [{
-            passageId: passage.id,
-            sourceId: passage.sourceId,
-            sourceTitle: passage.title,
-            author: passage.author,
-            edition: passage.edition,
-            volume: passage.volume,
-            printedPage: passage.printedPage,
-            pdfPage: passage.pdfPage,
-            quote: citation.quote,
-          }];
-        });
-      }
-    } catch (error) {
-      if (!(error instanceof ScholarlyProviderUnavailableError)) throw error;
-      status = "abstained";
-      reason = "تعذّر التحقق من الإجابة علميًا الآن. لا توجد إجابة مولّدة؛ يمكنك إعادة المحاولة أو طلب إحالة.";
-      providerFailed = true;
-    }
-  }
-
-  // Student general answers are newly generated from the student's input only.
-  // Never read or publish the separate private administrator preview drafts.
-  if (!answer && !providerFailed && !excerptRequested && gate.providerConfigured) {
-    try {
-      const reference = isNawawi
-        ? selectNawawiReference(question, (await getNawawiStudyRecords()).hadiths)
+  // Always generate a new explanation. References identify the passage internally;
+  // they do not replace the explanation or expose private administrator drafts.
+  try {
+      const records = isNawawi ? (await getNawawiStudyRecords()).hadiths : [];
+      const resolution = isNawawi ? resolveNawawiHadith(question, records, textContext) : null;
+      const reference = resolution?.number != null
+        ? selectNawawiReference(`الحديث رقم ${resolution.number}`, records)
         : null;
       const studyContext = [isNawawi ? null : USUL_STUDY_CONTEXT, reference, textContext]
         .filter(Boolean).join("\n\n") || null;
@@ -223,12 +159,11 @@ async function createAssistantQuestion(
       citations = [];
       status = requiredGuidance ? "abstained" : "unverified";
       reason = requiredGuidance ?? UNVERIFIED_STUDY_NOTICE;
-    } catch (error) {
+  } catch (error) {
       if (!(error instanceof ScholarlyProviderUnavailableError)) throw error;
       status = "abstained";
       reason = "تعذّر الاتصال بالنموذج أو قراءة إجابته الآن. لم تُولّد إجابة صالحة؛ أعد المحاولة أو اطلب إحالة.";
       providerFailed = true;
-    }
   }
 
   if (existingConversationId) {

@@ -7,7 +7,7 @@ Checking that a citation and quotation exist does not establish that generated e
 
 **Why:** The product explicitly forbids unsupported religious answers. A model can cite a genuine passage while adding an unrelated ruling; a valid citation would not catch that.
 
-**How to apply:** Keep source identity, rights review, printed-page metadata and source-version eligibility separate from answer grounding. Expand beyond extractive answers only after evaluating a claim-level grounding check on representative Arabic questions and adversarial requests.
+**How to apply:** For answers advertised as scientifically verified, keep source identity, rights review, printed-page metadata and source-version eligibility separate from answer grounding. Expand that verified mode beyond extractive answers only after evaluating a claim-level grounding check on representative Arabic questions and adversarial requests. This does not block the separately authorized unreviewed study-answer mode.
 
 Treat model-written abstention reasons as generated content too, not as automatically safe explanations. Use fixed, non-religious refusal wording unless the explanation itself has been grounded.
 
@@ -36,6 +36,12 @@ The user subsequently requested student-visible AI study answers even while sour
 **Why:** The user explicitly wanted the assistant to answer instead of displaying the readiness refusal for ordinary study questions.
 
 **How to apply:** Allow newly generated general educational answers with an explicit persistent unverified warning and no fabricated citation metadata. This newer instruction changes the student-answer gate, not scientific approval, personal-fatwa boundaries, or access to existing private administrator drafts. Verified answers still require the separate source and evaluation checks.
+
+The user explicitly rejected reference-excerpt answers and detailed source displays in the student assistant, asking for AI-generated explanations of the actual question instead.
+
+**Why:** They repeated that they wanted generated explanations after receiving bibliographic excerpt blocks rather than an explanation.
+
+**How to apply:** Generate a direct educational explanation for student questions, using book and passage identity internally. Do not substitute reference-only output or show source/page/edition lists by default. Keep a concise automated/unreviewed warning and preserve private administrator experiments and scientific review requirements separately.
 
 Resolve an explicitly numbered matn entry from the study text before asking the model to explain it, even in unverified-answer mode.
 
