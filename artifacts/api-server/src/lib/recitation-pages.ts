@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { z } from "zod/v4";
+import { canonicalMatnRecords } from "./canonical-matn";
 
 const regionSchema = z.object({
   page: z.number().int().min(1).max(32),
@@ -41,19 +42,25 @@ export function validatePageMap(input: unknown): PageMap {
     if (createHash("sha256").update(hadith.text).digest("hex") !== hadith.textHash)
       throw new Error("Stale recitation text hash.");
     const count = pageWords(hadith.text).length;
-    if (hadith.canonicalText && !hadith.text.endsWith(hadith.canonicalText))
-      throw new Error("Edition practice must retain its bound canonical matn.");
+    // The scan is a different edition: its spelling, honorifics and report
+    // boundaries must not be forced to be a suffix of the assessment reference.
+    if ((hadith.canonicalText ?? hadith.text) !==
+        canonicalMatnRecords.find(h => h.id === hadith.hadithId)?.text)
+      throw new Error("Assessment reference must remain independently bound.");
     if (hadith.heading) {
       const h=hadith.heading, p=map.pages.find(p => p.page===h.page)!;
       if (h.x+h.width>p.width || h.y+h.height>p.height) throw new Error("Invalid heading bounds.");
     }
     const seen = new Set<number>();
+    let previousIndex = -1;
     for (const r of hadith.regions) {
       const page = map.pages.find(p => p.page === r.page)!;
       if (r.x+r.width > page.width || r.y+r.height > page.height) throw new Error("Out of bounds crop.");
       for (const i of r.wordIndices) {
-        if (i >= count || seen.has(i)) throw new Error("Duplicate/invalid word mapping.");
+        if (i >= count || seen.has(i) || i <= previousIndex)
+          throw new Error("Duplicate/invalid or out-of-order word mapping.");
         seen.add(i);
+        previousIndex = i;
       }
     }
     for (const i of hadith.unmappedIndices) {

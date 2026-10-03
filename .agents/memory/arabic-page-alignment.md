@@ -16,3 +16,14 @@ come from overlapping lines or surrounding narration.
 Validate each crop against the exact edition and training passage before enabling
 it. Report unfinished geometry separately from rights permission and scholarly
 approval; do not turn a technical alignment gap into a learner mistake.
+
+Keep the scan's practice transcript independent of the assessment reference, not
+as a required prefix-plus-reference concatenation.
+
+**Why:** The supplied scan differs in spelling, honorific expansion, and actual
+report wording. Forcing it to end with another edition's reference manufactures
+words that have no printed crop.
+
+**How to apply:** Preserve the original assessment reference exactly; transcribe
+practice from the scan, exclude attribution and commentary, and verify each
+word crop. Joined printed words must retain separate spoken tokens when needed.

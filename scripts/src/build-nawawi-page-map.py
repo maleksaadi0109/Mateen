@@ -75,14 +75,23 @@ def build():
         maps.append(dict(hadithId=int(sid), text=text,
                          **{k:correction[k] for k in ("canonicalText","title","heading") if k in correction},
                          textHash=hashlib.sha256(text.encode()).hexdigest(),
-                         pageRange=[first,last], candidates=candidates,
+                         pageRange=correction.get("pageRange", [first,last]), candidates=candidates,
                          regions=regions, verification=correction.get("verification","pending"),
                          unmappedIndices=[i for i in range(len(target)) if i not in mapped]))
+    previous = json.loads(OUT.read_text()) if OUT.exists() else {}
+    pdf_hash = hashlib.sha256((SOURCE/"nawawi-source.pdf").read_bytes()).hexdigest()
     pages = [{**p, "sha256":hashlib.sha256((SOURCE/"pages"/p["file"]).read_bytes()).hexdigest(),
               "objectPath":None} for p in json.loads((SOURCE/"source.json").read_text())["pages"]]
+    if previous.get("sourcePdfHash") == pdf_hash:
+        for page in pages:
+            prior = next((p for p in previous["pages"] if p["page"] == page["page"]
+                          and p["sha256"] == page["sha256"]), None)
+            if prior:
+                page["objectPath"] = prior.get("objectPath")
     result = dict(edition="دار السلام — الطبعة الرابعة ١٤٢٨هـ / ٢٠٠٧م",
-                  sourcePdfHash=hashlib.sha256((SOURCE/"nawawi-source.pdf").read_bytes()).hexdigest(),
-                  rightsSourceVersionId=None, pages=pages, hadiths=maps)
+                  sourcePdfHash=pdf_hash,
+                  rightsSourceVersionId=previous.get("rightsSourceVersionId") if previous.get("sourcePdfHash") == pdf_hash else None,
+                  pages=pages, hadiths=maps)
     OUT.write_text(json.dumps(result, ensure_ascii=False, indent=2)+"\n")
     print(f"{len(maps)} hadith maps; {sum(len(m['candidates']) for m in maps)} unapproved OCR candidates.")
 
