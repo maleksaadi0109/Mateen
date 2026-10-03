@@ -38,7 +38,13 @@ try {
     entryPoints: [join(root, "tests/chat-request.test.ts")],
     bundle: true, platform: "node", format: "esm", outfile: chatFile,
   });
-  const child = spawn(process.execPath, ["--test", "--test-timeout=30000", outfile, answerFile, chatFile], {
+  const liveFile = join(temp, "live-recitation.test.mjs");
+  await build({
+    entryPoints: [join(root, "tests/live-recitation.test.tsx")],
+    bundle: true, platform: "node", format: "esm", outfile: liveFile, jsx: "automatic",
+    external: ["react", "react/*", "react-dom/*", "jsdom"],
+  });
+  const child = spawn(process.execPath, ["--test", "--test-timeout=30000", outfile, answerFile, chatFile, liveFile], {
     stdio: "inherit",
     // Never inherit provider, application database or Clerk credentials.
     env: { PATH: process.env.PATH, NODE_ENV: "test", HOME: temp },

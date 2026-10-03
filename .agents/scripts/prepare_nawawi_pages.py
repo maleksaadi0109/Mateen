@@ -10,8 +10,8 @@ import fitz
 root = Path("attached_assets/nawawi-page-source")
 pages = root / "pages"
 pages.mkdir(parents=True, exist_ok=True)
-source = "https://archive.org/details/Matn_alarbaein_alnawawiuh"
-download = "https://ia801602.us.archive.org/8/items/Matn_alarbaein_alnawawiuh/" + quote("متن الأربعين النوويه.pdf")
+source = "https://d1.islamhouse.com/data/ar/ih_books/parts/Forty_Nawawi_Hadith/ar_Forty_Nawawi_Hadith_Dar_Alsalam.pdf"
+download = source
 pdf_path = root / "nawawi-source.pdf"
 if not pdf_path.exists():
     with urlopen(download, timeout=60) as response:

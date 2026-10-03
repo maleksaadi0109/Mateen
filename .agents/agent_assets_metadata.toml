@@ -168,3 +168,17 @@ mtime_ms = 1791023355438
 storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/30a6cbee-8df5-4c3c-867f-59e408ed8beb/8b6e2c02-b0ec-49df-985d-8ba876c83693"
 storage_version_token = "1791023398263116"
 content_type = "text/html"
+
+[[outputs]]
+id = "G_RuR681Op9_sRZ6XEItp"
+uri = "file://attached_assets/nawawi-page-source/nawawi-pages.zip"
+type = "unspecified"
+title = "صور صفحات الأربعين النووية — ٣٢ صفحة"
+description = "صفحات النسخة المصوّرة المنشورة على إسلام هاوس، مع ملف يوضح المصدر. هذه نسخة مرجعية وليست اعتماداً علمياً أو تصريحاً بإعادة نشر الطبعة."
+logical_id = "2a413ca8-fa36-43a0-b6b8-73dc6a349add"
+content_hash = "sha256:f06a084fab8f05f340f92a45e6e09892febda37e2c1a4f869fd37ba466c3e703"
+size = 1776414
+mtime_ms = 1791036175414
+storage_uri = "gcs://replit-rams-assets-janeway/rams/assets/repl:19eabfae-9bef-4153-8b0b-29a4cff1610b/2a413ca8-fa36-43a0-b6b8-73dc6a349add/8f3caaf9-6e45-4cd0-a8f0-25935621e2ed"
+storage_version_token = "1791036301832896"
+content_type = "application/octet-stream"

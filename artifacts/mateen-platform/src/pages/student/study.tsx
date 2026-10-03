@@ -12,12 +12,13 @@ import { normalizeArabic, num, usePageMeta } from '@/lib/mateen';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import RecitationRecorder from '@/components/mateen/recitation-recorder';
+import LiveRecitation from '@/components/mateen/live-recitation';
 
 type Snap = { current: number; completed: number[]; bookmarked: number[] };
 
 export default function StudyPage() {
   const { textId = 'nawawi' } = useParams<{ textId: string }>();
-  usePageMeta('الدراسة | مَتِين', 'قراءة النص بتشكيله مع حفظ موضع التوقف والعلامات.');
+  usePageMeta('الدراسة | مَتِين', 'سمّع المتن من حفظك على صفحة فارغة تظهر كلماتها مع صوتك.');
   const search = useSearch();
   const qc = useQueryClient();
   const { toast } = useToast();
@@ -101,7 +102,7 @@ export default function StudyPage() {
   const go = (i: number) => { const n = hadiths[i]; if (n && n.number !== snap.current) persist({ ...snap, current: n.number }, snap); setListOpen(false); window.scrollTo({ top: 0 }); };
   const toggle = (arr: number[], id: number) => (arr.includes(id) ? arr.filter((x) => x !== id) : [...arr, id]);
   const nq = normalizeArabic(q.trim());
-  const filtered = nq ? hadiths.filter((x) => normalizeArabic(`${x.title} ${x.text}`).includes(nq)) : hadiths;
+  const filtered = nq ? hadiths.filter((x) => normalizeArabic(`${x.title} ${x.title}`).includes(nq)) : hadiths;
 
   const list = (
     <div>
@@ -131,7 +132,7 @@ export default function StudyPage() {
           <button onClick={() => setFontSize(Math.min(60, fontSize + 3))} className="rounded-full p-2 hover:bg-muted" aria-label="تكبير الخط" data-testid="button-font-up"><Plus size={16} /></button>
         </div>
       </div>
-      {review && <div className="mb-6"><Notice title="بيان مصدر النص والتقييم">نُقل هذا النص من مصدره المذكور، ولم تكتمل مراجعته العلمية الشاملة بعد. مقطع التدريب أدناه مستخرج منه دون تعليقات الناشر. المقارنات الصوتية الآلية تجريبية ولا تُعتمد درجات منها؛ وتحتاج إجابات الاختبار الشفهية إلى مراجعة مخوّلة للتسجيل والنص المرجعي قبل اعتماد نتيجة المطابقة.</Notice></div>}
+      {review && <div className="mb-6"><Notice title="بيان مصدر النص والتقييم">نُقل هذا النص من مصدره المذكور، ولم تكتمل مراجعته العلمية الشاملة بعد. مقطع التسميع مستخرج منه دون تعليقات الناشر. المقارنات الصوتية الآلية تجريبية ولا تُعتمد درجات منها؛ وتحتاج إجابات الاختبار الشفهية إلى مراجعة مخوّلة للتسجيل والنص المرجعي قبل اعتماد نتيجة المطابقة.</Notice></div>}
 
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <article className="paper-card relative overflow-hidden p-6 md:p-12" aria-live="polite">
@@ -143,7 +144,13 @@ export default function StudyPage() {
             </div>
             {listOpen && <div className="paper-card mt-4 p-4 lg:hidden">{list}</div>}
             <h2 className="mt-4 font-display text-2xl font-bold">{h.title}</h2>
-            <p className="hadith-text mt-6" style={{ fontSize: fontSize, lineHeight: 2.2 }} data-testid="text-hadith">{h.text}</p>
+            <p className="mt-2 font-ui text-sm text-muted-foreground">سمّع المقطع بصوتك من حفظك، فتظهر كل كلمة في موضعها من الصفحة حين تنطقها. لا يُشغَّل تسجيل ولا يُكشف النص تلقائياً.</p>
+            {h.recitationSelection === 'selected-primary-report' && <p className="mt-1 font-ui text-xs text-muted-foreground">اختير التقرير الأول من هذا الحديث فقط للتسميع، دون السند وتعليقات الناشر.</p>}
+            <div className="mt-6">
+              {h.recitationText
+                ? <LiveRecitation key={`${textId}:${h.id}`} text={h.recitationText} fontSize={fontSize} />
+                : <Notice title="المقطع غير متاح">تعذّر تحميل مقطع التسميع. أعد تحميل النص.</Notice>}
+            </div>
             <a href={h.sourceUrl} target="_blank" rel="noreferrer" className="mt-6 inline-flex items-center gap-2 font-ui text-sm text-muted-foreground underline underline-offset-4 hover:text-secondary" data-testid="link-source">
               المصدر: {t.title}، الصفحة المطبوعة {num(h.sourcePage)}
               {h.viewerPage && <> · صفحة العارض {num(h.viewerPage)}</>} <ExternalLink size={13} />
@@ -172,12 +179,7 @@ export default function StudyPage() {
         <aside className="paper-card hidden h-fit p-4 lg:sticky lg:top-6 lg:block">{list}</aside>
       </div>
       <section className="paper-card mt-6 min-w-0 space-y-4 p-5 sm:p-7" aria-labelledby="recitation-reference-title">
-        <h2 id="recitation-reference-title" className="font-display text-xl font-bold">المقطع المحدد للتدريب الصوتي</h2>
-        <p className="font-ui text-sm text-muted-foreground">اقرأ هذا المقطع؛ ولا تُدخل سند الحديث أو تعليقات المصدر التي تقع خارجه. لا يُقيَّم النطق أو التشكيل.</p>
-        {h.recitationSelection === 'selected-primary-report' && <p className="font-ui text-sm text-muted-foreground">اختير التقرير الأول من هذا الحديث فقط لهذا التدريب.</p>}
-        {h.recitationText
-          ? <p className="break-words font-arabic text-xl leading-loose sm:text-2xl" data-testid="text-recitation-reference">{h.recitationText}</p>
-          : <Notice title="المقطع غير متاح">تعذّر تحميل المقطع المحدد. أعد تحميل النص قبل بدء التسجيل.</Notice>}
+        <h2 id="recitation-reference-title" className="font-display text-xl font-bold">المراجعة والاختبار</h2>
         {scheduledReviews.isError && <button type="button" onClick={() => scheduledReviews.refetch()} className="min-h-11 rounded-full border px-5 py-2 font-ui text-sm">إعادة تحميل المراجعات المصححة</button>}
         {confirmedReviews.length > 0 && <Notice title="لهذا الحديث مراجعات مبنية على أداء مصحح">
           لديك {num(confirmedReviews.length)} مراجعة محفوظة لهذا الحديث، وهي منفصلة عن علامة القراءة.
@@ -185,7 +187,10 @@ export default function StudyPage() {
         </Notice>}
         <Link href="/student/exams" className="inline-flex min-h-11 items-center rounded-full border px-5 py-2 font-ui text-sm font-bold">الانتقال إلى اختبار المستوى دون اشتراط إكمال الدراسة</Link>
       </section>
-      {h.recitationText && <RecitationRecorder key={`${textId}:${h.id}`} hadithNumber={h.number} />}
+      {h.recitationText && <details className="paper-card mt-6 p-5 sm:p-7">
+        <summary className="cursor-pointer font-display text-lg font-bold">تفاصيل تدريب اختيارية: تسجيل صوتي</summary>
+        <div className="mt-4"><RecitationRecorder key={`${textId}:${h.id}`} hadithNumber={h.number} /></div>
+      </details>}
     </div>
   );
 }
