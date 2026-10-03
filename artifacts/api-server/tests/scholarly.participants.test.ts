@@ -11,7 +11,7 @@ import {
   startHarness, resetFixtures, question, readyCorpus, barrier, db,
   changeTeacherWhileReferring, pool,
 } from "./scholarly.harness";
-import { setCompletion, setStudyCompletion, ScholarlyProviderUnavailableError, getStudyCallCount, getLastStudyInput } from "./doubles/provider";
+import { setCompletion, setStudyCompletion, ScholarlyProviderUnavailableError, getStudyCallCount, getLastStudyInput, getLastStudyHistory } from "./doubles/provider";
 import { setExcerptUnavailable, getExcerptCallCount } from "./doubles/excerpts";
 import { hashSourcePayload } from "../src/lib/source-review";
 import nawawi from "../src/data/nawawi.json";
@@ -20,7 +20,7 @@ import { USUL_STUDY_CONTEXT } from "../src/lib/scholarly-study-books";
 let harness: Awaited<ReturnType<typeof startHarness>>;
 before(async () => { harness = await startHarness(); });
 after(async () => { await harness?.close(); });
-beforeEach(resetFixtures);
+beforeEach(async () => { await resetFixtures(); setStudyCompletion(null); });
 const request = (...args: Parameters<typeof harness.request>) => harness.request(...args);
 
 test("selected study book reaches general answers, history and private follow-ups without Nawawi evidence", async () => {
@@ -127,7 +127,7 @@ test("only owned persisted abstained questions with explicit consent may be refe
   assert.deepEqual(await counts(), initial);
 });
 
-test("consent shares only the abstained question and context, never private history or other messages", async () => {
+test("new consent shares the full selected dialogue but never other private conversations", async () => {
   const q = await question();
   const hidden = await question("student-a", "answered", q.conversationId, "سؤال سابق لا يجوز مشاركته");
   await db.insert(scholarlyMessagesTable).values([
@@ -137,18 +137,20 @@ test("consent shares only the abstained question and context, never private hist
   await question("student-a", "abstained", undefined, "محادثة أخرى خاصة");
   const preview = await request("student-a", "GET", `/assistant/questions/${q.id}/referral-preview`);
   assert.equal(preview.status, 200);
-  assert.deepEqual(preview.body.shares, [q.question, "المتن: الأربعون النووية\nسياق الطالب: سياق السؤال المحال فقط"]);
-  assert.equal(JSON.stringify(preview.body).includes(hidden.question), false);
+  assert.equal(preview.body.shares[0], "نطاق المشاركة: كامل هذه المحادثة");
+  assert.equal(JSON.stringify(preview.body).includes(hidden.question), true);
+  assert.equal(JSON.stringify(preview.body).includes("محادثة أخرى خاصة"), false);
   const referral = await refer(q);
   assert.ok(referral.consentedAt instanceof Date);
-  assert.equal(referral.contextShared, preview.body.textContext);
+  assert.equal(referral.contextShared, `نطاق المشاركة: كامل هذه المحادثة\n${preview.body.textContext}`);
   const inbox = await request("teacher-a", "GET", "/teacher/referrals");
   assert.equal(inbox.status, 200);
   assert.deepEqual(inbox.body.map((row: { id: string }) => row.id), [referral.id]);
   assert.equal(JSON.stringify(inbox.body).includes(hidden.question), false);
   const visible = await request("teacher-a", "GET", `/conversations/${q.conversationId}/messages`);
   assert.equal(visible.status, 200);
-  assert.deepEqual(visible.body.map((row: { text: string }) => row.text), [q.question]);
+  assert.deepEqual(visible.body.map((row: { text: string }) => row.text), [q.question, hidden.question, "جواب خاص لا يجوز مشاركته", "رسالة دون صلة"]);
+  assert.equal(JSON.stringify(visible.body).includes("محادثة أخرى خاصة"), false);
   assert.equal((await request("teacher-b", "GET", `/conversations/${q.conversationId}/messages`)).status, 404);
   assert.deepEqual((await request("teacher-b", "GET", "/conversations")).body, []);
   assert.deepEqual((await request("student-b", "GET", "/conversations")).body, []);
@@ -189,6 +191,9 @@ test("no available teachers means a private waiting referral; retry assigns it o
   assert.equal(old.teacherId, null);
   assert.equal((await counts()).notifications, 0);
   assert.deepEqual((await request("teacher-a", "GET", "/teacher/referrals")).body, []);
+  const beforeCalls = getStudyCallCount();
+  assert.equal((await request("student-a", "POST", `/conversations/${q.conversationId}/messages`, { text: "لا تولد أثناء الانتظار" })).status, 409);
+  assert.equal(getStudyCallCount(), beforeCalls);
   await db.update(teacherApplicationsTable).set({ available: true }).where(eq(teacherApplicationsTable.userId, "teacher-a"));
   const referral = await refer(q);
   assert.equal(referral.id, old.id);
@@ -267,10 +272,50 @@ test("new assistant follow-ups stay private instead of sharing an unrelated ques
   assert.equal((await request("teacher-a", "GET", `/conversations/${response.body.conversationId}/messages`)).status, 404);
   const followup = await request("student-a", "POST", `/conversations/${response.body.conversationId}/messages`, { text: "سؤال آخر مستقل" });
   assert.equal(followup.status, 201);
-  assert.notEqual(followup.body.conversationId, response.body.conversationId);
+  assert.equal(followup.body.conversationId, response.body.conversationId);
   assert.equal((await request("teacher-a", "GET", `/conversations/${followup.body.conversationId}/messages`)).status, 404);
   assert.equal((await counts()).referrals, 1);
   assert.equal((await counts()).notifications, 1);
+});
+
+test("AI chat retains history and same thread, handles uncertainty, and deduplicates follow-up retries", async () => {
+  const first = await request("student-a", "POST", "/assistant/questions", { question: "اشرح الحديث الأول", textId: "nawawi" });
+  const requestId = randomUUID();
+  const callsBefore = getStudyCallCount();
+  const follow = await request("student-a", "POST", `/conversations/${first.body.conversationId}/messages`, { text: "وضح المقصود بالنية", requestId });
+  assert.equal(follow.status, 201);
+  assert.equal(follow.body.conversationId, first.body.conversationId);
+  assert.ok(getLastStudyHistory().some(m => m.text === "اشرح الحديث الأول"));
+  assert.ok(getLastStudyHistory().some(m => m.role === "assistant"));
+  const retry = await request("student-a", "POST", `/conversations/${first.body.conversationId}/messages`, { text: "وضح المقصود بالنية", requestId });
+  assert.equal(retry.body.questionId, follow.body.questionId);
+  assert.equal(getStudyCallCount(), callsBefore + 1);
+  assert.equal((await request("student-a", "POST", `/conversations/${first.body.conversationId}/messages`, { text: "نص مختلف", requestId })).status, 409);
+  setStudyCompletion(async () => null);
+  const abstained = await request("student-a", "POST", `/conversations/${first.body.conversationId}/messages`, { text: "سؤال لا يمكن إجابته" });
+  assert.equal(abstained.status, 201);
+  assert.equal(abstained.body.status, "abstained");
+  assert.equal(abstained.body.answer, null);
+  const messages = await request("student-a", "GET", `/conversations/${first.body.conversationId}/messages`);
+  assert.ok(messages.body.some((m: { text: string }) => m.text === abstained.body.reason));
+  const referred = await request("student-a", "POST", `/assistant/questions/${abstained.body.questionId}/referral`, { consent: true, teacherId: "teacher-a" });
+  assert.equal(referred.status, 201);
+  const teacherMessages = await request("teacher-a", "GET", `/conversations/${first.body.conversationId}/messages`);
+  assert.deepEqual(teacherMessages.body, messages.body);
+  const beforeTeacherReply = getStudyCallCount();
+  assert.equal((await request("student-a", "POST", `/conversations/${first.body.conversationId}/messages`, { text: "رسالتي للمعلم" })).status, 201);
+  assert.equal(getStudyCallCount(), beforeTeacherReply);
+});
+
+test("legacy referrals retain question-only consent instead of silently exposing earlier dialogue", async () => {
+  const q = await question();
+  await question("student-a", "answered", q.conversationId, "حوار لم يوافق الطالب على مشاركته");
+  await db.insert(scholarlyReferralsTable).values({
+    conversationId: q.conversationId, questionId: q.id, studentId: "student-a", teacherId: "teacher-a",
+    reason: "امتناع", contextShared: "موافقة قديمة تخص السؤال فقط", status: "open",
+  });
+  const visible = await request("teacher-a", "GET", `/conversations/${q.conversationId}/messages`);
+  assert.deepEqual(visible.body.map((m: { text: string }) => m.text), [q.question]);
 });
 
 test("HTTP numbered hadith questions generate explanations instead of reference excerpts", async () => {
@@ -450,7 +495,7 @@ test("general explanations do not claim approval or cite a withdrawn commentary 
   assert.deepEqual(messages[0].citations, []);
 });
 
-test("provider failure privately saves the question with no assistant message", async () => {
+test("provider failure privately saves the question and a fixed assistant reason for chat referral", async () => {
   await readyCorpus();
   setStudyCompletion(async () => { throw new ScholarlyProviderUnavailableError(); });
   const response = await request("student-a", "POST", "/assistant/questions", { question: "ما النية في العمل؟" });
@@ -460,6 +505,6 @@ test("provider failure privately saves the question with no assistant message", 
   assert.equal(saved.id, response.body.questionId);
   assert.equal(saved.status, "abstained");
   assert.equal(saved.answer, null);
-  assert.deepEqual(await counts(), { questions: 1, messages: 1, referrals: 0, notifications: 0 });
+    assert.deepEqual(await counts(), { questions: 1, messages: 2, referrals: 0, notifications: 0 });
   assert.deepEqual((await request("student-b", "GET", "/assistant/questions")).body, []);
 });

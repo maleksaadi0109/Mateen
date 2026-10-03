@@ -45,7 +45,7 @@ import {
 } from "drizzle-orm";
 import { Router } from "express";
 import {
-  answerStudyQuestion,
+  generateStudyAnswer,
   filterTeacherConversationMessages,
   isApprovedAvailableTeacher,
   requiresHumanGuidance,
@@ -77,6 +77,7 @@ import { STUDY_BOOKS, USUL_STUDY_CONTEXT, isStudyBookId, studyBookId } from "../
 export { getMateenScholarlyReadiness };
 
 const router = Router();
+const FULL_THREAD_SHARE = "نطاق المشاركة: كامل هذه المحادثة";
 
 function referralStudyContext(question: typeof scholarlyQuestionsTable.$inferSelect): string {
   return `المتن: ${STUDY_BOOKS[studyBookId(question.textId)]}${question.textContext ? `\nسياق الطالب: ${question.textContext}` : ""}`;
@@ -88,7 +89,7 @@ async function questionPayload(question: typeof scholarlyQuestionsTable.$inferSe
     teacherName: profilesTable.name,
   }).from(scholarlyReferralsTable)
     .leftJoin(profilesTable, eq(scholarlyReferralsTable.teacherId, profilesTable.clerkId))
-    .where(eq(scholarlyReferralsTable.questionId, question.id)).limit(1);
+    .where(eq(scholarlyReferralsTable.conversationId, question.conversationId)).limit(1);
   return {
     conversationId: question.conversationId,
     questionId: question.id,
@@ -123,6 +124,7 @@ async function createAssistantQuestion(
   textContext: string | null,
   textId: string | null,
   existingConversationId?: string,
+  requestId?: string,
 ) {
   const gate = await getScholarlyReadiness();
   const selectedBook = studyBookId(textId);
@@ -145,20 +147,36 @@ async function createAssistantQuestion(
   let providerFailed = false;
   let responseModel: string = gate.model;
   const requiredGuidance = requiresHumanGuidance(question);
+  let history: Array<{ role: string; text: string }> = [];
+  if (existingConversationId) {
+    const [owned] = await db.select().from(scholarlyConversationsTable)
+      .where(and(eq(scholarlyConversationsTable.id, existingConversationId), eq(scholarlyConversationsTable.studentId, userId))).limit(1);
+    if (!owned) return { kind: "not-found" as const };
+    const messages = await db.select({ role: scholarlyMessagesTable.role, text: scholarlyMessagesTable.text })
+      .from(scholarlyMessagesTable).where(eq(scholarlyMessagesTable.conversationId, owned.id))
+      .orderBy(desc(scholarlyMessagesTable.createdAt)).limit(12);
+    history = messages.reverse();
+  }
   // Always generate a new explanation. References identify the passage internally;
   // they do not replace the explanation or expose private administrator drafts.
   try {
       const records = isNawawi ? (await getNawawiStudyRecords()).hadiths : [];
-      const resolution = isNawawi ? resolveNawawiHadith(question, records, textContext) : null;
+      const currentResolution = isNawawi ? resolveNawawiHadith(question, records, textContext) : null;
+      const resolution = currentResolution?.number != null ? currentResolution
+        : isNawawi ? [...history].reverse().filter(m => m.role === "student")
+            .map(m => resolveNawawiHadith(m.text, records)).find(r => r.number != null) ?? currentResolution
+        : null;
       const reference = resolution?.number != null
         ? selectNawawiReference(`الحديث رقم ${resolution.number}`, records)
         : null;
       const studyContext = [isNawawi ? null : USUL_STUDY_CONTEXT, reference, textContext]
         .filter(Boolean).join("\n\n") || null;
-      answer = await answerStudyQuestion(question, studyContext, gate.model, STUDY_BOOKS[selectedBook]);
+      answer = requiredGuidance ? null : await generateStudyAnswer(question, studyContext, gate.model, STUDY_BOOKS[selectedBook], history);
       citations = [];
-      status = requiredGuidance ? "abstained" : "unverified";
-      reason = requiredGuidance ?? UNVERIFIED_STUDY_NOTICE;
+      status = answer === null ? "abstained" : "unverified";
+      reason = requiredGuidance ?? (answer === null
+        ? "لا أستطيع تقديم جواب موثوق لهذا السؤال. يمكن إحالة هذه المحادثة إلى معلم ليطّلع على الحوار ويكمل معك."
+        : UNVERIFIED_STUDY_NOTICE);
   } catch (error) {
       if (!(error instanceof ScholarlyProviderUnavailableError)) throw error;
       status = "abstained";
@@ -195,14 +213,27 @@ async function createAssistantQuestion(
         reason = "تغيّرت حالة أحد المصادر أثناء التحقق. لم تُنشر إجابة؛ يمكنك إعادة المحاولة.";
       }
     }
-    // New assistant questions get private threads. An explicitly referred
-    // inquiry's continuation is handled separately by the referral message
-    // route, which retains the referred question/conversation association.
-    const [conversation] = await tx.insert(scholarlyConversationsTable)
-      .values({ studentId: userId, topic: question.slice(0, 180) })
-      .returning();
+    const [conversation] = existingConversationId
+      ? await tx.select().from(scholarlyConversationsTable)
+          .where(and(eq(scholarlyConversationsTable.id, existingConversationId), eq(scholarlyConversationsTable.studentId, userId)))
+          .for("update").limit(1)
+      : await tx.insert(scholarlyConversationsTable)
+          .values({ studentId: userId, topic: question.slice(0, 180) }).returning();
     if (!conversation) return null;
+    if (existingConversationId) {
+      const [referred] = await tx.select().from(scholarlyReferralsTable)
+        .where(eq(scholarlyReferralsTable.conversationId, conversation.id)).limit(1);
+      // Do not append new AI content after referral consent while a model call
+      // was in flight. The student can retry using the teacher reply path.
+      if (referred) return null;
+    }
+    if (requestId) {
+      const [previous] = await tx.select().from(scholarlyQuestionsTable)
+        .where(eq(scholarlyQuestionsTable.id, requestId)).limit(1);
+      if (previous) return previous.studentId === userId && previous.conversationId === conversation.id && previous.question === question ? previous : null;
+    }
     const [created] = await tx.insert(scholarlyQuestionsTable).values({
+      ...(requestId ? { id: requestId } : {}),
       conversationId: conversation.id,
       studentId: userId,
       question,
@@ -221,13 +252,13 @@ async function createAssistantQuestion(
       role: "student",
       text: question,
     });
-    if (answer) {
+    if (answer || reason) {
       await tx.insert(scholarlyMessagesTable).values({
         conversationId: conversation.id,
         questionId: created.id,
         senderId: null,
         role: "assistant",
-        text: answer,
+        text: answer ?? reason,
         citations,
       });
     }
@@ -323,7 +354,7 @@ router.get(
       status: scholarlyReferralsTable.status,
     })
       .from(scholarlyReferralsTable)
-      .where(eq(scholarlyReferralsTable.questionId, question.id)).limit(1);
+      .where(eq(scholarlyReferralsTable.conversationId, question.conversationId)).limit(1);
     if (alreadyReferred && alreadyReferred.status !== "waiting_for_teacher") {
       res.status(409).json({ error: "This question already has a referral" });
       return;
@@ -340,14 +371,18 @@ router.get(
         eq(profilesTable.role, "teacher"),
       ))
       .orderBy(profilesTable.name);
+    const dialogue = await db.select({ role: scholarlyMessagesTable.role, text: scholarlyMessagesTable.text })
+      .from(scholarlyMessagesTable).where(eq(scholarlyMessagesTable.conversationId, question.conversationId))
+      .orderBy(scholarlyMessagesTable.createdAt);
     res.json(GetMateenReferralPreviewResponse.parse({
       questionId: question.id,
       question: question.question,
       textContext: referralStudyContext(question),
       reason: question.reason ?? "المساعد لم يجد دليلًا كافيًا.",
       shares: [
-        question.question,
+        FULL_THREAD_SHARE,
         referralStudyContext(question),
+        ...dialogue.map(m => `${m.role === "student" ? "الطالب" : m.role === "teacher" ? "المعلم" : "المساعد"}: ${m.text}`),
       ],
       teachers,
     }));
@@ -378,8 +413,10 @@ router.post(
           eq(scholarlyQuestionsTable.status, "abstained"),
         )).for("update").limit(1);
       if (!question) return { kind: "not-found" as const };
+      await tx.select().from(scholarlyConversationsTable)
+        .where(eq(scholarlyConversationsTable.id, question.conversationId)).for("update");
       const [existing] = await tx.select().from(scholarlyReferralsTable)
-        .where(eq(scholarlyReferralsTable.questionId, question.id)).limit(1);
+        .where(eq(scholarlyReferralsTable.conversationId, question.conversationId)).limit(1);
       if (existing && existing.status !== "waiting_for_teacher") {
         return { kind: "duplicate" as const };
       }
@@ -422,6 +459,7 @@ router.post(
         ? await tx.update(scholarlyReferralsTable).set({
             teacherId: availableTeacher?.id ?? null,
             status: availableTeacher ? "open" : "waiting_for_teacher",
+            contextShared: `${FULL_THREAD_SHARE}\n${referralStudyContext(question)}`,
             updatedAt: new Date(),
           }).where(eq(scholarlyReferralsTable.id, existing.id)).returning()
         : await tx.insert(scholarlyReferralsTable).values({
@@ -430,10 +468,13 @@ router.post(
             studentId: req.scholarlyUserId!,
             teacherId: availableTeacher?.id ?? null,
             reason: question.reason ?? "المساعد لم يجد دليلًا كافيًا.",
-            contextShared: referralStudyContext(question),
+            contextShared: `${FULL_THREAD_SHARE}\n${referralStudyContext(question)}`,
             status: availableTeacher ? "open" : "waiting_for_teacher",
           }).returning();
       if (!availableTeacher) {
+        await tx.update(scholarlyConversationsTable)
+          .set({ status: "waiting_for_teacher", updatedAt: new Date() })
+          .where(eq(scholarlyConversationsTable.id, question.conversationId));
         return {
           kind: "waiting" as const,
           referral,
@@ -537,20 +578,22 @@ router.get(
     }
     const profile = await getProfile(req.scholarlyUserId!);
     let referredQuestionId: string | null = null;
+    let fullThreadShared = false;
     if (profile?.role === "teacher") {
-      const [referral] = await db.select({ questionId: scholarlyReferralsTable.questionId })
+      const [referral] = await db.select({ questionId: scholarlyReferralsTable.questionId, context: scholarlyReferralsTable.contextShared })
         .from(scholarlyReferralsTable)
         .where(and(
           eq(scholarlyReferralsTable.conversationId, params.data.conversationId),
           eq(scholarlyReferralsTable.teacherId, req.scholarlyUserId!),
         )).limit(1);
       referredQuestionId = referral?.questionId ?? null;
+      fullThreadShared = referral?.context?.startsWith(`${FULL_THREAD_SHARE}\n`) === true;
     }
     const rows = await db.select().from(scholarlyMessagesTable)
       .where(eq(scholarlyMessagesTable.conversationId, params.data.conversationId))
-      .orderBy(scholarlyMessagesTable.createdAt).limit(300);
+      .orderBy(scholarlyMessagesTable.createdAt);
     const visibleRows = profile?.role === "teacher"
-      ? referredQuestionId
+      ? fullThreadShared ? rows : referredQuestionId
         ? filterTeacherConversationMessages(rows, referredQuestionId)
         : []
       : rows;
@@ -592,6 +635,10 @@ router.post(
     }
     const [referral] = await db.select().from(scholarlyReferralsTable)
       .where(eq(scholarlyReferralsTable.conversationId, owned.id)).limit(1);
+    if (referral && !referral.teacherId) {
+      res.status(409).json({ error: "This conversation is waiting for a teacher; no further AI messages will be generated" });
+      return;
+    }
     if (referral?.teacherId) {
       if (referral.status === "closed") {
         res.status(409).json({ error: "This referral is closed" });
@@ -635,18 +682,31 @@ router.post(
       res.status(201).json(SendMateenFollowUpResponse.parse(await questionPayload(question!)));
       return;
     }
-    const [latestQuestion] = await db.select({ textId: scholarlyQuestionsTable.textId })
+    const [latestQuestion] = await db.select({ textId: scholarlyQuestionsTable.textId, textContext: scholarlyQuestionsTable.textContext })
       .from(scholarlyQuestionsTable)
       .where(and(
         eq(scholarlyQuestionsTable.conversationId, owned.id),
         eq(scholarlyQuestionsTable.studentId, req.scholarlyUserId!),
       )).orderBy(desc(scholarlyQuestionsTable.createdAt)).limit(1);
+    if (body.data.requestId) {
+      const [previous] = await db.select().from(scholarlyQuestionsTable)
+        .where(eq(scholarlyQuestionsTable.id, body.data.requestId)).limit(1);
+      if (previous) {
+        if (previous.studentId !== req.scholarlyUserId! || previous.conversationId !== owned.id || previous.question !== body.data.text.trim()) {
+          res.status(409).json({ error: "The message identifier was already used for different content" });
+          return;
+        }
+        res.status(201).json(SendMateenFollowUpResponse.parse(await questionPayload(previous)));
+        return;
+      }
+    }
     const saved = await createAssistantQuestion(
       req.scholarlyUserId!,
       body.data.text,
-      null,
+      latestQuestion?.textContext ?? null,
       latestQuestion?.textId ?? null,
       params.data.conversationId,
+      body.data.requestId,
     );
     if (saved.kind === "not-found") {
       res.status(404).json({ error: "Conversation not found" });

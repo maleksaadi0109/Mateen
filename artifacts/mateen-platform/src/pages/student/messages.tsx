@@ -5,9 +5,9 @@ import { getGetMateenConversationMessagesQueryKey, getGetMateenConversationsQuer
 import type { TeacherReferral } from '@workspace/api-client-react';
 import { MessageSquare } from 'lucide-react';
 import { EmptyState, ErrorState, LoadingList, PageHeader } from '@/components/mateen/bits';
-import { CitationList, StatusPill, btnGhost, btnPrimary, field, useFinitePoll } from '@/components/scholarly/shared';
+import { ChatMessages } from '@/components/scholarly/ChatMessages';
+import { StatusPill, btnGhost, btnPrimary, field, useFinitePoll } from '@/components/scholarly/shared';
 import { fmtDate, usePageMeta } from '@/lib/mateen';
-import { AnswerText } from '@/components/scholarly/AnswerText';
 import { useToast } from '@/hooks/use-toast';
 
 const ROLE: Record<string, string> = { student: 'الطالب', assistant: 'المساعد', teacher: 'المعلم' };
@@ -42,13 +42,7 @@ function Thread({ conversationId, teacher, referralId }: { conversationId: strin
     <div className="mt-4 space-y-3 border-t pt-4" data-testid={`thread-${conversationId}`}>
       {status.data && <p className="font-ui text-xs text-muted-foreground" data-testid="text-thread-status">حالة الإحالة: {status.data.referral.status === 'not_referred' ? 'دون إحالة' : <StatusPill status={status.data.referral.status} />}</p>}
       {msgs.isLoading ? <LoadingList rows={2} /> : msgs.isError ? <ErrorState onRetry={() => msgs.refetch()} /> : (
-        <ul className="space-y-3">{msgs.data?.map((m) => (
-          <li key={m.id} className={`rounded-2xl p-4 ${m.role === 'teacher' ? 'bg-muted' : 'border bg-background'}`} data-testid={`message-${m.id}`}>
-            <p className="font-ui text-xs font-bold text-secondary">{ROLE[m.role] ?? m.role} · <span className="font-normal text-muted-foreground">{fmtDate(m.createdAt)}</span></p>
-            <AnswerText className="mt-1 font-arabic text-lg leading-loose" text={m.text} />
-            <CitationList citations={m.citations} />
-          </li>
-        ))}</ul>
+        <ChatMessages messages={msgs.data ?? []} viewer={teacher ? 'teacher' : 'student'} />
       )}
       {!teacher && ['not_referred', 'waiting_for_teacher'].includes(status.data?.referral.status ?? '') && <p className="font-ui text-xs text-muted-foreground">لا يوجد معلم مكلّف بهذه المحادثة بعد. للأسئلة الجديدة استخدم المساعد؛ وللإحالة راجع السؤال في سجلّه.</p>}
       <textarea className={`${field} font-arabic`} rows={3} maxLength={8000} placeholder="رد نصي ضمن الإحالة؛ للأسئلة الجديدة استخدم المساعد" value={text} onChange={(e) => { setText(e.target.value); setRequestId(crypto.randomUUID()); }} disabled={follow.isPending || reply.isPending || !status.data || status.data.status === 'closed' || ['not_referred', 'waiting_for_teacher'].includes(status.data.referral.status)} data-testid="input-message" />

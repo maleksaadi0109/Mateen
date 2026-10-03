@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { getGetMateenAssistantQuestionsQueryKey, getGetMateenAssistantReadinessQueryKey, getGetMateenConversationsQueryKey, useAskMateenAssistant, useGetMateenAssistantQuestions, useGetMateenAssistantReadiness, useReportScholarlyIssue } from '@workspace/api-client-react';
+import { getGetMateenAssistantQuestionsQueryKey, getGetMateenAssistantReadinessQueryKey, getGetMateenConversationMessagesQueryKey, getGetMateenConversationStatusQueryKey, getGetMateenConversationsQueryKey, useAskMateenAssistant, useGetMateenAssistantQuestions, useGetMateenAssistantReadiness, useGetMateenConversationMessages, useGetMateenConversationStatus, useReportScholarlyIssue, useSendMateenFollowUp } from '@workspace/api-client-react';
 import type { AssistantQuestion } from '@workspace/api-client-react';
 import { Link } from 'wouter';
-import { ShieldAlert, Sparkles } from 'lucide-react';
-import { EmptyState, ErrorState, LoadingList, PageHeader } from '@/components/mateen/bits';
+import { Plus, SendHorizontal, ShieldAlert } from 'lucide-react';
+import { ErrorState, LoadingList, PageHeader } from '@/components/mateen/bits';
+import { ChatMessages } from '@/components/scholarly/ChatMessages';
 import { Field, NO_FATWA, StatusPill, btnGhost, btnPrimary, field, useFinitePoll } from '@/components/scholarly/shared';
 import { ReferralPanel } from '@/components/scholarly/ReferralPanel';
 import { fmtDate, usePageMeta } from '@/lib/mateen';
@@ -35,106 +36,162 @@ function IssueForm({ questionId, onDone }: { questionId: string; onDone: () => v
   );
 }
 
-function QuestionCard({ a }: { a: AssistantQuestion }) {
-  const regenerate = useAskMateenAssistant();
-  const qc = useQueryClient();
-  const { toast } = useToast();
-  const isLegacyExcerpt = a.model === 'reference-excerpt';
-  const [referral, setReferral] = useState(false);
-  const [issue, setIssue] = useState(false);
-  const canRefer = (a.status === 'abstained' && a.referral.status === 'not_referred') || a.referral.status === 'waiting_for_teacher';
-  return (
-    <article className="paper-card p-6" data-testid={`card-question-${a.questionId}`}>
-      <div className="flex flex-wrap items-center justify-between gap-2"><StatusPill status={a.status} /><span className="font-ui text-xs text-muted-foreground" data-testid={`text-model-${a.questionId}`}>النموذج: {a.model}</span></div>
-      <p className="mt-2 font-ui text-xs text-muted-foreground">{fmtDate(a.createdAt)}</p>
-      <p className="mt-2 font-ui text-sm font-semibold" data-testid="text-question-book">الكتاب: {STUDY_BOOKS.find(book => book.id === a.textId)?.title}</p>
-      <p className="mt-3 whitespace-pre-wrap font-ui text-sm font-semibold">{a.question}</p>
-      {a.textContext && <p className="mt-2 whitespace-pre-wrap font-arabic text-sm text-muted-foreground">سياق الدراسة: {a.textContext}</p>}
-      {isLegacyExcerpt ? <p className="mt-3 font-arabic text-lg leading-loose text-muted-foreground">هذه إجابة مرجعية سابقة. يمكنك الآن طلب شرح يولّده المساعد لسؤالك، دون عرض المقتطفات والمصادر.</p>
-        : a.answer ? <p className="mt-3 whitespace-pre-wrap font-arabic text-lg leading-loose" data-testid="text-answer">{a.answer}</p>
-        : <p className="mt-3 font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-abstained">{a.reason || 'لم تكفِ المصادر المراجَعة للجواب، فامتنع المساعد بدل أن يخمّن.'}</p>}
-      {a.referral.status !== 'not_referred' && (
-        <p className="mt-3 font-ui text-sm" data-testid="text-referral-state">{a.referral.status === 'waiting_for_teacher' ? 'طلبك بانتظار معلم معتمد متاح.' : a.referral.status === 'answered' ? `أجاب ${a.referral.teacherName ?? 'المعلم'}.` : `أُحيل إلى ${a.referral.teacherName ?? 'معلم'} وبانتظار الرد.`} <Link href="/student/messages" className="font-bold text-secondary">الرسائل</Link></p>
-      )}
-      <div className="mt-4 flex flex-wrap gap-3">
-        {isLegacyExcerpt && <button className={btnPrimary} disabled={regenerate.isPending} data-testid={`button-generate-explanation-${a.questionId}`} onClick={() => regenerate.mutate({
-          data: { question: a.question, textId: a.textId, textContext: a.textContext },
-        }, {
-          onSuccess: () => {
-            qc.invalidateQueries({ queryKey: getGetMateenAssistantQuestionsQueryKey() });
-            qc.invalidateQueries({ queryKey: getGetMateenConversationsQueryKey() });
-          },
-          onError: () => {
-            toast({ title: 'تعذّر توليد الشرح الآن', description: 'أعد المحاولة؛ لم تُستبدل الإجابة القديمة أو تُحذف.', variant: 'destructive' });
-            qc.invalidateQueries({ queryKey: getGetMateenAssistantQuestionsQueryKey() });
-          },
-        })}>{regenerate.isPending ? 'جارٍ توليد الشرح' : 'ولّد شرحاً لسؤالي'}</button>}
-        {canRefer && <button className={btnPrimary} onClick={() => setReferral(true)} data-testid={`button-refer-${a.questionId}`}>{a.referral.status === 'waiting_for_teacher' ? 'تحقق من توفر المعلمين' : 'اطلب معلماً'}</button>}
-        <button className={btnGhost} onClick={() => setIssue((v) => !v)} data-testid={`button-report-${a.questionId}`}><ShieldAlert size={15} />أبلغ عن مشكلة</button>
-      </div>
-      {referral && <ReferralPanel questionId={a.questionId} onClose={() => setReferral(false)} />}
-      {issue && <IssueForm questionId={a.questionId} onDone={() => setIssue(false)} />}
-    </article>
-  );
-}
+const bookTitle = (id: string) => STUDY_BOOKS.find((b) => b.id === id)?.title ?? id;
 
 export default function AssistantPage() {
-  usePageMeta('المساعد العلمي | مَتِين', 'إجابات تعليمية آلية مع توضيح التوثيق، وإحالة إلى معلم عند الحاجة.');
+  usePageMeta('المساعد العلمي | مَتِين', 'محادثة تعليمية مع المساعد الآلي، وإحالة إلى معلم عند الحاجة.');
   const qc = useQueryClient();
   const { toast } = useToast();
   const ready = useGetMateenAssistantReadiness({ query: { queryKey: getGetMateenAssistantReadinessQueryKey() } });
-  const poll = useFinitePoll(10000);
+  const poll = 8000;
   const hist = useGetMateenAssistantQuestions({ query: { queryKey: getGetMateenAssistantQuestionsQueryKey(), refetchInterval: poll } });
   const ask = useAskMateenAssistant();
-  const [question, setQuestion] = useState('');
+  const follow = useSendMateenFollowUp();
+  const [sel, setSel] = useState<string | null>(null); // null = new conversation
   const [bookId, setBookId] = useState<StudyBookId | ''>('');
-  const [context, setContext] = useState('');
-  const enabled = ready.data?.assistantEnabled === true;
-  const canSubmit = Boolean(ready.data) && !ready.isError;
-  const submit = () => {
-    if (!bookId || ask.isPending) return;
-    const text = question.trim();
-    ask.mutate({ data: { question: text, textId: bookId, textContext: context.trim() || null } }, {
-      onSuccess: () => { setQuestion(''); setContext(''); qc.invalidateQueries({ queryKey: getGetMateenAssistantQuestionsQueryKey() }); qc.invalidateQueries({ queryKey: getGetMateenConversationsQueryKey() }); },
-      onError: () => { toast({ title: 'تعذّر تقديم إجابة موثقة', description: 'راجع سجل الأسئلة؛ قد حُفظ السؤال مع سبب الامتناع دون توليد جواب.', variant: 'destructive' }); hist.refetch(); ready.refetch(); },
-    });
+  const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [dismissed, setDismissed] = useState<string[]>([]);
+  const [referralOpen, setReferralOpen] = useState(false);
+  const [issue, setIssue] = useState(false);
+  const reqId = useRef<{ key: string; text: string; id: string }>({ key: '', text: '', id: crypto.randomUUID() });
+  const pending = ask.isPending || follow.isPending;
+  const key = sel ?? 'new';
+  const text = drafts[key] ?? '';
+  const setText = (v: string) => setDrafts((d) => ({ ...d, [key]: v }));
+
+  const threads = useMemo(() => {
+    const map = new Map<string, AssistantQuestion[]>();
+    for (const q of hist.data ?? []) map.set(q.conversationId, [...(map.get(q.conversationId) ?? []), q]);
+    return Array.from(map.entries()).map(([id, qs]) => {
+      const sorted = [...qs].sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt));
+      return { id, first: sorted[0], latest: sorted[sorted.length - 1] };
+    }).sort((a, b) => +new Date(b.latest.createdAt) - +new Date(a.latest.createdAt));
+  }, [hist.data]);
+  const thread = threads.find((t) => t.id === sel);
+  const latest = thread?.latest;
+
+  const msgs = useGetMateenConversationMessages(sel ?? '', { query: { enabled: !!sel, queryKey: getGetMateenConversationMessagesQueryKey(sel ?? ''), refetchInterval: sel ? poll : false } });
+  const status = useGetMateenConversationStatus(sel ?? '', { query: { enabled: !!sel, queryKey: getGetMateenConversationStatusQueryKey(sel ?? ''), refetchInterval: sel ? poll : false } });
+  const refStatus = status.data?.referral.status ?? latest?.referral.status ?? 'not_referred';
+  const closed = status.data?.status === 'closed';
+  const waiting = refStatus === 'waiting_for_teacher';
+  const withTeacher = refStatus === 'awaiting_reply' || refStatus === 'answered';
+  const abstainedOpen = !!latest && latest.status === 'abstained' && refStatus === 'not_referred';
+  const autoPanel = abstainedOpen && !dismissed.includes(latest!.questionId);
+  const showPanel = !!latest && !closed && (referralOpen || autoPanel);
+
+  useEffect(() => { setReferralOpen(false); setIssue(false); }, [sel]);
+
+  const refresh = (cid?: string) => {
+    qc.invalidateQueries({ queryKey: getGetMateenAssistantQuestionsQueryKey() });
+    qc.invalidateQueries({ queryKey: getGetMateenConversationsQueryKey() });
+    if (cid) { qc.invalidateQueries({ queryKey: getGetMateenConversationMessagesQueryKey(cid) }); qc.invalidateQueries({ queryKey: getGetMateenConversationStatusQueryKey(cid) }); }
   };
-  const history = hist.data ?? [];
+  const nextReq = (k: string, t: string) => {
+    if (reqId.current.key !== k || reqId.current.text !== t) reqId.current = { key: k, text: t, id: crypto.randomUUID() };
+    return reqId.current.id;
+  };
+  const failToast = () => toast({ title: 'تعذّر الإرسال', description: 'نصك محفوظ في الحقل؛ أعد المحاولة.', variant: 'destructive' });
+  const clearDraft = (k: string) => {
+    if (reqId.current.key === k) reqId.current = { key: '', text: '', id: crypto.randomUUID() };
+    setDrafts((d) => { const n = { ...d }; delete n[k]; return n; });
+  };
+
+  const send = () => {
+    const t = text.trim();
+    if (!t || pending || waiting || closed || (sel ? !status.data : !ready.data)) return;
+    if (!sel) {
+      if (!bookId) return;
+      ask.mutate({ data: { question: t, textId: bookId, textContext: null } }, {
+        onSuccess: (a) => { clearDraft('new'); refresh(a.conversationId); setSel(a.conversationId); },
+        onError: async (err) => {
+          const qid = (err as { data?: { questionId?: string } } | null)?.data?.questionId;
+          const res = await hist.refetch();
+          const found = qid ? res.data?.find((q) => q.questionId === qid) : undefined;
+          if (found) {
+            clearDraft('new'); refresh(found.conversationId); setSel(found.conversationId);
+            toast({ title: 'حُفظ سؤالك', description: 'تعذّر على المساعد الجواب الآن. السؤال محفوظ في المحادثة، ولم يُرسل شيء مكرراً.' });
+          } else failToast();
+        },
+      });
+    } else {
+      const cid = sel;
+      follow.mutate({ conversationId: cid, data: { text: t, requestId: nextReq(cid, t) } }, {
+        onSuccess: () => { clearDraft(cid); refresh(cid); },
+        onError: async (err) => {
+          const qid = (err as { data?: { questionId?: string } } | null)?.data?.questionId;
+          const res = await hist.refetch();
+          if (qid && res.data?.some(q => q.questionId === qid && q.conversationId === cid)) {
+            clearDraft(cid);
+            toast({ title: 'حُفظت رسالتك', description: 'تعذّر على المساعد الجواب. يمكنك إحالة الحوار إلى معلم دون إعادة إرسال الرسالة.' });
+          } else failToast();
+          refresh(cid);
+        },
+      });
+    }
+  };
+
+  const lockedBook = thread ? thread.first.textId : bookId;
+  const placeholder = withTeacher ? 'اكتب رسالتك إلى المعلم' : 'اكتب سؤالك أو متابعتك';
+  const blocked = waiting ? 'طلبك بانتظار معلم معتمد متاح. أوقف المساعد الإجابة في هذه المحادثة حتى يُسند إليها معلم.' : closed ? 'أُغلقت هذه المحادثة وهي للقراءة فقط.' : '';
+
   return (
     <div>
-      <PageHeader eyebrow="المساعد العلمي" title="اختر الكتاب، ثم اسأل">اختر الكتاب واكتب سؤالك؛ يولّد المساعد شرحاً مباشراً للمعنى، مع مثال عند الحاجة، بدلاً من عرض مقتطفات المصادر. الإجابات آلية وغير مراجعة علمياً.</PageHeader>
-      <p className="mb-6 rounded-2xl border border-secondary/30 bg-card p-4 font-ui text-sm" data-testid="text-no-fatwa">{NO_FATWA}</p>
-      {ready.isLoading ? <LoadingList rows={1} /> : ready.isError || !ready.data ? <ErrorState message="تعذّر قراءة حالة المساعد." onRetry={() => ready.refetch()} /> : (
-        <section className="paper-card mb-8 p-6" data-testid="card-readiness">
-          <h2 className="font-display text-lg font-bold">جاهزية المساعد</h2>
-          <ul className="mt-3 grid gap-2 font-ui text-sm sm:grid-cols-2">
-            <li data-testid="text-ready-provider">المزوّد: {ready.data.providerConfigured ? 'مهيّأ' : 'غير مهيّأ'}</li>
-            <li data-testid="text-ready-sources">مصادر مراجَعة: {ready.data.reviewedSourceCount.toLocaleString('ar-EG')}</li>
-            <li data-testid="text-ready-eval">التقييم: {ready.data.evaluationPassed ? 'اجتاز' : 'لم يجتز بعد'}</li>
-            <li data-testid="text-ready-model">النموذج: {ready.data.model}</li>
-          </ul>
-           {!enabled && <p className="mt-4 font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-assistant-disabled">{ready.data.studyAnswersEnabled ? 'المساعد متاح لتوليد شرح لسؤالك عن الكتاب المختار. هذه الإجابات غير مراجعة علمياً.' : 'اتصال النموذج غير متاح الآن؛ أعد المحاولة لاحقاً.'}</p>}
+      <PageHeader eyebrow="المساعد العلمي" title="محادثتك مع المساعد">اختر الكتاب ثم اسأل، وتابع في المحادثة نفسها. الإجابات آلية وغير مراجعة علمياً.</PageHeader>
+      <p className="mb-5 rounded-2xl border border-secondary/30 bg-card p-4 font-ui text-sm" data-testid="text-no-fatwa">{NO_FATWA}</p>
+      {ready.isError && <div className="mb-5"><ErrorState message="تعذّر قراءة حالة المساعد." onRetry={() => ready.refetch()} /></div>}
+      <div className="grid gap-5 md:grid-cols-[17rem_minmax(0,1fr)]">
+        <aside className="min-w-0 space-y-3" data-testid="list-conversations">
+          <button className={`${btnPrimary} w-full`} disabled={pending} onClick={() => setSel(null)} data-testid="button-new-conversation"><Plus size={15} />محادثة جديدة</button>
+          {hist.isLoading ? <LoadingList rows={3} /> : hist.isError ? <ErrorState onRetry={() => hist.refetch()} /> : !threads.length ? (
+            <p className="rounded-2xl border border-dashed p-4 font-ui text-sm text-muted-foreground" data-testid="text-no-conversations">لا محادثات محفوظة بعد. تُحفظ محادثاتك هنا تلقائياً.</p>
+          ) : (
+            <ul className="max-h-64 space-y-2 overflow-y-auto md:max-h-[60vh]">
+              {threads.map((t) => (
+                <li key={t.id}>
+                  <button disabled={pending && t.id !== sel} onClick={() => setSel(t.id)} data-testid={`button-thread-${t.id}`}
+                    className={`block w-full min-w-0 rounded-2xl border p-3 text-start disabled:opacity-50 ${t.id === sel ? 'border-secondary bg-card' : 'hover:bg-muted'}`}>
+                    <span className="block truncate font-arabic text-base">{t.first.question}</span>
+                    <span className="mt-1 flex items-center justify-between gap-2 font-ui text-xs text-muted-foreground"><span className="truncate">{bookTitle(t.first.textId)}</span><span>{fmtDate(t.latest.createdAt)}</span></span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </aside>
+
+        <section className="paper-card flex min-w-0 flex-col p-4 sm:p-6" data-testid="card-chat">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b pb-3">
+            {sel ? <div className="flex flex-wrap items-center gap-2"><span className="font-ui text-sm font-bold" data-testid="text-question-book">الكتاب: {bookTitle(lockedBook)}</span>{refStatus !== 'not_referred' && <StatusPill status={refStatus} />}</div>
+              : <Field label="عن أي كتاب تريد أن تسأل؟" hint="يُثبَّت الكتاب في المحادثة بعد أول سؤال">
+                <select className={field} value={bookId} disabled={pending} data-testid="select-study-book" onChange={(e) => setBookId(STUDY_BOOKS.find((b) => b.id === e.target.value)?.id ?? '')}>
+                  <option value="" disabled>اختر الكتاب</option>
+                  {STUDY_BOOKS.map((b) => <option key={b.id} value={b.id}>{b.title}</option>)}
+                </select></Field>}
+            {latest && <button className={btnGhost} onClick={() => setIssue((v) => !v)} data-testid={`button-report-${latest.questionId}`}><ShieldAlert size={15} />أبلغ عن مشكلة</button>}
+          </div>
+          {issue && latest && <IssueForm questionId={latest.questionId} onDone={() => setIssue(false)} />}
+
+          <div className="min-h-[14rem] flex-1 space-y-3 md:max-h-[55vh] md:overflow-y-auto">
+            {!sel ? <p className="py-10 text-center font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-chat-empty">{bookId === 'usul-thalatha' ? 'سيشرح المساعد سؤالك في سياق الأصول الثلاثة.' : bookId ? 'اكتب سؤالك عن الأربعين النووية لتبدأ المحادثة.' : 'اختر الكتاب أولاً، ثم اكتب سؤالك.'}</p>
+              : msgs.isLoading ? <LoadingList rows={2} /> : msgs.isError ? <ErrorState onRetry={() => msgs.refetch()} /> : <ChatMessages messages={msgs.data ?? []} viewer="student" />}
+             {pending && <p className="font-ui text-sm text-muted-foreground" data-testid="text-pending">جارٍ المعالجة...</p>}
+             {sel && status.isError && <ErrorState message="تعذّر التحقق من حالة المحادثة؛ لم تُرسل رسالة جديدة." onRetry={() => status.refetch()} />}
+          </div>
+
+          {showPanel && latest && <ReferralPanel key={latest.questionId} questionId={latest.questionId} onClose={() => { setReferralOpen(false); setDismissed((d) => [...d, latest.questionId]); }} />}
+          {!showPanel && latest && !closed && (abstainedOpen || waiting) && <button className={`${btnGhost} mt-3 self-start`} onClick={() => setReferralOpen(true)} data-testid={`button-refer-${latest.questionId}`}>{waiting ? 'تحقق من توفر المعلمين' : 'اطلب معلماً'}</button>}
+          {withTeacher && <p className="mt-3 font-ui text-sm" data-testid="text-referral-state">{refStatus === 'answered' ? `أجاب ${status.data?.referral.teacherName ?? 'المعلم'}.` : `أُحيلت المحادثة إلى ${status.data?.referral.teacherName ?? 'معلم'}.`} رسائلك الآن تصل إلى المعلم دون توليد آلي. <Link href="/student/messages" className="font-bold text-secondary">الرسائل</Link></p>}
+          {blocked && <p className="mt-3 rounded-xl bg-muted p-3 font-ui text-sm" role="status" data-testid="text-composer-blocked">{blocked}</p>}
+
+          <div className="mt-4 flex items-end gap-2">
+             <textarea className={`${field} min-w-0 flex-1 font-arabic text-base`} rows={2} maxLength={8000} placeholder={placeholder} value={text} disabled={pending || !!blocked || (sel ? !status.data : !bookId || !ready.data)}
+              onChange={(e) => setText(e.target.value)} data-testid="input-question"
+              onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); send(); } }} />
+             <button className={btnPrimary} disabled={!text.trim() || pending || !!blocked || (sel ? !status.data : !bookId || !ready.data)} onClick={send} aria-label="إرسال" data-testid="button-ask"><SendHorizontal size={16} className="rtl:-scale-x-100" /></button>
+          </div>
         </section>
-      )}
-      <section className="paper-card mb-8 space-y-4 p-6">
-        <Field label="عن أي كتاب تريد أن تسأل؟" hint="اختيار الكتاب مطلوب قبل إرسال السؤال">
-          <select className={field} value={bookId} required disabled={!canSubmit || ask.isPending} data-testid="select-study-book" onChange={(e) => {
-            setBookId(STUDY_BOOKS.find(book => book.id === e.target.value)?.id ?? '');
-            setContext('');
-          }}>
-            <option value="" disabled>اختر الكتاب</option>
-            {STUDY_BOOKS.map(book => <option key={book.id} value={book.id}>{book.title}</option>)}
-          </select>
-        </Field>
-        {bookId === 'usul-thalatha' && <p className="font-ui text-sm text-muted-foreground" data-testid="text-study-book-notice">سيشرح المساعد سؤالك في سياق الأصول الثلاثة، لا الأربعين النووية.</p>}
-        <Field label="سؤالك" hint="حتى ٨٠٠٠ حرف"><textarea className={`${field} font-arabic text-base`} rows={4} maxLength={8000} value={question} onChange={(e) => setQuestion(e.target.value)} disabled={!canSubmit || ask.isPending} data-testid="input-question" /></Field>
-        <Field label={`سياق ${STUDY_BOOKS.find(book => book.id === bookId)?.title ?? 'الدراسة'} (اختياري)`} hint="حتى ٣٠٠٠ حرف"><textarea className={`${field} font-arabic`} rows={2} maxLength={3000} value={context} onChange={(e) => setContext(e.target.value)} disabled={!canSubmit || ask.isPending} data-testid="input-context" /></Field>
-         <button className={btnPrimary} disabled={!canSubmit || !bookId || !question.trim() || ask.isPending} onClick={submit} data-testid="button-ask"><Sparkles size={15} />{ask.isPending ? 'جارٍ إعداد الإجابة' : 'اسأل'}</button>
-      </section>
-      <h2 className="mb-4 font-display text-xl font-bold">سجل أسئلتك</h2>
-      {hist.isLoading ? <LoadingList /> : hist.isError ? <ErrorState onRetry={() => hist.refetch()} /> : !history.length ? (
-         <EmptyState title="لا أسئلة بعد">حين تسأل سيُحفظ السؤال وجوابه وحالة توثيقه هنا.</EmptyState>
-      ) : <div className="space-y-4">{history.map((h) => <QuestionCard key={h.questionId} a={h} />)}</div>}
+      </div>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { it } from "node:test";
 import {
   answerStudyQuestion,
+  generateStudyAnswer,
   generateNvidiaScholarlyPreview,
   isScholarlyProviderConfigured,
   NVIDIA_SCHOLARLY_MODEL,
@@ -51,6 +52,28 @@ it("generates labelled study answers without accessing administrator previews or
       choices: [{ message: { content: JSON.stringify({ answer: "   " }) } }],
     }));
     await assert.rejects(answerStudyQuestion("سؤال", null, NVIDIA_SCHOLARLY_MODEL), ScholarlyProviderUnavailableError);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (saved === undefined) delete process.env.NVIDIA_API_KEY;
+    else process.env.NVIDIA_API_KEY = saved;
+  }
+});
+
+it("model uncertainty requests a teacher with no generated refusal claims, retaining dialogue context", async () => {
+  const originalFetch = globalThis.fetch;
+  const saved = process.env.NVIDIA_API_KEY;
+  process.env.NVIDIA_API_KEY = "synthetic-nvidia-test-key";
+  try {
+    const conversationHistory = [{ role: "student", text: "اشرح الحديث الأول" }, { role: "assistant", text: "شرح سابق غير مراجع" }];
+    globalThis.fetch = async (_url, options) => {
+      const body = JSON.parse(String(options?.body));
+      assert.match(body.messages[0].content, /needsTeacher=true and answer=null/);
+      assert.deepEqual(JSON.parse(body.messages[1].content).conversationHistory, conversationHistory);
+      return new Response(JSON.stringify({
+        choices: [{ message: { content: JSON.stringify({ answer: "رفض غير موثوق", needsTeacher: true }) } }],
+      }));
+    };
+    assert.equal(await generateStudyAnswer("سؤال يحتاج إلى معلم", null, NVIDIA_SCHOLARLY_MODEL, "الأربعون النووية", conversationHistory), null);
   } finally {
     globalThis.fetch = originalFetch;
     if (saved === undefined) delete process.env.NVIDIA_API_KEY;

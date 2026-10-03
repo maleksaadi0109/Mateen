@@ -27,6 +27,12 @@ Unavailable teachers do not receive new referrals but retain access to previous 
 
 **How to apply:** Separate new-question eligibility from access to ongoing conversations.
 
+The student assistant must be a continuous chat, not separate question-and-answer cards. If the assistant cannot answer, the teacher should see the earlier student–assistant dialogue and continue in that same conversation.
+
+**Why:** The user explicitly requested chat-style follow-ups and teacher access to the conversation that led to the referral, so the student need not repeat the explanation.
+
+**How to apply:** Keep AI follow-ups in one thread and pass its earlier dialogue as untrusted context. Disclose full-thread sharing and obtain consent at referral. Share only that selected conversation with its assigned approved teacher; stop AI replies once referred, including while waiting for assignment. Earlier question-only consents must not silently expand to full-chat access.
+
 Assessment question generation selects completion passages from the approved source text instead of composing religious text from model memory.
 
 **Why:** The user approved this constraint to preserve scientific accuracy in sensitive content.

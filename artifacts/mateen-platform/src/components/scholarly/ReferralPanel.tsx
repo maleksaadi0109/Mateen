@@ -35,7 +35,8 @@ export function ReferralPanel({ questionId, onClose }: { questionId: string; onC
     <div className="mt-4 space-y-4 rounded-2xl border-2 border-secondary/40 bg-background p-5" data-testid="panel-referral">
       <h4 className="font-display text-lg font-bold">معاينة ما سيُشارَك</h4>
       <p className="font-ui text-sm text-muted-foreground">لا يُشارَك شيء قبل موافقتك الصريحة. السبب: {p.reason}</p>
-      <ul className="list-disc space-y-1 ps-5 font-ui text-sm">{p.shares.map((s, i) => <li key={i}>{s}</li>)}</ul>
+      <ul className="max-h-72 list-disc space-y-2 overflow-y-auto whitespace-pre-wrap break-words ps-5 font-ui text-sm">{p.shares.map((s, i) => <li key={i}>{s}</li>)}</ul>
+      <p className="rounded-xl bg-muted p-3 font-ui text-sm" data-testid="text-share-scope">ستُشارَك مع المعلم محادثتك المحددة كاملة، بما فيها أسئلتك وإجابات المساعد السابقة فيها. لا تُشارَك أي محادثة أخرى.</p>
       <blockquote className="border-s-2 border-secondary ps-3 font-arabic leading-loose">{p.question}{p.textContext && <span className="mt-2 block text-sm text-muted-foreground">{p.textContext}</span>}</blockquote>
       {noTeachers ? (
         <p className="rounded-xl bg-muted p-3 font-ui text-sm" data-testid="text-no-teachers">لا يوجد معلم معتمد متاح الآن. يمكنك تسجيل الطلب ليبقى بانتظار معلم، ولن يُنسب إلى أحد قبل قبوله.</p>
