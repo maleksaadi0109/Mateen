@@ -610,7 +610,7 @@ export const GetMateenAssistantQuestionsResponseItem = zod.object({
   "textContext": zod.string().nullable(),
   "createdAt": zod.coerce.date(),
   "reason": zod.string(),
-  "status": zod.enum(['answered', 'abstained', 'waiting_for_teacher', 'referred']),
+  "status": zod.enum(['answered', 'unverified', 'abstained', 'waiting_for_teacher', 'referred']),
   "answer": zod.string().nullable(),
   "citations": zod.array(zod.object({
   "passageId": zod.string().uuid(),
@@ -653,7 +653,7 @@ export const AskMateenAssistantResponse = zod.object({
   "textContext": zod.string().nullable(),
   "createdAt": zod.coerce.date(),
   "reason": zod.string(),
-  "status": zod.enum(['answered', 'abstained', 'waiting_for_teacher', 'referred']),
+  "status": zod.enum(['answered', 'unverified', 'abstained', 'waiting_for_teacher', 'referred']),
   "answer": zod.string().nullable(),
   "citations": zod.array(zod.object({
   "passageId": zod.string().uuid(),
@@ -679,7 +679,8 @@ export const GetMateenAssistantReadinessResponse = zod.object({
   "providerConfigured": zod.boolean(),
   "evaluationPassed": zod.boolean(),
   "reviewedSourceCount": zod.number().int(),
-  "assistantEnabled": zod.boolean()
+  "assistantEnabled": zod.boolean(),
+  "studyAnswersEnabled": zod.boolean().optional().describe('General unverified student answers can be generated without approved commentary sources.')
 })
 
 
@@ -769,7 +770,7 @@ export const SendMateenFollowUpResponse = zod.object({
   "textContext": zod.string().nullable(),
   "createdAt": zod.coerce.date(),
   "reason": zod.string(),
-  "status": zod.enum(['answered', 'abstained', 'waiting_for_teacher', 'referred']),
+  "status": zod.enum(['answered', 'unverified', 'abstained', 'waiting_for_teacher', 'referred']),
   "answer": zod.string().nullable(),
   "citations": zod.array(zod.object({
   "passageId": zod.string().uuid(),
@@ -1196,7 +1197,8 @@ export const GetScholarlyConfigResponse = zod.object({
   "providerConfigured": zod.boolean(),
   "evaluationPassed": zod.boolean(),
   "reviewedSourceCount": zod.number().int(),
-  "assistantEnabled": zod.boolean()
+  "assistantEnabled": zod.boolean(),
+  "studyAnswersEnabled": zod.boolean().optional().describe('General unverified student answers can be generated without approved commentary sources.')
 })
 
 
@@ -1209,7 +1211,8 @@ export const UpdateScholarlyConfigResponse = zod.object({
   "providerConfigured": zod.boolean(),
   "evaluationPassed": zod.boolean(),
   "reviewedSourceCount": zod.number().int(),
-  "assistantEnabled": zod.boolean()
+  "assistantEnabled": zod.boolean(),
+  "studyAnswersEnabled": zod.boolean().optional().describe('General unverified student answers can be generated without approved commentary sources.')
 })
 
 
@@ -1253,7 +1256,8 @@ export const RecordScholarlyEvaluationResponse = zod.object({
   "providerConfigured": zod.boolean(),
   "evaluationPassed": zod.boolean(),
   "reviewedSourceCount": zod.number().int(),
-  "assistantEnabled": zod.boolean()
+  "assistantEnabled": zod.boolean(),
+  "studyAnswersEnabled": zod.boolean().optional().describe('General unverified student answers can be generated without approved commentary sources.')
 })
 
 

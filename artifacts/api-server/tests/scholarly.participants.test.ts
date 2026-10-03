@@ -233,6 +233,26 @@ test("new assistant follow-ups stay private instead of sharing an unrelated ques
   assert.equal((await counts()).notifications, 1);
 });
 
+test("HTTP study answers work without approved sources and persist with an unverified label", async () => {
+  const readiness = await request("student-a", "GET", "/assistant/readiness");
+  assert.equal(readiness.body.assistantEnabled, false);
+  assert.equal(readiness.body.studyAnswersEnabled, true);
+  const response = await request("student-a", "POST", "/assistant/questions", {
+    question: "ما معنى الحديث الأول في الأربعين النووية؟",
+  });
+  assert.equal(response.status, 201);
+  assert.equal(response.body.status, "unverified");
+  assert.match(response.body.answer, /إجابة آلية غير موثّقة/);
+  assert.deepEqual(response.body.citations, []);
+  const saved = (await db.select().from(scholarlyQuestionsTable))
+    .find(row => row.id === response.body.questionId);
+  assert.equal(saved?.answer, response.body.answer);
+  assert.equal(saved?.status, "unverified");
+  const history = await request("student-a", "GET", "/assistant/questions");
+  assert.ok(history.body.some((row: { questionId: string; status: string }) =>
+    row.questionId === response.body.questionId && row.status === "unverified"));
+});
+
 test("HTTP completion publishes indexed-source citations when the source remains eligible", async () => {
   const { source, passage } = await readyCorpus();
   setCompletion(async () => ({

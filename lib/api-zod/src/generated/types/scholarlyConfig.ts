@@ -13,4 +13,6 @@ export interface ScholarlyConfig {
   evaluationPassed: boolean;
   reviewedSourceCount: number;
   assistantEnabled: boolean;
+  /** General unverified student answers can be generated without approved commentary sources. */
+  studyAnswersEnabled?: boolean;
 }

@@ -3,7 +3,7 @@ name: Scholarly grounding boundaries
 description: Why citation validation alone is insufficient for religious explanations.
 ---
 
-Checking that a citation and quotation exist does not establish that generated explanatory prose is supported. For the initial scholarly assistant, prefer an answer composed from verified exact source quotations rather than publish unconstrained model prose.
+Checking that a citation and quotation exist does not establish that generated explanatory prose is supported. For answers presented as scientifically verified, prefer verified exact source quotations rather than unconstrained model prose.
 
 **Why:** The product explicitly forbids unsupported religious answers. A model can cite a genuine passage while adding an unrelated ruling; a valid citation would not catch that.
 
@@ -30,6 +30,18 @@ The user explicitly accepted a private administrative NVIDIA generation experime
 **Why:** They wanted to try real generation and continue development without waiting for source review; the accepted alternative was private unreviewed drafts, not publication to students.
 
 **How to apply:** Keep experimental generation separate from scholarly approval and student launch readiness. Do not interpret permission for the private experiment as permission to record passing scientific results.
+
+The user subsequently requested student-visible AI study answers even while source approval and scientific evaluation remain incomplete.
+
+**Why:** The user explicitly wanted the assistant to answer instead of displaying the readiness refusal for ordinary study questions.
+
+**How to apply:** Allow newly generated general educational answers with an explicit persistent unverified warning and no fabricated citation metadata. This newer instruction changes the student-answer gate, not scientific approval, personal-fatwa boundaries, or access to existing private administrator drafts. Verified answers still require the separate source and evaluation checks.
+
+Resolve an explicitly numbered matn entry from the study text before asking the model to explain it, even in unverified-answer mode.
+
+**Why:** A live model response confidently identified the wrong hadith as the first Nawawi hadith when no reference text was supplied. A warning about unverified answers does not prevent this identity error.
+
+**How to apply:** Supply the selected entry as reference data, keep its review status explicit, and never substitute the model's recollection for known passage identity.
 
 NVIDIA transport timeouts can be transient even when configuration is valid.
 

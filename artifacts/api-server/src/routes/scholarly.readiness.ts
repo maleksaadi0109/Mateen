@@ -112,5 +112,6 @@ export async function getMateenScholarlyReadiness() {
     evaluationPassed: state.evaluationPassed,
     reviewedSourceCount: state.reviewedSourceCount,
     assistantEnabled: state.assistantEnabled,
+    studyAnswersEnabled: state.providerConfigured,
   });
 }

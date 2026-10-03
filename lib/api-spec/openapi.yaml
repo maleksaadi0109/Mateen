@@ -1465,7 +1465,7 @@ components:
         textContext: { type: ["string", "null"] }
         createdAt: { type: string, format: date-time }
         reason: { type: string }
-        status: { type: string, enum: [answered, abstained, waiting_for_teacher, referred] }
+        status: { type: string, enum: [answered, unverified, abstained, waiting_for_teacher, referred] }
         answer: { type: ["string", "null"] }
         citations:
           type: array
@@ -1684,6 +1684,7 @@ components:
         evaluationPassed: { type: boolean }
         reviewedSourceCount: { type: integer }
         assistantEnabled: { type: boolean }
+        studyAnswersEnabled: { type: boolean, description: General unverified student answers can be generated without approved commentary sources. }
     ScholarlyConfigInput:
       type: object
       required: [model]

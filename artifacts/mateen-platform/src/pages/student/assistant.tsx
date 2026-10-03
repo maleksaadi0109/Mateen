@@ -56,7 +56,7 @@ function QuestionCard({ a }: { a: AssistantQuestion }) {
 }
 
 export default function AssistantPage() {
-  usePageMeta('المساعد العلمي | مَتِين', 'أسئلة مجاوَبة من مصادر مراجَعة، أو إحالة إلى معلم معتمد.');
+  usePageMeta('المساعد العلمي | مَتِين', 'إجابات تعليمية آلية مع توضيح التوثيق، وإحالة إلى معلم عند الحاجة.');
   const qc = useQueryClient();
   const { toast } = useToast();
   const ready = useGetMateenAssistantReadiness({ query: { queryKey: getGetMateenAssistantReadinessQueryKey() } });
@@ -88,17 +88,17 @@ export default function AssistantPage() {
             <li data-testid="text-ready-eval">التقييم: {ready.data.evaluationPassed ? 'اجتاز' : 'لم يجتز بعد'}</li>
             <li data-testid="text-ready-model">النموذج: {ready.data.model}</li>
           </ul>
-           {!enabled && <p className="mt-4 font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-assistant-disabled">الإجابات العلمية غير مفعّلة لأن شروط الجاهزية لم تكتمل. يمكنك حفظ سؤالك لطلب إحالة؛ لن يولّد المساعد جواباً، ولن يشاركه مع معلم قبل موافقتك.</p>}
+           {!enabled && <p className="mt-4 font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-assistant-disabled">{ready.data.studyAnswersEnabled ? 'المساعد متاح للإجابة. إلى حين اكتمال مراجعة الشروح، تظهر الإجابات الآلية بوسم «غير موثّقة»؛ ليست فتوى أو اعتمادًا علميًا.' : 'اتصال النموذج غير متاح الآن. يمكنك حفظ سؤالك أو طلب إحالة؛ لن يُشارك مع معلم دون موافقتك.'}</p>}
         </section>
       )}
       <section className="paper-card mb-8 space-y-4 p-6">
         <Field label="سؤالك" hint="حتى ٨٠٠٠ حرف"><textarea className={`${field} font-arabic text-base`} rows={4} maxLength={8000} value={question} onChange={(e) => setQuestion(e.target.value)} disabled={!canSubmit} data-testid="input-question" /></Field>
         <Field label="سياق الأربعين النووية (اختياري)" hint="حتى ٣٠٠٠ حرف"><textarea className={`${field} font-arabic`} rows={2} maxLength={3000} value={context} onChange={(e) => setContext(e.target.value)} disabled={!canSubmit} data-testid="input-context" /></Field>
-        <button className={btnPrimary} disabled={!canSubmit || !question.trim() || ask.isPending} onClick={submit} data-testid="button-ask"><Sparkles size={15} />{ask.isPending ? 'جارٍ حفظ السؤال والتحقق' : enabled ? 'اسأل' : 'حفظ السؤال لطلب إحالة'}</button>
+         <button className={btnPrimary} disabled={!canSubmit || !question.trim() || ask.isPending} onClick={submit} data-testid="button-ask"><Sparkles size={15} />{ask.isPending ? 'جارٍ إعداد الإجابة' : 'اسأل'}</button>
       </section>
       <h2 className="mb-4 font-display text-xl font-bold">سجل أسئلتك</h2>
       {hist.isLoading ? <LoadingList /> : hist.isError ? <ErrorState onRetry={() => hist.refetch()} /> : !history.length ? (
-        <EmptyState title="لا أسئلة بعد">حين تسأل سيُحفظ السؤال وجوابه وسنده هنا.</EmptyState>
+         <EmptyState title="لا أسئلة بعد">حين تسأل سيُحفظ السؤال وجوابه وحالة توثيقه هنا.</EmptyState>
       ) : <div className="space-y-4">{history.map((h) => <QuestionCard key={h.questionId} a={h} />)}</div>}
     </div>
   );

@@ -623,6 +623,7 @@ export type AssistantQuestionStatus = typeof AssistantQuestionStatus[keyof typeo
 
 export const AssistantQuestionStatus = {
   answered: 'answered',
+  unverified: 'unverified',
   abstained: 'abstained',
   waiting_for_teacher: 'waiting_for_teacher',
   referred: 'referred',
@@ -995,6 +996,8 @@ export interface ScholarlyConfig {
   evaluationPassed: boolean;
   reviewedSourceCount: number;
   assistantEnabled: boolean;
+  /** General unverified student answers can be generated without approved commentary sources. */
+  studyAnswersEnabled?: boolean;
 }
 
 export type ScholarlyConfigInputModel = typeof ScholarlyConfigInputModel[keyof typeof ScholarlyConfigInputModel];

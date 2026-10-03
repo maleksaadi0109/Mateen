@@ -46,18 +46,22 @@ import {
 import { Router } from "express";
 import {
   answerFromPassages,
+  answerStudyQuestion,
   filterTeacherConversationMessages,
   isApprovedAvailableTeacher,
   lexicalRank,
   requiresHumanGuidance,
   semanticRank,
   ScholarlyProviderUnavailableError,
+  UNVERIFIED_STUDY_NOTICE,
 } from "../lib/scholarly";
 import {
   getMateenScholarlyReadiness,
   getScholarlyReadiness,
 } from "./scholarly.readiness";
 import teacherRoutes from "./scholarly.teacher";
+import { getNawawiStudyRecords } from "../lib/source-review";
+import { selectNawawiReference } from "../lib/scholarly-study-context";
 import adminRoutes from "./scholarly.admin";
 import {
   authenticationRequired,
@@ -143,7 +147,7 @@ async function createAssistantQuestion(
     reason = requiredGuidance;
   } else if (!gate.assistantEnabled) {
     status = "abstained";
-    reason = "المساعد غير مفعّل حاليًا لعدم اكتمال تهيئة النموذج أو تقييم المصادر المعتمدة.";
+    reason = "تعذّر الاتصال بالمساعد الآن؛ يمكنك إعادة المحاولة أو طلب إحالة.";
   } else {
     try {
       const lexical = lexicalRank(question, gate.corpus.passages);
@@ -174,6 +178,25 @@ async function createAssistantQuestion(
       if (!(error instanceof ScholarlyProviderUnavailableError)) throw error;
       status = "abstained";
       reason = "تعذّر التحقق من الإجابة علميًا الآن. لا توجد إجابة مولّدة؛ يمكنك إعادة المحاولة أو طلب إحالة.";
+      providerFailed = true;
+    }
+  }
+
+  // Student general answers are newly generated from the student's input only.
+  // Never read or publish the separate private administrator preview drafts.
+  if (!answer && !providerFailed && gate.providerConfigured) {
+    try {
+      const studyRecords = await getNawawiStudyRecords();
+      const reference = selectNawawiReference(question, studyRecords.hadiths);
+      const studyContext = [reference, textContext].filter(Boolean).join("\n\n") || null;
+      answer = await answerStudyQuestion(question, studyContext, gate.model);
+      citations = [];
+      status = requiredGuidance ? "abstained" : "unverified";
+      reason = requiredGuidance ?? UNVERIFIED_STUDY_NOTICE;
+    } catch (error) {
+      if (!(error instanceof ScholarlyProviderUnavailableError)) throw error;
+      status = "abstained";
+      reason = "تعذّر الاتصال بالنموذج أو قراءة إجابته الآن. لم تُولّد إجابة صالحة؛ أعد المحاولة أو اطلب إحالة.";
       providerFailed = true;
     }
   }

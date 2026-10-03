@@ -11,6 +11,7 @@ export type AssistantQuestionStatus = typeof AssistantQuestionStatus[keyof typeo
 
 export const AssistantQuestionStatus = {
   answered: 'answered',
+  unverified: 'unverified',
   abstained: 'abstained',
   waiting_for_teacher: 'waiting_for_teacher',
   referred: 'referred',

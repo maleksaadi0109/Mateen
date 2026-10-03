@@ -511,7 +511,7 @@ router.get("/mateen/capabilities", async (_req, res) => {
   res.json(
     GetCapabilitiesResponse.parse({
       voiceReady: await recitationCapabilitiesReady(),
-      assistantReady: scholarly.assistantEnabled,
+      assistantReady: scholarly.studyAnswersEnabled,
       examsReady: await assessmentAudioCapabilitiesReady(),
       sourceStatus: reviewedSource.sourceStatus,
       notice:
@@ -520,7 +520,9 @@ router.get("/mateen/capabilities", async (_req, res) => {
           : "لا تستخدم النسخ غير المعتمدة في التقييم؛ النص ينتظر المراجعة العلمية وتوثيق حقوق الاستخدام.") +
         (scholarly.assistantEnabled
           ? " المساعد العلمي يستشهد بالشروح المعتمدة فقط، ولا يصدر فتاوى."
-          : " الإجابات العلمية غير مفعّلة حتى اكتمال اعتماد الشروح وتهيئة النموذج واجتياز تقييم العربية والاستشهاد والامتناع.") +
+           : scholarly.studyAnswersEnabled
+             ? " المساعد يقدم إجابات آلية عامة غير موثّقة؛ الإجابات المسندة تنتظر اعتماد الشروح وتقييمها."
+             : " تعذّر تهيئة اتصال المساعد بالنموذج؛ يمكنك إعادة المحاولة لاحقًا.") +
         " يُصحح التحريري بمطابقة حتمية، ويتطلب الشفهي مراجعة بشرية مخولة؛ لا يستخدم التعرف الآلي على الكلام للدرجات.",
     }),
   );

@@ -1,11 +1,13 @@
 import assert from "node:assert/strict";
 import { it } from "node:test";
 import {
+  answerStudyQuestion,
   generateNvidiaScholarlyPreview,
   isScholarlyProviderConfigured,
   NVIDIA_SCHOLARLY_MODEL,
   semanticRank,
   ScholarlyProviderUnavailableError,
+  UNVERIFIED_STUDY_NOTICE,
   type PassageCandidate,
 } from "./scholarly";
 
@@ -20,6 +22,34 @@ const passage: PassageCandidate = {
   pdfPage: null,
   text: "The verification card is brown.",
 };
+
+it("generates labelled study answers without accessing administrator previews or source passages", async () => {
+  const originalFetch = globalThis.fetch;
+  const saved = process.env.NVIDIA_API_KEY;
+  process.env.NVIDIA_API_KEY = "synthetic-nvidia-test-key";
+  try {
+    globalThis.fetch = async (_url, options) => {
+      const body = JSON.parse(String(options?.body));
+      assert.match(body.messages[0].content, /do not claim verification or invent citations/);
+      assert.deepEqual(JSON.parse(body.messages[1].content), {
+        question: "ما معنى الحديث الأول؟", studyContext: null,
+      });
+      return new Response(JSON.stringify({
+        choices: [{ message: { content: JSON.stringify({ answer: "إجابة اختبار تعليمية فقط." }) } }],
+      }));
+    };
+    const answer = await answerStudyQuestion("ما معنى الحديث الأول؟", null, NVIDIA_SCHOLARLY_MODEL);
+    assert.equal(answer, `${UNVERIFIED_STUDY_NOTICE}\n\nإجابة اختبار تعليمية فقط.`);
+    globalThis.fetch = async () => new Response(JSON.stringify({
+      choices: [{ message: { content: JSON.stringify({ answer: "   " }) } }],
+    }));
+    await assert.rejects(answerStudyQuestion("سؤال", null, NVIDIA_SCHOLARLY_MODEL), ScholarlyProviderUnavailableError);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (saved === undefined) delete process.env.NVIDIA_API_KEY;
+    else process.env.NVIDIA_API_KEY = saved;
+  }
+});
 
 it("routes NVIDIA requests to the fixed NVIDIA endpoint with its own key and validates JSON", async () => {
   const originalFetch = globalThis.fetch;
