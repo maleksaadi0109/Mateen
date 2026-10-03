@@ -11,16 +11,53 @@ import {
   startHarness, resetFixtures, question, readyCorpus, barrier, db,
   changeTeacherWhileReferring, pool,
 } from "./scholarly.harness";
-import { setCompletion, ScholarlyProviderUnavailableError, getStudyCallCount } from "./doubles/provider";
+import { setCompletion, ScholarlyProviderUnavailableError, getStudyCallCount, getLastStudyInput } from "./doubles/provider";
 import { setExcerptUnavailable, getExcerptCallCount } from "./doubles/excerpts";
 import { hashSourcePayload } from "../src/lib/source-review";
 import nawawi from "../src/data/nawawi.json";
+import { USUL_STUDY_CONTEXT } from "../src/lib/scholarly-study-books";
 
 let harness: Awaited<ReturnType<typeof startHarness>>;
 before(async () => { harness = await startHarness(); });
 after(async () => { await harness?.close(); });
 beforeEach(resetFixtures);
 const request = (...args: Parameters<typeof harness.request>) => harness.request(...args);
+
+test("selected study book reaches general answers, history and private follow-ups without Nawawi evidence", async () => {
+  await readyCorpus();
+  setCompletion(async () => { assert.fail("Nawawi approved passages must not answer a question about another book"); });
+  const beforeExcerpts = getExcerptCallCount();
+  const asked = await request("student-a", "POST", "/assistant/questions", {
+    question: "ما معنى الحديث الأول؟", textId: "usul-thalatha", textContext: "السؤال عن الكتاب المختار",
+  });
+  assert.equal(asked.status, 201);
+  assert.equal(asked.body.textId, "usul-thalatha");
+  assert.equal(asked.body.status, "unverified");
+  assert.deepEqual(asked.body.citations, []);
+  assert.deepEqual(getLastStudyInput(), {
+    question: "ما معنى الحديث الأول؟", context: `${USUL_STUDY_CONTEXT}\n\nالسؤال عن الكتاب المختار`, book: "الأصول الثلاثة",
+  });
+  assert.equal(getExcerptCallCount(), beforeExcerpts);
+  const history = await request("student-a", "GET", "/assistant/questions");
+  assert.equal(history.body.find((row: { questionId: string }) => row.questionId === asked.body.questionId).textId, "usul-thalatha");
+  const followup = await request("student-a", "POST", `/conversations/${asked.body.conversationId}/messages`, {
+    text: "ما هو الأصل الأول؟",
+  });
+  assert.equal(followup.status, 201);
+  assert.equal(followup.body.textId, "usul-thalatha");
+  assert.equal(getLastStudyInput()?.book, "الأصول الثلاثة");
+});
+
+test("unsupported and injected book identifiers are rejected before persistence or generation", async () => {
+  const beforeCalls = getStudyCallCount();
+  const beforeRows = await db.select().from(scholarlyQuestionsTable);
+  for (const textId of ["unknown-book", "nawawi'; DROP TABLE users;--", "<script>alert(1)</script>", ""]) {
+    const result = await request("student-a", "POST", "/assistant/questions", { question: "ما معنى النية؟", textId });
+    assert.equal(result.status, 400);
+  }
+  assert.equal(getStudyCallCount(), beforeCalls);
+  assert.equal((await db.select().from(scholarlyQuestionsTable)).length, beforeRows.length);
+});
 async function counts() {
   const result = await pool.query(
     `select (select count(*)::int from mateen_scholarly_questions) as questions,

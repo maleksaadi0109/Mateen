@@ -11,6 +11,12 @@ import { AnswerText } from '@/components/scholarly/AnswerText';
 import { fmtDate, usePageMeta } from '@/lib/mateen';
 import { useToast } from '@/hooks/use-toast';
 
+const STUDY_BOOKS = [
+  { id: 'nawawi', title: 'الأربعون النووية' },
+  { id: 'usul-thalatha', title: 'الأصول الثلاثة' },
+] as const;
+type StudyBookId = (typeof STUDY_BOOKS)[number]['id'];
+
 function IssueForm({ questionId, onDone }: { questionId: string; onDone: () => void }) {
   const [category, setCategory] = useState<'citation' | 'unsupported_claim' | 'safety' | 'other'>('citation');
   const [description, setDescription] = useState('');
@@ -38,6 +44,7 @@ function QuestionCard({ a }: { a: AssistantQuestion }) {
     <article className="paper-card p-6" data-testid={`card-question-${a.questionId}`}>
       <div className="flex flex-wrap items-center justify-between gap-2"><StatusPill status={a.status} /><span className="font-ui text-xs text-muted-foreground" data-testid={`text-model-${a.questionId}`}>النموذج: {a.model}</span></div>
       <p className="mt-2 font-ui text-xs text-muted-foreground">{fmtDate(a.createdAt)}</p>
+      <p className="mt-2 font-ui text-sm font-semibold" data-testid="text-question-book">الكتاب: {STUDY_BOOKS.find(book => book.id === a.textId)?.title}</p>
       <p className="mt-3 whitespace-pre-wrap font-ui text-sm font-semibold">{a.question}</p>
       {a.textContext && <p className="mt-2 whitespace-pre-wrap font-arabic text-sm text-muted-foreground">سياق الدراسة: {a.textContext}</p>}
       {a.answer ? <AnswerText className="mt-3 font-arabic text-lg leading-loose" testId="text-answer" text={a.answer} />
@@ -65,12 +72,14 @@ export default function AssistantPage() {
   const hist = useGetMateenAssistantQuestions({ query: { queryKey: getGetMateenAssistantQuestionsQueryKey(), refetchInterval: poll } });
   const ask = useAskMateenAssistant();
   const [question, setQuestion] = useState('');
+  const [bookId, setBookId] = useState<StudyBookId | ''>('');
   const [context, setContext] = useState('');
   const enabled = ready.data?.assistantEnabled === true;
   const canSubmit = Boolean(ready.data) && !ready.isError;
   const submit = () => {
+    if (!bookId || ask.isPending) return;
     const text = question.trim();
-    ask.mutate({ data: { question: text, textId: 'nawawi', textContext: context.trim() || null } }, {
+    ask.mutate({ data: { question: text, textId: bookId, textContext: context.trim() || null } }, {
       onSuccess: () => { setQuestion(''); setContext(''); qc.invalidateQueries({ queryKey: getGetMateenAssistantQuestionsQueryKey() }); qc.invalidateQueries({ queryKey: getGetMateenConversationsQueryKey() }); },
       onError: () => { toast({ title: 'تعذّر تقديم إجابة موثقة', description: 'راجع سجل الأسئلة؛ قد حُفظ السؤال مع سبب الامتناع دون توليد جواب.', variant: 'destructive' }); hist.refetch(); ready.refetch(); },
     });
@@ -78,7 +87,7 @@ export default function AssistantPage() {
   const history = hist.data ?? [];
   return (
     <div>
-      <PageHeader eyebrow="المساعد العلمي" title="اسأل، ثم انظر إلى السند">اسأل برقم الحديث أو عنوانه أو بعض ألفاظه لعرض مقتطف من شرح ابن عثيمين والعباد مع رابط موضعه. يمكنك أيضاً وضع النص في سياق الدراسة. النقل المرجعي غير المعتمد يُميَّز عن المصادر المعتمدة.</PageHeader>
+      <PageHeader eyebrow="المساعد العلمي" title="اختر الكتاب، ثم اسأل">اختر الكتاب الذي تدرسه ليُفهم سؤالك في سياقه. في الأربعين النووية، يمكنك السؤال برقم الحديث أو عنوانه أو بعض ألفاظه لعرض مقتطف من الشرح. الإجابات والمقتطفات غير المعتمدة تُميَّز بوضوح.</PageHeader>
       <p className="mb-6 rounded-2xl border border-secondary/30 bg-card p-4 font-ui text-sm" data-testid="text-no-fatwa">{NO_FATWA}</p>
       {ready.isLoading ? <LoadingList rows={1} /> : ready.isError || !ready.data ? <ErrorState message="تعذّر قراءة حالة المساعد." onRetry={() => ready.refetch()} /> : (
         <section className="paper-card mb-8 p-6" data-testid="card-readiness">
@@ -89,13 +98,23 @@ export default function AssistantPage() {
             <li data-testid="text-ready-eval">التقييم: {ready.data.evaluationPassed ? 'اجتاز' : 'لم يجتز بعد'}</li>
             <li data-testid="text-ready-model">النموذج: {ready.data.model}</li>
           </ul>
-           {!enabled && <p className="mt-4 font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-assistant-disabled">يمكنك طلب مقتطف مرجعي برقم الحديث أو عنوانه أو بعض ألفاظه، دون الحاجة إلى توليد شرح آلي. هذه المقتطفات لم تُعتمد علمياً داخل المنصة بعد.{!ready.data.studyAnswersEnabled && ' اتصال النموذج غير متاح للأسئلة العامة؛ لا نبدّل المقتطف بإجابة مولّدة.'}</p>}
+           {!enabled && <p className="mt-4 font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-assistant-disabled">في الأربعين النووية، يمكنك طلب مقتطف مرجعي برقم الحديث أو عنوانه أو بعض ألفاظه. هذه المقتطفات لم تُعتمد علمياً داخل المنصة بعد. {ready.data.studyAnswersEnabled ? 'المساعد متاح للأسئلة العامة عن الكتاب المختار، مع التنبيه إلى أن إجاباته غير موثّقة.' : 'اتصال النموذج غير متاح للأسئلة العامة؛ لا نبدّل المقتطف بإجابة مولّدة.'}</p>}
         </section>
       )}
       <section className="paper-card mb-8 space-y-4 p-6">
-        <Field label="سؤالك" hint="حتى ٨٠٠٠ حرف"><textarea className={`${field} font-arabic text-base`} rows={4} maxLength={8000} value={question} onChange={(e) => setQuestion(e.target.value)} disabled={!canSubmit} data-testid="input-question" /></Field>
-        <Field label="سياق الأربعين النووية (اختياري)" hint="حتى ٣٠٠٠ حرف"><textarea className={`${field} font-arabic`} rows={2} maxLength={3000} value={context} onChange={(e) => setContext(e.target.value)} disabled={!canSubmit} data-testid="input-context" /></Field>
-         <button className={btnPrimary} disabled={!canSubmit || !question.trim() || ask.isPending} onClick={submit} data-testid="button-ask"><Sparkles size={15} />{ask.isPending ? 'جارٍ إعداد الإجابة' : 'اسأل'}</button>
+        <Field label="عن أي كتاب تريد أن تسأل؟" hint="اختيار الكتاب مطلوب قبل إرسال السؤال">
+          <select className={field} value={bookId} required disabled={!canSubmit || ask.isPending} data-testid="select-study-book" onChange={(e) => {
+            setBookId(STUDY_BOOKS.find(book => book.id === e.target.value)?.id ?? '');
+            setContext('');
+          }}>
+            <option value="" disabled>اختر الكتاب</option>
+            {STUDY_BOOKS.map(book => <option key={book.id} value={book.id}>{book.title}</option>)}
+          </select>
+        </Field>
+        {bookId === 'usul-thalatha' && <p className="font-ui text-sm text-muted-foreground" data-testid="text-study-book-notice">الأسئلة عن الأصول الثلاثة تُجاب بإجابات تعليمية آلية غير موثّقة؛ مقتطفات الشروح المتاحة حالياً خاصة بالأربعين النووية.</p>}
+        <Field label="سؤالك" hint="حتى ٨٠٠٠ حرف"><textarea className={`${field} font-arabic text-base`} rows={4} maxLength={8000} value={question} onChange={(e) => setQuestion(e.target.value)} disabled={!canSubmit || ask.isPending} data-testid="input-question" /></Field>
+        <Field label={`سياق ${STUDY_BOOKS.find(book => book.id === bookId)?.title ?? 'الدراسة'} (اختياري)`} hint="حتى ٣٠٠٠ حرف"><textarea className={`${field} font-arabic`} rows={2} maxLength={3000} value={context} onChange={(e) => setContext(e.target.value)} disabled={!canSubmit || ask.isPending} data-testid="input-context" /></Field>
+         <button className={btnPrimary} disabled={!canSubmit || !bookId || !question.trim() || ask.isPending} onClick={submit} data-testid="button-ask"><Sparkles size={15} />{ask.isPending ? 'جارٍ إعداد الإجابة' : 'اسأل'}</button>
       </section>
       <h2 className="mb-4 font-display text-xl font-bold">سجل أسئلتك</h2>
       {hist.isLoading ? <LoadingList /> : hist.isError ? <ErrorState onRetry={() => hist.refetch()} /> : !history.length ? (

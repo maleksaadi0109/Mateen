@@ -575,6 +575,18 @@ export interface HealthStatus {
   status: string;
 }
 
+/**
+ * Selected study book. Omitted or null values retain the legacy Nawawi default.
+ * @nullable
+ */
+export type AssistantQuestionInputTextId = typeof AssistantQuestionInputTextId[keyof typeof AssistantQuestionInputTextId] | null;
+
+
+export const AssistantQuestionInputTextId = {
+  nawawi: 'nawawi',
+  'usul-thalatha': 'usul-thalatha',
+} as const;
+
 export interface AssistantQuestionInput {
   /**
      * @minLength 1
@@ -587,10 +599,10 @@ export interface AssistantQuestionInput {
      */
   textContext?: string | null;
   /**
-     * @maxLength 64
+     * Selected study book. Omitted or null values retain the legacy Nawawi default.
      * @nullable
      */
-  textId?: string | null;
+  textId?: AssistantQuestionInputTextId;
 }
 
 export interface ConversationMessageInput {
@@ -617,6 +629,14 @@ export interface Citation {
   pdfPage: number | null;
   quote: string;
 }
+
+export type AssistantQuestionTextId = typeof AssistantQuestionTextId[keyof typeof AssistantQuestionTextId];
+
+
+export const AssistantQuestionTextId = {
+  nawawi: 'nawawi',
+  'usul-thalatha': 'usul-thalatha',
+} as const;
 
 export type AssistantQuestionStatus = typeof AssistantQuestionStatus[keyof typeof AssistantQuestionStatus];
 
@@ -649,6 +669,7 @@ export interface AssistantQuestion {
   conversationId: string;
   questionId: string;
   question: string;
+  textId: AssistantQuestionTextId;
   /** @nullable */
   textContext: string | null;
   createdAt: string;

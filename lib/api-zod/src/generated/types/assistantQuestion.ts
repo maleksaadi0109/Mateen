@@ -6,6 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { AssistantQuestionStatus } from './assistantQuestionStatus';
+import type { AssistantQuestionTextId } from './assistantQuestionTextId';
 import type { Citation } from './citation';
 import type { TeacherReferralSummary } from './teacherReferralSummary';
 
@@ -13,6 +14,7 @@ export interface AssistantQuestion {
   conversationId: string;
   questionId: string;
   question: string;
+  textId: AssistantQuestionTextId;
   /** @nullable */
   textContext: string | null;
   createdAt: Date;

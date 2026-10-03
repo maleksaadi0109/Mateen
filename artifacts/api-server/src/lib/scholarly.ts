@@ -56,6 +56,7 @@ export async function answerStudyQuestion(
   question: string,
   textContext: string | null,
   model: ScholarlyModel = SCHOLARLY_MODEL,
+  studyBook: string = "الأربعون النووية",
 ): Promise<string> {
   const result = await structuredCompletion(
     model,
@@ -64,6 +65,7 @@ export async function answerStudyQuestion(
       "You provide general educational study help, normally in clear Arabic.",
       "For an Arabic question, respond entirely in Arabic without English code-switching.",
       "Answer the student's question directly and helpfully using general knowledge.",
+      "The selectedBook identifies the book being studied. Interpret ambiguous questions within that book, not another text. Do not invent its contents or claim unavailable source evidence.",
       "If the study context supplies the text of a numbered hadith, explain that exact hadith. Never replace it with another hadith recalled from memory.",
       "Keep the response concise, normally no more than 250 words.",
       "No approved reference corpus is available for this response: do not claim verification or invent citations, page numbers, quotations, or scholarly consensus.",
@@ -73,6 +75,7 @@ export async function answerStudyQuestion(
     ].join(" "),
     JSON.stringify({
       question: question.slice(0, 8000),
+      selectedBook: studyBook,
       studyContext: textContext?.slice(0, 3000) ?? null,
     }),
     { timeoutMs: 65_000, maxTokens: 2000 },

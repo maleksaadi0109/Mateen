@@ -76,12 +76,14 @@ import {
   type AuthedRequest,
 } from "./scholarly.shared";
 
+import { STUDY_BOOKS, USUL_STUDY_CONTEXT, isStudyBookId, studyBookId } from "../lib/scholarly-study-books";
+
 export { getMateenScholarlyReadiness };
 
 const router = Router();
 
 function referralStudyContext(question: typeof scholarlyQuestionsTable.$inferSelect): string {
-  return `المتن: الأربعون النووية${question.textContext ? `\nسياق الطالب: ${question.textContext}` : ""}`;
+  return `المتن: ${STUDY_BOOKS[studyBookId(question.textId)]}${question.textContext ? `\nسياق الطالب: ${question.textContext}` : ""}`;
 }
 
 async function questionPayload(question: typeof scholarlyQuestionsTable.$inferSelect) {
@@ -95,6 +97,7 @@ async function questionPayload(question: typeof scholarlyQuestionsTable.$inferSe
     conversationId: question.conversationId,
     questionId: question.id,
     question: question.question,
+    textId: studyBookId(question.textId),
     textContext: question.textContext,
     createdAt: question.createdAt,
     reason: question.reason ?? "",
@@ -126,6 +129,8 @@ async function createAssistantQuestion(
   existingConversationId?: string,
 ) {
   const gate = await getScholarlyReadiness();
+  const selectedBook = studyBookId(textId);
+  const isNawawi = selectedBook === "nawawi";
   const question = questionText.trim();
   let answer: string | null = null;
   let citations: Array<{
@@ -144,8 +149,8 @@ async function createAssistantQuestion(
   let providerFailed = false;
   let responseModel: string = gate.model;
   const requiredGuidance = requiresHumanGuidance(question);
-  const resolution = requiredGuidance
-    ? { number: null, requested: wantsNawawiExcerpt(question) }
+  const resolution = requiredGuidance || !isNawawi
+    ? { number: null, requested: isNawawi && wantsNawawiExcerpt(question) }
     : resolveNawawiHadith(question, (await getNawawiStudyRecords()).hadiths, textContext);
   const excerptNumber = resolution.number;
   const excerptRequested = resolution.requested;
@@ -168,7 +173,7 @@ async function createAssistantQuestion(
     responseModel = "reference-excerpt";
     status = "abstained";
     reason = "لم أستطع تحديد حديث واحد من سؤالك. اكتب بعض ألفاظه أو عنوانه، ويمكنك ذكر رقمه أيضاً، حتى أعرض المقتطف الصحيح دون تخمين.";
-  } else if (!gate.assistantEnabled) {
+  } else if (!gate.assistantEnabled || !isNawawi) {
     status = "abstained";
     reason = "تعذّر الاتصال بالمساعد الآن؛ يمكنك إعادة المحاولة أو طلب إحالة.";
   } else {
@@ -209,10 +214,12 @@ async function createAssistantQuestion(
   // Never read or publish the separate private administrator preview drafts.
   if (!answer && !providerFailed && !excerptRequested && gate.providerConfigured) {
     try {
-      const studyRecords = await getNawawiStudyRecords();
-      const reference = selectNawawiReference(question, studyRecords.hadiths);
-      const studyContext = [reference, textContext].filter(Boolean).join("\n\n") || null;
-      answer = await answerStudyQuestion(question, studyContext, gate.model);
+      const reference = isNawawi
+        ? selectNawawiReference(question, (await getNawawiStudyRecords()).hadiths)
+        : null;
+      const studyContext = [isNawawi ? null : USUL_STUDY_CONTEXT, reference, textContext]
+        .filter(Boolean).join("\n\n") || null;
+      answer = await answerStudyQuestion(question, studyContext, gate.model, STUDY_BOOKS[selectedBook]);
       citations = [];
       status = requiredGuidance ? "abstained" : "unverified";
       reason = requiredGuidance ?? UNVERIFIED_STUDY_NOTICE;
@@ -265,7 +272,7 @@ async function createAssistantQuestion(
       studentId: userId,
       question,
       textContext,
-      textId: textId ?? "nawawi",
+      textId: selectedBook,
       answer,
       status,
       reason: reason || null,
@@ -327,7 +334,7 @@ router.post(
       return;
     }
     const parsed = AskMateenAssistantBody.safeParse(req.body);
-    if (!parsed.success || !parsed.data.question.trim() || (parsed.data.textId && parsed.data.textId !== "nawawi")) {
+    if (!parsed.success || !parsed.data.question.trim() || (parsed.data.textId != null && !isStudyBookId(parsed.data.textId))) {
       res.status(400).json({ error: "Provide a nonempty question for an available text" });
       return;
     }
@@ -693,11 +700,17 @@ router.post(
       res.status(201).json(SendMateenFollowUpResponse.parse(await questionPayload(question!)));
       return;
     }
+    const [latestQuestion] = await db.select({ textId: scholarlyQuestionsTable.textId })
+      .from(scholarlyQuestionsTable)
+      .where(and(
+        eq(scholarlyQuestionsTable.conversationId, owned.id),
+        eq(scholarlyQuestionsTable.studentId, req.scholarlyUserId!),
+      )).orderBy(desc(scholarlyQuestionsTable.createdAt)).limit(1);
     const saved = await createAssistantQuestion(
       req.scholarlyUserId!,
       body.data.text,
       null,
-      null,
+      latestQuestion?.textId ?? null,
       params.data.conversationId,
     );
     if (saved.kind === "not-found") {

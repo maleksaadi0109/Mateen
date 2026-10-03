@@ -5,6 +5,7 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { AssistantQuestionInputTextId } from './assistantQuestionInputTextId';
 
 export interface AssistantQuestionInput {
   /**
@@ -18,8 +19,8 @@ export interface AssistantQuestionInput {
      */
   textContext?: string | null;
   /**
-     * @maxLength 64
+     * Selected study book. Omitted or null values retain the legacy Nawawi default.
      * @nullable
      */
-  textId?: string | null;
+  textId?: AssistantQuestionInputTextId;
 }

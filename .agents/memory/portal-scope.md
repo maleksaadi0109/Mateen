@@ -13,6 +13,12 @@ Approved student scope: home with welcome, resume last text, performance/mistake
 
 Proposed catalog: العقيدة — التمهيدي: نواقض الإسلام، الأول: القواعد الأربع; الحديث — التمهيدي: الأربعون النووية; التجويد والقراءات — التمهيدي: تحفة الأطفال. In the first release only الأربعون النووية is open; everything else is shown closed with «قريباً».
 
+The user requested choosing a book before asking the assistant, explicitly including الأربعون النووية and الأصول الثلاثة, to make the question's intended context clearer.
+
+**Why:** A question should not be assumed to concern Nawawi solely because that is the first open learning text.
+
+**How to apply:** Support these book choices for assistant study questions and preserve the choice for history, follow-ups and referrals. This does not authorize opening additional reading/assessment tracks or treating general AI responses as approved commentary.
+
 The landing page is built from scratch per the brand identity (Arabic style, light theme); neither the existing landing page nor the old landing-page spec is a design source.
 
 The user supplied https://app.turath.io/book/12836?page=6 as the source for الأربعون النووية, and subsequently specified https://app.turath.io/book/12836?page=21 as a text reference.

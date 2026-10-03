@@ -1435,7 +1435,7 @@ components:
       properties:
         question: { type: string, minLength: 1, maxLength: 8000 }
         textContext: { type: ["string", "null"], maxLength: 3000 }
-        textId: { type: ["string", "null"], maxLength: 64 }
+        textId: { type: ["string", "null"], enum: [nawawi, usul-thalatha, null], description: "Selected study book. Omitted or null values retain the legacy Nawawi default." }
     ConversationMessageInput:
       type: object
       required: [text]
@@ -1457,11 +1457,12 @@ components:
         quote: { type: string }
     AssistantQuestion:
       type: object
-      required: [conversationId, questionId, question, textContext, createdAt, reason, status, answer, citations, referral, model]
+      required: [conversationId, questionId, question, textId, textContext, createdAt, reason, status, answer, citations, referral, model]
       properties:
         conversationId: { type: string, format: uuid }
         questionId: { type: string, format: uuid }
         question: { type: string }
+        textId: { type: string, enum: [nawawi, usul-thalatha] }
         textContext: { type: ["string", "null"] }
         createdAt: { type: string, format: date-time }
         reason: { type: string }

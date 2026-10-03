@@ -607,6 +607,7 @@ export const GetMateenAssistantQuestionsResponseItem = zod.object({
   "conversationId": zod.string().uuid(),
   "questionId": zod.string().uuid(),
   "question": zod.string(),
+  "textId": zod.enum(['nawawi', 'usul-thalatha']),
   "textContext": zod.string().nullable(),
   "createdAt": zod.coerce.date(),
   "reason": zod.string(),
@@ -636,20 +637,19 @@ export const askMateenAssistantBodyQuestionMax = 8000;
 
 export const askMateenAssistantBodyTextContextMax = 3000;
 
-export const askMateenAssistantBodyTextIdMax = 64;
-
 
 
 export const AskMateenAssistantBody = zod.object({
   "question": zod.string().min(1).max(askMateenAssistantBodyQuestionMax),
   "textContext": zod.string().max(askMateenAssistantBodyTextContextMax).nullish(),
-  "textId": zod.string().max(askMateenAssistantBodyTextIdMax).nullish()
+  "textId": zod.union([zod.literal('nawawi'),zod.literal('usul-thalatha'),zod.literal(null)]).nullish().describe('Selected study book. Omitted or null values retain the legacy Nawawi default.')
 })
 
 export const AskMateenAssistantResponse = zod.object({
   "conversationId": zod.string().uuid(),
   "questionId": zod.string().uuid(),
   "question": zod.string(),
+  "textId": zod.enum(['nawawi', 'usul-thalatha']),
   "textContext": zod.string().nullable(),
   "createdAt": zod.coerce.date(),
   "reason": zod.string(),
@@ -767,6 +767,7 @@ export const SendMateenFollowUpResponse = zod.object({
   "conversationId": zod.string().uuid(),
   "questionId": zod.string().uuid(),
   "question": zod.string(),
+  "textId": zod.enum(['nawawi', 'usul-thalatha']),
   "textContext": zod.string().nullable(),
   "createdAt": zod.coerce.date(),
   "reason": zod.string(),

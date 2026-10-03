@@ -33,6 +33,7 @@ it("generates labelled study answers without accessing administrator previews or
       assert.match(body.messages[0].content, /do not claim verification or invent citations/);
       assert.deepEqual(JSON.parse(body.messages[1].content), {
         question: "ما معنى الحديث الأول؟", studyContext: null,
+        selectedBook: "الأربعون النووية",
       });
       return new Response(JSON.stringify({
         choices: [{ message: { content: JSON.stringify({ answer: "إجابة اختبار تعليمية فقط." }) } }],

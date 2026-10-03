@@ -41,7 +41,9 @@ Resolve an explicitly numbered matn entry from the study text before asking the 
 
 **Why:** A live model response confidently identified the wrong hadith as the first Nawawi hadith when no reference text was supplied. A warning about unverified answers does not prevent this identity error.
 
-**How to apply:** Supply the selected entry as reference data, keep its review status explicit, and never substitute the model's recollection for known passage identity.
+The same problem occurred with the first principle of الأصول الثلاثة when the model received only the selected book title. A book title alone is not enough to ensure the model knows the book's structure.
+
+**How to apply:** Supply the selected entry as reference data, keep its review status explicit, and never substitute the model's recollection for known passage identity. For additional books, establish at least their basic topic structure from an actual reference rather than assume a selector alone improves answer accuracy.
 
 Student-facing Arabic explanations should use clear Arabic throughout, including hadith terminology, rather than mixing in English phrases.
 
