@@ -6,6 +6,8 @@ import { and, eq } from "drizzle-orm";
 import {
   assessmentAnswersTable,
   assessmentAttemptsTable,
+  assessmentReviewerGrantsTable,
+  profilesTable,
   assessmentAudioCleanupOutboxTable,
   assessmentAudioUploadCleanupOutboxTable,
   db,
@@ -44,6 +46,8 @@ before(async () => {
 });
 
 beforeEach(async () => {
+  await db.delete(assessmentReviewerGrantsTable);
+  await db.delete(profilesTable).where(eq(profilesTable.clerkId, ownerId));
   // Each case uses the same test-only principal in the disposable local
   // database; remove its previous active attempt before creating another.
   await db.delete(assessmentAnswersTable).where(eq(assessmentAnswersTable.userId, ownerId));
@@ -95,7 +99,155 @@ after(async () => {
   });
   await db.delete(assessmentAnswersTable).where(eq(assessmentAnswersTable.userId, ownerId));
   await db.delete(assessmentAttemptsTable).where(eq(assessmentAttemptsTable.userId, ownerId));
+  await db.delete(assessmentReviewerGrantsTable);
+  await db.delete(profilesTable).where(eq(profilesTable.clerkId, ownerId));
   await pool.end();
+});
+
+test("coverage admits only independent explicit grants and revocation closes review access", async () => {
+  const reviewerId = "synthetic-assessment-reviewer";
+  const coverage = async () => {
+    const response = await fetch(`${baseUrl}/mateen/assessment/coverage`);
+    assert.equal(response.status, 200);
+    return response.json() as Promise<{ available: boolean; responseHours: number }>;
+  };
+  const begin = () => fetch(`${baseUrl}/mateen/assessments`, {
+    method: "POST", headers: { "content-type": "application/json" },
+    body: JSON.stringify({ sessionId }),
+  });
+  await db.delete(assessmentAnswersTable).where(eq(assessmentAnswersTable.userId, ownerId));
+  await db.delete(assessmentAttemptsTable).where(eq(assessmentAttemptsTable.userId, ownerId));
+  await db.insert(profilesTable).values({ clerkId: ownerId, role: "student", onboarded: true });
+  assert.deepEqual(await coverage(), { available: false, responseHours: 48 });
+  assert.equal((await begin()).status, 503);
+  assert.equal((await db.select().from(assessmentAttemptsTable).where(eq(assessmentAttemptsTable.userId, ownerId))).length, 0);
+  // Public teacher role alone must not create coverage.
+  await db.insert(profilesTable).values({ clerkId: reviewerId, role: "teacher" }).onConflictDoNothing();
+  assert.equal((await coverage()).available, false);
+  await db.insert(assessmentReviewerGrantsTable).values({ clerkId: ownerId, enabled: true, operatorLabel: "disposable-test" });
+  assert.equal((await coverage()).available, false);
+  assert.equal((await begin()).status, 503);
+  await db.insert(assessmentReviewerGrantsTable).values({ clerkId: reviewerId, enabled: true, operatorLabel: "disposable-test" });
+  assert.equal((await coverage()).available, true);
+  const admitted = await begin();
+  assert.equal(admitted.status, 201);
+  const created = await admitted.json() as { id: string };
+  assert.ok(created.id);
+  const headers = { "x-test-user": reviewerId };
+  assert.equal((await fetch(`${baseUrl}/mateen/assessment/reviewer/queue`, { headers })).status, 200);
+  const selfReview = await fetch(`${baseUrl}/mateen/assessment/reviewer/${created.id}`);
+  assert.equal(selfReview.status, 403);
+  await db.update(assessmentReviewerGrantsTable).set({ enabled: false }).where(eq(assessmentReviewerGrantsTable.clerkId, reviewerId));
+  assert.equal((await coverage()).available, false);
+  const access = await fetch(`${baseUrl}/mateen/assessment/reviewer-access`, { headers });
+  assert.deepEqual(await access.json(), { authorized: false });
+  for (const path of ["queue", created.id, `${created.id}/audio/${questionId}`]) {
+    assert.equal((await fetch(`${baseUrl}/mateen/assessment/reviewer/${path}`, { headers })).status, 403);
+  }
+  const decision = await fetch(`${baseUrl}/mateen/assessment/reviewer/${created.id}`, {
+    method: "POST", headers: { ...headers, "content-type": "application/json" }, body: "{}",
+  });
+  assert.equal(decision.status, 403);
+  // Coverage loss must not prevent resuming a previously admitted attempt.
+  assert.equal((await begin()).status, 200);
+  const [unchanged] = await db.select().from(assessmentAttemptsTable).where(eq(assessmentAttemptsTable.id, created.id));
+  assert.equal(unchanged.status, "in_progress");
+  assert.equal(unchanged.result, null);
+  await db.delete(profilesTable).where(eq(profilesTable.clerkId, reviewerId));
+});
+
+test("a decision rechecks revocation after its initial access check while waiting on a grant lock", async () => {
+  const reviewer = "synthetic-racing-reviewer";
+  await db.insert(assessmentReviewerGrantsTable).values({ clerkId: reviewer, enabled: true, operatorLabel: "disposable-test" });
+  const client = await pool.connect();
+  let pending: Promise<Response> | undefined;
+  try {
+    await client.query("BEGIN");
+    await client.query("SELECT clerk_id FROM mateen_assessment_reviewer_grants WHERE clerk_id = $1 FOR UPDATE", [reviewer]);
+    pending = fetch(`${baseUrl}/mateen/assessment/reviewer/${attemptId}`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-test-user": reviewer },
+      body: JSON.stringify({
+        questionId, transcript: "verified fixture", technicalIssue: null,
+        attestCompleteRecording: true, attestAudioReviewed: true, attestReferenceAccurate: true,
+      }),
+    });
+    // The initial non-locking authorization sees the enabled committed grant;
+    // the decision transaction must wait, then read the revoked value.
+    let blocked = false;
+    for (let i = 0; i < 50; i++) {
+      const waiting = await client.query<{ count: string }>(
+        "SELECT count(*) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND wait_event_type = 'Lock' AND query LIKE '%mateen_assessment_reviewer_grants%'",
+      );
+      if (Number(waiting.rows[0].count) > 0) { blocked = true; break; }
+      await new Promise((resolve) => setTimeout(resolve, 20));
+    }
+    assert.equal(blocked, true);
+    await client.query("UPDATE mateen_assessment_reviewer_grants SET enabled = false WHERE clerk_id = $1", [reviewer]);
+    await client.query("COMMIT");
+    const response = await pending;
+    assert.equal(response.status, 403);
+    const [answer] = await db.select().from(assessmentAnswersTable).where(eq(assessmentAnswersTable.attemptId, attemptId));
+    assert.equal(answer.reviewedBy, null);
+    assert.equal(answer.score, null);
+  } finally {
+    await client.query("ROLLBACK");
+    client.release();
+    await pending;
+  }
+});
+
+test("review queue excludes self and active attempts before limiting, with overdue targets", async () => {
+  await db.insert(assessmentReviewerGrantsTable).values({ clerkId: ownerId, enabled: true, operatorLabel: "disposable-test" });
+  // More than a page of self-owned answers must not hide independent work.
+  const submittedAt = new Date(Date.now() - 49 * 3_600_000);
+  for (let i = 0; i < 7; i++) {
+    const selfAttempt = crypto.randomUUID();
+    await db.insert(assessmentAttemptsTable).values({
+      id: selfAttempt, userId: ownerId, status: "submitted", sourceVersion: "test",
+      canonicalHash: "test", policySnapshot: {}, questionsSnapshot: [], sessionId, submittedAt,
+    });
+    await db.insert(assessmentAnswersTable).values(Array.from({ length: 15 }, (_, j) => ({
+      id: crypto.randomUUID(), attemptId: selfAttempt, userId: ownerId, questionId: crypto.randomUUID(),
+      position: j + 16, kind: "oral", hadithNumber: 1, prompt: "fixture", referenceText: "fixture",
+      audioAvailable: true, status: "pending",
+    })));
+  }
+  await db.update(assessmentAnswersTable).set({ audioAvailable: true })
+    .where(eq(assessmentAnswersTable.attemptId, attemptId));
+  const selfQueue = await fetch(`${baseUrl}/mateen/assessment/reviewer/queue`);
+  assert.deepEqual(await selfQueue.json(), []);
+  const otherAttemptId = crypto.randomUUID();
+  const otherOwner = "synthetic-independent-student";
+  await db.insert(assessmentAttemptsTable).values({
+    id: otherAttemptId, userId: otherOwner, status: "submitted", sourceVersion: "test",
+    canonicalHash: "test", policySnapshot: {}, questionsSnapshot: [], sessionId,
+    submittedAt,
+  });
+  await db.insert(assessmentAnswersTable).values({
+    id: crypto.randomUUID(), attemptId: otherAttemptId, userId: otherOwner, questionId: crypto.randomUUID(),
+    position: 16, kind: "oral", hadithNumber: 1, prompt: "fixture", referenceText: "fixture",
+    audioAvailable: true, status: "pending",
+  });
+  const queue = await fetch(`${baseUrl}/mateen/assessment/reviewer/queue`);
+  assert.equal(queue.status, 200);
+  const rows = await queue.json() as Array<{ attemptId: string; pendingAnswers: number; overdue: boolean; reviewDueAt: string }>;
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].attemptId, otherAttemptId);
+  assert.equal(rows[0].pendingAnswers, 1);
+  assert.equal(rows[0].overdue, true);
+  assert.equal(new Date(rows[0].reviewDueAt).getTime(), submittedAt.getTime() + 48 * 3_600_000);
+  const [attempt] = await db.select().from(assessmentAttemptsTable).where(eq(assessmentAttemptsTable.id, otherAttemptId));
+  assert.equal(attempt.result, null);
+  assert.equal(attempt.status, "submitted");
+  const reviewer = "synthetic-independent-reviewer";
+  await db.insert(assessmentReviewerGrantsTable).values({ clerkId: reviewer, enabled: true, operatorLabel: "disposable-test" });
+  const independentQueue = await fetch(`${baseUrl}/mateen/assessment/reviewer/queue`, { headers: { "x-test-user": reviewer } });
+  const independentRows = await independentQueue.json() as Array<{ attemptId: string }>;
+  assert.equal(independentRows.length, 8);
+  assert.equal(independentRows.some((row) => row.attemptId === attemptId), false);
+  await db.delete(assessmentAnswersTable).where(eq(assessmentAnswersTable.attemptId, otherAttemptId));
+  await db.delete(assessmentAttemptsTable).where(eq(assessmentAttemptsTable.id, otherAttemptId));
 });
 
 async function requestAudio(sizeBytes = 20) {

@@ -2133,6 +2133,12 @@ export const CompleteScheduledReviewResponse = zod.object({
 })
 
 
+export const GetAssessmentCoverageResponse = zod.object({
+  "available": zod.boolean(),
+  "responseHours": zod.literal(48)
+})
+
+
 export const GetAssessmentReviewerAccessResponse = zod.object({
   "authorized": zod.boolean()
 })
@@ -2146,7 +2152,9 @@ export const ListAssessmentReviewQueueResponseItem = zod.object({
   "attemptId": zod.string().uuid(),
   "studentId": zod.string(),
   "submittedAt": zod.coerce.date(),
-  "pendingAnswers": zod.number().int().min(1).max(listAssessmentReviewQueueResponsePendingAnswersMax)
+  "pendingAnswers": zod.number().int().min(1).max(listAssessmentReviewQueueResponsePendingAnswersMax),
+  "reviewDueAt": zod.coerce.date(),
+  "overdue": zod.boolean()
 })
 export const ListAssessmentReviewQueueResponse = zod.array(ListAssessmentReviewQueueResponseItem).max(100)
 

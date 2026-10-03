@@ -79,14 +79,15 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
 export default function AdminAssessments() {
   usePageMeta('مراجعة الاختبارات | مَتِين', 'قائمة المراجعة البشرية.');
   const { isLoaded, isSignedIn, ready } = useAuthReady();
-  const access = useGetAssessmentReviewerAccess({ query: { enabled: ready, queryKey: getGetAssessmentReviewerAccessQueryKey() } });
-  const authorized = access.data?.authorized === true;
-  const queue = useListAssessmentReviewQueue({ query: { enabled: authorized, queryKey: getListAssessmentReviewQueueQueryKey() } });
+  const access = useGetAssessmentReviewerAccess({ query: { enabled: ready, queryKey: getGetAssessmentReviewerAccessQueryKey(), refetchInterval: 30_000, staleTime: 0 } });
+  const authorized = ready && !access.isError && access.data?.authorized === true;
+  const queue = useListAssessmentReviewQueue({ query: { enabled: authorized, queryKey: getListAssessmentReviewQueueQueryKey(), refetchInterval: 30_000, staleTime: 0 } });
   const [sel, setSel] = useState<string | null>(null);
   if (isLoaded && !isSignedIn) return <Redirect to="/sign-in" />;
   return (
     <div className="mx-auto min-h-[100dvh] max-w-3xl bg-background px-5 py-10">
       <PageHeader eyebrow="المراجعة البشرية" title="اختبارات بانتظار الاستماع" />
+      {authorized && <p className="mb-5 font-ui text-sm text-muted-foreground">المراجعون المخوّلون مسؤولون عن هذه القائمة. المهلة المستهدفة ٤٨ ساعة من التسليم؛ عالج الأقدم أولاً، وأبلغ مسؤول التشغيل عند تعذّر التغطية. التأخر ليس درجة صفر.</p>}
       {access.isLoading || !isLoaded ? <LoadingList /> : access.isError ? <ErrorState onRetry={() => access.refetch()} /> : !authorized ? (
         <EmptyState title="غير مخوّل">هذه الصفحة للمراجعين المخوّلين من الخادم فقط. <Link href="/" className="font-bold text-secondary underline">الرئيسية</Link></EmptyState>
       ) : sel ? <Detail id={sel} onBack={() => setSel(null)} /> : queue.isLoading ? <LoadingList /> : queue.isError ? <ErrorState onRetry={() => queue.refetch()} /> : !queue.data?.length ? (
@@ -94,7 +95,8 @@ export default function AdminAssessments() {
       ) : (
         <ul className="space-y-3">{queue.data.map((i) => (
           <li key={i.attemptId}><button onClick={() => setSel(i.attemptId)} className="paper-card w-full p-5 text-right">
-            <p className="font-ui font-bold">{num(i.pendingAnswers)} إجابات معلّقة</p><p className="font-ui text-xs text-muted-foreground">سُلّم {fmtDate(i.submittedAt)}</p></button></li>
+            <p className="font-ui font-bold">{num(i.pendingAnswers)} إجابات معلّقة</p><p className="font-ui text-xs text-muted-foreground">سُلّم {fmtDate(i.submittedAt)} · موعد المراجعة المستهدف {fmtDate(i.reviewDueAt)}</p>
+            {i.overdue && <p className="mt-2 font-ui text-sm font-bold text-secondary">متأخر عن مهلة المراجعة — يحتاج متابعة مسؤول التشغيل</p>}</button></li>
         ))}</ul>
       )}
     </div>

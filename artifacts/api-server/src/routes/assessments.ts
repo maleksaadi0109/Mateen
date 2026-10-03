@@ -13,6 +13,7 @@ import {
   DeleteAssessmentAudioParams,
   GetAssessmentParams,
   GetAssessmentPolicyResponse,
+  GetAssessmentCoverageResponse,
   GetAssessmentResponse,
   GetAssessmentReviewerAccessResponse,
   GetAssessmentReviewParams,
@@ -39,6 +40,7 @@ import {
 import {
   assessmentAnswersTable,
   assessmentAttemptsTable,
+  assessmentReviewerGrantsTable,
   assessmentAuditEventsTable,
   assessmentAudioCleanupOutboxTable,
   assessmentAudioUploadCleanupOutboxTable,
@@ -46,7 +48,7 @@ import {
   profilesTable,
   scheduledReviewsTable,
 } from "@workspace/db";
-import { and, count, desc, eq, gt, inArray, isNotNull, isNull, lt, lte, or } from "drizzle-orm";
+import { and, count, desc, eq, gt, inArray, isNotNull, isNull, lt, lte, ne, or } from "drizzle-orm";
 import { authenticationRequired, mutationOriginProtection, rateLimit, requireProfile, type AuthedRequest } from "../lib/mateen-auth";
 import { ObjectStorageService } from "../lib/objectStorage";
 import {
@@ -74,6 +76,8 @@ import {
   hasIncompleteAudio,
   isAttemptActive,
   isTrustedAssessmentReviewer,
+  hasAssessmentReviewCoverage,
+  ASSESSMENT_REVIEW_RESPONSE_HOURS,
   nextReviewIntervalDays,
   projectAttempt,
   reviewerCanReviewAttempt,
@@ -221,6 +225,15 @@ router.post(
       if (failed?.retryAvailableAt && failed.retryAvailableAt > new Date()) {
         return { kind: "cooldown" as const, retryAvailableAt: failed.retryAvailableAt };
       }
+      // A shared lock serializes admission with explicit grant revocation.
+      // Existing attempts may resume even if coverage is subsequently withdrawn.
+      const [coverage] = await tx.select({ clerkId: assessmentReviewerGrantsTable.clerkId })
+        .from(assessmentReviewerGrantsTable)
+        .where(and(
+          eq(assessmentReviewerGrantsTable.enabled, true),
+          ne(assessmentReviewerGrantsTable.clerkId, req.mateenUserId!),
+        )).limit(1).for("share");
+      if (!coverage) return { kind: "uncovered" as const };
       const id = randomUUID();
       const questions = buildQuestions();
       const attemptHash = selectedCanonicalHash(questions);
@@ -258,6 +271,10 @@ router.post(
       });
       return { kind: "created" as const, attempt };
     });
+    if (outcome.kind === "uncovered") {
+      res.status(503).json({ error: "لا توجد تغطية مخوّلة للمراجعة البشرية الآن؛ لم يبدأ الاختبار ولم تُسجّل درجة. يمكنك مواصلة التدريب التجريبي." });
+      return;
+    }
     if (outcome.kind === "lease") {
       res.status(409).json({ error: "This assessment attempt is leased to another browser session." });
       return;
@@ -550,6 +567,16 @@ router.post(
 
 function registerAssessmentReviewerRoutes() {
 router.get(
+  "/mateen/assessment/coverage",
+  authenticationRequired,
+  async (req: AuthedRequest, res): Promise<void> => {
+    res.json(GetAssessmentCoverageResponse.parse({
+      available: await hasAssessmentReviewCoverage(req.mateenUserId!),
+      responseHours: ASSESSMENT_REVIEW_RESPONSE_HOURS,
+    }));
+  },
+);
+router.get(
   "/mateen/assessment/reviewer-access",
   authenticationRequired,
   async (req: AuthedRequest, res): Promise<void> => {
@@ -564,35 +591,34 @@ router.get(
   authenticationRequired,
   async (req: AuthedRequest, res): Promise<void> => {
     if (!(await requireReviewer(req, res))) return;
+    // Limit attempts, not answers, after filtering submission and self-review.
     const pending = await db.select({
       attemptId: assessmentAnswersTable.attemptId,
-      userId: assessmentAnswersTable.userId,
-      createdAt: assessmentAnswersTable.createdAt,
+      studentId: assessmentAttemptsTable.userId,
+      submittedAt: assessmentAttemptsTable.submittedAt,
+      createdAt: assessmentAttemptsTable.createdAt,
+      pendingAnswers: count(),
     })
       .from(assessmentAnswersTable)
+      .innerJoin(assessmentAttemptsTable, eq(assessmentAnswersTable.attemptId, assessmentAttemptsTable.id))
       .where(and(
         eq(assessmentAnswersTable.kind, "oral"),
         eq(assessmentAnswersTable.status, "pending"),
         eq(assessmentAnswersTable.audioAvailable, true),
         eq(assessmentAnswersTable.audioDeletePending, false),
+        isNull(assessmentAnswersTable.audioDeletedAt),
+        ne(assessmentAttemptsTable.userId, req.mateenUserId!),
+        inArray(assessmentAttemptsTable.status, ["submitted", "technical_review"]),
       ))
-      .orderBy(assessmentAnswersTable.createdAt)
+      .groupBy(assessmentAnswersTable.attemptId, assessmentAttemptsTable.userId,
+        assessmentAttemptsTable.submittedAt, assessmentAttemptsTable.createdAt)
+      .orderBy(assessmentAttemptsTable.submittedAt, assessmentAttemptsTable.createdAt)
       .limit(100);
-    const unique = new Map<string, { attemptId: string; studentId: string; submittedAt: Date; pendingAnswers: number }>();
-    for (const row of pending) {
-      const attempt = await getOwnedAttempt(row.attemptId, row.userId);
-      if (!attempt || !reviewerCanReviewAttempt(req.mateenUserId!, attempt.userId) ||
-        !["submitted", "technical_review"].includes(attempt.status)) continue;
-      const entry = unique.get(attempt.id) ?? {
-        attemptId: attempt.id,
-        studentId: row.userId,
-        submittedAt: attempt.submittedAt ?? attempt.createdAt,
-        pendingAnswers: 0,
-      };
-      entry.pendingAnswers += 1;
-      unique.set(attempt.id, entry);
-    }
-    res.json(ListAssessmentReviewQueueResponse.parse([...unique.values()].slice(0, 100)));
+    res.json(ListAssessmentReviewQueueResponse.parse(pending.map((row) => {
+      const submittedAt = row.submittedAt ?? row.createdAt;
+      const reviewDueAt = new Date(submittedAt.getTime() + ASSESSMENT_REVIEW_RESPONSE_HOURS * 3_600_000);
+      return { ...row, submittedAt, reviewDueAt, overdue: reviewDueAt.getTime() <= Date.now() };
+    })));
   },
 );
 
@@ -725,6 +751,11 @@ router.post(
     }
     const now = new Date();
     const outcome = await db.transaction(async (tx) => {
+      const [grant] = await tx.select({ enabled: assessmentReviewerGrantsTable.enabled })
+        .from(assessmentReviewerGrantsTable)
+        .where(eq(assessmentReviewerGrantsTable.clerkId, req.mateenUserId!))
+        .for("share").limit(1);
+      if (!grant?.enabled) return { kind: "revoked" as const };
       const [attempt] = await tx.select().from(assessmentAttemptsTable)
         .where(eq(assessmentAttemptsTable.id, params.data.attemptId))
         .for("update").limit(1);
@@ -848,6 +879,10 @@ router.post(
     });
     if (outcome.kind === "missing") {
       res.status(404).json({ error: "Assessment review not found." });
+      return;
+    }
+    if (outcome.kind === "revoked") {
+      res.status(403).json({ error: "Assessment reviewer access was revoked; no decision was saved." });
       return;
     }
     if (outcome.kind === "self_review") {

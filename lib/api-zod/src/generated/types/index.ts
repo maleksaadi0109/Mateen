@@ -13,6 +13,8 @@ export * from './assessmentAttempt';
 export * from './assessmentAttemptStatus';
 export * from './assessmentAudioInput';
 export * from './assessmentAudioUpload';
+export * from './assessmentCoverage';
+export * from './assessmentCoverageResponseHours';
 export * from './assessmentFinalAnswer';
 export * from './assessmentFinalAnswerKind';
 export * from './assessmentFinalAnswerProvenance';

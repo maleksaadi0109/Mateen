@@ -967,12 +967,21 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/ScheduledReview" }
+  /mateen/assessment/coverage:
+    get:
+      operationId: getAssessmentCoverage
+      responses:
+        "200":
+          description: Human review coverage excluding the requesting student's own grant
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AssessmentCoverage" }
   /mateen/assessment/reviewer-access:
     get:
       operationId: getAssessmentReviewerAccess
       responses:
         "200":
-          description: Trusted Clerk private-metadata reviewer entitlement
+          description: Explicit server-side assessment reviewer grant
           content:
             application/json:
               schema: { $ref: "#/components/schemas/ReviewerAccess" }
@@ -1857,12 +1866,14 @@ components:
         attestReferenceAccurate: { type: boolean, const: true }
     ReviewQueueItem:
       type: object
-      required: [attemptId, studentId, submittedAt, pendingAnswers]
+      required: [attemptId, studentId, submittedAt, pendingAnswers, reviewDueAt, overdue]
       properties:
         attemptId: { type: string, format: uuid }
         studentId: { type: string }
         submittedAt: { type: string, format: date-time }
         pendingAnswers: { type: integer, minimum: 1, maximum: 15 }
+        reviewDueAt: { type: string, format: date-time }
+        overdue: { type: boolean }
     AssessmentReviewDetail:
       type: object
       required: [attemptId, sourceVersion, canonicalHash, answers]
@@ -1882,6 +1893,12 @@ components:
         referenceText: { type: string }
         audioAvailable: { type: boolean }
         status: { type: string, enum: [pending, scored, technical_review] }
+    AssessmentCoverage:
+      type: object
+      required: [available, responseHours]
+      properties:
+        available: { type: boolean }
+        responseHours: { type: integer, enum: [48] }
     ReviewerAccess:
       type: object
       required: [authorized]

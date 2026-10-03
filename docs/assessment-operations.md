@@ -43,6 +43,45 @@ The review portal is `/admin/assessments`. New oral submissions have no final
 score until the required oral decisions are complete. Plan reviewer coverage
 and response times before inviting real students to take oral assessments.
 
+## Coverage responsibility and response target
+
+The launch response target is **48 hours from server submission time**, not
+exam start or the time a reviewer opens it. This is an operational target, not
+a guarantee or an automatic grading deadline. Each explicitly enabled reviewer
+accepts responsibility for the shared queue of other students' submissions.
+The operator who executes the grant owns coverage planning: confirm the
+reviewer's agreement and availability, designate a primary and backup before
+inviting real students, check the queue at least daily, and arrange replacement
+coverage for absence or overdue work. The operator label records who changed
+access, not proof of a staffed shift.
+
+The coverage check discloses only whether another enabled reviewer exists.
+A new exam is rejected with 503 before any attempt is created when none exists,
+including when the only reviewer is the student. Existing attempts may resume
+and submit; pending results and experimental practice are unaffected.
+An enabled grant is the operator's coverage commitment, not evidence that the
+reviewer is online. Revoke unavailable reviewers rather than leaving unstaffed
+grants enabled. Teacher profiles and public roles never establish coverage.
+
+The portal lists the oldest submissions first, their target review dates, and
+an overdue marker. Overdue submissions remain pending with no final score:
+they must not become zeros, failures, or new cooldowns. Missing or unscorable
+recordings remain technical cases. There are no automatic reminder messages
+yet; the operator's daily check is required.
+
+Revocation is checked on every protected review request and again inside the
+decision transaction. Decisions committed before revocation remain immutable;
+no new decision may be saved after revocation commits. Revocation works even
+for a deleted Clerk identity; granting always verifies identity existence.
+Audio already downloaded cannot be recalled; reviewers must not retain copies.
+
+No real identity is selected or granted as part of implementation. Before
+launch, the operator must supply the exact existing Clerk identity and execute
+the confirmed grant above against the intended environment. Confirm portal
+access for that account, new exam admission for a different student, and that
+revocation removes portal/audio/decision access and blocks new exams if it
+removes the last independent reviewer. Reviewers never review their own attempts.
+
 ## Time and retries
 
 The server owns the active timer, checkpoints, question position, and single-tab

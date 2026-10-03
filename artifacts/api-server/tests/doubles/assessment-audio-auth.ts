@@ -7,7 +7,8 @@ export function authenticationRequired(
   _res: Response,
   next: NextFunction,
 ): void {
-  req.mateenUserId = "assessment-audio-test-owner";
+  // Only the disposable HTTP harness uses this identity seam.
+  req.mateenUserId = req.get("x-test-user") ?? "assessment-audio-test-owner";
   next();
 }
 

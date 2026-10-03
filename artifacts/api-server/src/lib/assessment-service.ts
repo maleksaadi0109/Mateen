@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, ne } from "drizzle-orm";
 import {
   assessmentAnswersTable,
   assessmentAttemptsTable,
@@ -120,6 +120,19 @@ export async function getAttemptAnswers(attemptId: string) {
     .from(assessmentAnswersTable)
     .where(eq(assessmentAnswersTable.attemptId, attemptId))
     .orderBy(assessmentAnswersTable.position);
+}
+
+// Operational response target, not an automatic grading deadline.
+export const ASSESSMENT_REVIEW_RESPONSE_HOURS = 48;
+
+export async function hasAssessmentReviewCoverage(ownerId: string): Promise<boolean> {
+  const [grant] = await db.select({ clerkId: assessmentReviewerGrantsTable.clerkId })
+    .from(assessmentReviewerGrantsTable)
+    .where(and(
+      eq(assessmentReviewerGrantsTable.enabled, true),
+      ne(assessmentReviewerGrantsTable.clerkId, ownerId),
+    )).limit(1);
+  return Boolean(grant);
 }
 
 export async function isTrustedAssessmentReviewer(clerkId: string): Promise<boolean> {

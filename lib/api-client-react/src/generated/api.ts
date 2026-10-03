@@ -26,6 +26,7 @@ import type {
   AssessmentAttempt,
   AssessmentAudioInput,
   AssessmentAudioUpload,
+  AssessmentCoverage,
   AssessmentHeartbeatInput,
   AssessmentPolicy,
   AssessmentReviewDetail,
@@ -5386,6 +5387,77 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
       return useMutation(getCompleteScheduledReviewMutationOptions(options));
     }
+
+export const getGetAssessmentCoverageUrl = () => {
+
+
+
+
+  return `/api/mateen/assessment/coverage`
+}
+
+export const getAssessmentCoverage = async ( options?: Parameters<typeof customFetch>[1]): Promise<AssessmentCoverage> => {
+
+  return customFetch<AssessmentCoverage>(getGetAssessmentCoverageUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetAssessmentCoverageQueryKey = () => {
+    return [
+    `/api/mateen/assessment/coverage`
+    ] as const;
+    }
+
+
+export const getGetAssessmentCoverageQueryOptions = <TData = Awaited<ReturnType<typeof getAssessmentCoverage>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessmentCoverage>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAssessmentCoverageQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssessmentCoverage>>> = ({ signal }) => getAssessmentCoverage({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssessmentCoverage>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAssessmentCoverageQueryResult = NonNullable<Awaited<ReturnType<typeof getAssessmentCoverage>>>
+export type GetAssessmentCoverageQueryError = ErrorType<unknown>
+
+
+
+export function useGetAssessmentCoverage<TData = Awaited<ReturnType<typeof getAssessmentCoverage>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAssessmentCoverage>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetAssessmentCoverageQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
 
 export const getGetAssessmentReviewerAccessUrl = () => {
 

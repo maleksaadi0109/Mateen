@@ -15,4 +15,6 @@ export interface ReviewQueueItem {
      * @maximum 15
      */
   pendingAnswers: number;
+  reviewDueAt: Date;
+  overdue: boolean;
 }

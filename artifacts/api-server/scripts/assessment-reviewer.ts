@@ -22,7 +22,8 @@ async function main() {
 
   // A Clerk lookup validates identity existence; the operator must still run
   // this explicit command and confirm the exact target.
-  await clerkClient.users.getUser(clerkId);
+  // Revocation must remain possible even if the identity was deleted in Clerk.
+  if (operation === "grant") await clerkClient.users.getUser(clerkId);
   await db
     .insert(assessmentReviewerGrantsTable)
     .values({

@@ -1321,6 +1321,8 @@ export interface ReviewQueueItem {
      * @maximum 15
      */
   pendingAnswers: number;
+  reviewDueAt: string;
+  overdue: boolean;
 }
 
 export type AssessmentReviewAnswerStatus = typeof AssessmentReviewAnswerStatus[keyof typeof AssessmentReviewAnswerStatus];
@@ -1345,6 +1347,18 @@ export interface AssessmentReviewDetail {
   sourceVersion: string;
   canonicalHash: string;
   answers: AssessmentReviewAnswer[];
+}
+
+export type AssessmentCoverageResponseHours = typeof AssessmentCoverageResponseHours[keyof typeof AssessmentCoverageResponseHours];
+
+
+export const AssessmentCoverageResponseHours = {
+  NUMBER_48: 48,
+} as const;
+
+export interface AssessmentCoverage {
+  available: boolean;
+  responseHours: AssessmentCoverageResponseHours;
 }
 
 export interface ReviewerAccess {
