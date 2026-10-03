@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '@clerk/react';
 import { useGenerateScholarlyPreview } from '@workspace/api-client-react';
 import { Notice } from '@/components/mateen/bits';
 
@@ -11,9 +12,17 @@ function previewError(error: unknown): string {
 }
 
 export default function PrivatePreview() {
+  const { isLoaded, isSignedIn, userId, sessionId } = useAuth();
+  if (!isLoaded || !isSignedIn || !userId || !sessionId) return null;
+  // Remount before rendering another account/session: drafts and pending
+  // mutation observers must never be inherited across identity changes.
+  return <SessionPreview key={JSON.stringify([userId, sessionId])} />;
+}
+
+function SessionPreview() {
   const [question, setQuestion] = useState('');
   const [submittedQuestion, setSubmittedQuestion] = useState('');
-  const preview = useGenerateScholarlyPreview();
+  const preview = useGenerateScholarlyPreview({ mutation: { gcTime: 0 } });
   const trimmed = question.trim();
   const valid = trimmed.length >= 3 && question.length <= 2000;
   const clear = () => {

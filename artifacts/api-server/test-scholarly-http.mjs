@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
 
 const root = dirname(fileURLToPath(import.meta.url));
+const preview = process.argv.includes("--preview");
 const temp = await mkdtemp(join(tmpdir(), "mateen-participant-tests-"));
 const dbRequire = createRequire(join(root, "../../lib/db/package.json"));
 const { generateDrizzleJson, generateMigration } = dbRequire("drizzle-kit/api");
@@ -22,6 +23,7 @@ const childEnv = {
   NODE_ENV: "test",
   DATABASE_URL: `postgresql://mateen_test@localhost/postgres?host=${encodeURIComponent(socket)}`,
   SCHOLARLY_TEST_CLUSTER: temp,
+  ...(preview ? { NVIDIA_API_KEY: "synthetic-test-only-not-a-credential" } : {}),
 };
 function pg(command, args) {
   const result = spawnSync(command, args, { env: childEnv, encoding: "utf8", timeout: 30000 });
@@ -48,16 +50,17 @@ try {
 
   // Resolution replacements exist only in this temporary test bundle. The
   // production build has no test header, auth bypass, model stub or test router.
-  const outfile = join(temp, "participants.test.cjs");
+  const outfile = join(temp, preview ? "preview.test.cjs" : "participants.test.cjs");
   await build({
-    entryPoints: [join(root, "tests/scholarly.participants.test.ts")],
+    entryPoints: [join(root, preview ? "tests/scholarly.preview.test.ts" : "tests/scholarly.participants.test.ts")],
     bundle: true, platform: "node", format: "cjs", outfile,
     plugins: [{
       name: "participant-test-boundaries",
       setup(builder) {
         builder.onResolve({ filter: /^@clerk\/express$/ }, () => ({
-          path: join(root, "tests/doubles/auth.ts"),
+          path: join(root, preview ? "tests/doubles/preview-auth.ts" : "tests/doubles/auth.ts"),
         }));
+        if (preview) return; // Exercise the real admin router and provider implementation.
         builder.onResolve({ filter: /^\.\/scholarly\.admin$/ }, () => ({
           path: join(root, "tests/doubles/admin.ts"),
         }));
