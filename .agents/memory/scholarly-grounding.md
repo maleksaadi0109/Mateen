@@ -51,11 +51,11 @@ The same problem occurred with the first principle of الأصول الثلاث�
 
 **How to apply:** Supply the selected entry as reference data, keep its review status explicit, and never substitute the model's recollection for known passage identity. For additional books, establish at least their basic topic structure from an actual reference rather than assume a selector alone improves answer accuracy.
 
-Student-facing Arabic explanations should use clear Arabic throughout, including hadith terminology, rather than mixing in English phrases.
+Student-facing explanations must use Arabic throughout, including hadith terminology, without English words or asterisk formatting.
 
-**Why:** The user reported that an English phrase in a generated Nawawi explanation made the answer difficult to understand, and requested accurate commentary-based explanations.
+**Why:** The user repeated the Arabic-only requirement after receiving an explanation containing “motives”, and explicitly rejected asterisks around headings.
 
-**How to apply:** Use Arabic terms such as «متفق عليه» with a brief explanation where needed. Language clarity does not replace commentary grounding or scientific review.
+**How to apply:** Use plain Arabic paragraphs and headings, not Markdown emphasis or star bullets. Enforce the language boundary on generated text rather than relying on the prompt alone. Language clarity does not replace commentary grounding or scientific review.
 
 For Nawawi explanations, the user chose short source excerpts with their references rather than model-written simplified explanations.
 

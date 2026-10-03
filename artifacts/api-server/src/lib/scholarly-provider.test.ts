@@ -52,6 +52,39 @@ it("generates labelled study answers without accessing administrator previews or
   }
 });
 
+it("removes asterisks and retries mixed-language study answers instead of saving English words", async () => {
+  const originalFetch = globalThis.fetch;
+  const saved = process.env.NVIDIA_API_KEY;
+  process.env.NVIDIA_API_KEY = "synthetic-nvidia-test-key";
+  try {
+    let calls = 0;
+    globalThis.fetch = async (_url, options) => {
+      const body = JSON.parse(String(options?.body));
+      assert.match(body.messages[0].content, /Never use asterisks/);
+      calls++;
+      if (calls > 1) assert.match(body.messages[0].content, /previous response contained non-Arabic words/);
+      const answer = calls === 1
+        ? "**المعنى:** المقاصد أو motives."
+        : "**المعنى:** الأعمال بالنيات.\n* مثال: طلب العلم بنية التعلم.";
+      return new Response(JSON.stringify({
+        choices: [{ message: { content: JSON.stringify({ answer }) } }],
+      }));
+    };
+    const answer = await answerStudyQuestion("اشرح الحديث الأول", null, NVIDIA_SCHOLARLY_MODEL);
+    assert.equal(calls, 2);
+    assert.equal(answer, `${UNVERIFIED_STUDY_NOTICE}\n\nالمعنى: الأعمال بالنيات.\n مثال: طلب العلم بنية التعلم.`);
+    assert.doesNotMatch(answer, /[A-Za-z*]/);
+    globalThis.fetch = async () => new Response(JSON.stringify({
+      choices: [{ message: { content: JSON.stringify({ answer: "شرح مع motives" }) } }],
+    }));
+    await assert.rejects(answerStudyQuestion("اشرح", null, NVIDIA_SCHOLARLY_MODEL), ScholarlyProviderUnavailableError);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (saved === undefined) delete process.env.NVIDIA_API_KEY;
+    else process.env.NVIDIA_API_KEY = saved;
+  }
+});
+
 it("routes NVIDIA requests to the fixed NVIDIA endpoint with its own key and validates JSON", async () => {
   const originalFetch = globalThis.fetch;
   const saved = process.env.NVIDIA_API_KEY;
