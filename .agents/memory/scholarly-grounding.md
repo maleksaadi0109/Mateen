@@ -12,3 +12,9 @@ Checking that a citation and quotation exist does not establish that generated e
 Treat model-written abstention reasons as generated content too, not as automatically safe explanations. Use fixed, non-religious refusal wording unless the explanation itself has been grounded.
 
 **Why:** An output marked “abstain” can still smuggle an unsupported ruling through its reason field; validating only the main answer misses that path.
+
+The user selected their own NVIDIA API access for the scholarly assistant instead of the proposed managed OpenAI connection or Gemini.
+
+**Why:** This was an explicit provider choice, not permission to substitute another billed provider when NVIDIA is unavailable.
+
+**How to apply:** Preserve NVIDIA as the intended provider unless the user changes it. Report connection failures explicitly; never silently route its requests to another provider or bypass source evaluation.

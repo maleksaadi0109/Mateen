@@ -12,4 +12,5 @@ export type ScholarlyEvaluationInputModel = typeof ScholarlyEvaluationInputModel
 export const ScholarlyEvaluationInputModel = {
   'gpt-54-mini': 'gpt-5.4-mini',
   'gpt-54': 'gpt-5.4',
+  'nvidia/nemotron-35-lightning-30b-a3b': 'nvidia/nemotron-3.5-lightning-30b-a3b',
 } as const;

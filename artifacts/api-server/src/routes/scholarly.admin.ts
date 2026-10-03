@@ -569,7 +569,7 @@ adminRouter.post(
       res.status(409).json({ error: "Index and scientifically review real source passages before evaluation" });
       return;
     }
-    if (!isScholarlyProviderConfigured()) {
+    if (!isScholarlyProviderConfigured(model)) {
       await persistFailedEvaluation(
         req.scholarlyUserId!,
         model,

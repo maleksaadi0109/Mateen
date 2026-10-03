@@ -96,11 +96,11 @@ export async function getScholarlyReadiness() {
   return {
     model,
     corpus,
-    providerConfigured: isScholarlyProviderConfigured(),
+    providerConfigured: isScholarlyProviderConfigured(model),
     evaluationPassed,
     reviewedSourceCount: sourceIds.size,
     assistantEnabled: evaluationPassed && sourceIds.size > 0 && corpus.complete &&
-      isScholarlyProviderConfigured(),
+      isScholarlyProviderConfigured(model),
   };
 }
 

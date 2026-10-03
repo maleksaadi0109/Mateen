@@ -1655,7 +1655,7 @@ components:
       type: object
       required: [model, providerConfigured, evaluationPassed, reviewedSourceCount, assistantEnabled]
       properties:
-        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4] }
+        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4, nvidia/nemotron-3.5-lightning-30b-a3b] }
         providerConfigured: { type: boolean }
         evaluationPassed: { type: boolean }
         reviewedSourceCount: { type: integer }
@@ -1664,12 +1664,12 @@ components:
       type: object
       required: [model]
       properties:
-        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4] }
+        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4, nvidia/nemotron-3.5-lightning-30b-a3b] }
     ScholarlyEvaluationInput:
       type: object
       required: [model, arabicQualityPassed, groundingPassed, abstentionPassed, note]
       properties:
-        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4] }
+        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4, nvidia/nemotron-3.5-lightning-30b-a3b] }
         arabicQualityPassed: { type: boolean }
         groundingPassed: { type: boolean }
         abstentionPassed: { type: boolean }

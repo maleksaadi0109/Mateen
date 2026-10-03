@@ -1,9 +1,14 @@
 import { createHash } from "node:crypto";
 import { z } from "zod/v4";
 
-export const SCHOLARLY_MODEL = "gpt-5.4-mini";
-export const SUPPORTED_SCHOLARLY_MODELS = ["gpt-5.4-mini", "gpt-5.4"] as const;
+export const NVIDIA_SCHOLARLY_MODEL = "nvidia/nemotron-3.5-lightning-30b-a3b";
+export const SUPPORTED_SCHOLARLY_MODELS = [
+  "gpt-5.4-mini", "gpt-5.4", NVIDIA_SCHOLARLY_MODEL,
+] as const;
 export type ScholarlyModel = (typeof SUPPORTED_SCHOLARLY_MODELS)[number];
+export const SCHOLARLY_MODEL: ScholarlyModel = process.env.NVIDIA_API_KEY
+  ? NVIDIA_SCHOLARLY_MODEL
+  : "gpt-5.4-mini";
 
 export type PassageCandidate = {
   id: string;
@@ -51,8 +56,10 @@ export class ScholarlyProviderUnavailableError extends Error {
   }
 }
 
-export function isScholarlyProviderConfigured(): boolean {
-  return Boolean(providerKeyOrNull() && providerBaseUrlOrDefault());
+export function isScholarlyProviderConfigured(model: ScholarlyModel = SCHOLARLY_MODEL): boolean {
+  return model === NVIDIA_SCHOLARLY_MODEL
+    ? Boolean(process.env.NVIDIA_API_KEY)
+    : Boolean(providerKeyOrNull() && providerBaseUrlOrDefault());
 }
 
 function providerKeyOrNull(): string | null {
@@ -65,7 +72,10 @@ function providerBaseUrlOrDefault(): string | null {
     (providerKeyOrNull() ? "https://api.openai.com/v1" : null);
 }
 
-function providerUrl(): string {
+function providerUrl(model: ScholarlyModel): string {
+  if (model === NVIDIA_SCHOLARLY_MODEL) {
+    return "https://integrate.api.nvidia.com/v1/chat/completions";
+  }
   const base = providerBaseUrlOrDefault();
   if (!base) throw new ScholarlyProviderUnavailableError();
   const trimmed = base.replace(/\/+$/, "");
@@ -74,8 +84,10 @@ function providerUrl(): string {
   return `${trimmed}/v1/chat/completions`;
 }
 
-function providerKey(): string {
-  const key = providerKeyOrNull();
+function providerKey(model: ScholarlyModel): string {
+  const key = model === NVIDIA_SCHOLARLY_MODEL
+    ? process.env.NVIDIA_API_KEY
+    : providerKeyOrNull();
   if (!key) throw new ScholarlyProviderUnavailableError();
   return key;
 }
@@ -94,21 +106,26 @@ async function structuredCompletion<T>(
   system: string,
   user: string,
 ): Promise<T> {
-  if (!isScholarlyProviderConfigured()) throw new ScholarlyProviderUnavailableError();
+  if (!isScholarlyProviderConfigured(model)) throw new ScholarlyProviderUnavailableError();
+  const nvidia = model === NVIDIA_SCHOLARLY_MODEL;
+  const outputInstruction = `Return only a JSON object matching this schema, without markdown: ${
+    JSON.stringify(z.toJSONSchema(schema))
+  }`;
   let response: Response;
   try {
-    response = await fetch(providerUrl(), {
+    response = await fetch(providerUrl(model), {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        authorization: `Bearer ${providerKey()}`,
+        authorization: `Bearer ${providerKey(model)}`,
       },
       body: JSON.stringify({
         model,
-        max_completion_tokens: 5000,
-        response_format: { type: "json_object" },
+        ...(nvidia
+          ? { max_tokens: 5000, reasoning_budget: 0, temperature: 0, stream: false }
+          : { max_completion_tokens: 5000, response_format: { type: "json_object" } }),
         messages: [
-          { role: "system", content: system },
+          { role: "system", content: `${system} ${outputInstruction}` },
           { role: "user", content: user },
         ],
       }),
@@ -117,7 +134,9 @@ async function structuredCompletion<T>(
   } catch {
     throw new ScholarlyProviderUnavailableError();
   }
-  if (!response.ok) throw new ScholarlyProviderUnavailableError();
+  if (!response.ok) {
+    throw new ScholarlyProviderUnavailableError(`The scholarly model provider returned HTTP ${response.status}`);
+  }
   let responseBody: unknown;
   try {
     const raw = await response.text();

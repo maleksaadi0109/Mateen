@@ -675,7 +675,7 @@ export const AskMateenAssistantResponse = zod.object({
 
 
 export const GetMateenAssistantReadinessResponse = zod.object({
-  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4']),
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b']),
   "providerConfigured": zod.boolean(),
   "evaluationPassed": zod.boolean(),
   "reviewedSourceCount": zod.number().int(),
@@ -1192,7 +1192,7 @@ export const ModerateScholarlyIssueResponse = zod.object({
 
 
 export const GetScholarlyConfigResponse = zod.object({
-  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4']),
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b']),
   "providerConfigured": zod.boolean(),
   "evaluationPassed": zod.boolean(),
   "reviewedSourceCount": zod.number().int(),
@@ -1201,11 +1201,11 @@ export const GetScholarlyConfigResponse = zod.object({
 
 
 export const UpdateScholarlyConfigBody = zod.object({
-  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4'])
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b'])
 })
 
 export const UpdateScholarlyConfigResponse = zod.object({
-  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4']),
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b']),
   "providerConfigured": zod.boolean(),
   "evaluationPassed": zod.boolean(),
   "reviewedSourceCount": zod.number().int(),
@@ -1219,7 +1219,7 @@ export const recordScholarlyEvaluationBodyNoteMax = 3000;
 
 
 export const RecordScholarlyEvaluationBody = zod.object({
-  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4']),
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b']),
   "arabicQualityPassed": zod.boolean(),
   "groundingPassed": zod.boolean(),
   "abstentionPassed": zod.boolean(),
@@ -1227,7 +1227,7 @@ export const RecordScholarlyEvaluationBody = zod.object({
 })
 
 export const RecordScholarlyEvaluationResponse = zod.object({
-  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4']),
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b']),
   "providerConfigured": zod.boolean(),
   "evaluationPassed": zod.boolean(),
   "reviewedSourceCount": zod.number().int(),

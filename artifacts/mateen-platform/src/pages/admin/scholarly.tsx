@@ -126,7 +126,7 @@ function Config() {
   const q = useGetScholarlyConfig({ query: { queryKey: getGetScholarlyConfigQueryKey() } });
   const upd = useUpdateScholarlyConfig(); const ev = useRecordScholarlyEvaluation();
   const [a, setA] = useState(false); const [g, setG] = useState(false); const [b, setB] = useState(false); const [note, setNote] = useState('');
-  const [model, setModel] = useState<'gpt-5.4-mini' | 'gpt-5.4' | ''>('');
+  const [model, setModel] = useState<NonNullable<typeof q.data>['model'] | ''>('');
   if (q.isLoading) return <LoadingList rows={1} />;
   if (forbidden(q.error)) return <Denied />;
   if (q.isError || !q.data) return <ErrorState onRetry={() => q.refetch()} />;
@@ -137,7 +137,7 @@ function Config() {
       <section className="paper-card p-6" data-testid="card-config">
         <ul className="grid gap-2 font-ui text-sm sm:grid-cols-2"><li>النموذج: {c.model}</li><li>المزوّد: {c.providerConfigured ? 'مهيّأ' : 'غير مهيّأ'}</li><li>التقييم: {c.evaluationPassed ? 'اجتاز' : 'لم يجتز'}</li><li>مصادر مراجَعة: {c.reviewedSourceCount.toLocaleString('ar-EG')}</li><li data-testid="text-enabled">المساعد: {c.assistantEnabled ? 'مفعّل' : 'غير مفعّل'}</li></ul>
         <div className="mt-4 space-y-3"><Field label="النموذج المراد تقييمه">
-          <select className={field} value={model || c.model} onChange={(e) => setModel(e.target.value as 'gpt-5.4-mini' | 'gpt-5.4')} data-testid="select-model"><option value="gpt-5.4-mini">gpt-5.4-mini</option><option value="gpt-5.4">gpt-5.4</option></select>
+          <select className={field} value={model || c.model} onChange={(e) => setModel(e.target.value as typeof c.model)} data-testid="select-model"><option value="nvidia/nemotron-3.5-lightning-30b-a3b">NVIDIA Nemotron 3.5 Lightning</option><option value="gpt-5.4-mini">gpt-5.4-mini</option><option value="gpt-5.4">gpt-5.4</option></select>
         </Field><p className="font-ui text-sm text-muted-foreground">تغيير النموذج يوقف الإجابات حتى يُعاد تقييمه على المجموعة الحالية.</p>
         <button className={btnGhost} disabled={upd.isPending} data-testid="button-pin-model" onClick={() => upd.mutate({ data: { model: model || c.model } }, { onSuccess: () => { done(); toast({ title: 'ثُبّت النموذج؛ راجع التقييم قبل تشغيله' }); }, onError: () => toast({ title: 'تعذّر التحديث', variant: 'destructive' }) })}>حفظ النموذج</button></div>
       </section>
