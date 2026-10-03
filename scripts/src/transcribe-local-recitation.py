@@ -171,6 +171,8 @@ def main():
         "networkDisabled": True,
         "audioUploaded": False,
         "consentConfirmed": True,
+        "consentScope": "legacy_user_declared_diagnostic_only",
+        "benchmarkEligible": False,
         "loadSeconds": round(loaded - started, 3),
         "preprocessingSeconds": round(prepared - loaded, 3),
         "inferenceSeconds": round(finished - prepared, 3),

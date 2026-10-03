@@ -49,6 +49,15 @@ class ComparisonCliTests(unittest.TestCase):
             "--omission-audio", "unused", "--omitted-word", "omitted",
         ])
 
+    def test_legacy_boolean_cannot_grant_corpus_consent(self):
+        self.assert_rejected(["--corpus", "unused", "--authorization-ledger", "unused"])
+
+    def test_corpus_requires_independent_ledger(self):
+        with patch("sys.argv", ["comparison", "--corpus", "unused"]):
+            with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+                comparison.main()
+            self.assertEqual(error.exception.code, 2)
+
 
 if __name__ == "__main__":
     unittest.main()

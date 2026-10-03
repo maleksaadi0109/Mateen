@@ -10,6 +10,7 @@ import {
 } from "./objectStorage";
 import { toPracticeRecitation } from "./recitation-contract";
 import { canonicalMatnRecords } from "./canonical-matn";
+import { assertPracticeOnlyResult } from "./recitation-safety";
 
 export const MAX_AUDIO_BYTES = 10 * 1024 * 1024;
 export const RETENTION_MS = 24 * 60 * 60 * 1000;
@@ -69,6 +70,7 @@ export function normalizeRuntimeResult(value: unknown) {
   if (!exactKeys(value, resultKeys)) {
     throw new Error("Local analysis result did not match the required contract.");
   }
+  assertPracticeOnlyResult(value);
   const alignment = value.alignment;
   const alignmentKeys = [
     "spans",

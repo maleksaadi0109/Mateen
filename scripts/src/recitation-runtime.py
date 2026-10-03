@@ -149,6 +149,10 @@ def transcribe(wave):
 
 
 def make_result(reference, transcript, revision):
+    # Whole-matn practice input is not a reviewed selection of the spoken
+    # passage. End/start disagreements must remain uncertain, never graded.
+    if not comparison_words(reference) or not comparison_words(transcript):
+        raise ValueError("Empty speech/reference cannot generate practice feedback.")
     return {
         "transcript": transcript,
         "referenceText": reference,

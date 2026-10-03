@@ -7,7 +7,7 @@
     "dev": "export NODE_ENV=development && pnpm run build && pnpm run start",
     "build": "node ./build.mjs",
     "start": "node --enable-source-maps ./dist/index.mjs",
-    "test:recitations": "tsx --test src/lib/recitation.test.ts",
+    "test:recitations": "tsx --test src/lib/recitation.test.ts src/lib/recitation-safety.test.ts",
     "test:assessments": "tsx --test src/lib/assessment-policy.test.ts src/lib/assessment-audio-freeze.test.ts",
     "assessment-reviewer": "tsx scripts/assessment-reviewer.ts",
     "assessment-retention-cleanup": "tsx scripts/assessment-retention-cleanup.ts",
