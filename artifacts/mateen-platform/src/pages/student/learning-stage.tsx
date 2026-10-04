@@ -10,6 +10,7 @@ import RecitationBook from '@/components/mateen/recitation-book';
 import StageAssistant from '@/components/mateen/stage-assistant';
 import StageExam from '@/components/mateen/stage-exam';
 import { useNawawiMap } from './learning-map';
+import BookMascot from '@/components/mateen/book-mascot';
 
 type Mode = 'study' | 'practice' | 'exam';
 
@@ -70,7 +71,7 @@ export default function LearningStagePage() {
           <StageAssistant key={chatKey} conversationId={chat.cid} onConversationId={(id) => patchChat({ cid: id })} draft={chat.draft} onDraft={(v) => patchChat({ draft: v })} hadith={hadith} selectedWord={word} wordRequest={req} onBusyChange={setBusy} />
         </div>
         <article dir="rtl" className="paper-card order-1 min-w-0 p-6 sm:p-8 lg:order-2" data-testid="card-stage-hadith">
-          <p className="font-ui text-xs font-semibold text-secondary">الحديث {num(hadith.number)}</p>
+          <div className="flex items-start justify-between gap-3"><p className="font-ui text-xs font-semibold text-secondary">الحديث {num(hadith.number)}</p><BookMascot size={52} mood={stage.status === 'passed' ? 'calm' : 'cheer'} className="-mt-2 shrink-0" /></div>
           <h1 className="mt-1 font-display text-2xl font-bold sm:text-3xl" data-testid="text-hadith-title">{hadith.title}</h1>
           <p className="mt-2 font-ui text-xs text-muted-foreground">اضغط أي كلمة ليُطلب شرحها من المساعد.</p>
           <div className="ornament my-5"><span className="text-xs">*</span></div>

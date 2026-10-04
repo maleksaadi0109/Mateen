@@ -17,3 +17,4 @@
 - [Scanned Nawawi edition](nawawi-scan-rights.md) — The supplied Dar al-Salam scan reserves publication rights; image permission must be separate from text and scientific review.
 - [Book recitation direction](book-reading-first.md) — Tarteel-inspired interactive text, not scan images; full collection and automatic numbered-page continuation.
 - [Arabic scanned-word alignment](arabic-page-alignment.md) — OCR text matches and detected document blocks do not establish reliable word geometry.
+- [Mateen mascot](mateen-mascot.md) — User approved an inanimate object with cartoon facial features, rendered in code for the learning journey.

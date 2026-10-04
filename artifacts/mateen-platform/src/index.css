@@ -111,3 +111,16 @@ body { font-family: var(--app-font-sans); -webkit-font-smoothing: antialiased; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* Mateen book mascot + journey */
+@keyframes mateen-bob { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-5px) } }
+@keyframes mateen-blink { 0%,92%,100% { transform: scaleY(1) } 95% { transform: scaleY(.1) } }
+@keyframes mateen-page { 0%,100% { transform: rotateY(0) } 50% { transform: rotateY(-28deg) } }
+@keyframes journey-pulse { 0% { transform: scale(1); opacity:.55 } 100% { transform: scale(1.45); opacity:0 } }
+.mateen-bob { animation: mateen-bob 3.6s ease-in-out infinite; }
+.mateen-eye { transform-box: fill-box; transform-origin: center; animation: mateen-blink 5s infinite; }
+.mateen-page { transform-box: fill-box; transform-origin: left center; animation: mateen-page 4.2s ease-in-out infinite; }
+.journey-ring { animation: journey-pulse 2.2s ease-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .mateen-bob, .mateen-eye, .mateen-page, .journey-ring { animation: none !important; }
+}
