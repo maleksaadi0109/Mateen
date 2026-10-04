@@ -44,6 +44,13 @@ import {
 
 const router = Router();
 
+// Profile responses contain private, self-reported learning answers. Do not
+// retain them in browser or shared proxy caches, including failed mutations.
+router.use("/mateen/profile", (_req, res, next) => {
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
+
 const sourceUrl = "https://app.turath.io/book/12836?page=6";
 const sourceAuthor = "الإمام يحيى بن شرف النووي";
 const catalogIds = new Set(["nawawi", "nawaqid", "qawaid", "tuhfa"]);

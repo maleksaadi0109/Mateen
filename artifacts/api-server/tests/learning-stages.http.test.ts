@@ -73,6 +73,35 @@ test("private welcome answers persist, validate strictly, and do not unlock stag
   assert.equal((await profileCall("welcome", { name: "اسم جديد", role: "teacher" })).status, 409);
   assert.equal((await profileCall("welcome", { ...body, learningPreferences: { ...prefs, age: null } })).status, 200);
   assert.equal((await readProfile("welcome")).learningPreferences?.age, null);
+  // Post-registration edits and clears are scoped to the signed-in account,
+  // never to a supplied profile id, and never change learning progression.
+  const beforeMap = await readMap("welcome");
+  const edited = { age: 120, memorized: "أ".repeat(1000), goal: "review", dailyMinutes: 60 };
+  const editBody = { name: "اسم جديد", role: "student", learningPreferences: edited };
+  assert.equal((await profileCall("welcome", { ...editBody, id: "other" })).status, 400);
+  assert.equal((await profileCall("welcome", editBody)).status, 200);
+  const reloaded = await profileCall("welcome");
+  assert.equal(reloaded.headers.get("cache-control"), "no-store");
+  assert.deepEqual(GetProfileResponse.parse(await reloaded.json()).learningPreferences, edited);
+  assert.equal((await profileCall("welcome", { ...editBody, learningPreferences: { ...edited, age: "25" } })).status, 400);
+  assert.deepEqual((await readProfile("welcome")).learningPreferences, edited, "failed edits retain saved answers");
+  assert.equal((await profileCall("welcome", { ...editBody, learningPreferences: { ...edited, age: 1, dailyMinutes: 10 } })).status, 200);
+  assert.equal((await readProfile("welcome")).learningPreferences?.age, 1, "retry succeeds");
+  assert.equal((await profileCall(null, { ...editBody, learningPreferences: null })).status, 401);
+  assert.equal((await profileCall("welcome", { ...editBody, learningPreferences: null })).status, 200);
+  const cleared = await readProfile("welcome");
+  assert.equal(cleared.learningPreferences, null);
+  assert.equal(cleared.name, "اسم جديد");
+  assert.equal(cleared.role, "student");
+  assert.equal(cleared.onboarded, true);
+  assert.deepEqual(await readMap("welcome"), beforeMap);
+  assert.equal((await readProfile("other")).learningPreferences, null);
+  // Clearing is idempotent; adding again accepts the remaining advertised options.
+  assert.equal((await profileCall("welcome", { ...editBody, learningPreferences: null })).status, 200);
+  for (const dailyMinutes of [30, 45]) {
+    assert.equal((await profileCall("welcome", { ...editBody, learningPreferences: { ...prefs, age: null, goal: "memorize", dailyMinutes } })).status, 200);
+  }
+  assert.equal((await readProfile("welcome")).learningPreferences?.dailyMinutes, 45);
 });
 
 test("auth, consent, path validation, origins, locked stage and foreign attempt ownership enforced", async () => {

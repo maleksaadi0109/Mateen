@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useClerk, UserProfile } from '@clerk/react';
+import { useClerk, useUser, UserProfile } from '@clerk/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { getGetProfileQueryKey, getGetDashboardQueryKey, useGetProfile, useSaveProfile } from '@workspace/api-client-react';
 import { LogOut, Moon, Sun } from 'lucide-react';
@@ -7,9 +7,15 @@ import { ErrorState, LoadingList, PageHeader } from '@/components/mateen/bits';
 import { usePortalTheme } from '@/components/portal/PortalShell';
 import { usePageMeta } from '@/lib/mateen';
 import { useToast } from '@/hooks/use-toast';
+import LearningPreferencesSettings from '@/components/mateen/learning-preferences-settings';
 
 export default function SettingsPage() {
-  usePageMeta('الإعدادات | مَتِين', 'اسمك وحسابك والمظهر.');
+  const { user } = useUser();
+  return <AccountSettings key={user?.id ?? 'anon'} />;
+}
+
+function AccountSettings() {
+  usePageMeta('الإعدادات | مَتِين', 'اسمك وتفضيلات تعلّمك وحسابك والمظهر.');
   const profile = useGetProfile({ query: { enabled: true, queryKey: getGetProfileQueryKey() } });
   const save = useSaveProfile();
   const qc = useQueryClient();
@@ -35,15 +41,19 @@ export default function SettingsPage() {
           e.preventDefault();
           if (!valid) return;
           save.mutate({ data: { name: name.trim(), role: p.role } }, {
-            onSuccess: () => { qc.invalidateQueries({ queryKey: getGetProfileQueryKey() }); qc.invalidateQueries({ queryKey: getGetDashboardQueryKey() }); toast({ title: 'تم حفظ الاسم' }); },
+            onSuccess: (updated) => { qc.setQueryData(getGetProfileQueryKey(), updated); qc.invalidateQueries({ queryKey: getGetProfileQueryKey() }); qc.invalidateQueries({ queryKey: getGetDashboardQueryKey() }); toast({ title: 'تم حفظ الاسم' }); },
             onError: () => toast({ title: 'تعذّر الحفظ', variant: 'destructive' }),
           });
         }}>
-          <input value={name} onChange={(e) => setName(e.target.value)} maxLength={100} aria-label="الاسم" className="min-w-0 flex-1 rounded-xl border bg-background px-4 py-3 font-ui outline-none focus:border-secondary" data-testid="input-settings-name" />
+          <input value={name} onChange={(e) => setName(e.target.value)} disabled={save.isPending} maxLength={100} aria-label="الاسم" className="min-w-0 flex-1 rounded-xl border bg-background px-4 py-3 font-ui outline-none focus:border-secondary" data-testid="input-settings-name" />
           <button disabled={!valid || save.isPending || name.trim() === p.name} className="rounded-full bg-primary px-7 py-3 font-ui font-bold text-primary-foreground disabled:opacity-50" data-testid="button-save-name">{save.isPending ? 'جارٍ الحفظ…' : 'حفظ'}</button>
         </form>
         <p className="mt-3 font-ui text-xs text-muted-foreground">الدور: {p.role === 'teacher' ? 'معلم' : 'طالب'}، ولا يتغير بعد التسجيل.</p>
       </section>
+      {p.role === 'student' && <LearningPreferencesSettings key={p.id} profile={p} save={save} onSaved={(updated) => {
+        qc.setQueryData(getGetProfileQueryKey(), updated);
+        qc.invalidateQueries({ queryKey: getGetProfileQueryKey() });
+      }} />}
       <section className="paper-card flex flex-wrap items-center justify-between gap-4 p-7">
         <div><h2 className="font-display text-xl font-bold">المظهر</h2><p className="font-arabic text-muted-foreground">فاتح «القرطاس الطبيعي» أو داكن «المخطوطات الليلية».</p></div>
         <div className="flex gap-2">

@@ -19,3 +19,4 @@
 - [Arabic scanned-word alignment](arabic-page-alignment.md) — OCR text matches and detected document blocks do not establish reliable word geometry.
 - [Mateen mascot](mateen-mascot.md) — User approved an inanimate object with cartoon facial features, rendered in code for the learning journey.
 - [Study report provenance](study-report-provenance.md) — Engagement is not mastery; report saves cannot establish study history; preserve the account calendar across travel.
+- [Node UI test runtime](node-ui-test-runtime.md) — DOM capability checks happen during imports; React Query cleanup can leave GC timers keeping test processes alive.
