@@ -38,6 +38,7 @@ import AdminAudit from '@/pages/admin/audit';
 import HomeGate from '@/pages/home-gate';
 import { claimAssessmentStorage } from '@/lib/assessment';
 import AdminAssessments from '@/pages/admin/assessments';
+import { draftOwner, messageDrafts } from '@/lib/message-drafts';
 
 const clerkPubKey = publishableKeyFromHost(window.location.hostname, import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
 const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
@@ -122,9 +123,10 @@ function ClerkQueryClientCacheInvalidator() {
   const qc = useQueryClient();
   const prev = useRef<string | null | undefined>(undefined);
   useEffect(() => {
-    const unsub = addListener(({ user }) => {
+    const unsub = addListener(({ user, session }) => {
       const id = user?.id ?? null;
       claimAssessmentStorage(id);
+      messageDrafts.claim(id && session?.id ? draftOwner(id, session.id) : null);
       if (prev.current !== undefined && prev.current !== id) qc.clear();
       prev.current = id;
     });

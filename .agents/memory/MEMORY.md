@@ -21,3 +21,4 @@
 - [Study report provenance](study-report-provenance.md) — Engagement is not mastery; report saves cannot establish study history; preserve the account calendar across travel.
 - [Node UI test runtime](node-ui-test-runtime.md) — DOM capability checks happen during imports; React Query cleanup can leave GC timers keeping test processes alive.
 - [Private PDF previews](private-pdf-previews.md) — Use a local PDF.js legacy renderer and worker; native plug-ins and modern-only JS assumptions failed browser verification.
+- [Private message drafts](private-message-drafts.md) — Prefer tab/login-session recovery over long-lived sensitive text; cross-device persistence needs a separate privacy decision.

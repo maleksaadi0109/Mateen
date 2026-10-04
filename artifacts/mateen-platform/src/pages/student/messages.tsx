@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useAuth } from '@clerk/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link, useLocation } from 'wouter';
 import { getGetMateenConversationMessagesQueryKey, getGetMateenConversationsQueryKey, getGetMateenConversationStatusQueryKey, getGetMateenTeacherReferralsQueryKey, useGetMateenConversationMessages, useGetMateenConversations, useGetMateenConversationStatus, useGetMateenTeacherReferrals, useReplyMateenReferral, useSendMateenFollowUp, useUpdateMateenReferralStatus } from '@workspace/api-client-react';
@@ -10,16 +11,20 @@ import { ChatMessages } from '@/components/scholarly/ChatMessages';
 import { StatusPill, btnGhost, btnPrimary, field, useFinitePoll } from '@/components/scholarly/shared';
 import { fmtDate, usePageMeta } from '@/lib/mateen';
 import { useToast } from '@/hooks/use-toast';
+import { useMessageDraft } from '@/hooks/use-message-draft';
+import { draftOwner, messageDrafts } from '@/lib/message-drafts';
 
 const linkedConversation = () => new URLSearchParams(window.location.search).get('conversation');
 const BLOCKED = ['not_referred', 'waiting_for_teacher'];
 
-function Thread({ conversationId, teacher, referralId }: { conversationId: string; teacher: boolean; referralId?: string }) {
+export function Thread({ owner, conversationId, teacher, referralId, referralClosed = false }: { owner: string; conversationId: string; teacher: boolean; referralId?: string; referralClosed?: boolean }) {
   const qc = useQueryClient();
   const { toast } = useToast();
-  const [text, setText] = useState('');
-  const [requestId, setRequestId] = useState(() => crypto.randomUUID());
+  const threadKey = JSON.stringify([teacher ? 'teacher' : 'student', conversationId, referralId ?? null]);
+  const { text, requestId, saved, setText } = useMessageDraft(owner, threadKey);
   const [tick, setTick] = useState(0);
+  const mounted = useRef(true);
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   const [, navigate] = useLocation();
   const poll = useFinitePoll(6000, 300000, tick);
   const msgs = useGetMateenConversationMessages(conversationId, { query: { enabled: true, queryKey: getGetMateenConversationMessagesQueryKey(conversationId), refetchInterval: poll } });
@@ -27,19 +32,31 @@ function Thread({ conversationId, teacher, referralId }: { conversationId: strin
   const follow = useSendMateenFollowUp();
   const reply = useReplyMateenReferral();
   const done = () => {
-    setText(''); setRequestId(crypto.randomUUID()); setTick((t) => t + 1);
+    if (mounted.current) setTick((t) => t + 1);
     qc.invalidateQueries({ queryKey: getGetMateenConversationMessagesQueryKey(conversationId) });
     qc.invalidateQueries({ queryKey: getGetMateenConversationStatusQueryKey(conversationId) });
     qc.invalidateQueries({ queryKey: getGetMateenConversationsQueryKey() });
     qc.invalidateQueries({ queryKey: getGetMateenTeacherReferralsQueryKey() });
   };
   const fail = () => toast({ title: 'تعذّر إرسال الرسالة', variant: 'destructive' });
-  const send = () => {
-    const t = text.trim(); if (!t || locked) return;
-    if (teacher && referralId) reply.mutate({ referralId, data: { text: t, requestId } }, { onSuccess: done, onError: fail });
-    else follow.mutate({ conversationId, data: { text: t, requestId } }, { onSuccess: (answer) => { done(); if (answer.conversationId !== conversationId) navigate('/student/assistant'); }, onError: fail });
+  const send = async () => {
+    const t = text.trim(); if (!t || locked || !messageDrafts.active(owner)) return;
+    const generation = messageDrafts.generation();
+    try {
+      // Await the mutation rather than per-call callbacks: acknowledgement must
+      // still remove the sent draft if the user collapsed/navigated away meanwhile.
+      const answer = teacher
+        ? await reply.mutateAsync({ referralId: referralId!, data: { text: t, requestId } })
+        : await follow.mutateAsync({ conversationId, data: { text: t, requestId } });
+      if (!messageDrafts.active(owner, generation)) return;
+      messageDrafts.acknowledge(owner, threadKey, requestId, generation);
+      done();
+      if (mounted.current && !teacher && 'conversationId' in answer && answer.conversationId !== conversationId) navigate('/student/assistant');
+    } catch {
+      if (messageDrafts.active(owner, generation)) fail();
+    }
   };
-  const locked = follow.isPending || reply.isPending || !status.data || status.isError || status.data.status === 'closed' || BLOCKED.includes(status.data.referral.status);
+  const locked = follow.isPending || reply.isPending || (teacher && (!referralId || referralClosed)) || !status.data || status.isError || status.data.status === 'closed' || BLOCKED.includes(status.data.referral.status);
   const hasAssistant = (msgs.data ?? []).some((m) => m.role === 'assistant');
   return (
     <div className="mt-4 space-y-3 border-t border-dashed pt-4" data-testid={`thread-${conversationId}`}>
@@ -51,9 +68,12 @@ function Thread({ conversationId, teacher, referralId }: { conversationId: strin
       </div>
       {!teacher && status.data && (BLOCKED.includes(status.data.referral.status) || status.data.status === 'closed') && <p className="font-ui text-xs text-muted-foreground">{status.data.status === 'closed' ? 'المحادثة مغلقة، فلا يمكن الرد.' : 'لا يوجد معلم مكلّف بهذه المحادثة بعد. للأسئلة الجديدة استخدم المساعد؛ وللإحالة راجع السؤال في سجلّه.'}</p>}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
-        <textarea className={`${field} font-arabic min-w-0`} rows={3} maxLength={8000} placeholder="رد نصي ضمن الإحالة؛ للأسئلة الجديدة استخدم المساعد" aria-label="نص الرسالة" value={text} onChange={(e) => { setText(e.target.value); setRequestId(crypto.randomUUID()); }} disabled={locked} data-testid="input-message" />
+        <textarea className={`${field} font-arabic min-w-0`} rows={3} maxLength={8000} placeholder="رد نصي ضمن الإحالة؛ للأسئلة الجديدة استخدم المساعد" aria-label="نص الرسالة" aria-describedby="message-draft-notice" value={text} onChange={(e) => setText(e.target.value)} disabled={locked} data-testid="input-message" />
         <button className={`${btnPrimary} shrink-0`} disabled={!text.trim() || locked} onClick={send} data-testid="button-send-message"><Send size={15} className="rotate-180" /> إرسال</button>
       </div>
+      <p id="message-draft-notice" role={saved ? undefined : 'alert'} className="font-ui text-xs text-muted-foreground" data-testid="text-draft-notice">
+        {saved ? 'المسودة خاصة بحسابك في علامة التبويب هذه، وتبقى عند إعادة التحميل. تُحذف عند تسجيل الخروج أو تبديل الحساب أو إغلاق علامة التبويب، ولا تُرسل تلقائيًا.' : 'تعذّر حفظ المسودة في المتصفح. قد تفقدها عند إعادة التحميل؛ انسخ النص قبل المغادرة.'}
+      </p>
     </div>
   );
 }
@@ -66,7 +86,7 @@ function Meta({ status, date }: { status: string; date: string }) {
   return <div className="flex flex-wrap items-center justify-between gap-2"><StatusPill status={status} /><span className="font-ui text-xs text-muted-foreground">{fmtDate(date)}</span></div>;
 }
 
-function StudentView() {
+export function StudentView({ owner }: { owner: string }) {
   const poll = useFinitePoll(15000);
   const q = useGetMateenConversations({ query: { queryKey: getGetMateenConversationsQueryKey(), refetchInterval: poll } });
   const [filter, setFilter] = useState('all');
@@ -91,7 +111,7 @@ function StudentView() {
             <Meta status={c.status} date={c.updatedAt} />
             <p className="mt-3 break-words font-arabic text-lg leading-loose">{c.topic}</p>
             <div className="mt-3"><Toggle open={open === c.id} onClick={() => setOpen(open === c.id ? null : c.id)} label="فتح المحادثة" id={c.id} /></div>
-            {open === c.id && <Thread conversationId={c.id} teacher={false} />}
+            {open === c.id && <Thread owner={owner} conversationId={c.id} teacher={false} />}
           </article>
         ))}</div>
       )}
@@ -99,7 +119,7 @@ function StudentView() {
   );
 }
 
-function TeacherView() {
+export function TeacherView({ owner }: { owner: string }) {
   const qc = useQueryClient();
   const { toast } = useToast();
   const [status, setStatus] = useState<'open' | 'answered' | 'closed' | undefined>(undefined);
@@ -136,7 +156,7 @@ function TeacherView() {
                 <button className={btnGhost} disabled={upd.isPending} onClick={() => setSt(r, r.status === 'open' ? 'answered' : 'open')} data-testid={`button-toggle-${r.id}`}>{r.status === 'open' ? 'علّم كمُجاب' : 'أعد الفتح'}</button>
                 {r.status !== 'closed' && <button className={btnGhost} disabled={upd.isPending} onClick={() => setSt(r, 'closed')} data-testid={`button-close-${r.id}`}>إغلاق الإحالة</button>}
               </div>
-              {isOpen && <Thread conversationId={r.conversationId} referralId={r.id} teacher />}
+              {isOpen && <Thread owner={owner} conversationId={r.conversationId} referralId={r.id} referralClosed={r.status === 'closed'} teacher />}
             </article>
           );
         })}</div>
@@ -146,13 +166,19 @@ function TeacherView() {
 }
 
 export default function MessagesPage({ teacher = false }: { teacher?: boolean }) {
+  const { isLoaded, userId, sessionId } = useAuth();
+  const owner = isLoaded && userId && sessionId ? draftOwner(userId, sessionId) : null;
+  useLayoutEffect(() => {
+    if (isLoaded) messageDrafts.claim(owner);
+  }, [isLoaded, owner]);
   usePageMeta('الرسائل | مَتِين', 'محادثات الإحالة بين الطالب والمعلم المعتمد.');
+  if (!owner) return null;
   return (
     <div>
       <PageHeader eyebrow="الرسائل" title={teacher ? 'صندوق الإحالات' : 'محادثاتك'}>
         {teacher ? 'تصلك هنا الإحالات التي وافق الطلاب على مشاركتها معك.' : 'محادثات المساعد وإحالاتك في مكان واحد. الرد على المعلم يُتاح بعد تكليفه بالإحالة.'}
       </PageHeader>
-      {teacher ? <TeacherView /> : <StudentView />}
+      {teacher ? <TeacherView key={owner} owner={owner} /> : <StudentView key={owner} owner={owner} />}
     </div>
   );
 }

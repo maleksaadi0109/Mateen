@@ -24,6 +24,10 @@ args = "scholarly-regression"
 task = "workflow.run"
 args = "typecheck"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "message-drafts"
+
 [[workflows.workflow]]
 name = "scholarly-regression"
 author = "agent"
@@ -42,6 +46,17 @@ author = "agent"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "pnpm run typecheck"
+
+[workflows.workflow.metadata]
+isValidation = true
+
+[[workflows.workflow]]
+name = "message-drafts"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm --filter @workspace/mateen-platform run test:message-drafts"
 
 [workflows.workflow.metadata]
 isValidation = true
