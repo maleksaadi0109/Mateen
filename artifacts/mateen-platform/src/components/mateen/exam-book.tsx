@@ -57,7 +57,7 @@ export function LiveExamBook({ words, revealed, interimIndices, listening, title
 }
 
 /** Final review: whole canonical text with numbered highlights and a full list of differences. */
-export function ExamReview({ snapshot, outcome, title, compact }: { snapshot: ExamSnapshot; outcome: StageOutcome; title: string; compact?: boolean }) {
+export function ExamReview({ snapshot, outcome, title, compact, unit = 'الحديث' }: { snapshot: ExamSnapshot; outcome: StageOutcome; title: string; compact?: boolean; unit?: 'الحديث' | 'البيت' }) {
   const { words, matched, issues } = snapshot;
   const ord = useOrdinals(words);
   const model = useMemo(() => {
@@ -93,7 +93,7 @@ export function ExamReview({ snapshot, outcome, title, compact }: { snapshot: Ex
         <p className="font-ui text-xs font-bold text-muted-foreground">{outcome.passed ? 'اجتياز — أكثر من ٩٠٪' : !outcome.complete ? 'المقطع غير مكتمل' : 'لم تتجاوز ٩٠٪'}</p>
         <p className={cn('font-display font-bold text-primary', compact ? 'text-4xl' : 'text-[clamp(2.75rem,10vw,4rem)]')} data-testid="exam-review-percent">{num(outcome.percent)}٪</p>
         <p className="font-ui text-sm">{num(outcome.matched)} من {num(outcome.total)} كلمة مطابقة · زيادات {num(outcome.extras)} · اختلافات مرصودة {num(model.sorted.length)}</p>
-        <p className="mt-1 font-ui text-[11px] leading-relaxed text-muted-foreground">النسبة والاجتياز من الخادم، محسوبة على الحديث كاملًا مع الزيادات. يُشترط تجاوز ٩٠٪ تمامًا؛ ٩٠٪ وحدها لا تكفي.</p>
+        <p className="mt-1 font-ui text-[11px] leading-relaxed text-muted-foreground">النسبة والاجتياز من الخادم، محسوبة على {unit} كاملًا مع الزيادات. يُشترط تجاوز ٩٠٪ تمامًا؛ ٩٠٪ وحدها لا تكفي.</p>
       </div>
 
       <BookFrame title={title} caption="النص كما في الكتاب" testId="exam-review-book">
@@ -119,7 +119,7 @@ export function ExamReview({ snapshot, outcome, title, compact }: { snapshot: Ex
         </ul>
       </BookFrame>
 
-      {model.unreached > 0 && <p className="rounded-xl border border-dashed p-3 font-ui text-xs leading-relaxed" data-testid="exam-review-incomplete">توقّف التسميع قبل آخر الحديث: {num(model.unreached)} كلمة في آخره لم تُبلغ. هذا الجزء غير مكتمل ولا يُعدّ حذوفات مرصودة، ولذلك لا يظهر في قائمة الاختلافات.</p>}
+      {model.unreached > 0 && <p className="rounded-xl border border-dashed p-3 font-ui text-xs leading-relaxed" data-testid="exam-review-incomplete">توقّف التسميع قبل آخر {unit}: {num(model.unreached)} كلمة في آخره لم تُبلغ. هذا الجزء غير مكتمل ولا يُعدّ حذوفات مرصودة، ولذلك لا يظهر في قائمة الاختلافات.</p>}
 
       <section aria-label="قائمة الاختلافات" className="space-y-2">
         <h3 className="font-display text-lg font-bold">الاختلافات بالتفصيل ({num(model.sorted.length)})</h3>
@@ -131,7 +131,7 @@ export function ExamReview({ snapshot, outcome, title, compact }: { snapshot: Ex
               <div className="min-w-0 space-y-1.5">
                 <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-ui text-xs">
                   <b className="text-secondary">{ISSUE_KIND[issue.kind]}</b>
-                  <span className="text-muted-foreground">{issue.kind === 'extra' ? `قبل الكلمة ${num(Math.min(wordNo(issue.index) + (ord[issue.index] ? 0 : 1), ord.reduce((a, b) => Math.max(a, b), 0)))}` : `الكلمة ${num(wordNo(issue.index))}`} من الحديث</span>
+                  <span className="text-muted-foreground">{issue.kind === 'extra' ? `قبل الكلمة ${num(Math.min(wordNo(issue.index) + (ord[issue.index] ? 0 : 1), ord.reduce((a, b) => Math.max(a, b), 0)))}` : `الكلمة ${num(wordNo(issue.index))}`} من {unit}</span>
                 </p>
                 <p className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
                   {issue.kind !== 'extra' && <span className="hadith-text text-lg"><span className="font-ui text-[10px] text-muted-foreground">المتوقع: </span>{issue.expected}</span>}

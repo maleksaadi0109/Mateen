@@ -112,7 +112,8 @@ import type {
   TeacherInput,
   TeacherReferral,
   TeacherReferralSummary,
-  TeacherReview
+  TeacherReview,
+  TuhfaText
 } from './api.schemas';
 
 import { customFetch } from '../custom-fetch';
@@ -378,7 +379,78 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getFinishStudyActivityMutationOptions(options));
     }
 
-export const getGetLearningMapUrl = (textId: 'nawawi',) => {
+export const getGetTuhfaTextUrl = () => {
+
+
+
+
+  return `/api/mateen/tuhfa`
+}
+
+export const getTuhfaText = async ( options?: Parameters<typeof customFetch>[1]): Promise<TuhfaText> => {
+
+  return customFetch<TuhfaText>(getGetTuhfaTextUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetTuhfaTextQueryKey = () => {
+    return [
+    `/api/mateen/tuhfa`
+    ] as const;
+    }
+
+
+export const getGetTuhfaTextQueryOptions = <TData = Awaited<ReturnType<typeof getTuhfaText>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTuhfaText>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTuhfaTextQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTuhfaText>>> = ({ signal }) => getTuhfaText({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTuhfaText>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetTuhfaTextQueryResult = NonNullable<Awaited<ReturnType<typeof getTuhfaText>>>
+export type GetTuhfaTextQueryError = ErrorType<unknown>
+
+
+
+export function useGetTuhfaText<TData = Awaited<ReturnType<typeof getTuhfaText>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTuhfaText>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetTuhfaTextQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetLearningMapUrl = (textId: 'nawawi' | 'tuhfa',) => {
 
 
 
@@ -386,7 +458,7 @@ export const getGetLearningMapUrl = (textId: 'nawawi',) => {
   return `/api/mateen/learning/${textId}`
 }
 
-export const getLearningMap = async (textId: 'nawawi', options?: Parameters<typeof customFetch>[1]): Promise<LearningMap> => {
+export const getLearningMap = async (textId: 'nawawi' | 'tuhfa', options?: Parameters<typeof customFetch>[1]): Promise<LearningMap> => {
 
   return customFetch<LearningMap>(getGetLearningMapUrl(textId),
   {
@@ -401,14 +473,14 @@ export const getLearningMap = async (textId: 'nawawi', options?: Parameters<type
 
 
 
-export const getGetLearningMapQueryKey = (textId: 'nawawi',) => {
+export const getGetLearningMapQueryKey = (textId: 'nawawi' | 'tuhfa',) => {
     return [
     `/api/mateen/learning/${textId}`
     ] as const;
     }
 
 
-export const getGetLearningMapQueryOptions = <TData = Awaited<ReturnType<typeof getLearningMap>>, TError = ErrorType<unknown>>(textId: 'nawawi', options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getLearningMap>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+export const getGetLearningMapQueryOptions = <TData = Awaited<ReturnType<typeof getLearningMap>>, TError = ErrorType<unknown>>(textId: 'nawawi' | 'tuhfa', options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getLearningMap>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -432,7 +504,7 @@ export type GetLearningMapQueryError = ErrorType<unknown>
 
 
 export function useGetLearningMap<TData = Awaited<ReturnType<typeof getLearningMap>>, TError = ErrorType<unknown>>(
- textId: 'nawawi', options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getLearningMap>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+ textId: 'nawawi' | 'tuhfa', options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getLearningMap>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
 
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
@@ -449,7 +521,7 @@ export function useGetLearningMap<TData = Awaited<ReturnType<typeof getLearningM
 
 
 
-export const getStartStageAttemptUrl = (textId: 'nawawi',
+export const getStartStageAttemptUrl = (textId: 'nawawi' | 'tuhfa',
     stageNumber: number,) => {
 
 
@@ -458,7 +530,7 @@ export const getStartStageAttemptUrl = (textId: 'nawawi',
   return `/api/mateen/learning/${textId}/stages/${stageNumber}/attempts`
 }
 
-export const startStageAttempt = async (textId: 'nawawi',
+export const startStageAttempt = async (textId: 'nawawi' | 'tuhfa',
     stageNumber: number,
     stageStartInput: StageStartInput, options?: Parameters<typeof customFetch>[1]): Promise<StartStageAttempt201> => {
 
@@ -521,7 +593,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type StartStageAttemptMutationResult = NonNullable<Awaited<ReturnType<typeof startStageAttempt>>>
     export type StartStageAttemptMutationBody = BodyType<StageStartInput>
     export type StartStageAttemptMutationError = ErrorType<unknown>
-    export type StartStageAttemptMutationVariables = {textId: 'nawawi';stageNumber: number;data: BodyType<StageStartInput>}
+    export type StartStageAttemptMutationVariables = {textId: 'nawawi' | 'tuhfa';stageNumber: number;data: BodyType<StageStartInput>}
 
     export const useStartStageAttempt = <TError = ErrorType<unknown>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startStageAttempt>>, TError,StartStageAttemptMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}

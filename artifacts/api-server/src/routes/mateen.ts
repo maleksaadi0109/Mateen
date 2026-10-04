@@ -135,9 +135,9 @@ const catalog = GetCatalogResponse.parse([
     title: "تحفة الأطفال",
     track: "التجويد والقراءات",
     level: "التمهيدي",
-    status: "coming_soon",
-    description: "هذا المتن مغلق حتى نشره في إصدار لاحق.",
-    hadithCount: 0,
+    status: "available",
+    description: "منظومة سليمان الجمزوري في التجويد؛ مراحل بحسب الأبواب، ودراسة وتسميع بيتًا بيتًا.",
+    hadithCount: 61,
   },
 ]);
 

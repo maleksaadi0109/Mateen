@@ -31,6 +31,8 @@ try {
     join(root, "../../lib/db/migrations/0013_learning_preferences.sql")]);
   pg("psql", [env.DATABASE_URL, "-v", "ON_ERROR_STOP=1", "-f",
     join(root, "../../lib/db/migrations/0012_fractional_stage_scores.sql")]);
+  pg("psql", [env.DATABASE_URL, "-v", "ON_ERROR_STOP=1", "-f",
+    join(root, "../../lib/db/migrations/0014_stage_attempt_text_id.sql")]);
   await build({
     entryPoints: [join(root, "tests/learning-stages.http.test.ts")], bundle: true, platform: "node", format: "cjs", outfile,
     plugins: [{ name: "stage-test-adapters", setup(b) {

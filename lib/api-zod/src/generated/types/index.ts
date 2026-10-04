@@ -182,3 +182,7 @@ export * from './teacherReferralStatus';
 export * from './teacherReferralSummary';
 export * from './teacherReferralSummaryStatus';
 export * from './teacherReview';
+export * from './tuhfaChapter';
+export * from './tuhfaText';
+export * from './tuhfaTextId';
+export * from './tuhfaVerse';

@@ -9,16 +9,22 @@ import { boundedChatRequest } from '@/lib/chat-request';
 import { num } from '@/lib/mateen';
 import { ExamReview, LiveExamBook, type ExamSnapshot } from './exam-book';
 
-type Props = { hadith: { id: number; number: number; title: string; text: string }; onClose: () => void };
+type Props = {
+  hadith: { id: number; number: number; title: string; text: string };
+  onClose: () => void;
+  textId?: 'nawawi' | 'tuhfa';
+  nextHref?: string;
+};
 const primary = 'inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 font-ui text-sm font-bold text-primary-foreground disabled:opacity-40';
 const secondary = 'inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-5 py-2 font-ui text-sm font-bold disabled:opacity-40';
 
 export default function StageExam(props: Props) {
   const { user } = useUser();
-  return <StageExamContent key={`${user?.id}:${props.hadith.id}`} {...props} />;
+  return <StageExamContent key={`${user?.id}:${props.textId ?? 'nawawi'}:${props.hadith.id}`} {...props} />;
 }
 
-function StageExamContent({ hadith, onClose }: Props) {
+function StageExamContent({ hadith, onClose, textId = 'nawawi', nextHref }: Props) {
+  const poem = textId === 'tuhfa';
   const r = useLiveRecitation(hadith.text, { continuousFeedback: true });
   const qc = useQueryClient();
   const [consent, setConsent] = useState(false);
@@ -38,13 +44,13 @@ function StageExamContent({ hadith, onClose }: Props) {
     inFlight.current = true; setBusy(true); setError('');
     try {
       const next = await boundedChatRequest(signal =>
-        startStageAttempt('nawawi', hadith.number, { requestId: requestId.current, consent: true }, { signal }), 20_000);
+        startStageAttempt(textId, hadith.number, { requestId: requestId.current, consent: true }, { signal }), 20_000);
       if (!mounted.current) return;
       const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(hadith.text));
       const localHash = Array.from(new Uint8Array(bytes), b => b.toString(16).padStart(2, '0')).join('');
       if (!mounted.current) return;
       if (next.sourceHash !== localHash) {
-        setError('تغيّرت نسخة الحديث. أعد تحميل الصفحة قبل بدء محاولة جديدة حتى يتطابق النص مع التدريب.');
+        setError('تغيّرت نسخة النص. أعد تحميل الصفحة قبل بدء محاولة جديدة حتى يتطابق النص مع التدريب.');
         return;
       }
       setAttempt(next); r.reset(); r.start();
@@ -71,7 +77,7 @@ function StageExamContent({ hadith, onClose }: Props) {
       const result = await boundedChatRequest(signal => finishStageAttempt(attempt.id, data!, { signal }), 20_000);
       if (!mounted.current) return;
       setOutcome(result);
-      void qc.invalidateQueries({ queryKey: getGetLearningMapQueryKey('nawawi') });
+      void qc.invalidateQueries({ queryKey: getGetLearningMapQueryKey(textId) });
     } catch {
       if (mounted.current) setError('تعذّر تثبيت النتيجة. لا تُفتح المرحلة التالية قبل تأكيد الخادم. يمكنك إعادة إرسال المحاولة نفسها دون تكرار التسميع؛ وإذا انتهت مهلة الساعة فابدأ محاولة جديدة.');
     } finally {
@@ -89,23 +95,26 @@ function StageExamContent({ hadith, onClose }: Props) {
     <section className="mx-auto max-w-3xl space-y-5 py-3" data-testid="stage-exam">
       <button type="button" className={secondary} onClick={close} disabled={busy} data-testid="button-stage-exam-back"><ArrowRight size={16} />العودة للدراسة</button>
       <header className="paper-card space-y-3 p-5 sm:p-8">
-        <p className="font-ui text-xs font-bold text-secondary">تدريب المرحلة {num(hadith.number)}</p>
+        <p className="font-ui text-xs font-bold text-secondary">{poem ? 'تسميع البيت' : 'تدريب المرحلة'} {num(hadith.number)}</p>
         <h1 className="font-display text-3xl font-bold">{hadith.title}</h1>
-        <p className="font-ui text-sm leading-loose text-muted-foreground">سمّع الحديث كاملًا كما درسته، بالسند والعزو. يُفتح الحديث التالي عند إكمال المقطع وتطابق أكثر من ٩٠٪ من كلماته (٩٠٪ تمامًا لا تكفي). تظهر كلماتك في صفحة الكتاب كلما سمّعتها، وتُعرض الاختلافات كلها بعد الإنهاء فقط. بعد كل سبع مراحل مجتازة يُفتح امتحان المجموعة في الخريطة.</p>
+        <p className="font-ui text-sm leading-loose text-muted-foreground">{poem
+          ? 'سمّع البيت كاملًا بشطريه. يُفتح البيت التالي عند إكماله وتطابق أكثر من ٩٠٪ من كلماته (٩٠٪ تمامًا لا تكفي). تظهر الكلمات أثناء التسميع، وتُعرض الاختلافات بعد الإنهاء. تُفتح المرحلة التالية بعد اجتياز كل أبيات هذا الباب.'
+          : 'سمّع الحديث كاملًا كما درسته، بالسند والعزو. يُفتح الحديث التالي عند إكمال المقطع وتطابق أكثر من ٩٠٪ من كلماته (٩٠٪ تمامًا لا تكفي). تظهر كلماتك في صفحة الكتاب كلما سمّعتها، وتُعرض الاختلافات كلها بعد الإنهاء فقط. بعد كل سبع مراحل مجتازة يُفتح امتحان المجموعة في الخريطة.'}</p>
         <p className="rounded-xl border border-secondary/30 bg-secondary/5 p-3 font-ui text-xs leading-loose" data-testid="stage-exam-disclaimer">هذا اجتياز تدريبي تقريبي بالتعرّف الآلي؛ ليس اعتمادًا للحفظ ولا تقييمًا للنطق أو التشكيل.</p>
       </header>
 
       {outcome ? (
         <div className="paper-card space-y-5 p-4 sm:p-8" data-testid="stage-exam-result">
-          {snapshot ? <ExamReview snapshot={snapshot} outcome={outcome} title={hadith.title} /> : <>
+          {snapshot ? <ExamReview snapshot={snapshot} outcome={outcome} title={hadith.title} unit={poem ? 'البيت' : 'الحديث'} /> : <>
             <h2 className="font-display text-2xl font-bold" data-testid="stage-result-title">{outcome.passed ? 'اجتزت هذه المرحلة' : !outcome.complete ? 'لم يكتمل المقطع بعد' : 'تحتاج إلى مزيد من التدريب'}</h2>
             <p className="font-display text-5xl font-bold text-primary" data-testid="stage-result-percent">{num(outcome.percent)}٪</p>
           </>}
           <h2 className="sr-only" data-testid={snapshot ? 'stage-result-title' : undefined}>{outcome.passed ? 'اجتزت هذه المرحلة' : !outcome.complete ? 'لم يكتمل المقطع بعد' : 'تحتاج إلى مزيد من التدريب'}</h2>
           <div className="flex flex-wrap justify-center gap-2">
-            {outcome.nextStage && <Link className={primary} href={`/student/learn/nawawi/${outcome.nextStage}`} data-testid="button-stage-next">المرحلة التالية</Link>}
-            {outcome.passed && !outcome.nextStage && <Link className={primary} href="/student/learn/nawawi/checkpoint/6" data-testid="button-stage-final-checkpoint">امتحان المجموعة الأخيرة</Link>}
-            <Link className={secondary} href="/student/learn/nawawi" data-testid="button-stage-result-map">خريطة التعلّم</Link>
+            {outcome.nextStage && (!poem || nextHref) && <Link className={primary} href={nextHref ?? `/student/learn/nawawi/${outcome.nextStage}`} data-testid="button-stage-next">{poem ? 'البيت التالي' : 'المرحلة التالية'}</Link>}
+            {outcome.passed && !outcome.nextStage && !poem && <Link className={primary} href="/student/learn/nawawi/checkpoint/6" data-testid="button-stage-final-checkpoint">امتحان المجموعة الأخيرة</Link>}
+            {outcome.passed && !outcome.nextStage && poem && <p role="status" className="font-bold text-secondary">أتممت تسميع أبيات تحفة الأطفال.</p>}
+            <Link className={secondary} href={`/student/learn/${textId}`} data-testid="button-stage-result-map">خريطة التعلّم</Link>
             <button type="button" className={secondary} onClick={reset} data-testid="button-stage-retry">محاولة جديدة</button>
           </div>
         </div>

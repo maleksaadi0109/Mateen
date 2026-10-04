@@ -48,6 +48,28 @@ test("selected study book reaches general answers, history and private follow-up
   assert.equal(getLastStudyInput()?.book, "الأصول الثلاثة");
 });
 
+test("Tuhfa questions and follow-ups retain poem context without borrowing Nawawi or Usul references", async () => {
+  const selectedVerse = "وَالآلِ وَالصَّحْبِ وَكُلِّ تَابِعِ\nوَكُلِّ قَارِئٍ وكُلِّ سَامِعِ";
+  const asked = await request("student-a", "POST", "/assistant/questions", {
+    question: "اشرح هذا البيت في تحفة الأطفال", textId: "tuhfa", textContext: selectedVerse,
+  });
+  assert.equal(asked.status, 201);
+  assert.equal(asked.body.textId, "tuhfa");
+  assert.equal(asked.body.status, "unverified");
+  assert.deepEqual(asked.body.citations, []);
+  assert.equal(getLastStudyInput()?.book, "تحفة الأطفال");
+  assert.match(getLastStudyInput()?.context ?? "", /سليمان الجمزوري/);
+  assert.ok((getLastStudyInput()?.context ?? "").slice(0, 3000).includes(selectedVerse));
+  assert.ok(!(getLastStudyInput()?.context ?? "").includes(USUL_STUDY_CONTEXT));
+  const followup = await request("student-a", "POST", `/conversations/${asked.body.conversationId}/messages`, {
+    text: "وماذا عن أحكام النون الساكنة؟",
+  });
+  assert.equal(followup.status, 201);
+  assert.equal(followup.body.textId, "tuhfa");
+  assert.equal(getLastStudyInput()?.book, "تحفة الأطفال");
+  assert.ok((getLastStudyInput()?.context ?? "").slice(0, 3000).includes(selectedVerse));
+});
+
 test("unsupported and injected book identifiers are rejected before persistence or generation", async () => {
   const beforeCalls = getStudyCallCount();
   const beforeRows = await db.select().from(scholarlyQuestionsTable);

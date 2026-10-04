@@ -6,10 +6,9 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type LearningMapTextId = typeof LearningMapTextId[keyof typeof LearningMapTextId];
+export type TuhfaTextId = typeof TuhfaTextId[keyof typeof TuhfaTextId];
 
 
-export const LearningMapTextId = {
-  nawawi: 'nawawi',
+export const TuhfaTextId = {
   tuhfa: 'tuhfa',
 } as const;

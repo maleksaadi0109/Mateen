@@ -14,6 +14,8 @@ export const learningStagesTable = pgTable("mateen_learning_stages", {
 export const stageAttemptsTable = pgTable("mateen_stage_attempts", {
   id: text("id").primaryKey(),
   userId: text("user_id").notNull(),
+  // Existing attempts belong to Nawawi. Never infer the book from a verse number.
+  textId: text("text_id").notNull().default("nawawi"),
   requestId: text("request_id").notNull(),
   stageNumber: integer("stage_number").notNull(),
   sourceHash: text("source_hash").notNull(),

@@ -68,9 +68,19 @@ paths:
           description: Session not found for this account
         "409":
           description: Expired session or meaningful activity threshold not met
+  /mateen/tuhfa:
+    get:
+      operationId: getTuhfaText
+      tags: [Mateen]
+      responses:
+        "200":
+          description: Tuhfat al-Atfal poem, grouped by source chapter; no commentary
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TuhfaText" }
   /mateen/learning/{textId}:
     parameters:
-      - { name: textId, in: path, required: true, schema: { type: string, enum: [nawawi] } }
+      - { name: textId, in: path, required: true, schema: { type: string, enum: [nawawi, tuhfa] } }
     get:
       operationId: getLearningMap
       tags: [Mateen]
@@ -82,8 +92,8 @@ paths:
               schema: { $ref: "#/components/schemas/LearningMap" }
   /mateen/learning/{textId}/stages/{stageNumber}/attempts:
     parameters:
-      - { name: textId, in: path, required: true, schema: { type: string, enum: [nawawi] } }
-      - { name: stageNumber, in: path, required: true, schema: { type: integer, minimum: 1, maximum: 42 } }
+      - { name: textId, in: path, required: true, schema: { type: string, enum: [nawawi, tuhfa] } }
+      - { name: stageNumber, in: path, required: true, schema: { type: integer, minimum: 1, maximum: 61 } }
     post:
       operationId: startStageAttempt
       tags: [Mateen]
@@ -1415,11 +1425,41 @@ components:
             properties:
               index: { type: integer, minimum: 0, maximum: 2999 }
               kind: { type: string, enum: [substitution, omission, extra] }
+    TuhfaVerse:
+      type: object
+      required: [id, number, title, text, sourceUrl, sourcePage]
+      properties:
+        id: { type: integer }
+        number: { type: integer }
+        title: { type: string }
+        text: { type: string }
+        sourceUrl: { type: string }
+        sourcePage: { type: integer }
+    TuhfaChapter:
+      type: object
+      required: [number, title, verses]
+      properties:
+        number: { type: integer }
+        title: { type: string }
+        verses:
+          type: array
+          items: { $ref: "#/components/schemas/TuhfaVerse" }
+    TuhfaText:
+      type: object
+      required: [id, title, author, sourceUrl, chapters]
+      properties:
+        id: { type: string, enum: [tuhfa] }
+        title: { type: string }
+        author: { type: string }
+        sourceUrl: { type: string }
+        chapters:
+          type: array
+          items: { $ref: "#/components/schemas/TuhfaChapter" }
     LearningMap:
       type: object
       required: [textId, threshold, stages]
       properties:
-        textId: { type: string, enum: [nawawi] }
+        textId: { type: string, enum: [nawawi, tuhfa] }
         threshold: { type: integer }
         stages:
           type: array
@@ -1915,7 +1955,7 @@ components:
       properties:
         question: { type: string, minLength: 1, maxLength: 8000 }
         textContext: { type: ["string", "null"], maxLength: 3000 }
-        textId: { type: ["string", "null"], enum: [nawawi, usul-thalatha, null], description: "Selected study book. Omitted or null values retain the legacy Nawawi default." }
+        textId: { type: ["string", "null"], enum: [nawawi, usul-thalatha, tuhfa, null], description: "Selected study book. Omitted or null values retain the legacy Nawawi default." }
     ConversationMessageInput:
       type: object
       required: [text]
@@ -1942,7 +1982,7 @@ components:
         conversationId: { type: string, format: uuid }
         questionId: { type: string, format: uuid }
         question: { type: string }
-        textId: { type: string, enum: [nawawi, usul-thalatha] }
+        textId: { type: string, enum: [nawawi, usul-thalatha, tuhfa] }
         textContext: { type: ["string", "null"] }
         createdAt: { type: string, format: date-time }
         reason: { type: string }

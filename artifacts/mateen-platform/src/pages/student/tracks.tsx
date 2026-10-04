@@ -31,7 +31,7 @@ export default function TracksPage() {
   usePageMeta('المسارات | مَتِين', 'المتون المتاحة والمقبلة في مَتِين.');
   const q = useGetCatalog({ query: { enabled: true, queryKey: getGetCatalogQueryKey() } });
   const items = q.data ?? [];
-  const isOpen = (t: { id: string; status: string }) => t.status === 'available' && t.id === 'nawawi';
+  const isOpen = (t: { id: string; status: string }) => t.status === 'available' && (t.id === 'nawawi' || t.id === 'tuhfa');
   const openItems = items.filter(isOpen);
   const soon = items.filter((t) => !isOpen(t));
 
@@ -41,10 +41,10 @@ export default function TracksPage() {
       {q.isLoading ? <LoadingList rows={4} /> : q.isError ? <ErrorState onRetry={() => q.refetch()} /> : !items.length ? <EmptyState title="لا متون في الفهرس">سيظهر الفهرس هنا عند توفره.</EmptyState> : (
         <div className="space-y-10">
           {openItems.map((t) => {
-            const c = COVERS.nawawi;
+            const c = coverFor(t.id);
             return (
               <Reveal key={t.id}>
-                <Link href="/student/learn/nawawi" data-testid={`card-track-${t.id}`}
+                <Link href={`/student/learn/${t.id}`} data-testid={`card-track-${t.id}`}
                   className="mateen-track-card group relative block overflow-hidden rounded-[1.75rem] border border-secondary/25 bg-gradient-to-l from-[hsl(36_55%_90%)] to-[hsl(40_50%_97%)] p-6 shadow-[0_30px_60px_-38px_hsl(19_28%_33%/.6)] sm:p-9">
                   <div className="star-pattern pointer-events-none absolute inset-0 opacity-40" aria-hidden />
                   <div className="relative grid items-center gap-8 lg:grid-cols-[minmax(0,15rem)_1fr] lg:gap-12">
@@ -58,9 +58,9 @@ export default function TracksPage() {
                       <p className="mt-4 max-w-xl font-arabic text-lg leading-loose text-foreground/75">{t.description}</p>
                       <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
                         <span className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-ui text-sm font-bold text-primary-foreground transition-transform motion-safe:group-hover:-translate-x-1">
-                          خريطة المراحل <ArrowLeft size={16} aria-hidden />
+                          {t.id === 'tuhfa' ? 'أبواب التحفة' : 'خريطة المراحل'} <ArrowLeft size={16} aria-hidden />
                         </span>
-                        <span className="font-ui text-sm text-muted-foreground">{num(t.hadithCount)} موضعاً</span>
+                        <span className="font-ui text-sm text-muted-foreground">{num(t.hadithCount)} {t.id === 'tuhfa' ? 'أبيات' : 'موضعاً'}</span>
                       </div>
                     </div>
                   </div>

@@ -12,4 +12,5 @@ export type AssistantQuestionTextId = typeof AssistantQuestionTextId[keyof typeo
 export const AssistantQuestionTextId = {
   nawawi: 'nawawi',
   'usul-thalatha': 'usul-thalatha',
+  tuhfa: 'tuhfa',
 } as const;

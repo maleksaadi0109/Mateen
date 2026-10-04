@@ -51,9 +51,9 @@ export default function StudyLibraryPage() {
                 </div>
                 <p className="mt-3 line-clamp-3 font-ui text-sm leading-relaxed text-muted-foreground">{b.description}</p>
                 <div className="mt-5 flex items-center justify-between gap-2 border-t border-dashed pt-3 font-ui text-xs">
-                  <span className="text-muted-foreground">{b.hadithCount ? `${num(b.hadithCount)} حديثاً` : 'العدد غير محدد'}</span>
+                  <span className="text-muted-foreground">{b.hadithCount ? `${num(b.hadithCount)} ${b.id === 'tuhfa' ? 'بيتاً' : 'حديثاً'}` : 'العدد غير محدد'}</span>
                   {open
-                    ? <span className="inline-flex items-center gap-1 font-bold text-secondary">{saved ? `متابعة من الحديث ${num(saved)}` : 'ابدأ القراءة'}<ArrowLeft size={14} /></span>
+                    ? <span className="inline-flex items-center gap-1 font-bold text-secondary">{b.id === 'tuhfa' ? 'أبواب التحفة' : saved ? `متابعة من الحديث ${num(saved)}` : 'ابدأ القراءة'}<ArrowLeft size={14} /></span>
                     : <span className="text-muted-foreground">غير منشور بعد</span>}
                 </div>
               </>
@@ -62,7 +62,7 @@ export default function StudyLibraryPage() {
             return (
               <li key={b.id}>
                 {open
-                  ? <Link href={`/student/study/${b.id}`} className={cn(cls, 'transition-transform hover:-translate-y-0.5 hover:border-secondary/50 motion-reduce:transition-none')} data-testid={`link-library-book-${b.id}`}>{body}</Link>
+                  ? <Link href={b.id === 'tuhfa' ? '/student/learn/tuhfa' : `/student/study/${b.id}`} className={cn(cls, 'transition-transform hover:-translate-y-0.5 hover:border-secondary/50 motion-reduce:transition-none')} data-testid={`link-library-book-${b.id}`}>{body}</Link>
                   : <div className={cn(cls, 'opacity-70')} aria-disabled="true" data-testid={`card-library-locked-${b.id}`}>{body}</div>}
               </li>
             );

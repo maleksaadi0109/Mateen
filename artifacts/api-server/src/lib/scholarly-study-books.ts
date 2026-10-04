@@ -1,6 +1,7 @@
 export const STUDY_BOOKS = {
   nawawi: "الأربعون النووية",
   "usul-thalatha": "الأصول الثلاثة",
+  tuhfa: "تحفة الأطفال",
 } as const;
 
 export type StudyBookId = keyof typeof STUDY_BOOKS;

@@ -15,6 +15,7 @@ import { boundedChatRequest } from '@/lib/chat-request';
 const STUDY_BOOKS = [
   { id: 'nawawi', title: 'الأربعون النووية' },
   { id: 'usul-thalatha', title: 'الأصول الثلاثة' },
+  { id: 'tuhfa', title: 'تحفة الأطفال' },
 ] as const;
 type StudyBookId = (typeof STUDY_BOOKS)[number]['id'];
 
@@ -192,7 +193,7 @@ export default function AssistantPage() {
           {issue && latest && <IssueForm questionId={latest.questionId} onDone={() => setIssue(false)} />}
 
           <div className="min-h-[14rem] flex-1 space-y-3 md:max-h-[55vh] md:overflow-y-auto">
-            {!sel ? <p className="py-10 text-center font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-chat-empty">{bookId === 'usul-thalatha' ? 'سيشرح المساعد سؤالك في سياق الأصول الثلاثة.' : bookId ? 'اكتب سؤالك عن الأربعين النووية لتبدأ المحادثة.' : 'اختر الكتاب أولاً، ثم اكتب سؤالك.'}</p>
+            {!sel ? <p className="py-10 text-center font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-chat-empty">{bookId ? `اكتب سؤالك عن ${bookTitle(bookId)} لتبدأ المحادثة.` : 'اختر الكتاب أولاً، ثم اكتب سؤالك.'}</p>
               : msgs.isLoading ? <LoadingList rows={2} /> : msgs.isError ? <ErrorState onRetry={() => msgs.refetch()} /> : <ChatMessages messages={msgs.data ?? []} viewer="student" />}
               {pending && <p className="font-ui text-sm text-muted-foreground" role="status" data-testid="text-pending">{slowPending ? 'تأخر اتصال النموذج. الانتظار محدود؛ ستظهر الإجابة أو رسالة توضّح تعذّر الرد.' : 'المساعد يجهّز الرد...'}</p>}
               {!pending && sendError && <p className="font-ui text-sm text-destructive" role="alert" data-testid="text-send-error">{sendError}</p>}

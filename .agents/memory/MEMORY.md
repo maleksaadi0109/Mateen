@@ -2,7 +2,7 @@
 - [Recitation practice authorization](recitation-practice-authorization.md) — Proceed with experimental practice without repeating documentation/transcript requests; do not fabricate verified grades.
 - [Recitation evaluation boundaries](recitation-evaluation-boundaries.md) — Labelled error samples inform experiments; ASR artifacts and differing passage lengths must not become learner mistakes.
 - [Learning and guidance boundaries](learning-guidance.md) — Level assessments allow direct attempts; teachers provide text-only guidance in the first release.
-- [Approved portal scope](portal-scope.md) — Approved portal scope; V1 opens only الأربعون النووية; teachers reached only via assistant referral.
+- [Approved portal scope](portal-scope.md) — Nawawi and chapter-based Tuhfa are authorized open; teachers reached only via assistant referral.
 - [Registration pitch framing](registration-pitch.md) — Pitch the concept and proposed plan, not implementation; preserve separate disclosure obligations.
 - [Presentation font validation](presentation-font-validation.md) — Verify fonts in exported PDFs; font files on disk do not prove the renderer uses them.
 - [Mateen presentation identity](mateen-presentation-identity.md) — Use the project's warm brand system over generic pitch styles; keep the accepted centered cover composition.

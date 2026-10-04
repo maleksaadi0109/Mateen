@@ -96,11 +96,42 @@ export interface StageFinishInput {
   issues: StageFinishInputIssuesItem[];
 }
 
+export interface TuhfaVerse {
+  id: number;
+  number: number;
+  title: string;
+  text: string;
+  sourceUrl: string;
+  sourcePage: number;
+}
+
+export interface TuhfaChapter {
+  number: number;
+  title: string;
+  verses: TuhfaVerse[];
+}
+
+export type TuhfaTextId = typeof TuhfaTextId[keyof typeof TuhfaTextId];
+
+
+export const TuhfaTextId = {
+  tuhfa: 'tuhfa',
+} as const;
+
+export interface TuhfaText {
+  id: TuhfaTextId;
+  title: string;
+  author: string;
+  sourceUrl: string;
+  chapters: TuhfaChapter[];
+}
+
 export type LearningMapTextId = typeof LearningMapTextId[keyof typeof LearningMapTextId];
 
 
 export const LearningMapTextId = {
   nawawi: 'nawawi',
+  tuhfa: 'tuhfa',
 } as const;
 
 export type LearningMapStagesItemStatus = typeof LearningMapStagesItemStatus[keyof typeof LearningMapStagesItemStatus];
@@ -952,6 +983,7 @@ export type AssistantQuestionInputTextId = typeof AssistantQuestionInputTextId[k
 export const AssistantQuestionInputTextId = {
   nawawi: 'nawawi',
   'usul-thalatha': 'usul-thalatha',
+  tuhfa: 'tuhfa',
 } as const;
 
 export interface AssistantQuestionInput {
@@ -1003,6 +1035,7 @@ export type AssistantQuestionTextId = typeof AssistantQuestionTextId[keyof typeo
 export const AssistantQuestionTextId = {
   nawawi: 'nawawi',
   'usul-thalatha': 'usul-thalatha',
+  tuhfa: 'tuhfa',
 } as const;
 
 export type AssistantQuestionStatus = typeof AssistantQuestionStatus[keyof typeof AssistantQuestionStatus];

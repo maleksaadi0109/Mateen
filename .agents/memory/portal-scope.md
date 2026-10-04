@@ -11,7 +11,13 @@ On 2026-09-22 the user approved the portal outline, architecture, and final priv
 
 Approved student scope: home with welcome, resume the reached learning-map stage and personal progress/activity analytics; tracks with study/recitation and map checkpoints; available scholars directory and scholarly profiles with approved ijazat; text-only conversations that originate only from assistant referrals (no direct student-to-teacher questions; decided 2026-10-01 so the platform keeps AI as the entry point rather than becoming a traditional messaging platform).
 
-Proposed catalog: العقيدة — التمهيدي: نواقض الإسلام، الأول: القواعد الأربع; الحديث — التمهيدي: الأربعون النووية; التجويد والقراءات — التمهيدي: تحفة الأطفال. In the first release only الأربعون النووية is open; everything else is shown closed with «قريباً».
+Proposed catalog: العقيدة — التمهيدي: نواقض الإسلام، الأول: القواعد الأربع; الحديث — التمهيدي: الأربعون النووية; التجويد والقراءات — التمهيدي: تحفة الأطفال. Initially only الأربعون النووية was authorized open. On 2026-10-04 the user explicitly expanded the open catalog to تحفة الأطفال; نواقض الإسلام and القواعد الأربع remain closed with «قريباً».
+
+Tuhfat al-Atfal uses the user-selected https://app.turath.io/book/9632?page=3 as its text reference. Its learning-map stages are the poem's subject chapters (e.g. أحكام النون الساكنة والتنوين), with individual verse recitation inside each chapter.
+
+**Why:** The user explicitly requested the same learning/recitation system, but divided by topics and assessed «على كل بيت» rather than pages or hadith-style groups.
+
+**How to apply:** Preserve the full poem and source chapter boundaries; separate its verses from al-Dabba’s explanatory footnotes. Keep book progress independent, retain the strictly-above-90% approximate memorization threshold, and do not imply that word matching evaluates tajwid performance. Seven-hadith checkpoints remain specific to Nawawi.
 
 The user requested choosing a book before asking the assistant, explicitly including الأربعون النووية and الأصول الثلاثة, to make the question's intended context clearer.
 

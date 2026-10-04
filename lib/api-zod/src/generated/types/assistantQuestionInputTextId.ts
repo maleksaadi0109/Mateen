@@ -16,4 +16,5 @@ export type AssistantQuestionInputTextId = typeof AssistantQuestionInputTextId[k
 export const AssistantQuestionInputTextId = {
   nawawi: 'nawawi',
   'usul-thalatha': 'usul-thalatha',
+  tuhfa: 'tuhfa',
 } as const;

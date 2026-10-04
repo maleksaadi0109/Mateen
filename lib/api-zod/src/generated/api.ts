@@ -85,12 +85,32 @@ export const FinishStudyActivityResponse = zod.object({
 })
 
 
+export const GetTuhfaTextResponse = zod.object({
+  "id": zod.enum(['tuhfa']),
+  "title": zod.string(),
+  "author": zod.string(),
+  "sourceUrl": zod.string(),
+  "chapters": zod.array(zod.object({
+  "number": zod.number().int(),
+  "title": zod.string(),
+  "verses": zod.array(zod.object({
+  "id": zod.number().int(),
+  "number": zod.number().int(),
+  "title": zod.string(),
+  "text": zod.string(),
+  "sourceUrl": zod.string(),
+  "sourcePage": zod.number().int()
+}))
+}))
+})
+
+
 export const GetLearningMapParams = zod.object({
-  "textId": zod.enum(['nawawi'])
+  "textId": zod.enum(['nawawi', 'tuhfa'])
 })
 
 export const GetLearningMapResponse = zod.object({
-  "textId": zod.enum(['nawawi']),
+  "textId": zod.enum(['nawawi', 'tuhfa']),
   "threshold": zod.number().int(),
   "stages": zod.array(zod.object({
   "number": zod.number().int(),
@@ -101,12 +121,12 @@ export const GetLearningMapResponse = zod.object({
 })
 
 
-export const startStageAttemptPathStageNumberMax = 42;
+export const startStageAttemptPathStageNumberMax = 61;
 
 
 
 export const StartStageAttemptParams = zod.object({
-  "textId": zod.enum(['nawawi']),
+  "textId": zod.enum(['nawawi', 'tuhfa']),
   "stageNumber": zod.coerce.number().int().min(1).max(startStageAttemptPathStageNumberMax)
 })
 
@@ -1218,7 +1238,7 @@ export const GetMateenAssistantQuestionsResponseItem = zod.object({
   "conversationId": zod.string().uuid(),
   "questionId": zod.string().uuid(),
   "question": zod.string(),
-  "textId": zod.enum(['nawawi', 'usul-thalatha']),
+  "textId": zod.enum(['nawawi', 'usul-thalatha', 'tuhfa']),
   "textContext": zod.string().nullable(),
   "createdAt": zod.coerce.date(),
   "reason": zod.string(),
@@ -1253,14 +1273,14 @@ export const askMateenAssistantBodyTextContextMax = 3000;
 export const AskMateenAssistantBody = zod.object({
   "question": zod.string().min(1).max(askMateenAssistantBodyQuestionMax),
   "textContext": zod.string().max(askMateenAssistantBodyTextContextMax).nullish(),
-  "textId": zod.union([zod.literal('nawawi'),zod.literal('usul-thalatha'),zod.literal(null)]).nullish().describe('Selected study book. Omitted or null values retain the legacy Nawawi default.')
+  "textId": zod.union([zod.literal('nawawi'),zod.literal('usul-thalatha'),zod.literal('tuhfa'),zod.literal(null)]).nullish().describe('Selected study book. Omitted or null values retain the legacy Nawawi default.')
 })
 
 export const AskMateenAssistantResponse = zod.object({
   "conversationId": zod.string().uuid(),
   "questionId": zod.string().uuid(),
   "question": zod.string(),
-  "textId": zod.enum(['nawawi', 'usul-thalatha']),
+  "textId": zod.enum(['nawawi', 'usul-thalatha', 'tuhfa']),
   "textContext": zod.string().nullable(),
   "createdAt": zod.coerce.date(),
   "reason": zod.string(),
@@ -1378,7 +1398,7 @@ export const SendMateenFollowUpResponse = zod.object({
   "conversationId": zod.string().uuid(),
   "questionId": zod.string().uuid(),
   "question": zod.string(),
-  "textId": zod.enum(['nawawi', 'usul-thalatha']),
+  "textId": zod.enum(['nawawi', 'usul-thalatha', 'tuhfa']),
   "textContext": zod.string().nullable(),
   "createdAt": zod.coerce.date(),
   "reason": zod.string(),

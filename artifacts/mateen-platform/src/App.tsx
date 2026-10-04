@@ -19,6 +19,8 @@ import StudyReportsPage from '@/pages/student/study-reports';
 import LearningMapPage from '@/pages/student/learning-map';
 import LearningCheckpointPage from '@/pages/student/learning-checkpoint';
 import LearningStagePage from '@/pages/student/learning-stage';
+import TuhfaMapPage from '@/pages/student/tuhfa-map';
+import TuhfaChapterPage from '@/pages/student/tuhfa-chapter';
 import ReviewsPage from '@/pages/student/reviews';
 import ScholarsPage from '@/pages/student/scholars';
 import ScholarProfilePage from '@/pages/student/scholar-profile';
@@ -157,6 +159,8 @@ function Routes() {
           <Route path="/onboarding" component={OnboardingPage} />
           <Route path="/student"><Portal role="student"><StudentHome /></Portal></Route>
           <Route path="/student/tracks"><Portal role="student"><TracksPage /></Portal></Route>
+          <Route path="/student/learn/tuhfa"><Portal role="student"><TuhfaMapPage /></Portal></Route>
+          <Route path="/student/learn/tuhfa/:chapterNumber"><Portal role="student"><TuhfaChapterPage /></Portal></Route>
           <Route path="/student/learn/:textId"><Portal role="student"><LearningMapPage /></Portal></Route>
           <Route path="/student/learn/:textId/checkpoint/:group"><Portal role="student"><LearningCheckpointPage /></Portal></Route>
           <Route path="/student/learn/:textId/:stageNumber"><Portal role="student"><LearningStagePage /></Portal></Route>

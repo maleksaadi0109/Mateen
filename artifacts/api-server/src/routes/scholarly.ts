@@ -73,6 +73,7 @@ import {
 } from "./scholarly.shared";
 
 import { STUDY_BOOKS, USUL_STUDY_CONTEXT, isStudyBookId, studyBookId } from "../lib/scholarly-study-books";
+import { tuhfaVerses } from "../data/tuhfa";
 
 export { getMateenScholarlyReadiness };
 
@@ -169,7 +170,15 @@ async function createAssistantQuestion(
       const reference = resolution?.number != null
         ? selectNawawiReference(`الحديث رقم ${resolution.number}`, records)
         : null;
-      const studyContext = [isNawawi ? null : USUL_STUDY_CONTEXT, reference, textContext]
+       const bookContext = selectedBook === "tuhfa"
+         ? "متن تحفة الأطفال لسليمان الجمزوري، دون الحواشي أو الشروح؛ النص مرجع للحفظ وليس شرحًا معتمدًا. لا تقيّم النطق أو تطبيق التجويد من النص وحده.\n" +
+           tuhfaVerses.map(v => `${v.number}. ${v.text}`).join("\n")
+         : selectedBook === "usul-thalatha" ? USUL_STUDY_CONTEXT : null;
+       // The provider caps context at 3000 characters. Keep the selected verse
+       // before the longer poem so later chapters are never clipped away.
+       const studyContext = (selectedBook === "tuhfa"
+         ? [textContext, bookContext]
+         : [bookContext, reference, textContext])
         .filter(Boolean).join("\n\n") || null;
       answer = requiredGuidance ? null : await generateStudyAnswer(question, studyContext, gate.model, STUDY_BOOKS[selectedBook], history);
       citations = [];

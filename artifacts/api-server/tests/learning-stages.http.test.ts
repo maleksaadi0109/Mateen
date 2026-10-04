@@ -7,7 +7,8 @@ import { db, pool, profilesTable, stageAttemptsTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import router from "../src/routes/learning-stages";
 import mateenRouter from "../src/routes/mateen";
-import { learningRecords, isStageWord } from "../src/lib/learning-stage-policy";
+import { learningRecords, isStageWord, learningRecord } from "../src/lib/learning-stage-policy";
+import { tuhfaText, tuhfaVerses } from "../src/data/tuhfa";
 import { StartStageAttemptResponse, FinishStageAttemptResponse, GetLearningMapResponse, GetProfileResponse } from "@workspace/api-zod";
 
 const app = express();
@@ -37,6 +38,61 @@ const finish = (id: string) => `/attempts/${id}/finish`;
 const start = async (user = "learner", n = 1, body = startBody()) =>
   StartStageAttemptResponse.parse(await (await call(`/nawawi/stages/${n}/attempts`, user, body)).json());
 const readMap = async (user = "learner") => GetLearningMapResponse.parse(await (await call("/nawawi", user)).json());
+
+test("Tuhfa source contains exactly 61 distinct verses in complete source chapters", () => {
+  assert.equal(tuhfaVerses.length, 61);
+  assert.deepEqual(tuhfaVerses.map(v => v.number), Array.from({ length: 61 }, (_, i) => i + 1));
+  assert.deepEqual(tuhfaText.chapters.map(c => c.verses.length), [5, 11, 1, 6, 6, 5, 7, 6, 10, 4]);
+  for (const v of tuhfaVerses) {
+    assert.equal(v.text.split("\n").length, 2);
+    assert.ok(v.sourcePage >= 2 && v.sourcePage <= 8);
+    assert.ok(!/<|>|________|\([٠-٩]+\)/u.test(v.text));
+  }
+});
+
+test("Tuhfa verse progress is private, source-bound, sequential and isolated from Nawawi", async () => {
+  const user = "poem-student";
+  await db.insert(profilesTable).values({ clerkId: user, onboarded: true });
+  const poemMap = async () => GetLearningMapResponse.parse(await (await call("/tuhfa", user)).json());
+  const initial = await poemMap();
+  assert.equal(initial.stages.length, 61);
+  assert.equal(initial.stages[0].status, "current");
+  assert.equal(initial.stages[1].status, "locked");
+  assert.equal((await call("/tuhfa", null)).status, 401);
+  assert.equal((await call("/tuhfa", "teacher")).status, 403);
+  assert.equal((await call("/tuhfa/stages/6/attempts", user, startBody())).status, 403);
+  assert.equal((await call("/tuhfa/stages/62/attempts", user, startBody())).status, 400);
+  const input = startBody();
+  const a = StartStageAttemptResponse.parse(await (await call("/tuhfa/stages/1/attempts", user, input)).json());
+  assert.equal(a.sourceHash, learningRecord(tuhfaVerses[0]).hash);
+  const replay = StartStageAttemptResponse.parse(await (await call("/tuhfa/stages/1/attempts", user, input)).json());
+  assert.equal(replay.id, a.id);
+  assert.equal((await call("/nawawi/stages/1/attempts", user, input)).status, 409);
+  const verseFull = (n: number) => ({
+    matchedIndices: learningRecord(tuhfaVerses[n - 1]).words.flatMap((w, i) => isStageWord(w) ? [i] : []),
+    issues: [],
+  });
+  assert.equal((await call(finish(a.id), "other", verseFull(1))).status, 404);
+  const partial = StartStageAttemptResponse.parse(await (await call("/tuhfa/stages/1/attempts", user, startBody())).json());
+  await call(finish(partial.id), user, { matchedIndices: [0], issues: [] });
+  assert.equal((await poemMap()).stages[1].status, "locked");
+  const outcome = FinishStageAttemptResponse.parse(await (await call(finish(a.id), user, verseFull(1))).json());
+  assert.equal(outcome.passed, true);
+  assert.equal(outcome.nextStage, 2);
+  assert.deepEqual(await (await call(finish(a.id), user, verseFull(1))).json(), outcome);
+  assert.equal((await poemMap()).stages[0].status, "passed");
+  assert.equal((await readMap(user)).stages[0].status, "current");
+  // Completing the introduction opens the first verse in the next chapter,
+  // not all its verses and never the next Nawawi hadith.
+  for (let n = 2; n <= 5; n++) {
+    const b = StartStageAttemptResponse.parse(await (await call(`/tuhfa/stages/${n}/attempts`, user, startBody())).json());
+    const result = FinishStageAttemptResponse.parse(await (await call(finish(b.id), user, verseFull(n))).json());
+    assert.equal(result.passed, true);
+  }
+  assert.equal((await poemMap()).stages[5].status, "current");
+  assert.equal((await poemMap()).stages[6].status, "locked");
+  assert.equal((await readMap(user)).stages[1].status, "locked");
+});
 
 test("private welcome answers persist, validate strictly, and do not unlock stages", async () => {
   const profileCall = (user: string | null, body?: unknown) => fetch(`${url}/api/mateen/profile`, {
