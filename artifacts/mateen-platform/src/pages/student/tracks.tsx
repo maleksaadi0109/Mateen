@@ -1,6 +1,6 @@
 import { Link } from 'wouter';
 import { getGetCatalogQueryKey, useGetCatalog } from '@workspace/api-client-react';
-import { Lock, ArrowLeft, ExternalLink, Info } from 'lucide-react';
+import { Lock, ArrowLeft, Info } from 'lucide-react';
 import { EmptyState, ErrorState, LoadingList, PageHeader, Reveal } from '@/components/mateen/bits';
 import { num, usePageMeta } from '@/lib/mateen';
 
@@ -9,7 +9,7 @@ const img = (f: string) => `${B}images/book-covers/${f}`;
 
 type Cover = { file: string; w: number; h: number; caption: string; source: string; url: string };
 const COVERS = {
-  nawawi: { file: 'nawawi.jpg', w: 313, h: 500, caption: 'غلاف متن الأربعين النووية', source: 'أمازون', url: 'https://m.media-amazon.com/images/I/51mvG4BNT1L.jpg' },
+  nawawi: { file: 'nawawi-supplied.jpg', w: 908, h: 1361, caption: 'غلاف كتاب الأربعين النووية', source: 'صورة مقدمة من المستخدم', url: '' },
   nawaqid: { file: 'nawaqid.jpg', w: 349, h: 500, caption: 'غلاف «فتح القدوس السلام بشرح نواقض الإسلام»', source: 'نصيحة', url: 'https://nasihaa.com/uploads/img/1679391879_SXT9H.jpg' },
   qawaid: { file: 'qawaid.jpg', w: 673, h: 1000, caption: 'غلاف «المطلع في شرح القواعد الأربع»', source: 'سلة', url: 'https://cdn.salla.sa/YvENm/vYEE9FDGPk05b67szO9e9SQKeKaSWsIHtJTQMHgY.jpg' },
   tuhfa: { file: 'tuhfa-crop.webp', w: 332, h: 482, caption: 'غلاف «شرح تحفة الأطفال»', source: 'مكتبة دبي', url: 'https://shop.dubailibrary.com/cdn/shop/files/10_11c4f424-26a3-4954-b283-8843883d022a_800x.jpg?v=1695022480' },
@@ -26,8 +26,6 @@ function Photo({ c, className = '', eager = false }: { c: Cover | undefined; cla
       className={`block h-auto w-full rounded-[3px] ${className}`} />
   );
 }
-
-const credit = 'font-ui inline-flex items-center gap-1 text-[11px] text-muted-foreground underline-offset-2 hover:text-secondary hover:underline';
 
 export default function TracksPage() {
   usePageMeta('المسارات | مَتِين', 'المتون المتاحة والمقبلة في مَتِين.');
@@ -72,10 +70,6 @@ export default function TracksPage() {
                     </div>
                   </div>
                 </Link>
-                <p className="mt-2 px-2 font-ui text-[11px] text-muted-foreground">
-                  {c.caption} — المصدر:{' '}
-                  <a href={c.url} target="_blank" rel="noopener noreferrer" className={credit} data-testid={`link-credit-${t.id}`}>{c.source}<ExternalLink size={11} aria-hidden /></a>
-                </p>
               </Reveal>
             );
           })}
@@ -105,10 +99,6 @@ export default function TracksPage() {
                           </div>
                           <h3 className="mt-2 font-display text-lg font-bold leading-snug">{t.title}</h3>
                           <p className="mt-2 font-arabic text-base leading-loose text-muted-foreground">{t.description}</p>
-                          {c && <p className="mt-auto pt-4 font-ui text-[11px] text-muted-foreground">
-                            {c.caption} —{' '}
-                            <a href={c.url} target="_blank" rel="noopener noreferrer" className={credit} data-testid={`link-credit-${t.id}`}>{c.source}<ExternalLink size={11} aria-hidden /></a>
-                          </p>}
                         </div>
                       </div>
                     </Reveal>

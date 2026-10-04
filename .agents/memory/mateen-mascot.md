@@ -14,3 +14,9 @@ Book-cover imagery is a separate requirement: use photographs or actual publishe
 **Why:** On 2026-10-04 the user rejected the illustrated track covers as «الشكل سيء جدا» and repeated «نبي تحط صور حقيقة».
 
 **How to apply:** Keep real covers identifiable, show them at a useful size, and distinguish a pictured commentary from an adopted study edition. This correction concerns track imagery, not the previously approved cartoon mascot.
+
+Do not display image-source captions or credit links beneath book covers.
+
+**Why:** The user explicitly requested removing «غلاف متن الأربعين النووية — المصدر: أمازون» and equivalent image-source labels.
+
+**How to apply:** Preserve image provenance internally and accessible image descriptions, without visible photo-credit rows. This does not remove scholarly citations, source-review requirements, or licensing obligations.
