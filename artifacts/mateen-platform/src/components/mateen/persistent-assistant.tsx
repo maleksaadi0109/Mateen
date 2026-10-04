@@ -5,6 +5,16 @@ import BookMascot from './book-mascot';
 export default function PersistentAssistant() {
   const [path] = useLocation();
   const studying = /\/student\/(learn|study)(\/|$)/.test(path);
+  if (path === '/') {
+    return (
+      <aside aria-label="مساعد مَتِين" data-testid="persistent-assistant" className="sticky top-0 z-40 h-[var(--mateen-assistant-height)] border-b border-secondary/15 bg-[#f4e7d1]">
+        <div className="mx-auto flex h-full max-w-7xl items-center justify-center gap-2 px-4 text-primary">
+          <BookMascot size={38} mood="calm" title="مَتِين، رفيق القراءة" still />
+          <p className="font-ui text-xs font-bold sm:text-sm">أهلًا بك في مجلس القراءة <span className="font-arabic font-medium text-primary/70">— نمضي في المتن على مهل</span></p>
+        </div>
+      </aside>
+    );
+  }
   const tip = path.startsWith('/teacher')
     ? 'إرشادك يعين الطالب على الفهم. تابع الإحالات من صفحة الرسائل.'
     : path.startsWith('/admin')

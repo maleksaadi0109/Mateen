@@ -26,3 +26,9 @@ Do not display image-source captions, credit links beneath book covers, or the i
 **Why:** The user explicitly requested removing «غلاف متن الأربعين النووية — المصدر: أمازون» and equivalent image-source labels, then asked to remove the cover disclaimer and introductory closed-books text in a screenshot.
 
 **How to apply:** Preserve image provenance internally and accessible image descriptions, without visible photo-credit rows. This does not remove scholarly citations, source-review requirements, or licensing obligations.
+
+The public homepage's approved direction is calm and warm, with the original book mascot prominent and supplied book covers below the opening.
+
+**Why:** On 2026-10-04, the user explicitly approved this design for the platform after reviewing it beside the older, densely patterned homepage.
+
+**How to apply:** Preserve this visual direction when maintaining the homepage unless the user requests a new one. Use the existing global companion rather than adding a second persistent strip.
