@@ -97,7 +97,7 @@ function CheckpointRun({ group, from, to, hadiths }: { group: number; from: numb
             return <li key={`${round}-${p}`} className={cn('h-2.5 flex-1 rounded-full transition-colors duration-500', r ? (r.outcome.passed ? 'bg-secondary' : 'bg-destructive/60') : i === index && !done ? 'bg-secondary/40' : 'bg-muted')} />;
           })}
         </ol>
-        <p className="mt-4 rounded-xl border border-secondary/30 bg-secondary/5 p-3 font-ui text-xs leading-loose" data-testid="checkpoint-disclaimer"><ShieldAlert size={14} className="me-1 inline" />امتحان تدريبي تقريبي بالتعرّف الآلي، وليس اعتماداً رسمياً للحفظ ولا شهادة. لا يغيّر سجلات الاختبار الشامل المعتمدة.</p>
+        <p className="mt-4 rounded-xl border border-secondary/30 bg-secondary/5 p-3 font-ui text-xs leading-loose" data-testid="checkpoint-disclaimer"><ShieldAlert size={14} className="me-1 inline" />امتحان تدريبي تقريبي بالتعرّف الآلي، وليس اعتماداً رسمياً للحفظ ولا شهادة.</p>
         <p className="mt-2 font-ui text-xs leading-loose text-muted-foreground">ملخص هذه الجولة يبقى في الصفحة فقط؛ مغادرتها أو تحديثها يبدأ اختيارًا عشوائيًا جديدًا.</p>
       </header>
 

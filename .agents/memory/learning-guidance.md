@@ -3,6 +3,8 @@ name: Learning and guidance boundaries
 description: User-defined boundaries for assessment progression and teacher duties.
 ---
 
+The 2026-10-04 student-scope decision in [portal-scope.md](portal-scope.md) supersedes the level-assessment entry points below: no student-facing level/comprehensive exam. Preserve historical assessment rules for existing records and administrative review, not as permission to restore those student screens.
+
 The current learning journey is Duolingo-like: choose a track, enter a map with
 one hadith per stage, study it with clickable word meanings and a contextual
 assistant, practise reciting, then explicitly start a stage recitation exam.

@@ -1,7 +1,7 @@
-import { Fragment } from 'react';
-import { Link, useParams } from 'wouter';
+import { Fragment, useEffect, useRef } from 'react';
+import { Link, useParams, useSearch } from 'wouter';
 import { getGetLearningMapQueryKey, useGetLearningMap } from '@workspace/api-client-react';
-import { ArrowLeft, BookOpen, FileText, GraduationCap, Lock } from 'lucide-react';
+import { ArrowLeft, BookOpen, GraduationCap, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { EmptyState, ErrorState, PageHeader, SkeletonBlock } from '@/components/mateen/bits';
 import { num, usePageMeta } from '@/lib/mateen';
@@ -20,6 +20,24 @@ export default function LearningMapPage() {
   const { textId } = useParams<{ textId: string }>();
   usePageMeta('خريطة الأربعين | مَتِين', 'مراحل الأربعين النووية: حديث في كل مرحلة، وامتحان بعد كل سبع مراحل.');
   const map = useNawawiMap();
+  const search = useSearch();
+  const resume = new URLSearchParams(search).get('resume') === '1';
+  const scrolled = useRef(false);
+  useEffect(() => {
+    if (!resume) { scrolled.current = false; return; }
+    if (textId !== 'nawawi' || map.isFetching || scrolled.current) return;
+    const stages = map.data?.stages ?? [];
+    const target = stages.find(s => s.status === 'current') ?? [...stages].reverse().find(s => s.status === 'passed');
+    if (!target) return;
+    const frame = requestAnimationFrame(() => {
+      const node = document.getElementById(`stage-${target.number}`);
+      if (!node) return;
+      node.scrollIntoView({ block: 'center', behavior: 'instant' });
+      node.focus({ preventScroll: true });
+      scrolled.current = true;
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [resume, textId, map.isFetching, map.data]);
   if (textId !== 'nawawi') return <EmptyState icon={<BookMascot size={72} mood="rest" />} title="هذا المتن قريباً">لا خريطة له بعد. <Link href="/student/tracks" className="font-bold text-secondary">المسارات</Link></EmptyState>;
 
   const stages = map.data?.stages ?? [];
@@ -35,7 +53,6 @@ export default function LearningMapPage() {
       </PageHeader>
       <div className="mb-6 flex flex-wrap gap-3">
         {current && <Link href={`/student/learn/nawawi/${current.number}`} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-secondary px-6 py-3 font-ui font-bold text-secondary-foreground shadow-[0_4px_0_hsl(24_90%_20%)] transition active:translate-y-1 active:shadow-none" data-testid="link-resume-stage">تابع المرحلة {num(current.number)} <ArrowLeft size={16} /></Link>}
-        <Link href="/student/exams" className="inline-flex min-h-11 items-center gap-2 rounded-full border bg-card px-5 py-3 font-ui text-sm font-semibold hover:bg-muted" data-testid="link-comprehensive-exam"><FileText size={16} />الامتحان الشامل الشفهي والكتابي</Link>
         <Link href="/student/study/nawawi" className="inline-flex min-h-11 items-center gap-2 rounded-full border bg-card px-5 py-3 font-ui text-sm font-semibold hover:bg-muted" data-testid="link-fullbook"><BookOpen size={16} />الكتاب كاملاً والتقارير</Link>
       </div>
       {map.isLoading ? (
@@ -49,7 +66,7 @@ export default function LearningMapPage() {
               <div className="h-full rounded-full bg-secondary transition-[width] duration-700" style={{ width: `${pct}%` }} />
             </div>
           </div>
-          {!current && passed === stages.length && <JourneyGuide mood="cheer" message="أتممت المراحل كلها. الامتحان الشامل بانتظارك." />}
+          {!current && passed === stages.length && <JourneyGuide mood="cheer" message="أتممت المراحل كلها. يمكنك مراجعة الأحاديث وإعادة امتحانات المجموعات." />}
           <ol className="relative">
             {stages.map((s, i) => {
               const sectionStart = i % SECTION === 0;

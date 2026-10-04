@@ -92,7 +92,7 @@ function StageExamContent({ hadith, onClose }: Props) {
         <p className="font-ui text-xs font-bold text-secondary">تدريب المرحلة {num(hadith.number)}</p>
         <h1 className="font-display text-3xl font-bold">{hadith.title}</h1>
         <p className="font-ui text-sm leading-loose text-muted-foreground">سمّع الحديث كاملًا كما درسته، بالسند والعزو. يُفتح الحديث التالي عند إكمال المقطع وتطابق أكثر من ٩٠٪ من كلماته (٩٠٪ تمامًا لا تكفي). تظهر كلماتك في صفحة الكتاب كلما سمّعتها، وتُعرض الاختلافات كلها بعد الإنهاء فقط. بعد كل سبع مراحل مجتازة يُفتح امتحان المجموعة في الخريطة.</p>
-        <p className="rounded-xl border border-secondary/30 bg-secondary/5 p-3 font-ui text-xs leading-loose" data-testid="stage-exam-disclaimer">هذا اجتياز تدريبي تقريبي بالتعرّف الآلي؛ ليس اعتمادًا للحفظ ولا تقييمًا للنطق أو التشكيل. يبقى اختبار المستوى الشامل الشفهي والكتابي مستقلًا.</p>
+        <p className="rounded-xl border border-secondary/30 bg-secondary/5 p-3 font-ui text-xs leading-loose" data-testid="stage-exam-disclaimer">هذا اجتياز تدريبي تقريبي بالتعرّف الآلي؛ ليس اعتمادًا للحفظ ولا تقييمًا للنطق أو التشكيل.</p>
       </header>
 
       {outcome ? (
@@ -104,7 +104,7 @@ function StageExamContent({ hadith, onClose }: Props) {
           <h2 className="sr-only" data-testid={snapshot ? 'stage-result-title' : undefined}>{outcome.passed ? 'اجتزت هذه المرحلة' : !outcome.complete ? 'لم يكتمل المقطع بعد' : 'تحتاج إلى مزيد من التدريب'}</h2>
           <div className="flex flex-wrap justify-center gap-2">
             {outcome.nextStage && <Link className={primary} href={`/student/learn/nawawi/${outcome.nextStage}`} data-testid="button-stage-next">المرحلة التالية</Link>}
-            {outcome.passed && !outcome.nextStage && <Link className={primary} href="/student/exams" data-testid="button-stage-final-exam">الاختبار الشامل</Link>}
+            {outcome.passed && !outcome.nextStage && <Link className={primary} href="/student/learn/nawawi/checkpoint/6" data-testid="button-stage-final-checkpoint">امتحان المجموعة الأخيرة</Link>}
             <Link className={secondary} href="/student/learn/nawawi" data-testid="button-stage-result-map">خريطة التعلّم</Link>
             <button type="button" className={secondary} onClick={reset} data-testid="button-stage-retry">محاولة جديدة</button>
           </div>

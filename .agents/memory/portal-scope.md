@@ -9,7 +9,7 @@ On 2026-09-22 the user approved the portal outline, architecture, and final priv
 
 **How to apply:** The website build is now authorized. Distinguish approved product requirements from proposed architecture and implemented capabilities; do not claim the whole specification is implemented when delivering a staged foundation.
 
-Approved student scope: home with welcome, resume last text, performance/mistakes, due reviews and next assessment; tracks with levels and study/recitation; assessments; available scholars directory and scholarly profiles with approved ijazat; text-only conversations that originate only from assistant referrals (no direct student-to-teacher questions; decided 2026-10-01 so the platform keeps AI as the entry point rather than becoming a traditional messaging platform).
+Approved student scope: home with welcome, resume the reached learning-map stage and personal progress/activity analytics; tracks with study/recitation and map checkpoints; available scholars directory and scholarly profiles with approved ijazat; text-only conversations that originate only from assistant referrals (no direct student-to-teacher questions; decided 2026-10-01 so the platform keeps AI as the entry point rather than becoming a traditional messaging platform).
 
 Proposed catalog: العقيدة — التمهيدي: نواقض الإسلام، الأول: القواعد الأربع; الحديث — التمهيدي: الأربعون النووية; التجويد والقراءات — التمهيدي: تحفة الأطفال. In the first release only الأربعون النووية is open; everything else is shown closed with «قريباً».
 
@@ -38,6 +38,12 @@ Stage recitation should reveal words on a book-style page and show precise diffe
 **Why:** On 2026-10-04 the user asked for the first-stage exam to resemble book practice and insisted «ضروري تاكون نسبته فوق 90».
 
 **How to apply:** Apply the strict boundary to new stage/checkpoint attempts, preserve fractional percentages consistently in results and history, require complete coverage, and retain existing earned progress. Do not change the independent formal assessment policy.
+
+On 2026-10-04 the user removed the student-facing «اختبار المستوى» and «الامتحان الشامل الشفهي والكتابي» as unnecessary. Home continuation should open the reached position on the map, and home analytics should use real personal progress/activity rather than self-reported study counts.
+
+**Why:** The user explicitly requested both removals in screenshots and made the learning-map journey the priority.
+
+**How to apply:** Do not reintroduce level/comprehensive exams, their dashboard cards or progression links to student screens. Retain stage practice and seven-hadith group checkpoints. Removing these entry points does not authorize deleting historical assessment records or removing administrative review capabilities.
 
 Approved teacher scope: overview of pending questions/referrals/recent conversations; unified referral inbox filterable by response status; scholarly profile with biography, specialties, teachers and ijazat review status; account/notification settings; accessible availability control.
 

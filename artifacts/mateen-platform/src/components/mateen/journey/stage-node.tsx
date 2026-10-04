@@ -30,7 +30,7 @@ export default function StageNode({ stage, index }: { stage: LearningMapStagesIt
   );
   const inner = <span className="flex flex-col items-center gap-2 text-center sm:flex-row sm:gap-4 sm:text-start">{disc}{label}</span>;
   return (
-    <li className="relative py-3" data-testid={`stage-${s.number}`} data-status={s.status}>
+    <li id={`stage-${s.number}`} tabIndex={-1} className="relative scroll-mt-28 py-3 focus-visible:rounded-3xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-secondary" data-testid={`stage-${s.number}`} data-status={s.status}>
       <div className="mx-auto w-[calc(100%-7rem)] max-w-[22rem] transition-transform" style={{ transform: `translateX(${x}px)` }}>
         {s.status === 'locked'
           ? <div aria-disabled="true" aria-label={`المرحلة ${num(s.number)}: ${s.title} — مغلقة`} className="rounded-3xl p-1 opacity-75">{inner}</div>

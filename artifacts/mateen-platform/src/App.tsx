@@ -3,7 +3,7 @@ import { ClerkProvider, SignIn, SignUp, useClerk } from '@clerk/react';
 import { publishableKeyFromHost } from '@clerk/react/internal';
 import { arSA } from '@clerk/localizations';
 import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
-import { Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
+import { Route, Switch, Redirect, useLocation, Router as WouterRouter } from 'wouter';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthFrame } from '@/components/mateen/AuthFrame';
 import { PortalGate } from '@/components/portal/PortalShell';
@@ -34,8 +34,6 @@ import AdminSources from '@/pages/admin/sources';
 import AdminAudit from '@/pages/admin/audit';
 import HomeGate from '@/pages/home-gate';
 import { claimAssessmentStorage } from '@/lib/assessment';
-import ExamsPage from '@/pages/student/exams';
-import ExamAttemptPage from '@/pages/student/exam-attempt';
 import AdminAssessments from '@/pages/admin/assessments';
 
 const clerkPubKey = publishableKeyFromHost(window.location.hostname, import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
@@ -170,8 +168,8 @@ function Routes() {
           <Route path="/student/scholars/:teacherId"><Portal role="student"><ScholarProfilePage /></Portal></Route>
           <Route path="/student/messages"><Portal role="student"><MessagesPage /></Portal></Route>
           <Route path="/student/assistant"><Portal role="student"><AssistantPage /></Portal></Route>
-          <Route path="/student/exams"><Portal role="student"><ExamsPage /></Portal></Route>
-          <Route path="/student/exams/:attemptId"><Portal role="student"><ExamAttemptPage /></Portal></Route>
+          <Route path="/student/exams"><Portal role="student"><Redirect to="/student/learn/nawawi?resume=1" replace /></Portal></Route>
+          <Route path="/student/exams/:attemptId"><Portal role="student"><Redirect to="/student/learn/nawawi?resume=1" replace /></Portal></Route>
           <Route path="/admin/assessments" component={AdminAssessments} />
           <Route path="/student/settings"><Portal role="student"><SettingsPage /></Portal></Route>
           <Route path="/teacher"><Portal role="teacher"><TeacherHome /></Portal></Route>
