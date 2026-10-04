@@ -103,3 +103,7 @@ export const tuhfaText = {
   })),
 };
 export const tuhfaVerses = tuhfaText.chapters.flatMap(c => c.verses);
+// A learning stage is a complete chapter, not an individual verse.
+export const tuhfaChapterStages = tuhfaText.chapters.map(c => ({
+  number: c.number, title: c.title, text: c.verses.map(v => v.text).join("\n"),
+}));

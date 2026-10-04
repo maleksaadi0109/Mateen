@@ -3,12 +3,12 @@ import assert from "node:assert/strict";
 import "./stage-threshold.test";
 import { after, before, test } from "node:test";
 import express from "express";
-import { db, pool, profilesTable, stageAttemptsTable } from "@workspace/db";
+import { db, pool, profilesTable, stageAttemptsTable, learningStagesTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import router from "../src/routes/learning-stages";
 import mateenRouter from "../src/routes/mateen";
 import { learningRecords, isStageWord, learningRecord } from "../src/lib/learning-stage-policy";
-import { tuhfaText, tuhfaVerses } from "../src/data/tuhfa";
+import { tuhfaText, tuhfaVerses, tuhfaChapterStages } from "../src/data/tuhfa";
 import { StartStageAttemptResponse, FinishStageAttemptResponse, GetLearningMapResponse, GetProfileResponse } from "@workspace/api-zod";
 
 const app = express();
@@ -50,12 +50,12 @@ test("Tuhfa source contains exactly 61 distinct verses in complete source chapte
   }
 });
 
-test("Tuhfa verse progress is private, source-bound, sequential and isolated from Nawawi", async () => {
+test("Tuhfa whole-chapter progress is private, source-bound, sequential and isolated from Nawawi", async () => {
   const user = "poem-student";
   await db.insert(profilesTable).values({ clerkId: user, onboarded: true });
   const poemMap = async () => GetLearningMapResponse.parse(await (await call("/tuhfa", user)).json());
   const initial = await poemMap();
-  assert.equal(initial.stages.length, 61);
+  assert.equal(initial.stages.length, 10);
   assert.equal(initial.stages[0].status, "current");
   assert.equal(initial.stages[1].status, "locked");
   assert.equal((await call("/tuhfa", null)).status, 401);
@@ -64,34 +64,63 @@ test("Tuhfa verse progress is private, source-bound, sequential and isolated fro
   assert.equal((await call("/tuhfa/stages/62/attempts", user, startBody())).status, 400);
   const input = startBody();
   const a = StartStageAttemptResponse.parse(await (await call("/tuhfa/stages/1/attempts", user, input)).json());
-  assert.equal(a.sourceHash, learningRecord(tuhfaVerses[0]).hash);
+  assert.equal(a.sourceHash, learningRecord(tuhfaChapterStages[0]).hash);
+  assert.notEqual(a.sourceHash, learningRecord(tuhfaVerses[0]).hash);
   const replay = StartStageAttemptResponse.parse(await (await call("/tuhfa/stages/1/attempts", user, input)).json());
   assert.equal(replay.id, a.id);
   assert.equal((await call("/nawawi/stages/1/attempts", user, input)).status, 409);
-  const verseFull = (n: number) => ({
-    matchedIndices: learningRecord(tuhfaVerses[n - 1]).words.flatMap((w, i) => isStageWord(w) ? [i] : []),
+  const chapterFull = (n: number) => ({
+    matchedIndices: learningRecord(tuhfaChapterStages[n - 1]).words.flatMap((w, i) => isStageWord(w) ? [i] : []),
     issues: [],
   });
-  assert.equal((await call(finish(a.id), "other", verseFull(1))).status, 404);
+  assert.equal((await call(finish(a.id), "other", chapterFull(1))).status, 404);
   const partial = StartStageAttemptResponse.parse(await (await call("/tuhfa/stages/1/attempts", user, startBody())).json());
-  await call(finish(partial.id), user, { matchedIndices: [0], issues: [] });
+  // A complete first verse is still an incomplete five-verse chapter.
+  await call(finish(partial.id), user, {
+    matchedIndices: learningRecord(tuhfaVerses[0]).words.flatMap((w, i) => isStageWord(w) ? [i] : []), issues: [],
+  });
   assert.equal((await poemMap()).stages[1].status, "locked");
-  const outcome = FinishStageAttemptResponse.parse(await (await call(finish(a.id), user, verseFull(1))).json());
+  const outcome = FinishStageAttemptResponse.parse(await (await call(finish(a.id), user, chapterFull(1))).json());
   assert.equal(outcome.passed, true);
   assert.equal(outcome.nextStage, 2);
-  assert.deepEqual(await (await call(finish(a.id), user, verseFull(1))).json(), outcome);
+  assert.deepEqual(await (await call(finish(a.id), user, chapterFull(1))).json(), outcome);
   assert.equal((await poemMap()).stages[0].status, "passed");
   assert.equal((await readMap(user)).stages[0].status, "current");
-  // Completing the introduction opens the first verse in the next chapter,
-  // not all its verses and never the next Nawawi hadith.
-  for (let n = 2; n <= 5; n++) {
+  // One attempt completes each whole chapter, including the final chapter.
+  for (let n = 2; n <= 10; n++) {
     const b = StartStageAttemptResponse.parse(await (await call(`/tuhfa/stages/${n}/attempts`, user, startBody())).json());
-    const result = FinishStageAttemptResponse.parse(await (await call(finish(b.id), user, verseFull(n))).json());
+    const result = FinishStageAttemptResponse.parse(await (await call(finish(b.id), user, chapterFull(n))).json());
     assert.equal(result.passed, true);
+    assert.equal(result.nextStage, n < 10 ? n + 1 : null);
   }
-  assert.equal((await poemMap()).stages[5].status, "current");
-  assert.equal((await poemMap()).stages[6].status, "locked");
+  assert.ok((await poemMap()).stages.every(s => s.status === "passed"));
   assert.equal((await readMap(user)).stages[1].status, "locked");
+});
+
+test("legacy verse passes never become unrelated chapter passes and historical rows remain intact", async () => {
+  const user = "legacy-poem-student";
+  await db.insert(profilesTable).values({ clerkId: user, onboarded: true });
+  await db.insert(learningStagesTable).values({
+    userId: user, textId: "tuhfa", stageNumber: 1, bestPercent: 100, passedAt: new Date(),
+  });
+  const read = async () => GetLearningMapResponse.parse(await (await call("/tuhfa", user)).json());
+  assert.equal((await read()).stages[0].status, "current");
+  assert.equal((await call("/tuhfa/stages/2/attempts", user, startBody())).status, 403);
+  for (let n = 2; n <= 5; n++) await db.insert(learningStagesTable).values({
+    userId: user, textId: "tuhfa", stageNumber: n, bestPercent: 100, passedAt: new Date(),
+  });
+  const restored = await read();
+  assert.equal(restored.stages[0].status, "passed");
+  assert.equal(restored.stages[1].status, "current");
+  assert.equal(restored.stages[4].status, "locked");
+  assert.equal((await call("/tuhfa/stages/2/attempts", user, startBody())).status, 201);
+  assert.equal((await db.select().from(learningStagesTable).where(eq(learningStagesTable.userId, user))).length, 5);
+  const id = randomUUID();
+  await db.insert(stageAttemptsTable).values({
+    id, userId: user, textId: "tuhfa", requestId: randomUUID(), stageNumber: 1,
+    sourceHash: learningRecord(tuhfaVerses[0]).hash, expiresAt: new Date(Date.now() + 60_000),
+  });
+  assert.equal((await call(finish(id), user, { matchedIndices: [0], issues: [] })).status, 409);
 });
 
 test("private welcome answers persist, validate strictly, and do not unlock stages", async () => {

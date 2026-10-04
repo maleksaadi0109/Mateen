@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { recitationWords } from '@/lib/live-recitation';
 
-export default function PassageSelection({ text, selected, onSelect, onAsk, busy }: {
-  text: string; selected: string | null; onSelect: (text: string | null) => void; onAsk: () => void; busy: boolean;
+export default function PassageSelection({ text, selected, onSelect, onAsk, busy, poem }: {
+  text: string; poem?: { number: number; text: string }[]; selected: string | null; onSelect: (text: string | null) => void; onAsk: () => void; busy: boolean;
 }) {
-  const body = useRef<HTMLParagraphElement>(null);
+  const body = useRef<HTMLElement>(null);
   const words = useMemo(() => recitationWords(text), [text]);
   const [manual, setManual] = useState(false);
   const [start, setStart] = useState<number | null>(null);
@@ -45,14 +45,40 @@ export default function PassageSelection({ text, selected, onSelect, onAsk, busy
         {manual ? 'العودة إلى التحديد بالسحب' : 'تحديد بالنقر على أول وآخر كلمة'}
       </button>
       {manual && <p role="status" className="mb-3 font-ui text-sm text-secondary">{start === null ? 'اضغط أول كلمة، ثم آخر كلمة في المقطع المطلوب.' : 'الآن اضغط آخر كلمة؛ سيُحدّد كل ما بينهما.'}</p>}
-      <p ref={body} className={`hadith-text text-2xl sm:text-[1.7rem] ${manual ? 'select-none' : 'select-text'}`} data-testid="text-hadith-body">
-        {words.map((word, i) => manual
+      {(() => {
+        const mark = (i: number, word: string) => manual
           ? <span key={i}><button type="button" disabled={busy} onClick={() => pick(i)}
             aria-label={`تحديد الكلمة ${i + 1}: ${word}`} aria-pressed={!!range && i >= range[0] && i <= range[1]}
             className={`min-h-11 rounded px-0.5 ${range && i >= range[0] && i <= range[1] ? 'bg-secondary/20 text-secondary' : 'hover:bg-secondary/10'}`}
             data-testid={`button-word-${i}`}>{word}</button>{' '}</span>
-          : <span key={i} data-word-index={i}>{word}{i < words.length - 1 ? ' ' : ''}</span>)}
-      </p>
+          : <span key={i} data-word-index={i}>{word}{' '}</span>;
+        if (!poem) return (
+          <p ref={body as React.RefObject<HTMLParagraphElement>} className={`hadith-text text-2xl sm:text-[1.7rem] ${manual ? 'select-none' : 'select-text'}`} data-testid="text-hadith-body">
+            {words.map((word, i) => mark(i, word))}
+          </p>
+        );
+        let g = 0;
+        return (
+          <div ref={body as React.RefObject<HTMLDivElement>} className={`space-y-2 ${manual ? 'select-none' : 'select-text'}`} data-testid="text-hadith-body">
+            {poem.map((v) => {
+              const lines = v.text.split('\n').map((l) => l.trim()).filter(Boolean);
+              let halves: string[][] = lines.map((l) => recitationWords(l));
+              if (halves.length === 1) { const w = halves[0], m = Math.ceil(w.length / 2); halves = [w.slice(0, m), w.slice(m)]; }
+              else if (halves.length > 2) halves = [halves.slice(0, Math.ceil(halves.length / 2)).flat(), halves.slice(Math.ceil(halves.length / 2)).flat()];
+              return (
+                <div key={v.number} dir="rtl" className="grid grid-cols-[1.75rem_minmax(0,1fr)_minmax(0,1fr)] items-start gap-x-2 rounded-xl border-b border-border/60 pb-2" data-testid={`poem-verse-${v.number}`}>
+                  <span aria-hidden className="mt-2 select-none text-center font-ui text-[0.7rem] font-bold text-secondary">{v.number}</span>
+                  {halves.map((h, hi) => (
+                    <p key={hi} className="hadith-text min-w-0 break-words text-[1.15rem] leading-[2.2] sm:text-2xl">
+                      {h.map((w) => { const i = g++; return mark(i, w); })}
+                    </p>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        );
+      })()}
       {error && <p role="alert" className="mt-3 font-ui text-sm text-destructive">{error}</p>}
       {selected && <div className="mt-4 rounded-xl border border-secondary/30 bg-secondary/5 p-4" data-testid="selection-actions">
         <p className="font-ui text-xs font-bold text-secondary">المقطع المحدّد</p>

@@ -57,7 +57,7 @@ export function LiveExamBook({ words, revealed, interimIndices, listening, title
 }
 
 /** Final review: whole canonical text with numbered highlights and a full list of differences. */
-export function ExamReview({ snapshot, outcome, title, compact, unit = 'الحديث' }: { snapshot: ExamSnapshot; outcome: StageOutcome; title: string; compact?: boolean; unit?: 'الحديث' | 'البيت' }) {
+export function ExamReview({ snapshot, outcome, title, compact, unit = 'الحديث' }: { snapshot: ExamSnapshot; outcome: StageOutcome; title: string; compact?: boolean; unit?: 'الحديث' | 'البيت' | 'الباب' }) {
   const { words, matched, issues } = snapshot;
   const ord = useOrdinals(words);
   const model = useMemo(() => {

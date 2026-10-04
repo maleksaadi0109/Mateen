@@ -16,14 +16,12 @@ export function useTuhfaText() {
 
 export type ChapterStatus = 'locked' | 'current' | 'passed';
 export function chapterStatus(ch: TuhfaChapter, stages: LearningMapStagesItem[]): ChapterStatus {
-  const st = ch.verses.map((v) => stages.find((s) => s.number === v.number)?.status ?? 'locked');
-  if (st.length && st.every((s) => s === 'passed')) return 'passed';
-  if (st.some((s) => s === 'current')) return 'current';
-  return 'locked';
+  const st = stages.find((s) => s.number === ch.number)?.status;
+  return st === 'passed' ? 'passed' : st === 'current' ? 'current' : 'locked';
 }
 
 export default function TuhfaMapPage() {
-  usePageMeta('رحلة تحفة الأطفال | مَتِين', 'أبواب تحفة الأطفال: اقرأ الباب كاملاً، وسمّع كل بيت لتُفتح الأبيات التالية.');
+  usePageMeta('رحلة تحفة الأطفال | مَتِين', 'أبواب تحفة الأطفال: اقرأ الباب كاملاً ثم سمّع أبياته كلها في محاولة واحدة ليُفتح الباب التالي.');
   const map = useTuhfaMap();
   const text = useTuhfaText();
   const stages = map.data?.stages ?? [];
@@ -31,18 +29,18 @@ export default function TuhfaMapPage() {
   const threshold = map.data?.threshold ?? 90;
   const passed = stages.filter((s) => s.status === 'passed').length;
   const current = stages.find((s) => s.status === 'current');
-  const currentChapter = current ? chapters.find((c) => c.verses.some((v) => v.number === current.number)) : undefined;
+  const currentChapter = current ? chapters.find((c) => c.number === current.number) : undefined;
   const pct = stages.length ? (passed / stages.length) * 100 : 0;
 
   return (
     <div>
       <PageHeader eyebrow="تحفة الأطفال" title="رحلة التحفة">
-        المنظومة مقسّمة على أبوابها: اقرأ الباب المفتوح كاملاً، ثم سمّع أبياته بيتاً بيتاً. يُفتح البيت التالي عند تسميع السابق بأكثر من {num(threshold)}٪.
+        كل باب مرحلة واحدة: اقرأه كاملاً، ثم سمّع جميع أبياته في محاولة واحدة. يُفتح الباب التالي عند تسميع هذا الباب بأكثر من {num(threshold)}٪.
       </PageHeader>
       {current && currentChapter && (
         <div className="mb-6">
-          <Link href={`/student/learn/tuhfa/${currentChapter.number}?verse=${current.number}`} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-secondary px-6 py-3 font-ui font-bold text-secondary-foreground shadow-[0_4px_0_hsl(24_90%_20%)] transition active:translate-y-1 active:shadow-none" data-testid="link-resume-verse">
-            تابع البيت {num(current.number)} <ArrowLeft size={16} />
+          <Link href={`/student/learn/tuhfa/${currentChapter.number}`} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-secondary px-6 py-3 font-ui font-bold text-secondary-foreground shadow-[0_4px_0_hsl(24_90%_20%)] transition active:translate-y-1 active:shadow-none" data-testid="link-resume-verse">
+            تابع الباب {num(currentChapter.number)} <ArrowLeft size={16} />
           </Link>
         </div>
       )}
@@ -53,17 +51,16 @@ export default function TuhfaMapPage() {
         : !chapters.length || !stages.length ? <EmptyState icon={<BookMascot size={72} mood="rest" />} title="لا أبواب بعد">ستظهر الأبواب عند نشرها.</EmptyState> : (
         <div className="paper-card mx-auto max-w-2xl px-4 py-6 sm:px-8">
           <div className="mb-5 flex items-center gap-3">
-            <p className="shrink-0 font-ui text-sm font-semibold text-muted-foreground" data-testid="text-tuhfa-progress">سمّعت {num(passed)} من {num(stages.length)} بيتاً</p>
-            <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuemin={0} aria-valuemax={stages.length} aria-valuenow={passed} aria-label="التقدم في الأبيات">
+            <p className="shrink-0 font-ui text-sm font-semibold text-muted-foreground" data-testid="text-tuhfa-progress">أتممت {num(passed)} من {num(stages.length)} أبواب</p>
+            <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuemin={0} aria-valuemax={stages.length} aria-valuenow={passed} aria-label="التقدم في الأبواب">
               <div className="h-full rounded-full bg-secondary transition-[width] duration-700" style={{ width: `${pct}%` }} />
             </div>
           </div>
-          {!current && passed === stages.length && <JourneyGuide mood="cheer" message="أتممت أبيات التحفة كلها. راجع الأبواب متى شئت." />}
+          {!current && passed === stages.length && <JourneyGuide mood="cheer" message="أتممت أبواب التحفة كلها. راجع الأبواب متى شئت." />}
           <ol className="relative space-y-3">
             <span className="absolute inset-y-6 right-[1.9rem] w-0.5 bg-border" aria-hidden />
             {chapters.map((ch, i) => {
               const status = chapterStatus(ch, stages);
-              const done = ch.verses.filter((v) => stages.find((s) => s.number === v.number)?.status === 'passed').length;
               const first = ch.verses[0]?.number, last = ch.verses[ch.verses.length - 1]?.number;
               const body = (
                 <>
@@ -75,14 +72,15 @@ export default function TuhfaMapPage() {
                     {status === 'passed' ? <Check size={24} /> : status === 'locked' ? <Lock size={20} /> : num(ch.number)}
                   </span>
                   <span className="min-w-0 flex-1 text-start">
-                    <span className="block font-ui text-xs font-semibold text-secondary">الباب {num(ch.number)}{first ? ` · الأبيات ${num(first)}–${num(last ?? first)}` : ''}</span>
-                    <span className="block font-display text-lg font-bold leading-snug">{ch.title}</span>
-                    <span className="mt-1 block font-ui text-xs text-muted-foreground">{status === 'locked' ? 'يُفتح بعد إتمام الباب السابق' : `${num(done)} من ${num(ch.verses.length)} أبيات مُسمّعة`}</span>
+                    <span className="block font-ui text-xs font-semibold leading-6 text-secondary">الباب {num(ch.number)}{first ? ` · الأبيات ${num(first)}–${num(last ?? first)}` : ''}</span>
+                    <span className="block py-1 font-display text-lg font-bold leading-[2]">{ch.title}</span>
+                    <span className="mt-1 block font-ui text-xs text-muted-foreground">{status === 'locked' ? 'يُفتح بعد إتمام الباب السابق' : status === 'passed' ? 'تم تسميعه' : `${num(ch.verses.length)} أبيات · تسميع واحد`}</span>
                   </span>
                   {status !== 'locked' && <ArrowLeft size={18} className="shrink-0 text-secondary" aria-hidden />}
                 </>
               );
               const cls = 'flex items-center gap-4 rounded-2xl p-3';
+              const here = status === 'current';
               return (
                 <Reveal key={ch.number} delay={Math.min(i, 6) * 0.05}>
                   <li className="list-none" data-testid={`chapter-node-${ch.number}`}>
@@ -90,6 +88,7 @@ export default function TuhfaMapPage() {
                       ? <div className={cn(cls, 'opacity-75')} aria-disabled="true">{body}</div>
                       : <Link href={`/student/learn/tuhfa/${ch.number}`} className={cn(cls, 'transition hover:bg-secondary/5', status === 'current' && 'bg-secondary/5 ring-1 ring-secondary/30')} data-testid={`link-chapter-${ch.number}`}>{body}</Link>}
                   </li>
+                  {here && <JourneyGuide mood="cheer" message={`اقرأ الباب ${num(ch.number)} كاملاً، واختر الكلمات لتسأل عنها. سمّع جميع أبياته في محاولة واحدة لتفتح الباب التالي بأكثر من ${num(threshold)}٪. هذا تدريب كلمات تقريبي، لا تقييم للنطق.`} />}
                 </Reveal>
               );
             })}

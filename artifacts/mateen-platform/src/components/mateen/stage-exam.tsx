@@ -95,23 +95,23 @@ function StageExamContent({ hadith, onClose, textId = 'nawawi', nextHref }: Prop
     <section className="mx-auto max-w-3xl space-y-5 py-3" data-testid="stage-exam">
       <button type="button" className={secondary} onClick={close} disabled={busy} data-testid="button-stage-exam-back"><ArrowRight size={16} />العودة للدراسة</button>
       <header className="paper-card space-y-3 p-5 sm:p-8">
-        <p className="font-ui text-xs font-bold text-secondary">{poem ? 'تسميع البيت' : 'تدريب المرحلة'} {num(hadith.number)}</p>
+        <p className="font-ui text-xs font-bold text-secondary">{poem ? 'تدريب تسميع الباب' : 'تدريب المرحلة'} {num(hadith.number)}</p>
         <h1 className="font-display text-3xl font-bold">{hadith.title}</h1>
         <p className="font-ui text-sm leading-loose text-muted-foreground">{poem
-          ? 'سمّع البيت كاملًا بشطريه. يُفتح البيت التالي عند إكماله وتطابق أكثر من ٩٠٪ من كلماته (٩٠٪ تمامًا لا تكفي). تظهر الكلمات أثناء التسميع، وتُعرض الاختلافات بعد الإنهاء. تُفتح المرحلة التالية بعد اجتياز كل أبيات هذا الباب.'
+          ? 'سمّع أبيات الباب كلها بالترتيب في محاولة واحدة، بالشطر الأول ثم الثاني لكل بيت. يُفتح الباب التالي بعد إكمال المقطع وتطابق أكثر من ٩٠٪ من كلماته (٩٠٪ تمامًا لا تكفي). تظهر الكلمات أثناء التسميع، وتُعرض الاختلافات بعد الإنهاء.'
           : 'سمّع الحديث كاملًا كما درسته، بالسند والعزو. يُفتح الحديث التالي عند إكمال المقطع وتطابق أكثر من ٩٠٪ من كلماته (٩٠٪ تمامًا لا تكفي). تظهر كلماتك في صفحة الكتاب كلما سمّعتها، وتُعرض الاختلافات كلها بعد الإنهاء فقط. بعد كل سبع مراحل مجتازة يُفتح امتحان المجموعة في الخريطة.'}</p>
         <p className="rounded-xl border border-secondary/30 bg-secondary/5 p-3 font-ui text-xs leading-loose" data-testid="stage-exam-disclaimer">هذا اجتياز تدريبي تقريبي بالتعرّف الآلي؛ ليس اعتمادًا للحفظ ولا تقييمًا للنطق أو التشكيل.</p>
       </header>
 
       {outcome ? (
         <div className="paper-card space-y-5 p-4 sm:p-8" data-testid="stage-exam-result">
-          {snapshot ? <ExamReview snapshot={snapshot} outcome={outcome} title={hadith.title} unit={poem ? 'البيت' : 'الحديث'} /> : <>
+          {snapshot ? <ExamReview snapshot={snapshot} outcome={outcome} title={hadith.title} unit={poem ? 'الباب' : 'الحديث'} /> : <>
             <h2 className="font-display text-2xl font-bold" data-testid="stage-result-title">{outcome.passed ? 'اجتزت هذه المرحلة' : !outcome.complete ? 'لم يكتمل المقطع بعد' : 'تحتاج إلى مزيد من التدريب'}</h2>
             <p className="font-display text-5xl font-bold text-primary" data-testid="stage-result-percent">{num(outcome.percent)}٪</p>
           </>}
           <h2 className="sr-only" data-testid={snapshot ? 'stage-result-title' : undefined}>{outcome.passed ? 'اجتزت هذه المرحلة' : !outcome.complete ? 'لم يكتمل المقطع بعد' : 'تحتاج إلى مزيد من التدريب'}</h2>
           <div className="flex flex-wrap justify-center gap-2">
-            {outcome.nextStage && (!poem || nextHref) && <Link className={primary} href={nextHref ?? `/student/learn/nawawi/${outcome.nextStage}`} data-testid="button-stage-next">{poem ? 'البيت التالي' : 'المرحلة التالية'}</Link>}
+            {outcome.nextStage && (!poem || nextHref) && <Link className={primary} href={nextHref ?? `/student/learn/nawawi/${outcome.nextStage}`} data-testid="button-stage-next">{poem ? 'الباب التالي' : 'المرحلة التالية'}</Link>}
             {outcome.passed && !outcome.nextStage && !poem && <Link className={primary} href="/student/learn/nawawi/checkpoint/6" data-testid="button-stage-final-checkpoint">امتحان المجموعة الأخيرة</Link>}
             {outcome.passed && !outcome.nextStage && poem && <p role="status" className="font-bold text-secondary">أتممت تسميع أبيات تحفة الأطفال.</p>}
             <Link className={secondary} href={`/student/learn/${textId}`} data-testid="button-stage-result-map">خريطة التعلّم</Link>

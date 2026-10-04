@@ -13,9 +13,9 @@ Approved student scope: home with welcome, resume the reached learning-map stage
 
 Proposed catalog: العقيدة — التمهيدي: نواقض الإسلام، الأول: القواعد الأربع; الحديث — التمهيدي: الأربعون النووية; التجويد والقراءات — التمهيدي: تحفة الأطفال. Initially only الأربعون النووية was authorized open. On 2026-10-04 the user explicitly expanded the open catalog to تحفة الأطفال; نواقض الإسلام and القواعد الأربع remain closed with «قريباً».
 
-Tuhfat al-Atfal uses the user-selected https://app.turath.io/book/9632?page=3 as its text reference. Its learning-map stages are the poem's subject chapters (e.g. أحكام النون الساكنة والتنوين), with individual verse recitation inside each chapter.
+Tuhfat al-Atfal uses the user-selected https://app.turath.io/book/9632?page=3 as its text reference. Each subject chapter is one level, studied and recited in full in a single attempt. Do not lock or train verses individually and do not divide the poem into fixed eight-verse groups. Display each verse's first hemistich on the right and second on the left, and show the book mascot's guidance at the current path node.
 
-**Why:** The user explicitly requested the same learning/recitation system, but divided by topics and assessed «على كل بيت» rather than pages or hadith-style groups.
+**Why:** On 2026-10-04 the user corrected the earlier individual-verse interpretation and explicitly selected «كل باب مستوى واحد، وتُسمَّع أبياته كلها معًا». The source introduction has five verses; their mention of eight verses did not mean fixed-size groups.
 
 **How to apply:** Preserve the full poem and source chapter boundaries; separate its verses from al-Dabba’s explanatory footnotes. Keep book progress independent, retain the strictly-above-90% approximate memorization threshold, and do not imply that word matching evaluates tajwid performance. Seven-hadith checkpoints remain specific to Nawawi.
 

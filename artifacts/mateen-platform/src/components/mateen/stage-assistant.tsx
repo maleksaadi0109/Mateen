@@ -14,6 +14,7 @@ import { boundedChatRequest } from '@/lib/chat-request';
 import { num } from '@/lib/mateen';
 
 type Props = {
+  unit?: 'البيت' | 'الباب' | 'الحديث';
   textId?: 'nawawi' | 'tuhfa';
   hadith: { number: number; title: string; text: string };
   selectedWord: string | null;
@@ -29,8 +30,8 @@ const errText = (e: unknown) => e instanceof Error && ['TimeoutError', 'AbortErr
   ? 'انتهت مهلة انتظار المساعد. قد يكون الطلب وصل؛ راجع المحادثة في صفحة المساعد قبل الإعادة.'
   : 'تعذّر الحصول على الرد من المساعد. يمكنك إعادة المحاولة.';
 
-export default function StageAssistant({ hadith, selectedWord, wordRequest, onBusyChange, conversationId: cid, onConversationId, draft, onDraft, textId = 'nawawi' }: Props) {
-  const unit = textId === 'tuhfa' ? 'البيت' : 'الحديث';
+export default function StageAssistant({ hadith, selectedWord, wordRequest, onBusyChange, conversationId: cid, onConversationId, draft, onDraft, textId = 'nawawi', unit: requestedUnit }: Props) {
+  const unit = requestedUnit ?? (textId === 'tuhfa' ? 'البيت' : 'الحديث');
   const bookTitle = textId === 'tuhfa' ? 'تحفة الأطفال' : 'الأربعين النووية';
   const qc = useQueryClient();
   const [busy, setBusy] = useState(false);
