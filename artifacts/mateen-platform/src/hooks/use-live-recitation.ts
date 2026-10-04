@@ -41,6 +41,10 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
   const [mismatchIndex, setMismatchIndex] = useState<number | null>(null);
   const [position, setPosition] = useState(0);
   const recognition = useRef<Recognition | null>(null);
+  const keepListening = useRef(false);
+  const restartTimer = useRef<number | null>(null);
+  const emptyRestarts = useRef(0);
+  const startRef = useRef<() => void>(() => {});
   const committed = useRef<boolean[]>(words.map(() => false));
   const cursor = useRef(0);
   const [issues, setIssues] = useState<RecitationIssue[]>([]);
@@ -64,6 +68,9 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
   const clearIssues = () => { issuesRef.current = []; setIssues([]); };
 
   const stop = () => {
+    keepListening.current = false;
+    if (restartTimer.current !== null) window.clearTimeout(restartTimer.current);
+    restartTimer.current = null;
     settleFinish(false);
     const active = recognition.current;
     recognition.current = null; // Late callbacks cannot restore old text/mic state.
@@ -90,6 +97,9 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
     setMismatchIndex(null);
     setError('');
     return () => {
+      keepListening.current = false;
+      if (restartTimer.current !== null) window.clearTimeout(restartTimer.current);
+      restartTimer.current = null;
       const pending = pendingFinish.current;
       pendingFinish.current = null;
       if (pending) { window.clearTimeout(pending.timer); pending.resolve(null); }
@@ -115,6 +125,8 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
       setError('أعد الصفحة فارغة لبدء تسميع جديد.');
       return;
     }
+    if (!keepListening.current) emptyRestarts.current = 0;
+    keepListening.current = true;
     const active = new Constructor();
     const baseMask = [...committed.current];
     const baseCursor = cursor.current;
@@ -156,7 +168,7 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
       const finalWordCount = recitationWords(final).filter(normalizeRecitationWord).length;
       const added = Math.max(0, finalWordCount - countedFinalWords);
       countedFinalWords = Math.max(countedFinalWords, finalWordCount);
-      if (added) { spokenWordsRef.current += added; setSpokenWords(spokenWordsRef.current); }
+      if (added) { emptyRestarts.current = 0; spokenWordsRef.current += added; setSpokenWords(spokenWordsRef.current); }
       // Never silently truncate a long continuous book session and then appear
       // to stop making progress. Resume explicitly from the committed position.
       if (final.length + interim.length > 250_000) {
@@ -164,7 +176,7 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
         stop();
         return;
       }
-      const continuous = options.continuousFeedback ? matchContinuousRecitation(words, final, baseCursor) : null;
+      const continuous = options.continuousFeedback ? matchContinuousRecitation(words, final, baseCursor, baseMask) : null;
       const aligned = continuous ?? matchRecitation(words, final, baseCursor);
       if (continuous) {
         issuesRef.current = [...baseIssues, ...continuous.issues];
@@ -182,7 +194,7 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
         return;
       }
       const provisional = options.continuousFeedback
-        ? matchContinuousRecitation(words, `${final} ${interim}`, baseCursor)
+        ? matchContinuousRecitation(words, `${final} ${interim}`, baseCursor, baseMask)
         : matchRecitation(words, `${final} ${interim}`, baseCursor);
       setInterimIndices(provisional.indices.filter((i) => !committed.current[i]));
       setHeardText(`${final} ${interim}`.trim().slice(-500));
@@ -190,6 +202,9 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
     };
     active.onerror = ({ error: code }) => {
       if (recognition.current !== active) return;
+      // Silence is not a learner error. The browser ends this recognition
+      // session next; onend reconnects without losing the committed position.
+      if (code === 'no-speech' && keepListening.current && !pendingFinish.current) return;
       const messages: Record<string, string> = {
         'not-allowed': 'لم يُسمح بالميكروفون. اسمح باستخدامه من إعدادات الموقع ثم حاول مجدداً.',
         'service-not-allowed': 'خدمة التعرّف على الكلام غير مسموحة في هذا المتصفح. جرّب متصفحاً يدعمها.',
@@ -203,10 +218,20 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
     };
     active.onend = () => {
       if (recognition.current !== active) return;
+      const restarting = keepListening.current && !pendingFinish.current && cursor.current < words.length;
       settleFinish(true);
       recognition.current = null;
-      setListening(false);
       setInterimIndices([]);
+      if (restarting && emptyRestarts.current++ < 5) {
+        restartTimer.current = window.setTimeout(() => {
+          restartTimer.current = null;
+          if (keepListening.current) startRef.current();
+        }, 350);
+      } else {
+        setListening(false);
+        keepListening.current = false;
+        if (restarting) setError('تعذّر استمرار خدمة الصوت بعد عدة محاولات. تحقّق من الميكروفون ثم اضغط متابعة؛ موضعك محفوظ.');
+      }
     };
     try {
       active.start();
@@ -216,6 +241,7 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
       setError('تعذّر بدء الميكروفون. تأكّد من الإذن وعدم استخدامه في تطبيق آخر.');
     }
   };
+  startRef.current = start;
 
   const reset = () => {
     stop();
@@ -232,6 +258,9 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
   // ending capture. Bound the wait; navigation/reset cancels the pending review.
   const finish = async (): Promise<Summary | null> => {
     if (pendingFinish.current) return null;
+    keepListening.current = false;
+    if (restartTimer.current !== null) window.clearTimeout(restartTimer.current);
+    restartTimer.current = null;
     const active = recognition.current;
     if (!active?.stop) { const result = snapshot(); stop(); return result; }
     setFinishing(true);

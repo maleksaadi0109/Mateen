@@ -34,6 +34,50 @@ class FakeRecognition {
 }
 let state: ReturnType<typeof useLiveRecitation>;
 const reference = 'إنما الأعمال بالنيات وإنما لكل امرئ ما نوى';
+test('exact repeated phrases and single words are rehearsal, not new mistakes', () => {
+  const words = recitationWords('سمعت رسول الله صلى الله عليه وسلم يقول إنما الأعمال بالنيات');
+  for (const heard of [
+    'سمعت رسول الله صلى الله عليه وسلم صلى الله عليه وسلم يقول إنما الأعمال بالنيات',
+    'سمعت رسول الله صلى الله عليه وسلم يقول يقول إنما الأعمال بالنيات',
+  ]) {
+    const result = matchContinuousRecitation(words, heard);
+    assert.equal(result.cursor, words.length);
+    assert.deepEqual(result.issues, []);
+  }
+  const mask = words.map((_, i) => i < 7);
+  assert.deepEqual(matchContinuousRecitation(words, 'صلى الله عليه', 7, mask).issues, []);
+  const resumed = matchContinuousRecitation(words, 'صلى الله عليه وسلم يقول إنما الأقوال بالنيات', 7, mask);
+  assert.equal(resumed.issues.length, 1);
+  assert.equal(resumed.issues[0].heard, 'الأقوال');
+});
+
+test('silence reconnects and preserves progress; manual pause cancels scheduled restart', async () => {
+  await act(async () => root.render(<ContinuousHarness />));
+  await act(async () => state.start());
+  const first = FakeRecognition.latest;
+  await act(async () => first.emit('إنما الأعمال بالنيات', true));
+  await act(async () => { first.onerror?.({ error: 'no-speech' }); first.onend?.(); });
+  await act(async () => { await new Promise(resolve => setTimeout(resolve, 400)); });
+  assert.notEqual(FakeRecognition.latest, first);
+  assert.equal(state.listening, true);
+  assert.equal(state.cursor, 3);
+  await act(async () => FakeRecognition.latest.emit('الأعمال بالنيات وإنما لكل', true));
+  assert.equal(state.issues.length, 0);
+  assert.equal(state.cursor, 5);
+  const second = FakeRecognition.latest;
+  await act(async () => { second.onend?.(); state.stop(); });
+  await act(async () => { await new Promise(resolve => setTimeout(resolve, 400)); });
+  assert.equal(FakeRecognition.latest, second);
+  assert.equal(state.listening, false);
+});
+
+test('a genuine practice substitution keeps capture running', async () => {
+  await act(async () => root.render(<ContinuousHarness />));
+  await act(async () => state.start());
+  await act(async () => FakeRecognition.latest.emit('إنما الأقوال بالنيات', true));
+  assert.equal(state.listening, true);
+  assert.equal(state.issues.length, 1);
+});
 test('Arabic whitespace variations do not become substitutions, without forgiving missing words', () => {
   assert.equal(matchRecitation(recitationWords('وإنما لكل امرئ'), 'و إنما لكل امرئ').mismatchIndex, null);
   assert.equal(matchRecitation(recitationWords('عبد الله'), 'عبدالله').mismatchIndex, null);

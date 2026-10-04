@@ -1,7 +1,8 @@
 import { Fragment } from 'react';
 import { Link, useParams } from 'wouter';
 import { getGetLearningMapQueryKey, useGetLearningMap } from '@workspace/api-client-react';
-import { ArrowLeft, BookOpen, FileText } from 'lucide-react';
+import { ArrowLeft, BookOpen, FileText, GraduationCap, Lock } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { EmptyState, ErrorState, PageHeader, SkeletonBlock } from '@/components/mateen/bits';
 import { num, usePageMeta } from '@/lib/mateen';
 import BookMascot from '@/components/mateen/book-mascot';
@@ -17,7 +18,7 @@ const SECTION = 7;
 
 export default function LearningMapPage() {
   const { textId } = useParams<{ textId: string }>();
-  usePageMeta('خريطة الأربعين | مَتِين', 'مراحل الأربعين النووية: حديث في كل مرحلة، وامتحان يفتح ما بعده.');
+  usePageMeta('خريطة الأربعين | مَتِين', 'مراحل الأربعين النووية: حديث في كل مرحلة، وامتحان بعد كل سبع مراحل.');
   const map = useNawawiMap();
   if (textId !== 'nawawi') return <EmptyState icon={<BookMascot size={72} mood="rest" />} title="هذا المتن قريباً">لا خريطة له بعد. <Link href="/student/tracks" className="font-bold text-secondary">المسارات</Link></EmptyState>;
 
@@ -30,7 +31,7 @@ export default function LearningMapPage() {
   return (
     <div>
       <PageHeader eyebrow="الأربعون النووية" title="رحلة الأربعين">
-        حديث في كل مرحلة: ادرسه، تدرّب على تسميعه، ثم امتحنه. تُفتح المرحلة التالية عند بلوغ نحو {num(threshold)}٪.
+        حديث في كل مرحلة: ادرسه ثم أنهِ تدريب المرحلة بأكثر من {num(threshold)}٪ لتُفتح التالية. وبعد كل سبع مراحل مجتازة يُفتح امتحان المجموعة: خمسة أحاديث عشوائية منها.
       </PageHeader>
       <div className="mb-6 flex flex-wrap gap-3">
         {current && <Link href={`/student/learn/nawawi/${current.number}`} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-secondary px-6 py-3 font-ui font-bold text-secondary-foreground shadow-[0_4px_0_hsl(24_90%_20%)] transition active:translate-y-1 active:shadow-none" data-testid="link-resume-stage">تابع المرحلة {num(current.number)} <ArrowLeft size={16} /></Link>}
@@ -57,9 +58,10 @@ export default function LearningMapPage() {
                 <Fragment key={s.number}>
                   {sectionStart && <SectionBanner from={group[0].number} to={group[group.length - 1].number} passed={group.filter((g) => g.status === 'passed').length} total={group.length} />}
                   <StageNode stage={s} index={i} />
+                  {(i + 1) % SECTION === 0 && <CheckpointNode group={(i + 1) / SECTION} from={stages[i + 1 - SECTION].number} to={s.number} open={stages.slice(i + 1 - SECTION, i + 1).every((g) => g.status === 'passed')} />}
                   {s.status === 'current' && (
                     <li className="list-none">
-                      <JourneyGuide message={s.number === 1 ? 'بسم الله، نبدأ بالحديث الأول. خطوة بعد خطوة.' : `أنت هنا. أتقن هذا الحديث بنحو ${num(threshold)}٪ لتُفتح التالية.`} />
+                      <JourneyGuide message={s.number === 1 ? 'بسم الله، نبدأ بالحديث الأول. خطوة بعد خطوة.' : `أنت هنا. أتقن هذا الحديث بأكثر من ${num(threshold)}٪ لتُفتح التالية.`} />
                     </li>
                   )}
                 </Fragment>
@@ -69,5 +71,27 @@ export default function LearningMapPage() {
         </div>
       )}
     </div>
+  );
+}
+
+function CheckpointNode({ group, from, to, open }: { group: number; from: number; to: number; open: boolean }) {
+  const body = (
+    <>
+      <span className={cn('grid h-16 w-16 shrink-0 rotate-45 place-items-center rounded-2xl border-4', open ? 'border-secondary bg-secondary text-secondary-foreground shadow-[0_5px_0_hsl(24_90%_20%)]' : 'border-muted bg-muted text-muted-foreground')}>
+        <span className="-rotate-45">{open ? <GraduationCap size={26} /> : <Lock size={22} />}</span>
+      </span>
+      <span className="min-w-0 text-start">
+        <span className="block font-display text-lg font-bold">امتحان المجموعة {num(group)}</span>
+        <span className="block font-ui text-xs text-muted-foreground">{open ? `خمسة أحاديث عشوائية من ${num(from)}–${num(to)}` : `يُفتح بعد اجتياز المراحل ${num(from)}–${num(to)}`}</span>
+      </span>
+    </>
+  );
+  const cls = 'mx-auto my-6 flex w-fit items-center gap-5 rounded-3xl border-2 border-dashed px-5 py-4';
+  return (
+    <li className="list-none" data-testid={`checkpoint-node-${group}`}>
+      {open
+        ? <Link href={`/student/learn/nawawi/checkpoint/${group}`} className={cn(cls, 'border-secondary/50 bg-secondary/5 transition hover:bg-secondary/10')} data-testid={`link-checkpoint-${group}`}>{body}</Link>
+        : <div className={cn(cls, 'border-muted-foreground/30 opacity-80')} aria-disabled="true">{body}</div>}
+    </li>
   );
 }

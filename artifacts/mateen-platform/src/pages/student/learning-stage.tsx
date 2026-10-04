@@ -17,7 +17,7 @@ type Mode = 'study' | 'practice' | 'exam';
 export default function LearningStagePage() {
   const { textId, stageNumber } = useParams<{ textId: string; stageNumber: string }>();
   const n = Number(stageNumber);
-  usePageMeta(`المرحلة ${num(n || 0)} | مَتِين`, 'ادرس الحديث كلمة كلمة مع المساعد، ثم تدرّب وامتحن.');
+  usePageMeta(`المرحلة ${num(n || 0)} | مَتِين`, 'ادرس الحديث كلمة كلمة مع المساعد، ثم تدرّب على تسميعه.');
   const { user } = useUser();
   const map = useNawawiMap();
   const text = useGetStudyText('nawawi', { query: { queryKey: getGetStudyTextQueryKey('nawawi') } });
@@ -43,7 +43,7 @@ export default function LearningStagePage() {
   if (!stage || !hadith) return <EmptyState title="مرحلة غير موجودة"><Link href="/student/learn/nawawi" className="font-bold text-secondary">العودة للخريطة</Link></EmptyState>;
   if (stage.status === 'locked') return (
     <EmptyState icon={<Lock size={30} className="text-muted-foreground" />} title={`المرحلة ${num(n)} مغلقة`}>
-      <span data-testid="text-stage-locked">اجتز المرحلة السابقة بنحو {num(map.data?.threshold ?? 90)}٪ لتُفتح هذه المرحلة.</span>{' '}
+      <span data-testid="text-stage-locked">اجتز المرحلة السابقة بأكثر من {num(map.data?.threshold ?? 90)}٪ لتُفتح هذه المرحلة.</span>{' '}
       <Link href="/student/learn/nawawi" className="font-bold text-secondary" data-testid="link-back-map">العودة للخريطة</Link>
     </EmptyState>
   );
@@ -78,7 +78,7 @@ export default function LearningStagePage() {
             <button className="inline-flex items-center gap-2 rounded-full border border-secondary px-6 py-3 font-ui font-bold text-secondary hover:bg-secondary/10" onClick={() => setMode('practice')} data-testid="button-practice">
               <Mic size={17} />التدريب على التسميع</button>
             <button className="inline-flex items-center gap-2 rounded-full bg-secondary px-6 py-3 font-ui font-bold text-secondary-foreground" onClick={() => setMode('exam')} data-testid="button-start-exam">
-              <GraduationCap size={17} />الامتحان</button>
+              <GraduationCap size={17} />تدريب المرحلة</button>
           </div>
           <div className="mt-5 flex justify-between font-ui text-sm">
             {prev && prev.status !== 'locked' ? <Link href={`/student/learn/nawawi/${prev.number}`} className="inline-flex items-center gap-1 text-secondary" data-testid="link-prev-stage"><ChevronRight size={15} />السابقة</Link> : <span />}

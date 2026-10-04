@@ -1,4 +1,4 @@
-import { pgTable, text, integer, timestamp, jsonb, primaryKey, uniqueIndex, index } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, doublePrecision, timestamp, jsonb, primaryKey, uniqueIndex, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -7,7 +7,7 @@ export const learningStagesTable = pgTable("mateen_learning_stages", {
   userId: text("user_id").notNull(),
   textId: text("text_id").notNull(),
   stageNumber: integer("stage_number").notNull(),
-  bestPercent: integer("best_percent").notNull(),
+  bestPercent: doublePrecision("best_percent").notNull(),
   passedAt: timestamp("passed_at", { withTimezone: true }),
 }, t => [primaryKey({ columns: [t.userId, t.textId, t.stageNumber] })]);
 

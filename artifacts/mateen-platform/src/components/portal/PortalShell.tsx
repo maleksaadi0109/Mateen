@@ -2,7 +2,7 @@ import { type ReactNode, createContext, useContext, useEffect, useState } from '
 import { Link, Redirect, useLocation } from 'wouter';
 import { useClerk } from '@clerk/react';
 import {
-  LayoutDashboard, Library, BookOpen, Bookmark, ClipboardCheck, ScrollText, MessageSquare, Sparkles, Settings, LogOut, Moon, Sun, FileText, ShieldCheck,
+  LayoutDashboard, Library, ClipboardCheck, ScrollText, MessageSquare, Sparkles, Settings, LogOut, Moon, Sun, FileText, ShieldCheck,
 } from 'lucide-react';
 import { getGetProfileQueryKey, getGetReviewAccessQueryKey, getGetAssessmentReviewerAccessQueryKey, useGetProfile, useGetReviewAccess, useGetAssessmentReviewerAccess } from '@workspace/api-client-react';
 import { Logo, ErrorState, SkeletonBlock } from '@/components/mateen/bits';
@@ -17,9 +17,6 @@ export const usePortalTheme = () => useContext(ThemeCtx);
 const studentNav = [
   { href: '/student', label: 'الرئيسية', icon: LayoutDashboard, exact: true },
   { href: '/student/tracks', label: 'المسارات', icon: Library },
-  { href: '/student/study', label: 'الدراسة', icon: BookOpen },
-  { href: '/student/reviews', label: 'المراجعات', icon: Bookmark },
-  { href: '/student/exams', label: 'الاختبارات', icon: ClipboardCheck },
   { href: '/student/scholars', label: 'المشايخ', icon: ScrollText },
   { href: '/student/messages', label: 'الرسائل', icon: MessageSquare },
   { href: '/student/assistant', label: 'المساعد العلمي', icon: Sparkles },

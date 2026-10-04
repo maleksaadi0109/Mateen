@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useUser } from '@clerk/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link } from 'wouter';
-import { ArrowRight, Check, Flag, Mic, Pause, RotateCcw } from 'lucide-react';
+import { ArrowRight, Flag, Mic, Pause } from 'lucide-react';
 import { finishStageAttempt, startStageAttempt, getGetLearningMapQueryKey, type StageFinishInput, type StageOutcome } from '@workspace/api-client-react';
 import { useLiveRecitation } from '@/hooks/use-live-recitation';
 import { boundedChatRequest } from '@/lib/chat-request';
 import { num } from '@/lib/mateen';
+import { ExamReview, LiveExamBook, type ExamSnapshot } from './exam-book';
 
 type Props = { hadith: { id: number; number: number; title: string; text: string }; onClose: () => void };
 const primary = 'inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 font-ui text-sm font-bold text-primary-foreground disabled:opacity-40';
@@ -24,6 +25,7 @@ function StageExamContent({ hadith, onClose }: Props) {
   const [attempt, setAttempt] = useState<{ id: string; expiresAt: string } | null>(null);
   const [payload, setPayload] = useState<StageFinishInput | null>(null);
   const [outcome, setOutcome] = useState<StageOutcome | null>(null);
+  const [snapshot, setSnapshot] = useState<ExamSnapshot | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const requestId = useRef(crypto.randomUUID());
@@ -42,12 +44,12 @@ function StageExamContent({ hadith, onClose }: Props) {
       const localHash = Array.from(new Uint8Array(bytes), b => b.toString(16).padStart(2, '0')).join('');
       if (!mounted.current) return;
       if (next.sourceHash !== localHash) {
-        setError('تغيّرت نسخة الحديث. أعد تحميل الصفحة قبل بدء محاولة جديدة حتى يتطابق النص مع الامتحان.');
+        setError('تغيّرت نسخة الحديث. أعد تحميل الصفحة قبل بدء محاولة جديدة حتى يتطابق النص مع التدريب.');
         return;
       }
       setAttempt(next); r.reset(); r.start();
     } catch {
-      if (mounted.current) setError('تعذّر بدء الامتحان. تحقق من الاتصال وأن المرحلة السابقة مجتازة، ثم أعد المحاولة.');
+      if (mounted.current) setError('تعذّر بدء التدريب. تحقق من الاتصال وأن المرحلة السابقة مجتازة، ثم أعد المحاولة.');
     } finally {
       inFlight.current = false;
       if (mounted.current) setBusy(false);
@@ -63,6 +65,7 @@ function StageExamContent({ hadith, onClose }: Props) {
         const summary = await r.finish(); // Flush final native result before scoring.
         if (!summary || !mounted.current) return;
         data = { matchedIndices: summary.matchedIndices, issues: summary.issues.map(({ index, kind }) => ({ index, kind })) };
+        setSnapshot({ words: [...r.words], matched: [...summary.matchedIndices], issues: summary.issues.map((i) => ({ ...i })) });
         setPayload(data);
       }
       const result = await boundedChatRequest(signal => finishStageAttempt(attempt.id, data!, { signal }), 20_000);
@@ -78,27 +81,27 @@ function StageExamContent({ hadith, onClose }: Props) {
   };
   const reset = () => {
     if (inFlight.current) return;
-    r.reset(); setAttempt(null); setPayload(null); setOutcome(null); setError(''); requestId.current = crypto.randomUUID();
+    r.reset(); setAttempt(null); setPayload(null); setOutcome(null); setSnapshot(null); setError(''); requestId.current = crypto.randomUUID();
   };
   const close = () => { if (!inFlight.current) { r.stop(); onClose(); } };
 
   return (
-    <section className="mx-auto max-w-2xl space-y-5 py-3" data-testid="stage-exam">
+    <section className="mx-auto max-w-3xl space-y-5 py-3" data-testid="stage-exam">
       <button type="button" className={secondary} onClick={close} disabled={busy} data-testid="button-stage-exam-back"><ArrowRight size={16} />العودة للدراسة</button>
       <header className="paper-card space-y-3 p-5 sm:p-8">
-        <p className="font-ui text-xs font-bold text-secondary">امتحان المرحلة {num(hadith.number)}</p>
+        <p className="font-ui text-xs font-bold text-secondary">تدريب المرحلة {num(hadith.number)}</p>
         <h1 className="font-display text-3xl font-bold">{hadith.title}</h1>
-        <p className="font-ui text-sm leading-loose text-muted-foreground">سمّع الحديث كاملًا كما درسته، بالسند والعزو. يُفتح الحديث التالي عند إكمال المقطع وتطابق ٩٠٪ على الأقل من كلماته. لا تُعرض الكلمات أو المساعدة أثناء الامتحان.</p>
+        <p className="font-ui text-sm leading-loose text-muted-foreground">سمّع الحديث كاملًا كما درسته، بالسند والعزو. يُفتح الحديث التالي عند إكمال المقطع وتطابق أكثر من ٩٠٪ من كلماته (٩٠٪ تمامًا لا تكفي). تظهر كلماتك في صفحة الكتاب كلما سمّعتها، وتُعرض الاختلافات كلها بعد الإنهاء فقط. بعد كل سبع مراحل مجتازة يُفتح امتحان المجموعة في الخريطة.</p>
         <p className="rounded-xl border border-secondary/30 bg-secondary/5 p-3 font-ui text-xs leading-loose" data-testid="stage-exam-disclaimer">هذا اجتياز تدريبي تقريبي بالتعرّف الآلي؛ ليس اعتمادًا للحفظ ولا تقييمًا للنطق أو التشكيل. يبقى اختبار المستوى الشامل الشفهي والكتابي مستقلًا.</p>
       </header>
 
       {outcome ? (
-        <div className="paper-card space-y-4 p-5 text-center sm:p-8" role="status" data-testid="stage-exam-result">
-          <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-secondary/10 text-secondary">{outcome.passed ? <Check size={28} /> : <RotateCcw size={28} />}</div>
-          <h2 className="font-display text-2xl font-bold" data-testid="stage-result-title">{outcome.passed ? 'اجتزت هذه المرحلة' : !outcome.complete ? 'لم يكتمل المقطع بعد' : 'تحتاج إلى مزيد من التدريب'}</h2>
-          <p className="font-display text-5xl font-bold text-primary" data-testid="stage-result-percent">{num(outcome.percent)}٪</p>
-          <p className="font-ui text-sm">تطابق تقريبي: {num(outcome.matched)} من {num(outcome.total)} كلمة · زيادات {num(outcome.extras)}</p>
-          <p className="font-ui text-xs leading-loose text-muted-foreground">النسبة محسوبة على الحديث كاملًا مع الزيادات، وليست على الكلمات التي قرأتها فقط. {!outcome.complete && 'لم يُلتقط المقطع كاملًا، ولذلك لم تُحتسب المحاولة اجتيازًا.'}</p>
+        <div className="paper-card space-y-5 p-4 sm:p-8" data-testid="stage-exam-result">
+          {snapshot ? <ExamReview snapshot={snapshot} outcome={outcome} title={hadith.title} /> : <>
+            <h2 className="font-display text-2xl font-bold" data-testid="stage-result-title">{outcome.passed ? 'اجتزت هذه المرحلة' : !outcome.complete ? 'لم يكتمل المقطع بعد' : 'تحتاج إلى مزيد من التدريب'}</h2>
+            <p className="font-display text-5xl font-bold text-primary" data-testid="stage-result-percent">{num(outcome.percent)}٪</p>
+          </>}
+          <h2 className="sr-only" data-testid={snapshot ? 'stage-result-title' : undefined}>{outcome.passed ? 'اجتزت هذه المرحلة' : !outcome.complete ? 'لم يكتمل المقطع بعد' : 'تحتاج إلى مزيد من التدريب'}</h2>
           <div className="flex flex-wrap justify-center gap-2">
             {outcome.nextStage && <Link className={primary} href={`/student/learn/nawawi/${outcome.nextStage}`} data-testid="button-stage-next">المرحلة التالية</Link>}
             {outcome.passed && !outcome.nextStage && <Link className={primary} href="/student/exams" data-testid="button-stage-final-exam">الاختبار الشامل</Link>}
@@ -111,19 +114,17 @@ function StageExamContent({ hadith, onClose }: Props) {
           {!attempt ? <>
             <label className="flex items-start gap-3 rounded-xl border bg-background p-4 font-ui text-sm leading-loose">
               <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} disabled={busy} className="mt-2 h-4 w-4 shrink-0" data-testid="checkbox-stage-consent" />
-              <span>أوافق على استخدام الميكروفون. قد تعالج خدمة المتصفح الصوت خارجيًا. عند إنهاء الامتحان تُرسل مواضع الكلمات المطابقة وأنواع الاختلافات لحساب نتيجة المرحلة وحفظ تقدّمي في حسابي، دون تسجيل صوتي أو نص مسموع كامل.</span>
+              <span>أوافق على استخدام الميكروفون. قد تعالج خدمة المتصفح الصوت خارجيًا. عند إنهاء التدريب تُرسل مواضع الكلمات المطابقة وأنواع الاختلافات لحساب نتيجة المرحلة وحفظ تقدّمي في حسابي، دون تسجيل صوتي أو نص مسموع كامل.</span>
             </label>
             {r.supported === false && <p role="alert" className="font-ui text-sm" data-testid="stage-mic-unsupported">التعرّف الصوتي غير متاح في متصفحك. يمكنك العودة للدراسة والتجربة بمتصفح يدعمه؛ لن تُسجّل نتيجة وهمية.</p>}
-            <button type="button" className={`${primary} w-full`} onClick={begin} disabled={!consent || !r.supported || busy} data-testid="button-stage-start"><Mic size={18} />{busy ? 'جارٍ بدء المحاولة…' : 'بدء التسميع للامتحان'}</button>
+            <button type="button" className={`${primary} w-full`} onClick={begin} disabled={!consent || !r.supported || busy} data-testid="button-stage-start"><Mic size={18} />{busy ? 'جارٍ بدء المحاولة…' : 'بدء تدريب المرحلة'}</button>
           </> : <>
-            <div className="space-y-3 py-5 text-center">
-              <Mic className={`mx-auto h-12 w-12 text-secondary ${r.listening ? 'animate-pulse motion-reduce:animate-none' : ''}`} />
-              <p className="font-display text-xl font-bold" role="status" data-testid="stage-listening-status">{r.listening ? 'يستمع الآن — تابع التسميع' : 'الميكروفون متوقف'}</p>
-              <p className="font-ui text-xs text-muted-foreground">المحاولة متاحة لمدة ساعة. إغلاق الصفحة قبل تثبيت النتيجة يتطلب بدء محاولة جديدة.</p>
-            </div>
+            <p className="flex items-center justify-center gap-2 font-ui text-sm font-bold" role="status" data-testid="stage-listening-status"><Mic size={16} className={r.listening ? 'animate-pulse text-secondary motion-reduce:animate-none' : 'text-muted-foreground'} />{r.listening ? 'يستمع الآن — تابع التسميع' : 'الميكروفون متوقف'}</p>
+            <LiveExamBook words={r.words} revealed={r.revealed} interimIndices={r.interimIndices} listening={r.listening} title={hadith.title} />
+            <p className="text-center font-ui text-xs text-muted-foreground">المحاولة متاحة لمدة ساعة. إغلاق الصفحة قبل تثبيت النتيجة يتطلب بدء محاولة جديدة.</p>
             {!payload && <div className="flex flex-wrap justify-center gap-2">
               <button type="button" className={secondary} disabled={busy || r.finishing} onClick={r.listening ? r.stop : r.start} data-testid="button-stage-pause">{r.listening ? <><Pause size={16} />إيقاف مؤقت</> : <><Mic size={16} />متابعة التسميع</>}</button>
-              <button type="button" className={primary} disabled={busy || r.finishing || r.attemptedCount === 0} onClick={finish} data-testid="button-stage-finish"><Flag size={16} />{busy ? 'جارٍ احتساب النتيجة…' : 'إنهاء الامتحان'}</button>
+              <button type="button" className={primary} disabled={busy || r.finishing || r.attemptedCount === 0} onClick={finish} data-testid="button-stage-finish"><Flag size={16} />{busy ? 'جارٍ احتساب النتيجة…' : 'إنهاء التدريب'}</button>
             </div>}
             {payload && !outcome && <button type="button" className={`${primary} w-full`} disabled={busy} onClick={finish} data-testid="button-stage-submit-retry">{busy ? 'جارٍ تثبيت النتيجة…' : 'إعادة إرسال النتيجة'}</button>}
             <button type="button" className={secondary} disabled={busy} onClick={reset} data-testid="button-stage-reset">بدء محاولة جديدة</button>

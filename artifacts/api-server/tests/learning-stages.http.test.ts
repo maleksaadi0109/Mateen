@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import assert from "node:assert/strict";
+import "./stage-threshold.test";
 import { after, before, test } from "node:test";
 import express from "express";
 import { db, pool, profilesTable, stageAttemptsTable } from "@workspace/db";
@@ -59,6 +60,18 @@ test("incomplete attempt does not unlock; complete pass is durable, idempotent a
   assert.equal(partial.passed, false); assert.equal(partial.complete, false);
   const beforeMap = await readMap();
   assert.equal(beforeMap.stages[1].status, "locked");
+  const fractional = await start();
+  const original = full();
+  const missed = original.matchedIndices[0];
+  const fractionResponse = await call(finish(fractional.id), "learner", {
+    matchedIndices: original.matchedIndices.slice(1),
+    issues: [{ index: missed, kind: "substitution" }],
+  });
+  assert.equal(fractionResponse.status, 200);
+  const fractionOutcome = FinishStageAttemptResponse.parse(await fractionResponse.json());
+  assert.equal(fractionOutcome.passed, true);
+  assert.ok(fractionOutcome.percent > 90 && fractionOutcome.percent < 100);
+  assert.equal((await readMap()).stages[0].bestPercent, fractionOutcome.percent);
   const b = await start();
   const passed = await Promise.all([call(finish(b.id), "learner", full()), call(finish(b.id), "learner", full())]);
   for (const p of passed) { assert.equal(p.status, 200); assert.equal(FinishStageAttemptResponse.parse(await p.json()).passed, true); }

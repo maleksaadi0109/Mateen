@@ -17,6 +17,7 @@ import StudyReaderPage from '@/pages/student/study-reader';
 import StudyLibraryPage from '@/pages/student/study-library';
 import StudyReportsPage from '@/pages/student/study-reports';
 import LearningMapPage from '@/pages/student/learning-map';
+import LearningCheckpointPage from '@/pages/student/learning-checkpoint';
 import LearningStagePage from '@/pages/student/learning-stage';
 import ReviewsPage from '@/pages/student/reviews';
 import ScholarsPage from '@/pages/student/scholars';
@@ -159,6 +160,7 @@ function Routes() {
           <Route path="/student"><Portal role="student"><StudentHome /></Portal></Route>
           <Route path="/student/tracks"><Portal role="student"><TracksPage /></Portal></Route>
           <Route path="/student/learn/:textId"><Portal role="student"><LearningMapPage /></Portal></Route>
+          <Route path="/student/learn/:textId/checkpoint/:group"><Portal role="student"><LearningCheckpointPage /></Portal></Route>
           <Route path="/student/learn/:textId/:stageNumber"><Portal role="student"><LearningStagePage /></Portal></Route>
           <Route path="/student/study"><Portal role="student"><StudyLibraryPage /></Portal></Route>
           <Route path="/student/study/reports"><Portal role="student"><StudyReportsPage /></Portal></Route>

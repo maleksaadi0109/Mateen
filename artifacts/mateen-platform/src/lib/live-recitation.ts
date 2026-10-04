@@ -16,7 +16,7 @@ export type RecitationIssue = {
 };
 
 /** Practice alignment, not assessment: retain ASR differences without blocking. */
-export function matchContinuousRecitation(words: string[], transcript: string, start = 0) {
+export function matchContinuousRecitation(words: string[], transcript: string, start = 0, previouslyMatched: readonly boolean[] = []) {
   const target = words.map(normalizeRecitationWord);
   const raw = recitationWords(transcript.slice(0, 250_000)).filter(w => normalizeRecitationWord(w));
   const heard = raw.map(normalizeRecitationWord);
@@ -34,6 +34,20 @@ export function matchContinuousRecitation(words: string[], transcript: string, s
     while (cursor < target.length && !target[cursor]) indices.push(cursor++);
     if (cursor >= target.length) break;
     if (heard[i] === target[cursor]) { indices.push(cursor++); continue; }
+    // A reader can pause and repeat already matched context, including within
+    // one cumulative browser result. Do not advance or penalize that rehearsal.
+    // Only exact, actually matched words qualify; merely seeking past text does not.
+    let repeated = 0;
+    for (let n = Math.min(cursor, 32); n > 0; n--) {
+      const count = Math.min(n, heard.length - i);
+      if (count && Array.from({ length: count }, (_, k) => cursor - n + k).every((at, k) =>
+        target[at] && heard[i + k] === target[at] &&
+        (previouslyMatched[at] || indices.includes(at))) &&
+        (count < n || i + count === heard.length || heard[i + count] === target[cursor])) {
+        repeated = count; break;
+      }
+    }
+    if (repeated) { i += repeated - 1; continue; }
     if (heard[i + 1] && heard[i] + heard[i + 1] === target[cursor]) {
       indices.push(cursor++); i++; continue;
     }

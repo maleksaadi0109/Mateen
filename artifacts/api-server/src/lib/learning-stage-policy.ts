@@ -43,9 +43,9 @@ export function scoreStage(words: string[], input: unknown) {
   const denominator = total + extras;
   const complete = covered.size === total;
   return {
-    // Floor avoids showing 90% for a failing 89.8% attempt.
-    percent: Math.floor(100 * matches.size / denominator),
+    // Keep fractional scores: 90.1% passes, exactly 90% does not.
+    percent: Math.floor(100_000 * matches.size / denominator) / 1000,
     matched: matches.size, total, extras, complete,
-    passed: complete && matches.size * 100 >= STAGE_THRESHOLD * denominator,
+    passed: complete && matches.size * 100 > STAGE_THRESHOLD * denominator,
   };
 }

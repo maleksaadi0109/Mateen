@@ -27,6 +27,18 @@ The user supplied https://app.turath.io/book/12836?page=6 as the source for ال
 
 **How to apply:** Verify the edition, text boundaries, and reuse permissions before importing it. The supplied reference does not by itself approve any commentary or additional texts bundled with the book.
 
+On 2026-10-04 the user requested removing «الدراسة، المراجعات، الاختبارات» from the student navigation and putting an exam on the map after every seven hadiths, selecting five random hadiths from that group.
+
+**Why:** The learning map should be the primary journey, rather than three competing navigation entries.
+
+**How to apply:** Keep existing books, reports and historical records accessible through contextual links; this is not permission to delete user data. Distinguish approximate practice checkpoints from formal reviewed assessments.
+
+Stage recitation should reveal words on a book-style page and show precise differences after finishing. The user explicitly requires a score **strictly above 90%**, not at least 90%.
+
+**Why:** On 2026-10-04 the user asked for the first-stage exam to resemble book practice and insisted «ضروري تاكون نسبته فوق 90».
+
+**How to apply:** Apply the strict boundary to new stage/checkpoint attempts, preserve fractional percentages consistently in results and history, require complete coverage, and retain existing earned progress. Do not change the independent formal assessment policy.
+
 Approved teacher scope: overview of pending questions/referrals/recent conversations; unified referral inbox filterable by response status; scholarly profile with biography, specialties, teachers and ijazat review status; account/notification settings; accessible availability control.
 
 Approved admin scope: activity and review priorities; users/permissions/account states; teacher qualification review with accept/request information/reject and reason; tracks/levels/approved texts/order; assessment generation/pass/retake policy management and results; approved commentary sources, assistant answer issues and referrals; reports and administrative audit trail.

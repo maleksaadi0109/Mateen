@@ -92,6 +92,19 @@ uncertainty explanations without adding the removed live panel back.
 Practice review must break results down by individual hadith as well as the
 overall attempted passage, on a full-page review rather than only a popup.
 
+The user reiterated on 2026-10-04 that mistakes must not stop the microphone,
+and repeating a previously recognized word or phrase after a pause is not
+a new learner error.
+
+**Why:** Both interruptions and false repetition penalties undermine the
+core recitation experience; this repeats the earlier continuous-capture requirement.
+
+**How to apply:** Keep capture active through practice differences and recover
+from ordinary browser session endings, while respecting deliberate pause,
+finish, permission denial and navigation. Ignore exact rehearsal of already
+matched context, but do not use fuzzy matching to erase actual substitutions.
+Synthetic ASR event tests establish app behavior, not real-service accuracy.
+
 **Why:** The user wants to identify which hadith and which exact words need
 practice, not rely on one percentage for the whole attempt.
 

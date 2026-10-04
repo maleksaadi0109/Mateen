@@ -27,6 +27,8 @@ try {
   pg("psql", ["-h", socket, "-U", "stage_test", "-d", "stages", "-v", "ON_ERROR_STOP=1", "-f",
     join(root, "../../lib/db/migrations/0010_learning_stages.sql")]);
   const outfile = join(temp, "tests.cjs");
+  pg("psql", [env.DATABASE_URL, "-v", "ON_ERROR_STOP=1", "-f",
+    join(root, "../../lib/db/migrations/0012_fractional_stage_scores.sql")]);
   await build({
     entryPoints: [join(root, "tests/learning-stages.http.test.ts")], bundle: true, platform: "node", format: "cjs", outfile,
     plugins: [{ name: "stage-test-adapters", setup(b) {
