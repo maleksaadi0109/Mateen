@@ -8,6 +8,7 @@ import { EmptyState, ErrorState, SkeletonBlock } from '@/components/mateen/bits'
 import { buildStudyInsights } from '@/lib/study-insights';
 import { num, usePageMeta } from '@/lib/mateen';
 import { cn } from '@/lib/utils';
+import { StudyContinuity } from '@/components/mateen/study-continuity';
 
 const PAGE = 20;
 const CAP = 500;
@@ -56,6 +57,7 @@ export default function StudyReportsPage() {
         </p>
       </header>
 
+      <StudyContinuity />
       {!isLoaded || query.isLoading ? (
         <div className="space-y-4"><SkeletonBlock className="h-28" /><SkeletonBlock className="h-64" /></div>
       ) : !userId ? (
@@ -81,13 +83,13 @@ function Overview({ insights, capped }: { insights: Insights; capped: boolean })
   return (
     <>
       <section className="grid gap-px overflow-hidden rounded-[1.5rem] border bg-border sm:grid-cols-2 lg:grid-cols-4" aria-label="ملخص" data-testid="reports-summary">
-        <Stat label="سلسلة الأيام الحالية" value={num(insights.currentStreak)} unit="يوم" testId="stat-current-streak" />
-        <Stat label="أطول سلسلة" value={num(insights.longestStreak)} unit="يوم" testId="stat-longest-streak" />
+        <Stat label="سلسلة حفظ التقارير الحالية" value={num(insights.currentStreak)} unit="يوم" testId="stat-current-streak" />
+        <Stat label="أطول سلسلة حفظ تقارير" value={num(insights.longestStreak)} unit="يوم" testId="stat-longest-streak" />
         <Stat label="أيام فيها تقارير" value={num(insights.activeDays)} unit="يوم" testId="stat-active-days" />
         <Stat label="تطابق تقريبي إجمالي" value={`${num(pct(insights.matched, insights.attempted))}٪`} unit={`${num(insights.reportCount)} تقريراً`} testId="stat-overall-match" />
       </section>
       <p className="-mt-5 font-ui text-[11px] leading-relaxed text-muted-foreground" data-testid="text-streak-note">
-        الأيام تُحسب من وقت حفظ تقارير التسميع بتوقيت متصفحك، لا من كل أيام دراستك أو قراءتك. حذف تقرير يعيد الحساب. التقارير القديمة ذات التفاصيل الناقصة لا تدخل في هذا الملخص.
+        هذا الملخص خاص بأيام حفظ التقارير بتوقيت متصفحك، وليس استمرارية الدراسة أعلاه. حذف تقرير يعيد حساب ملخص التقارير فقط ولا يغير أيام الدراسة. التقارير القديمة ذات التفاصيل الناقصة لا تدخل في هذا الملخص.
         {capped && ` تُعرض أحدث ${num(CAP)} تقرير فقط.`}
       </p>
 

@@ -1,4 +1,7 @@
 export const listPracticeReports = async () => ({ reports: [], hasMore: false });
+export const getStudyActivity = async () => ({ timezone: null, today: null, currentStreak: 0, longestStreak: 0, activeDays: 0, studiedToday: false, lastStudyDay: null });
+export const startStudyActivity = async () => { throw new Error('No focused reading in saved-position tests'); };
+export const finishStudyActivity = async () => { throw new Error('Saved positions must not count activity'); };
 export const getPracticeReportWords = async () => ({ issues: [], total: 0, hasMore: false });
 export const savePracticeReport = async () => { throw new Error('Unexpected report write in study progress test'); };
 export const getPracticeReport = async () => { throw new Error('Unexpected report read in study progress test'); };

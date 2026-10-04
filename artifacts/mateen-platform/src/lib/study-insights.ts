@@ -8,6 +8,7 @@ const validAnalysis = (a: PracticeReportHadith) =>
   [a.totalWords, a.covered, a.matched, a.attempted, a.substitutions, a.omissions, a.extras].every(nonnegative) &&
   a.totalWords > 0 && a.attempted > 0 && a.covered <= a.totalWords && a.matched <= a.covered && a.matched <= a.attempted;
 
+// Report-save history only. Real study continuity comes exclusively from the activity API.
 export function buildStudyInsights(reports: PracticeReport[], now = new Date()) {
   const seen = new Set<string>();
   const valid = reports.filter(r => {

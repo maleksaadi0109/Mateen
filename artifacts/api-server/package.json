@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test:study-activity": "tsx --test src/lib/study-activity-policy.test.ts && node ./test-study-activity.mjs",
     "test:learning-stages": "tsx --test src/lib/learning-stage-policy.test.ts && node ./test-learning-stages.mjs",
     "test:practice-reports": "node ./test-practice-reports.mjs",
     "test:recitation-pages": "tsx --test src/lib/recitation-pages.test.ts",

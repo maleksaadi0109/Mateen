@@ -3,6 +3,12 @@ name: OpenAPI generator compatibility
 description: YAML merge handling and generated path/query naming collisions in Orval.
 ---
 
+Use named input component schemas instead of inline request bodies for operations exported by both the Zod and types barrels.
+
+**Why:** Orval can give the inline request-body type and Zod schema the same exported name, causing duplicate barrel exports at codegen typecheck.
+
+**How to apply:** Define an `...Input` component, reference it from the request body, and regenerate; never patch generated files.
+
 Use explicit path and component-schema mappings, not YAML merge keys (`<<`), in the OpenAPI contract consumed by Orval.
 
 **Why:** A YAML loader can expand merge keys successfully while Orval treats them as literal component names and rejects the contract. Successful generic YAML parsing does not establish generator compatibility.

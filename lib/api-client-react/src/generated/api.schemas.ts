@@ -5,6 +5,63 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+export type StudyActivityStartInputKind = typeof StudyActivityStartInputKind[keyof typeof StudyActivityStartInputKind];
+
+
+export const StudyActivityStartInputKind = {
+  reading: 'reading',
+  recitation: 'recitation',
+} as const;
+
+export interface StudyActivityStartInput {
+  requestId: string;
+  /**
+     * @minLength 1
+     * @maxLength 100
+     */
+  timezone: string;
+  kind: StudyActivityStartInputKind;
+  /**
+     * @minimum 1
+     * @maximum 1000
+     */
+  page: number;
+}
+
+export interface StudyActivityFinishInput {
+  /**
+     * @minimum 1
+     * @maximum 1000
+     */
+  page: number;
+  /**
+     * @minimum 0
+     * @maximum 7200
+     */
+  activeSeconds: number;
+  /**
+     * @minimum 0
+     * @maximum 100000
+     */
+  spokenWords: number;
+}
+
+export interface StudyActivity {
+  /** @nullable */
+  timezone: string | null;
+  /** @nullable */
+  today: string | null;
+  /** @minimum 0 */
+  currentStreak: number;
+  /** @minimum 0 */
+  longestStreak: number;
+  /** @minimum 0 */
+  activeDays: number;
+  studiedToday: boolean;
+  /** @nullable */
+  lastStudyDay: string | null;
+}
+
 export interface StageStartInput {
   requestId: string;
   consent: true;
@@ -1749,6 +1806,11 @@ export interface CompleteScheduledReviewInput {
 
 export type PracticeReportErrorResponse = {
   error: string;
+};
+
+export type StartStudyActivity201 = {
+  id: string;
+  timezone: string;
 };
 
 export type StartStageAttempt201 = {

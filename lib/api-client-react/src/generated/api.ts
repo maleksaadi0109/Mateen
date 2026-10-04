@@ -100,7 +100,11 @@ import type {
   StageStartInput,
   StartAssessmentInput,
   StartStageAttempt201,
+  StartStudyActivity201,
   StudentAssessmentSummary,
+  StudyActivity,
+  StudyActivityFinishInput,
+  StudyActivityStartInput,
   StudyProgress,
   StudyText,
   SubmitAssessmentInput,
@@ -137,6 +141,242 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   }
   return result;
 };
+
+export const getGetStudyActivityUrl = () => {
+
+
+
+
+  return `/api/mateen/study-activity`
+}
+
+export const getStudyActivity = async ( options?: Parameters<typeof customFetch>[1]): Promise<StudyActivity> => {
+
+  return customFetch<StudyActivity>(getGetStudyActivityUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetStudyActivityQueryKey = () => {
+    return [
+    `/api/mateen/study-activity`
+    ] as const;
+    }
+
+
+export const getGetStudyActivityQueryOptions = <TData = Awaited<ReturnType<typeof getStudyActivity>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getStudyActivity>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetStudyActivityQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getStudyActivity>>> = ({ signal }) => getStudyActivity({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getStudyActivity>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetStudyActivityQueryResult = NonNullable<Awaited<ReturnType<typeof getStudyActivity>>>
+export type GetStudyActivityQueryError = ErrorType<unknown>
+
+
+
+export function useGetStudyActivity<TData = Awaited<ReturnType<typeof getStudyActivity>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getStudyActivity>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetStudyActivityQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getStartStudyActivityUrl = () => {
+
+
+
+
+  return `/api/mateen/study-activity/sessions`
+}
+
+export const startStudyActivity = async (studyActivityStartInput: StudyActivityStartInput, options?: Parameters<typeof customFetch>[1]): Promise<StartStudyActivity201> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<StartStudyActivity201>(getStartStudyActivityUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(studyActivityStartInput)
+  }
+);}
+
+
+
+
+
+export const getStartStudyActivityMutationKey = () => ['startStudyActivity'] as const;
+
+export const getStartStudyActivityMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startStudyActivity>>, TError,StartStudyActivityMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof startStudyActivity>>, TError,StartStudyActivityMutationVariables, TContext> => {
+
+const mutationKey = getStartStudyActivityMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof startStudyActivity>>, StartStudyActivityMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  startStudyActivity(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type StartStudyActivityMutationResult = NonNullable<Awaited<ReturnType<typeof startStudyActivity>>>
+    export type StartStudyActivityMutationBody = BodyType<StudyActivityStartInput>
+    export type StartStudyActivityMutationError = ErrorType<void>
+    export type StartStudyActivityMutationVariables = {data: BodyType<StudyActivityStartInput>}
+
+    export const useStartStudyActivity = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof startStudyActivity>>, TError,StartStudyActivityMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof startStudyActivity>>,
+        TError,
+        StartStudyActivityMutationVariables,
+        TContext
+      > => {
+      return useMutation(getStartStudyActivityMutationOptions(options));
+    }
+
+export const getFinishStudyActivityUrl = (sessionId: string,) => {
+
+
+
+
+  return `/api/mateen/study-activity/sessions/${sessionId}/finish`
+}
+
+export const finishStudyActivity = async (sessionId: string,
+    studyActivityFinishInput: StudyActivityFinishInput, options?: Parameters<typeof customFetch>[1]): Promise<StudyActivity> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<StudyActivity>(getFinishStudyActivityUrl(sessionId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(studyActivityFinishInput)
+  }
+);}
+
+
+
+
+
+export const getFinishStudyActivityMutationKey = () => ['finishStudyActivity'] as const;
+
+export const getFinishStudyActivityMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof finishStudyActivity>>, TError,FinishStudyActivityMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof finishStudyActivity>>, TError,FinishStudyActivityMutationVariables, TContext> => {
+
+const mutationKey = getFinishStudyActivityMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof finishStudyActivity>>, FinishStudyActivityMutationVariables> = (props) => {
+          const {sessionId,data} = props ?? {};
+
+          return  finishStudyActivity(sessionId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type FinishStudyActivityMutationResult = NonNullable<Awaited<ReturnType<typeof finishStudyActivity>>>
+    export type FinishStudyActivityMutationBody = BodyType<StudyActivityFinishInput>
+    export type FinishStudyActivityMutationError = ErrorType<void>
+    export type FinishStudyActivityMutationVariables = {sessionId: string;data: BodyType<StudyActivityFinishInput>}
+
+    export const useFinishStudyActivity = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof finishStudyActivity>>, TError,FinishStudyActivityMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof finishStudyActivity>>,
+        TError,
+        FinishStudyActivityMutationVariables,
+        TContext
+      > => {
+      return useMutation(getFinishStudyActivityMutationOptions(options));
+    }
 
 export const getGetLearningMapUrl = (textId: 'nawawi',) => {
 

@@ -9,12 +9,14 @@ import assessmentRouter from "./assessments";
 import recitationPagesRouter from "./recitation-pages";
 import practiceReportsRouter from "./practice-reports";
 import learningStagesRouter from "./learning-stages";
+import studyActivityRouter from "./study-activity";
 
 const router: IRouter = Router();
 router.use(healthRouter);
 router.use(recitationPagesRouter);
 router.use(practiceReportsRouter);
 router.use(learningStagesRouter);
+router.use(studyActivityRouter);
 router.use(teacherReviewRouter);
 router.use(sourceReviewRouter);
 router.use(mateenRouter);

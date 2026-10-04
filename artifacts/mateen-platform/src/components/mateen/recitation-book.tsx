@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useUser } from '@clerk/react';
 import { Flag, BookOpen, ChevronLeft, ChevronRight, Eye, Lightbulb, Mic, MoreHorizontal, Pause, RotateCcw, ShieldAlert } from 'lucide-react';
 import { useLiveRecitation } from '@/hooks/use-live-recitation';
+import { useReaderActivity } from '@/hooks/use-study-activity';
 import { buildRecitationBook } from '@/lib/recitation-book';
 import { analyzeRecitation } from '@/lib/recitation-analysis';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -62,6 +63,14 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
   const [manual, setManual] = useState(false);
   const [hint, setHint] = useState(false);
   const [more, setMore] = useState(false);
+  const activity = useReaderActivity({
+    userId, kind: reading ? 'reading' : 'recitation', page: pageIdx + 1, attemptId,
+    enabled: !manual && !report && !consentOpen, spokenWords: r.spokenWords,
+  });
+  const activityError = activity.error && <p role="alert" className="rounded-xl border p-3 font-ui text-sm" data-testid="activity-save-error">
+    تعذّر تسجيل نشاط الدراسة. يمكنك المتابعة؛ لن ندّعي احتسابه قبل تأكيد الخادم.
+    <button onClick={activity.retry} className="mx-2 min-h-10 underline">إعادة المحاولة</button>
+  </p>;
 
   const seekRef = useRef(r.seek);
   seekRef.current = r.seek;
@@ -104,6 +113,7 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
     speech.cancel();
     const summary = await r.finish();
     if (!summary) return;
+    activity.recite(summary.spokenWords);
     setReport({ attemptId, priorCounts: history.countsExcluding(attemptId), matched: summary.matchedCount, attempted: summary.attemptedCount, issues: summary.issues,
       analyses: analyzeRecitation(book, summary.matchedIndices, summary.issues) });
   };
@@ -111,6 +121,7 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
   const freshAttempt = () => { setReport(null); setAttemptId(newAttemptId()); };
   const jumpTo = (wordIdx: number) => {
     if (navigationPending) return;
+    activity.navigate(pageOf(wordIdx) + 1);
     freshAttempt(); speech.cancel();
     r.seek(wordIdx); setManual(false); setPageIdx(pageOf(wordIdx));
     const segment = book.pages[pageOf(wordIdx)]?.segments.find(s => wordIdx >= s.start && wordIdx < s.end);
@@ -148,16 +159,18 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
 
   if (report) {
     return (
+      <>{activityError}
       <RecitationReport report={report} onClose={discardReport} canSave={!report.accountReportId && !!userId && !manual && !!report.attempted} alreadySaved={reportSaved} speech={speech}
         userId={userId} onAccountSave={async () => { await account.save(reportInput(report)); }}
         onSave={() => history.save({ attemptId: report.attemptId, matched: report.matched, attempted: report.attempted,
           issues: stored.map(({ index, expected, heard, kind }) => ({ index, expected, heard, kind })),
-          analyses: report.analyses.map(({ issues: _issues, ...summary }) => summary) })} />
+          analyses: report.analyses.map(({ issues: _issues, ...summary }) => summary) })} /></>
     );
   }
 
   return (
     <div className="space-y-4" data-testid="recitation-book">
+      {activityError}
       {/* Navigator */}
       <div className="sticky top-2 z-20 mx-auto flex max-w-[860px] flex-col-reverse items-stretch gap-2 rounded-2xl border bg-card/90 p-2 font-ui text-xs shadow-sm backdrop-blur sm:flex-row sm:items-center sm:justify-between" data-testid="book-navigator">
         <div className="flex items-center justify-between gap-1">
@@ -303,7 +316,7 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
             <DialogDescription className="font-ui text-sm">تدريب تجريبي لإظهار الكلمات، لا تقييم للنطق أو التشكيل أو الحفظ.</DialogDescription>
             <label className="mt-4 flex cursor-pointer gap-3 rounded-xl border bg-background p-3 font-ui text-sm leading-relaxed">
               <input type="checkbox" className="mt-1 h-4 w-4 accent-[hsl(var(--secondary))]" checked={agree} onChange={(e) => setAgree(e.target.checked)} data-testid="checkbox-book-consent" />
-              <span>أوافق على استخدام الميكروفون. قد ترسل خدمة التعرّف في المتصفح صوتي إلى مزوّد خارجي. لا تحفظ المنصة تسجيلاً صوتياً ولا النص المسموع كاملاً، ولا ترفع نتائج التدريب تلقائيًا. بعد إنهاء المحاولة يمكنك اختيار حفظ النتيجة على هذا المتصفح فقط، أو الموافقة بشكل منفصل على حفظ التقرير في حسابك، ويمكنك حذفه لاحقًا.</span>
+              <span>أوافق على استخدام الميكروفون. قد ترسل خدمة التعرّف في المتصفح صوتي إلى مزوّد خارجي. لا تحفظ المنصة تسجيلاً صوتياً ولا النص المسموع كاملاً، ولا ترفع نتائج التدريب تلقائيًا. يُسجَّل يوم النشاط للاستمرارية عند تحقق شروطها دون محتوى صوتي. بعد إنهاء المحاولة يمكنك اختيار حفظ النتيجة على هذا المتصفح فقط، أو الموافقة بشكل منفصل على حفظ التقرير في حسابك، ويمكنك حذفه لاحقًا.</span>
             </label>
             <div className="mt-4 flex justify-end gap-2">
               <button type="button" onClick={() => setConsentOpen(false)} className="min-h-10 rounded-full border px-5 font-ui text-sm font-bold" data-testid="button-book-consent-cancel">إلغاء</button>

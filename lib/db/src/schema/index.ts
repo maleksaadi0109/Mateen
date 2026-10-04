@@ -19,6 +19,7 @@
 
 export * from "./profiles";
 export * from "./study-progress";
+export * from "./study-activity";
 export * from "./teacher-applications";
 export * from "./reviews";
 export * from "./source-versions";

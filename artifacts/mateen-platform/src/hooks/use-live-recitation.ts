@@ -34,6 +34,10 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
   const [supported, setSupported] = useState<boolean | null>(null);
   const [error, setError] = useState('');
   const [heardText, setHeardText] = useState('');
+  // Engagement counts final ASR words, not correct words or inferred omissions.
+  // No transcript is sent to the activity endpoint.
+  const [spokenWords, setSpokenWords] = useState(0);
+  const spokenWordsRef = useRef(0);
   const [mismatchIndex, setMismatchIndex] = useState<number | null>(null);
   const [position, setPosition] = useState(0);
   const recognition = useRef<Recognition | null>(null);
@@ -41,13 +45,13 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
   const cursor = useRef(0);
   const [issues, setIssues] = useState<RecitationIssue[]>([]);
   const issuesRef = useRef<RecitationIssue[]>([]);
-  type Summary = { matchedCount: number; attemptedCount: number; issues: RecitationIssue[]; matchedIndices: number[] };
+  type Summary = { matchedCount: number; attemptedCount: number; issues: RecitationIssue[]; matchedIndices: number[]; spokenWords: number };
   const [finishing, setFinishing] = useState(false);
   const pendingFinish = useRef<{ resolve: (value: Summary | null) => void; timer: number } | null>(null);
   const snapshot = (): Summary => {
     const matchedCount = committed.current.reduce((n, visible, i) => n + (visible && normalizeRecitationWord(words[i]) ? 1 : 0), 0);
     const matchedIndices = committed.current.flatMap((visible, i) => visible && normalizeRecitationWord(words[i]) ? [i] : []);
-    return { matchedCount, attemptedCount: matchedCount + issuesRef.current.length, issues: [...issuesRef.current], matchedIndices };
+    return { matchedCount, attemptedCount: matchedCount + issuesRef.current.length, issues: [...issuesRef.current], matchedIndices, spokenWords: spokenWordsRef.current };
   };
   const settleFinish = (keep: boolean) => {
     const pending = pendingFinish.current;
@@ -120,6 +124,7 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
     active.interimResults = true;
     active.maxAlternatives = 3;
     recognition.current = active;
+    let countedFinalWords = 0;
     setError('');
     setMismatchIndex(null);
     setHeardText('');
@@ -148,6 +153,10 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
         else interim += ` ${value}`;
         if (final.length + interim.length > 250_000) break;
       }
+      const finalWordCount = recitationWords(final).filter(normalizeRecitationWord).length;
+      const added = Math.max(0, finalWordCount - countedFinalWords);
+      countedFinalWords = Math.max(countedFinalWords, finalWordCount);
+      if (added) { spokenWordsRef.current += added; setSpokenWords(spokenWordsRef.current); }
       // Never silently truncate a long continuous book session and then appear
       // to stop making progress. Resume explicitly from the committed position.
       if (final.length + interim.length > 250_000) {
@@ -258,5 +267,5 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
 
   const matchedCount = revealed.reduce((count, visible, i) => count + (visible && normalizeRecitationWord(words[i]) ? 1 : 0), 0);
   return { words, revealed, interimIndices, listening, supported, error, heardText, mismatchIndex, cursor: position, start, stop, reset, revealAll, seek,
-    issues, matchedCount, attemptedCount: matchedCount + issues.length, finish, finishing };
+    issues, matchedCount, attemptedCount: matchedCount + issues.length, spokenWords, finish, finishing };
 }

@@ -119,6 +119,7 @@ test('finishing requests the final native result, while reset cancels an unfinis
   await act(async () => { summary = await state.finish(); });
   assert.equal(summary!.matchedCount, 2);
   assert.equal(summary!.attemptedCount, 3);
+  assert.equal(summary!.spokenWords, 3);
   assert.equal(state.finishing, false);
   await act(async () => state.start());
   FakeRecognition.latest.stop = () => {};
@@ -127,6 +128,20 @@ test('finishing requests the final native result, while reset cancels an unfinis
   await act(async () => state.reset());
   assert.equal(await pending!, null);
   assert.equal(state.issues.length, 0);
+});
+
+test('activity word count ignores interim, omissions, replayed ASR results and manual reveals', async () => {
+  await act(async () => root.render(<ContinuousHarness />));
+  await act(async () => state.start());
+  const recognizer = FakeRecognition.latest;
+  await act(async () => recognizer.emit('إنما الأعمال بالنيات وإنما لكل امرئ', false));
+  assert.equal(state.spokenWords, 0);
+  await act(async () => recognizer.emit('إنما بالنيات وإنما', true));
+  assert.equal(state.spokenWords, 3); // Omitted الأعمال is not a spoken word.
+  await act(async () => recognizer.emit('إنما بالنيات وإنما', true));
+  assert.equal(state.spokenWords, 3);
+  await act(async () => state.revealAll());
+  assert.equal(state.spokenWords, 3);
 });
 
 test('Arabic playback chooses the expected text and stops capture before speaking', async () => {

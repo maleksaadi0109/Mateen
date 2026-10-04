@@ -90,7 +90,16 @@ try {
       }));
     }}],
   });
-  const child = spawn(process.execPath, ["--test", "--test-timeout=30000", outfile, answerFile, chatFile, liveFile, bookTextFile, studyProgressFile, scanFile, bookFile, bookFlowFile], {
+  const activityFile = join(temp, "study-activity.test.mjs");
+  await build({
+    entryPoints: [join(root, "tests/study-activity.test.tsx")],
+    bundle: true, platform: "node", format: "esm", outfile: activityFile, jsx: "automatic",
+    external: ["react", "react/*", "react-dom", "react-dom/*", "@tanstack/react-query", "jsdom"],
+    plugins: [{name:"activity-auth",setup(builder) {
+      builder.onResolve({filter:/^@clerk\/react$/},() => ({path:join(root,"tests/doubles/preview-auth.ts")}));
+    }}],
+  });
+  const child = spawn(process.execPath, ["--test", "--test-timeout=30000", outfile, answerFile, chatFile, liveFile, bookTextFile, studyProgressFile, scanFile, bookFile, bookFlowFile, activityFile], {
     stdio: "inherit",
     // Never inherit provider, application database or Clerk credentials.
     env: { PATH: process.env.PATH, NODE_ENV: "test", HOME: temp },

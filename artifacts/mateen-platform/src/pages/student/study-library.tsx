@@ -4,6 +4,7 @@ import { ArrowLeft, BarChart3, BookOpen, Lock } from 'lucide-react';
 import { EmptyState, ErrorState, SkeletonBlock } from '@/components/mateen/bits';
 import { num, usePageMeta } from '@/lib/mateen';
 import { cn } from '@/lib/utils';
+import { StudyContinuity } from '@/components/mateen/study-continuity';
 
 const spines = ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(var(--primary) / 0.7)', 'hsl(var(--secondary) / 0.75)'];
 
@@ -24,6 +25,7 @@ export default function StudyLibraryPage() {
         </Link>
       </header>
 
+      <StudyContinuity />
       {catalog.isLoading ? (
         <div className="grid gap-4 sm:grid-cols-2"><SkeletonBlock className="h-52" /><SkeletonBlock className="h-52" /></div>
       ) : catalog.isError ? (

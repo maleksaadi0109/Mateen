@@ -6,6 +6,7 @@ import { ArrowRight, BarChart3, Library, Lock } from 'lucide-react';
 import { EmptyState, ErrorState, LoadingList, Notice } from '@/components/mateen/bits';
 import { usePageMeta } from '@/lib/mateen';
 import RecitationBook from '@/components/mateen/recitation-book';
+import { StudyContinuity } from '@/components/mateen/study-continuity';
 
 export type StudyAssistantContext = {
   textId: string;
@@ -96,6 +97,7 @@ export default function StudyPage({ assistant }: { assistant?: (ctx: StudyAssist
 
   return (
     <div className="space-y-4">
+      <StudyContinuity />
       {mode === 'read' && (
         <div className="flex flex-wrap items-center justify-between gap-2">
           <nav className="flex flex-wrap items-center gap-1" aria-label="تنقل الدراسة">

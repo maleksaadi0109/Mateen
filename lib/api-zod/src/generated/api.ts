@@ -8,6 +8,83 @@
 import * as zod from 'zod';
 
 
+export const getStudyActivityResponseCurrentStreakMin = 0;
+
+export const getStudyActivityResponseLongestStreakMin = 0;
+
+export const getStudyActivityResponseActiveDaysMin = 0;
+
+
+
+export const GetStudyActivityResponse = zod.object({
+  "timezone": zod.string().nullable(),
+  "today": zod.string().nullable(),
+  "currentStreak": zod.number().int().min(getStudyActivityResponseCurrentStreakMin),
+  "longestStreak": zod.number().int().min(getStudyActivityResponseLongestStreakMin),
+  "activeDays": zod.number().int().min(getStudyActivityResponseActiveDaysMin),
+  "studiedToday": zod.boolean(),
+  "lastStudyDay": zod.string().nullable()
+})
+
+
+export const startStudyActivityBodyTimezoneMax = 100;
+
+export const startStudyActivityBodyPageMax = 1000;
+
+
+
+export const StartStudyActivityBody = zod.object({
+  "requestId": zod.string().uuid(),
+  "timezone": zod.string().min(1).max(startStudyActivityBodyTimezoneMax),
+  "kind": zod.enum(['reading', 'recitation']),
+  "page": zod.number().int().min(1).max(startStudyActivityBodyPageMax)
+})
+
+export const StartStudyActivityResponse = zod.object({
+  "id": zod.string().uuid(),
+  "timezone": zod.string()
+})
+
+
+export const FinishStudyActivityParams = zod.object({
+  "sessionId": zod.coerce.string().uuid()
+})
+
+export const finishStudyActivityBodyPageMax = 1000;
+
+export const finishStudyActivityBodyActiveSecondsMin = 0;
+export const finishStudyActivityBodyActiveSecondsMax = 7200;
+
+export const finishStudyActivityBodySpokenWordsMin = 0;
+export const finishStudyActivityBodySpokenWordsMax = 100000;
+
+
+
+export const FinishStudyActivityBody = zod.object({
+  "page": zod.number().int().min(1).max(finishStudyActivityBodyPageMax),
+  "activeSeconds": zod.number().int().min(finishStudyActivityBodyActiveSecondsMin).max(finishStudyActivityBodyActiveSecondsMax),
+  "spokenWords": zod.number().int().min(finishStudyActivityBodySpokenWordsMin).max(finishStudyActivityBodySpokenWordsMax)
+})
+
+export const finishStudyActivityResponseCurrentStreakMin = 0;
+
+export const finishStudyActivityResponseLongestStreakMin = 0;
+
+export const finishStudyActivityResponseActiveDaysMin = 0;
+
+
+
+export const FinishStudyActivityResponse = zod.object({
+  "timezone": zod.string().nullable(),
+  "today": zod.string().nullable(),
+  "currentStreak": zod.number().int().min(finishStudyActivityResponseCurrentStreakMin),
+  "longestStreak": zod.number().int().min(finishStudyActivityResponseLongestStreakMin),
+  "activeDays": zod.number().int().min(finishStudyActivityResponseActiveDaysMin),
+  "studiedToday": zod.boolean(),
+  "lastStudyDay": zod.string().nullable()
+})
+
+
 export const GetLearningMapParams = zod.object({
   "textId": zod.enum(['nawawi'])
 })

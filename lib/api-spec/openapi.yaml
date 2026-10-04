@@ -11,6 +11,63 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /mateen/study-activity:
+    get:
+      operationId: getStudyActivity
+      tags: [Mateen]
+      responses:
+        "200":
+          description: Actual study days in the account's fixed timezone, never inferred from reports
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StudyActivity" }
+  /mateen/study-activity/sessions:
+    post:
+      operationId: startStudyActivity
+      tags: [Mateen]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/StudyActivityStartInput" }
+      responses:
+        "201":
+          description: Server-timed session, not a counted study day
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [id, timezone]
+                properties:
+                  id: { type: string, format: uuid }
+                  timezone: { type: string }
+        "400":
+          description: Invalid session
+        "409":
+          description: Conflicting request identifier
+  /mateen/study-activity/sessions/{sessionId}/finish:
+    parameters:
+      - { name: sessionId, in: path, required: true, schema: { type: string, format: uuid } }
+    post:
+      operationId: finishStudyActivity
+      tags: [Mateen]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/StudyActivityFinishInput" }
+      responses:
+        "200":
+          description: Idempotent completion; day assigned by server at first completion
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StudyActivity" }
+        "400":
+          description: Invalid evidence
+        "404":
+          description: Session not found for this account
+        "409":
+          description: Expired session or meaningful activity threshold not met
   /mateen/learning/{textId}:
     parameters:
       - { name: textId, in: path, required: true, schema: { type: string, enum: [nawawi] } }
@@ -1307,6 +1364,34 @@ components:
             properties:
               error: { type: string }
   schemas:
+    StudyActivityStartInput:
+      type: object
+      additionalProperties: false
+      required: [requestId, timezone, kind, page]
+      properties:
+        requestId: { type: string, format: uuid }
+        timezone: { type: string, minLength: 1, maxLength: 100 }
+        kind: { type: string, enum: [reading, recitation] }
+        page: { type: integer, minimum: 1, maximum: 1000 }
+    StudyActivityFinishInput:
+      type: object
+      additionalProperties: false
+      required: [page, activeSeconds, spokenWords]
+      properties:
+        page: { type: integer, minimum: 1, maximum: 1000 }
+        activeSeconds: { type: integer, minimum: 0, maximum: 7200 }
+        spokenWords: { type: integer, minimum: 0, maximum: 100000 }
+    StudyActivity:
+      type: object
+      required: [timezone, today, currentStreak, longestStreak, activeDays, studiedToday, lastStudyDay]
+      properties:
+        timezone: { type: [string, "null"] }
+        today: { type: [string, "null"] }
+        currentStreak: { type: integer, minimum: 0 }
+        longestStreak: { type: integer, minimum: 0 }
+        activeDays: { type: integer, minimum: 0 }
+        studiedToday: { type: boolean }
+        lastStudyDay: { type: [string, "null"] }
     StageStartInput:
       type: object
       required: [requestId, consent]
