@@ -16,7 +16,7 @@ import { num } from '@/lib/mateen';
 type Props = {
   hadith: { number: number; title: string; text: string };
   selectedWord: string | null;
-  wordRequest: number; // increments each time a word is chosen
+  wordRequest: number; // explicit request to compose a question about the selected passage
   onBusyChange?: (busy: boolean) => void;
   conversationId: string | null;
   onConversationId: (id: string) => void;
@@ -100,23 +100,29 @@ export default function StageAssistant({ hadith, selectedWord, wordRequest, onBu
       if (alive.current) setBusy(false);
     }
   };
-  const sendRef = useRef(send);
-  sendRef.current = send;
-
-  const wordQ = (w: string) => `ما معنى كلمة «${w}» في سياق الحديث رقم ${hadith.number} (${hadith.title}) من الأربعين النووية؟ أجب باختصار في ثلاثة أسطر عن الكلمة فقط، لا بشرح الحديث كاملًا.`;
   useEffect(() => {
     if (wordRequest === seenWordReq.current) return;
     seenWordReq.current = wordRequest;
     if (selectedWord) {
+      setOpen(true);
+      if (!draft.trim()) onDraft('اشرح لي هذا المقطع في سياق الحديث.');
       if (window.matchMedia('(max-width: 1023px)').matches) {
         panel.current?.scrollIntoView({ block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
       }
-      void sendRef.current(wordQ(selectedWord));
+      requestAnimationFrame(() => panel.current?.querySelector('textarea')?.focus({ preventScroll: true }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wordRequest]);
 
-  const submit = async () => { const t = draft.trim(); if (!t) return; if (await send(t) && alive.current) onDraft(''); };
+  const submit = async () => {
+    const question = draft.trim();
+    if (!question) return;
+    const t = selectedWord
+      ? `عن المقطع «${selectedWord}» من الحديث رقم ${hadith.number} (${hadith.title}) في الأربعين النووية:\n${question}`
+      : question;
+    if (t.length > 8000) { setError('السؤال مع المقطع طويل؛ اختصر السؤال أو المقطع قبل الإرسال.'); return; }
+    if (await send(t) && alive.current) onDraft('');
+  };
 
   return (
     <section ref={panel} className="paper-card flex min-w-0 scroll-mt-20 flex-col p-4 lg:sticky lg:top-6 lg:max-h-[calc(100dvh-3rem)]" aria-label="المساعد السياقي" data-testid="panel-stage-assistant">
@@ -127,7 +133,7 @@ export default function StageAssistant({ hadith, selectedWord, wordRequest, onBu
       <div className={`${open ? 'flex' : 'hidden'} min-h-0 flex-1 flex-col lg:flex`}>
         <p className="mt-3 rounded-xl bg-muted/60 p-3 font-ui text-xs leading-relaxed text-muted-foreground" data-testid="text-assistant-notice">{NO_FATWA} الإجابات آلية وغير مراجعة علميًا وقد تخطئ؛ يُرسل نص الحديث للسياق، ولا يُعدّ الشرح اعتمادًا علميًا.</p>
         <div className="mt-3 min-h-[10rem] flex-1 space-y-3 overflow-y-auto lg:max-h-[50vh]" aria-live="polite">
-          {!cid && !busy && !error && <p className="py-8 text-center font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-assistant-empty">اضغط أي كلمة في النص ليُطلب شرحها من المساعد، أو اكتب سؤالك عن هذا الحديث.</p>}
+          {!cid && !busy && !error && <p className="py-8 text-center font-arabic text-lg leading-loose text-muted-foreground" data-testid="text-assistant-empty">حدّد مقطعًا من النص ثم اضغط «اسأل عن المقطع»، أو اكتب سؤالك عن هذا الحديث.</p>}
           {cid && (msgs.isLoading ? <LoadingList rows={2} /> : msgs.isError ? <ErrorState onRetry={() => msgs.refetch()} /> : <ChatMessages messages={msgs.data ?? []} viewer="student" />)}
           {busy && <p role="status" className="flex items-center gap-2 font-ui text-sm text-secondary" data-testid="status-assistant-busy"><span className="skel inline-block h-2 w-10" />{selectedWord ? `يُجهَّز الرد عن «${selectedWord}»...` : 'يُجهَّز الرد...'}</p>}
           {!busy && error && <div role="alert" className="rounded-xl border border-destructive/40 p-3 font-ui text-sm text-destructive" data-testid="text-assistant-error">{error}
@@ -136,6 +142,7 @@ export default function StageAssistant({ hadith, selectedWord, wordRequest, onBu
         </div>
         {(referred || closed) && <p className="mt-3 rounded-xl bg-muted p-3 font-ui text-sm" role="status" data-testid="text-assistant-referred">
           {closed ? 'أُغلقت هذه المحادثة.' : 'أُحيلت هذه المحادثة إلى معلم؛ توقف التوليد الآلي فيها.'} تابعها من <Link href="/student/assistant" className="font-bold text-secondary">صفحة المساعد</Link>.</p>}
+        {selectedWord && <blockquote className="mt-3 max-h-32 overflow-y-auto rounded-xl bg-secondary/10 p-3 font-arabic text-sm break-words" data-testid="assistant-selected-passage"><span className="block font-ui text-xs font-bold">سيُرفق هذا المقطع مع سؤالك:</span>{selectedWord}</blockquote>}
         <div className="mt-3 flex items-end gap-2">
           <textarea className={`${field} min-w-0 flex-1 font-arabic text-base`} rows={2} maxLength={8000} value={draft} disabled={busy || blocked}
             placeholder="اسأل عن هذا الحديث" onChange={(e) => onDraft(e.target.value)} aria-label="سؤالك عن هذا الحديث" data-testid="input-stage-question"

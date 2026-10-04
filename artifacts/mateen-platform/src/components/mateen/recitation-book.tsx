@@ -9,10 +9,16 @@ import { num } from '@/lib/mateen';
 import { cn } from '@/lib/utils';
 import { useRecitationHistory, useArabicSpeech, RecitationHistory } from './recitation-history';
 import { RecitationReport, type ReportSnapshot } from './recitation-report';
+import PassageSelection from './passage-selection';
 import { AccountRecitationHistory, useAccountReports, reportInput } from './account-recitation-history';
 
 type BookHadith = { id: number; number: number; title: string; text: string; sourceUrl: string; sourcePage: number; reviewStatus?: string };
-type BookProps = { hadiths: BookHadith[]; initialHadith?: number; sourceStatus?: string; navigationPending?: boolean; onNavigate?: (number: number) => void; onModeChange?: (m: 'read' | 'recite') => void };
+type BookProps = { hadiths: BookHadith[]; initialHadith?: number; sourceStatus?: string; navigationPending?: boolean; onNavigate?: (number: number) => void; onModeChange?: (m: 'read' | 'recite') => void;
+  /** Notified with the hadith number currently in view (notification only; never saves progress). */
+  onActiveHadith?: (number: number) => void;
+  /** Enables passage selection on the displayed page segments while in reading mode. */
+  selection?: { selected: string | null; busy: boolean; onSelect: (hadithNumber: number, text: string | null) => void; onAsk: () => void };
+};
 
 export default function RecitationBook(props: BookProps) {
   const { user } = useUser();
@@ -24,7 +30,7 @@ export default function RecitationBook(props: BookProps) {
   return <RecitationBookContent key={`${user?.id ?? 'guest'}:${book.text}`} {...props} book={book} />;
 }
 
-function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeChange, onNavigate, navigationPending, book }: BookProps & {book: ReturnType<typeof buildRecitationBook>}) {
+function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeChange, onNavigate, navigationPending, onActiveHadith, selection, book }: BookProps & {book: ReturnType<typeof buildRecitationBook>}) {
   const r = useLiveRecitation(book.text, { continuousFeedback: true });
   const { user, isLoaded: userLoaded } = useUser();
   const userId = userLoaded && user ? user.id : null;
@@ -108,7 +114,10 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
     freshAttempt(); speech.cancel();
     r.seek(wordIdx); setManual(false); setPageIdx(pageOf(wordIdx));
     const segment = book.pages[pageOf(wordIdx)]?.segments.find(s => wordIdx >= s.start && wordIdx < s.end);
-    if (segment) onNavigate?.(segment.hadithNumber);
+    if (segment) {
+      selection?.onSelect(segment.hadithNumber, null);
+      onNavigate?.(segment.hadithNumber);
+    }
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
   const goPage = (i: number) => { const p = book.pages[i]; if (p) jumpTo(p.start); };
@@ -125,6 +134,15 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
       issue.index === stored[i].index && issue.kind === stored[i].kind &&
       issue.expected === stored[i].expected.slice(0, 60) && issue.heard === stored[i].heard.slice(0, 60)));
   const currentHadith = page?.segments.find(s => r.cursor >= s.start && r.cursor < s.end) ?? page?.segments[0];
+
+  // Visible hadith: a segment the reader explicitly selected in, else the cursor's segment on this page.
+  const [focus, setFocus] = useState<{ key: string; number: number } | null>(null);
+  const viewKey = `${pageIdx}:${r.cursor}`;
+  const activeNumber = focus && focus.key === viewKey ? focus.number : currentHadith?.hadithNumber;
+  const activeCb = useRef(onActiveHadith);
+  activeCb.current = onActiveHadith;
+  useEffect(() => { if (activeNumber != null) activeCb.current?.(activeNumber); }, [activeNumber]);
+  const [selSeg, setSelSeg] = useState<string | null>(null);
 
   if (!page) return null;
 
@@ -227,7 +245,18 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
               <h3 className="font-display text-lg font-bold leading-snug sm:text-xl">{s.title}</h3>
               {s.continued && <span className="rounded-full bg-muted px-2 py-0.5 font-ui text-[10px] text-muted-foreground">تتمة</span>}
             </header>
-            <p className="hadith-text select-none text-foreground" style={{ fontSize: 'clamp(21px, 2.6vw, 30px)', lineHeight: 2.25, textAlign: 'justify', textAlignLast: 'right' }} data-testid={`text-book-segment-${s.hadithNumber}-${page.number}`}>
+            {reading && selection ? (
+              <div className="rounded-2xl" data-testid={`text-book-segment-${s.hadithNumber}-${page.number}`}>
+                <PassageSelection text={r.words.slice(s.start, s.end).join(' ')} busy={selection.busy}
+                  selected={selSeg === `${s.hadithId}-${s.start}` ? selection.selected : null}
+                  onSelect={(t) => {
+                    if (t) { setSelSeg(`${s.hadithId}-${s.start}`); setFocus({ key: viewKey, number: s.hadithNumber }); }
+                    else if (selSeg !== `${s.hadithId}-${s.start}`) return;
+                    selection.onSelect(s.hadithNumber, t);
+                  }}
+                  onAsk={selection.onAsk} />
+              </div>
+            ) : <p className="hadith-text select-none text-foreground" style={{ fontSize: 'clamp(21px, 2.6vw, 30px)', lineHeight: 2.25, textAlign: 'justify', textAlignLast: 'right' }} data-testid={`text-book-segment-${s.hadithNumber}-${page.number}`}>
               {r.words.slice(s.start, s.end).map((w, k) => {
                 const i = s.start + k;
                 const on = reading || manual || r.revealed[i];
@@ -246,7 +275,7 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
                   </span>
                 );
               })}
-            </p>
+            </p>}
           </section>
         ))}
         <div className="mt-8 h-1 overflow-hidden rounded-full bg-muted" aria-hidden>

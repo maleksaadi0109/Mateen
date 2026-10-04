@@ -3,7 +3,7 @@ import { ClerkProvider, SignIn, SignUp, useClerk } from '@clerk/react';
 import { publishableKeyFromHost } from '@clerk/react/internal';
 import { arSA } from '@clerk/localizations';
 import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
-import { Route, Switch, useLocation, Router as WouterRouter, Redirect } from 'wouter';
+import { Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthFrame } from '@/components/mateen/AuthFrame';
 import { PortalGate } from '@/components/portal/PortalShell';
@@ -13,7 +13,9 @@ import OnboardingPage from '@/pages/onboarding';
 import NotFound from '@/pages/not-found';
 import StudentHome from '@/pages/student/home';
 import TracksPage from '@/pages/student/tracks';
-import StudyPage from '@/pages/student/study';
+import StudyReaderPage from '@/pages/student/study-reader';
+import StudyLibraryPage from '@/pages/student/study-library';
+import StudyReportsPage from '@/pages/student/study-reports';
 import LearningMapPage from '@/pages/student/learning-map';
 import LearningStagePage from '@/pages/student/learning-stage';
 import ReviewsPage from '@/pages/student/reviews';
@@ -158,8 +160,9 @@ function Routes() {
           <Route path="/student/tracks"><Portal role="student"><TracksPage /></Portal></Route>
           <Route path="/student/learn/:textId"><Portal role="student"><LearningMapPage /></Portal></Route>
           <Route path="/student/learn/:textId/:stageNumber"><Portal role="student"><LearningStagePage /></Portal></Route>
-          <Route path="/student/study"><Redirect to="/student/study/nawawi" /></Route>
-          <Route path="/student/study/:textId"><Portal role="student"><StudyPage /></Portal></Route>
+          <Route path="/student/study"><Portal role="student"><StudyLibraryPage /></Portal></Route>
+          <Route path="/student/study/reports"><Portal role="student"><StudyReportsPage /></Portal></Route>
+          <Route path="/student/study/:textId"><Portal role="student"><StudyReaderPage /></Portal></Route>
           <Route path="/student/reviews"><Portal role="student"><ReviewsPage /></Portal></Route>
           <Route path="/student/scholars"><Portal role="student"><ScholarsPage /></Portal></Route>
           <Route path="/student/scholars/:teacherId"><Portal role="student"><ScholarProfilePage /></Portal></Route>

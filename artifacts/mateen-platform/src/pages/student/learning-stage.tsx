@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Link, useParams } from 'wouter';
 import { useUser } from '@clerk/react';
 import { getGetStudyTextQueryKey, useGetStudyText } from '@workspace/api-client-react';
 import { ArrowRight, Lock, Mic, GraduationCap, ChevronRight, ChevronLeft } from 'lucide-react';
 import { EmptyState, ErrorState, SkeletonBlock } from '@/components/mateen/bits';
 import { num, usePageMeta } from '@/lib/mateen';
-import { recitationWords } from '@/lib/live-recitation';
+import PassageSelection from '@/components/mateen/passage-selection';
 import RecitationBook from '@/components/mateen/recitation-book';
 import StageAssistant from '@/components/mateen/stage-assistant';
 import StageExam from '@/components/mateen/stage-exam';
@@ -33,7 +33,6 @@ export default function LearningStagePage() {
   if (modeKey !== chatKey) { setModeKey(chatKey); setMode('study'); setWord(null); setBusy(false); }
 
   const hadith = text.data?.hadiths.find((h) => h.number === n);
-  const words = useMemo(() => recitationWords(hadith?.text ?? ''), [hadith?.text]);
   const stage = map.data?.stages.find((s) => s.number === n);
   const total = map.data?.stages.length ?? 42;
 
@@ -73,18 +72,8 @@ export default function LearningStagePage() {
         <article dir="rtl" className="paper-card order-1 min-w-0 p-6 sm:p-8 lg:order-2" data-testid="card-stage-hadith">
           <div className="flex items-start justify-between gap-3"><p className="font-ui text-xs font-semibold text-secondary">الحديث {num(hadith.number)}</p><BookMascot size={52} mood={stage.status === 'passed' ? 'calm' : 'cheer'} className="-mt-2 shrink-0" /></div>
           <h1 className="mt-1 font-display text-2xl font-bold sm:text-3xl" data-testid="text-hadith-title">{hadith.title}</h1>
-          <p className="mt-2 font-ui text-xs text-muted-foreground">اضغط أي كلمة ليُطلب شرحها من المساعد.</p>
           <div className="ornament my-5"><span className="text-xs">*</span></div>
-          <p className="hadith-text text-2xl sm:text-[1.7rem]" data-testid="text-hadith-body">
-            {words.map((w, i) => (
-              <span key={i}>
-                <button type="button" disabled={busy} onClick={() => { setWord(w); setReq((r) => r + 1); }}
-                  aria-label={`اشرح كلمة ${w}`} aria-pressed={word === w}
-                  className={`rounded-md px-0.5 transition-colors hover:bg-secondary/15 focus-visible:bg-secondary/15 disabled:cursor-wait ${word === w ? 'bg-secondary/20 text-secondary' : ''}`}
-                  data-testid={`button-word-${i}`}>{w}</button>{' '}
-              </span>
-            ))}
-          </p>
+          <PassageSelection key={chatKey} text={hadith.text} selected={word} onSelect={setWord} onAsk={() => setReq(r => r + 1)} busy={busy} />
           <div className="mt-8 flex flex-wrap gap-3 border-t pt-5">
             <button className="inline-flex items-center gap-2 rounded-full border border-secondary px-6 py-3 font-ui font-bold text-secondary hover:bg-secondary/10" onClick={() => setMode('practice')} data-testid="button-practice">
               <Mic size={17} />التدريب على التسميع</button>

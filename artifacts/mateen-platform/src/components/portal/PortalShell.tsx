@@ -17,7 +17,7 @@ export const usePortalTheme = () => useContext(ThemeCtx);
 const studentNav = [
   { href: '/student', label: 'الرئيسية', icon: LayoutDashboard, exact: true },
   { href: '/student/tracks', label: 'المسارات', icon: Library },
-  { href: '/student/study/nawawi', label: 'الدراسة', icon: BookOpen },
+  { href: '/student/study', label: 'الدراسة', icon: BookOpen },
   { href: '/student/reviews', label: 'المراجعات', icon: Bookmark },
   { href: '/student/exams', label: 'الاختبارات', icon: ClipboardCheck },
   { href: '/student/scholars', label: 'المشايخ', icon: ScrollText },
@@ -77,10 +77,10 @@ function Shell({ nav: navProp, name, role, children }: { nav: typeof studentNav;
   const active = (n: (typeof nav)[number]) => (n.exact ? loc === n.href : loc.startsWith(n.href));
   const base = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
   // Focused reading route: no portal chrome, just the book.
-  if (role === 'student' && loc.startsWith('/student/study/')) {
+  if (role === 'student' && loc.startsWith('/student/study/') && loc !== '/student/study/reports') {
     return (
       <div className="min-h-[100dvh] bg-background text-foreground" data-testid="focused-study-shell">
-        <main className="mx-auto max-w-4xl px-3 py-3 sm:px-6 sm:py-5">{children}</main>
+        <main className="mx-auto max-w-7xl px-3 py-3 sm:px-6 sm:py-5">{children}</main>
       </div>
     );
   }
