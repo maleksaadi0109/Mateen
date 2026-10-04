@@ -28,10 +28,20 @@ try {
     join(root, "../../lib/db/migrations/0010_learning_stages.sql")]);
   const outfile = join(temp, "tests.cjs");
   pg("psql", [env.DATABASE_URL, "-v", "ON_ERROR_STOP=1", "-f",
+    join(root, "../../lib/db/migrations/0013_learning_preferences.sql")]);
+  pg("psql", [env.DATABASE_URL, "-v", "ON_ERROR_STOP=1", "-f",
     join(root, "../../lib/db/migrations/0012_fractional_stage_scores.sql")]);
   await build({
     entryPoints: [join(root, "tests/learning-stages.http.test.ts")], bundle: true, platform: "node", format: "cjs", outfile,
     plugins: [{ name: "stage-test-adapters", setup(b) {
+      b.onResolve({ filter: /\/scholarly$/ }, args => args.importer === join(root, "src/routes/mateen.ts") ? { path: "scholarly", namespace: "stage-readiness" } : undefined);
+      b.onLoad({ filter: /.*/, namespace: "stage-readiness" }, () => ({
+        contents: "export async function getMateenScholarlyReadiness() { return {}; }", loader: "js",
+      }));
+      b.onResolve({ filter: /\/recitation-readiness$/ }, () => ({ path: "recitation", namespace: "stage-recitation-readiness" }));
+      b.onLoad({ filter: /.*/, namespace: "stage-recitation-readiness" }, () => ({
+        contents: "export async function recitationCapabilitiesReady() { return false; } export async function assessmentAudioCapabilitiesReady() { return false; }", loader: "js",
+      }));
       b.onResolve({ filter: /^@clerk\/express$/ }, () => ({ path: "clerk", namespace: "stage-auth" }));
       b.onLoad({ filter: /.*/, namespace: "stage-auth" }, () => ({
         contents: "export const getAuth = req => ({ userId: req.headers['x-test-user'] || null });", loader: "js",

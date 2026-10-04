@@ -1007,29 +1007,63 @@ export const GetStudyTextResponse = zod.object({
 })
 
 
+export const getProfileResponseLearningPreferencesAgeMax = 120;
+
+export const getProfileResponseLearningPreferencesMemorizedMax = 1000;
+
+
+
 export const GetProfileResponse = zod.object({
   "id": zod.string(),
   "name": zod.string(),
   "role": zod.enum(['student', 'teacher']),
-  "onboarded": zod.boolean()
+  "onboarded": zod.boolean(),
+  "learningPreferences": zod.object({
+  "age": zod.number().int().min(1).max(getProfileResponseLearningPreferencesAgeMax).nullable(),
+  "memorized": zod.string().min(1).max(getProfileResponseLearningPreferencesMemorizedMax),
+  "goal": zod.enum(['memorize', 'review', 'both']),
+  "dailyMinutes": zod.union([zod.literal(10),zod.literal(15),zod.literal(30),zod.literal(45),zod.literal(60)])
+}).nullish()
 })
 
 
 export const saveProfileBodyNameMin = 2;
 export const saveProfileBodyNameMax = 100;
 
+export const saveProfileBodyLearningPreferencesAgeMax = 120;
+
+export const saveProfileBodyLearningPreferencesMemorizedMax = 1000;
+
 
 
 export const SaveProfileBody = zod.object({
   "name": zod.string().min(saveProfileBodyNameMin).max(saveProfileBodyNameMax),
-  "role": zod.enum(['student', 'teacher'])
+  "role": zod.enum(['student', 'teacher']),
+  "learningPreferences": zod.object({
+  "age": zod.number().int().min(1).max(saveProfileBodyLearningPreferencesAgeMax).nullable(),
+  "memorized": zod.string().min(1).max(saveProfileBodyLearningPreferencesMemorizedMax),
+  "goal": zod.enum(['memorize', 'review', 'both']),
+  "dailyMinutes": zod.union([zod.literal(10),zod.literal(15),zod.literal(30),zod.literal(45),zod.literal(60)])
+}).nullish()
 })
+
+export const saveProfileResponseLearningPreferencesAgeMax = 120;
+
+export const saveProfileResponseLearningPreferencesMemorizedMax = 1000;
+
+
 
 export const SaveProfileResponse = zod.object({
   "id": zod.string(),
   "name": zod.string(),
   "role": zod.enum(['student', 'teacher']),
-  "onboarded": zod.boolean()
+  "onboarded": zod.boolean(),
+  "learningPreferences": zod.object({
+  "age": zod.number().int().min(1).max(saveProfileResponseLearningPreferencesAgeMax).nullable(),
+  "memorized": zod.string().min(1).max(saveProfileResponseLearningPreferencesMemorizedMax),
+  "goal": zod.enum(['memorize', 'review', 'both']),
+  "dailyMinutes": zod.union([zod.literal(10),zod.literal(15),zod.literal(30),zod.literal(45),zod.literal(60)])
+}).nullish()
 })
 
 

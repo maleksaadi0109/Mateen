@@ -204,6 +204,7 @@ router.get(
         name: profile.name,
         role: profile.role,
         onboarded: profile.onboarded,
+        learningPreferences: profile.learningPreferences,
       }),
     );
   },
@@ -216,13 +217,22 @@ router.put(
   authenticationRequired,
   async (req: AuthedRequest, res) => {
     if (
-      !hasOnlyKeys(req.body, ["name", "role"]) ||
+      !hasOnlyKeys(req.body, ["name", "role", "learningPreferences"]) ||
+      (req.body?.learningPreferences != null && !hasOnlyKeys(
+        req.body.learningPreferences, ["age", "memorized", "goal", "dailyMinutes"],
+      )) ||
       !SaveProfileBody.safeParse(req.body).success
     ) {
-      res.status(400).json({ error: "Expected only a valid name and student/teacher role" });
+      res.status(400).json({ error: "Invalid profile or learning preferences" });
       return;
     }
     const input = SaveProfileBody.parse(req.body);
+    if (input.learningPreferences && (
+      input.role !== "student" || !input.learningPreferences.memorized.trim()
+    )) {
+      res.status(400).json({ error: "Learning preferences require a student and a nonblank memorization answer" });
+      return;
+    }
     const name = input.name.trim();
     if (name.length < 2) {
       res.status(400).json({ error: "Name must contain at least two characters" });
@@ -237,7 +247,14 @@ router.put(
         return { kind: "conflict" as const };
       }
       const [profile] = await tx.update(profilesTable)
-        .set({ name, role: existing.onboarded ? existing.role : input.role, onboarded: true })
+        .set({
+          name, role: existing.onboarded ? existing.role : input.role, onboarded: true,
+          ...(input.learningPreferences !== undefined ? {
+            learningPreferences: input.learningPreferences ? {
+              ...input.learningPreferences, memorized: input.learningPreferences.memorized.trim(),
+            } : null,
+          } : {}),
+        })
         .where(eq(profilesTable.clerkId, req.mateenUserId!))
         .returning();
       return { kind: "saved" as const, profile };
@@ -257,6 +274,7 @@ router.put(
         name: profile.name,
         role: profile.role,
         onboarded: profile.onboarded,
+        learningPreferences: profile.learningPreferences,
       }),
     );
   },

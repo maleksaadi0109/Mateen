@@ -1615,12 +1615,25 @@ components:
         name: { type: string }
         role: { type: string, enum: [student, teacher] }
         onboarded: { type: boolean }
+        learningPreferences:
+          $ref: "#/components/schemas/LearningPreferences"
     ProfileInput:
       type: object
       required: [name, role]
       properties:
         name: { type: string, minLength: 2, maxLength: 100 }
         role: { type: string, enum: [student, teacher] }
+        learningPreferences:
+          $ref: "#/components/schemas/LearningPreferences"
+    LearningPreferences:
+      type: [object, "null"]
+      additionalProperties: false
+      required: [age, memorized, goal, dailyMinutes]
+      properties:
+        age: { type: [integer, "null"], minimum: 1, maximum: 120 }
+        memorized: { type: string, minLength: 1, maxLength: 1000 }
+        goal: { type: string, enum: [memorize, review, both] }
+        dailyMinutes: { type: integer, enum: [10, 15, 30, 45, 60] }
     ProgressInput:
       type: object
       required: [currentHadith, completedIds, bookmarkedIds]

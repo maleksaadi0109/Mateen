@@ -5,6 +5,7 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { LearningPreferences } from './learningPreferences';
 import type { ProfileRole } from './profileRole';
 
 export interface Profile {
@@ -12,4 +13,5 @@ export interface Profile {
   name: string;
   role: ProfileRole;
   onboarded: boolean;
+  learningPreferences?: LearningPreferences | null;
 }

@@ -23,7 +23,7 @@ try {
   started = true;
   pg("createdb", ["-h", socket, "-U", "report_test", "reports"]);
   pg("psql", ["-h", socket, "-U", "report_test", "-d", "reports", "-v", "ON_ERROR_STOP=1", "-c",
-    "CREATE TYPE mateen_profile_role AS ENUM ('student','teacher'); CREATE TABLE mateen_profiles(clerk_id text PRIMARY KEY,name text NOT NULL DEFAULT '',role mateen_profile_role NOT NULL DEFAULT 'student',onboarded boolean NOT NULL DEFAULT false);"]);
+    "CREATE TYPE mateen_profile_role AS ENUM ('student','teacher'); CREATE TABLE mateen_profiles(clerk_id text PRIMARY KEY,name text NOT NULL DEFAULT '',role mateen_profile_role NOT NULL DEFAULT 'student',onboarded boolean NOT NULL DEFAULT false,learning_preferences jsonb);"]);
   pg("psql", ["-h", socket, "-U", "report_test", "-d", "reports", "-v", "ON_ERROR_STOP=1", "-f",
     join(root, "../../lib/db/migrations/0009_practice_reports.sql")]);
   const outfile = join(temp, "tests.cjs");

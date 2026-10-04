@@ -6,12 +6,14 @@ import express from "express";
 import { db, pool, profilesTable, stageAttemptsTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import router from "../src/routes/learning-stages";
+import mateenRouter from "../src/routes/mateen";
 import { learningRecords, isStageWord } from "../src/lib/learning-stage-policy";
-import { StartStageAttemptResponse, FinishStageAttemptResponse, GetLearningMapResponse } from "@workspace/api-zod";
+import { StartStageAttemptResponse, FinishStageAttemptResponse, GetLearningMapResponse, GetProfileResponse } from "@workspace/api-zod";
 
 const app = express();
 app.use(express.json({ limit: "64kb" }));
 app.use("/api", router);
+app.use("/api", mateenRouter);
 const server = app.listen(0, "127.0.0.1");
 let url: string;
 before(async () => {
@@ -35,6 +37,43 @@ const finish = (id: string) => `/attempts/${id}/finish`;
 const start = async (user = "learner", n = 1, body = startBody()) =>
   StartStageAttemptResponse.parse(await (await call(`/nawawi/stages/${n}/attempts`, user, body)).json());
 const readMap = async (user = "learner") => GetLearningMapResponse.parse(await (await call("/nawawi", user)).json());
+
+test("private welcome answers persist, validate strictly, and do not unlock stages", async () => {
+  const profileCall = (user: string | null, body?: unknown) => fetch(`${url}/api/mateen/profile`, {
+    method: body === undefined ? "GET" : "PUT",
+    headers: { ...(user ? { "x-test-user": user } : {}), Origin: url, "Content-Type": "application/json" },
+    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+  });
+  const readProfile = async (user: string) => GetProfileResponse.parse(await (await profileCall(user)).json());
+  assert.equal((await profileCall(null)).status, 401);
+  const initial = await readProfile("welcome");
+  assert.equal(initial.onboarded, false);
+  assert.equal(initial.learningPreferences, null);
+  const prefs = { age: 25, memorized: "  أجزاء من القرآن  ", goal: "both", dailyMinutes: 15 };
+  const body = { name: "طالب تجريبي", role: "student", learningPreferences: prefs };
+  for (const invalid of [
+    { ...prefs, age: 0 }, { ...prefs, age: 121 }, { ...prefs, age: 25.5 },
+    { ...prefs, dailyMinutes: 17 }, { ...prefs, goal: "admin" },
+    { ...prefs, memorized: " " }, { ...prefs, memorized: "أ".repeat(1001) },
+    { ...prefs, approved: true },
+  ]) {
+    assert.equal((await profileCall("welcome", { ...body, learningPreferences: invalid })).status, 400);
+  }
+  assert.equal((await readProfile("welcome")).onboarded, false);
+  assert.equal((await profileCall("welcome", body)).status, 200);
+  const saved = await readProfile("welcome");
+  assert.equal(saved.onboarded, true);
+  assert.deepEqual(saved.learningPreferences, { ...prefs, memorized: prefs.memorized.trim() });
+  assert.equal((await readMap("welcome")).stages[0].status, "current");
+  assert.equal((await readMap("welcome")).stages[1].status, "locked");
+  assert.equal((await readProfile("other")).learningPreferences, null);
+  assert.equal((await profileCall("welcome", { name: "اسم جديد", role: "student" })).status, 200);
+  assert.deepEqual((await readProfile("welcome")).learningPreferences, saved.learningPreferences);
+  assert.equal((await profileCall("welcome", { ...body, role: "teacher" })).status, 400);
+  assert.equal((await profileCall("welcome", { name: "اسم جديد", role: "teacher" })).status, 409);
+  assert.equal((await profileCall("welcome", { ...body, learningPreferences: { ...prefs, age: null } })).status, 200);
+  assert.equal((await readProfile("welcome")).learningPreferences?.age, null);
+});
 
 test("auth, consent, path validation, origins, locked stage and foreign attempt ownership enforced", async () => {
   assert.equal((await call("/nawawi", null)).status, 401);

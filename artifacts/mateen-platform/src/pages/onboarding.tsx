@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Redirect, useLocation } from 'wouter';
 import { useUser } from '@clerk/react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -10,13 +10,22 @@ import { BookOpen, ScrollText } from 'lucide-react';
 import { AuthFrame } from '@/components/mateen/AuthFrame';
 import { ErrorState, SkeletonBlock } from '@/components/mateen/bits';
 import { TEACHER_INTENT_KEY, usePageMeta, useAuthReady } from '@/lib/mateen';
+import OnboardingAssistant, { type Answers } from '@/components/mateen/onboarding-assistant';
+import BookMascot from '@/components/mateen/book-mascot';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
 export default function OnboardingPage() {
+  const { user } = useUser();
+  return <OnboardingFlow key={user?.id ?? 'anon'} />;
+}
+
+function OnboardingFlow() {
   usePageMeta('إكمال الحساب | مَتِين', 'اختر اسمك ودورك في المنصة.');
   const { isLoaded, isSignedIn, ready } = useAuthReady();
   const { user } = useUser();
+  const [chat, setChat] = useState(false);
+  const busy = useRef(false);
   const profile = useGetProfile({ query: { enabled: ready, queryKey: getGetProfileQueryKey() } });
   const save = useSaveProfile();
   const qc = useQueryClient();
@@ -31,20 +40,27 @@ export default function OnboardingPage() {
   }, [profile.data, user, touched]);
 
   if (isLoaded && !isSignedIn) return <Redirect to="/sign-in" />;
+  if (!ready || profile.isPending) return <AuthFrame><div className="paper-card mx-auto w-full max-w-xl p-8"><SkeletonBlock className="h-64" /></div></AuthFrame>;
   if (profile.data?.onboarded) return <Redirect to={profile.data.role === 'teacher' ? '/teacher' : '/student'} />;
 
   const valid = name.trim().length >= 2 && name.trim().length <= 100;
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!valid) return;
-    save.mutate({ data: { name: name.trim(), role } }, {
+  const doSave = (learningPreferences?: Answers) => {
+    if (busy.current || !valid) return;
+    busy.current = true;
+    save.mutate({ data: { name: name.trim(), role, ...(learningPreferences ? { learningPreferences } : {}) } }, {
       onSuccess: (p) => {
         sessionStorage.removeItem(TEACHER_INTENT_KEY);
+        qc.setQueryData(getGetProfileQueryKey(), p);
         [getGetProfileQueryKey(), getGetDashboardQueryKey(), getGetProgressQueryKey(), getGetTeacherQueryKey(), getGetReferralsQueryKey()].forEach((k) => qc.invalidateQueries({ queryKey: k }));
         setLocation(p.role === 'teacher' ? '/teacher' : '/student/tracks');
       },
-      onError: () => toast({ title: 'تعذّر حفظ البيانات', description: 'حاول مرة أخرى.', variant: 'destructive' }),
+      onError: () => { busy.current = false; toast({ title: 'تعذّر حفظ البيانات', description: 'حاول مرة أخرى.', variant: 'destructive' }); },
     });
+  };
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!valid) return;
+    if (role === 'teacher') doSave(); else setChat(true);
   };
 
   const roles = [
@@ -52,14 +68,21 @@ export default function OnboardingPage() {
     { v: 'teacher' as const, t: 'معلم', d: 'أقدّم ملفي ووثائقي الخاصة للمراجعة. لا أستقبل إحالات قبل الاعتماد.', I: ScrollText },
   ];
 
+  if (chat && role === 'student') return <AuthFrame><OnboardingAssistant name={name.trim()} saving={save.isPending} error={save.isError} onSave={doSave} onBack={() => setChat(false)} /></AuthFrame>;
+
   return (
     <AuthFrame>
       <form onSubmit={submit} className="paper-card mx-auto w-full max-w-xl p-8 md:p-10" data-testid="form-onboarding">
-        <h1 className="font-display text-3xl font-bold">أهلاً بك في مَتِين</h1>
-        <p className="mt-2 font-arabic text-lg text-muted-foreground">خطوة واحدة لنُعدّ لك مكانك.</p>
+        <div className="flex items-start gap-4">
+          <BookMascot size={80} mood="cheer" className="shrink-0" />
+          <div className="min-w-0">
+            <h1 className="font-display text-3xl font-bold">أهلاً، أنا مَتِين</h1>
+            <p className="mt-2 font-arabic text-lg text-muted-foreground">مساعدك في رحلة التعلّم. دعنا نتعرّف عليك أولاً، ثم أسألك عن حفظك وهدفك.</p>
+          </div>
+        </div>
         {profile.isLoading ? <div className="mt-8"><SkeletonBlock className="h-40" /></div> : profile.isError ? <div className="mt-8"><ErrorState onRetry={() => profile.refetch()} /></div> : (
           <>
-            <label className="mt-8 block font-ui text-sm font-bold" htmlFor="name">الاسم</label>
+            <label className="mt-8 block font-ui text-sm font-bold" htmlFor="name">كيف تحب أن أناديك؟</label>
             <input id="name" value={name} onChange={(e) => { setTouched(true); setName(e.target.value); }} maxLength={100} placeholder="الاسم كما تحب أن يظهر"
               className="mt-2 w-full rounded-xl border bg-background px-4 py-3 font-ui outline-none focus:border-secondary" data-testid="input-name" />
             {!valid && touched && <p className="mt-1 font-ui text-sm text-secondary">أدخل اسماً من حرفين على الأقل.</p>}

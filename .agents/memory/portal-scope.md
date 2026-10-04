@@ -45,6 +45,12 @@ On 2026-10-04 the user removed the student-facing «اختبار المستوى�
 
 **How to apply:** Do not reintroduce level/comprehensive exams, their dashboard cards or progression links to student screens. Retain stage practice and seven-hadith group checkpoints. Removing these entry points does not authorize deleting historical assessment records or removing administrative review capabilities.
 
+New students should meet the «مَتِين» assistant immediately after registration and answer introductory questions about age, what they memorize, learning goal and available daily time. This introduction is first-time onboarding, not a repeated questionnaire at each sign-in.
+
+**Why:** On 2026-10-04 the user explicitly requested the assistant ask «كم عمرك وماذا تحفظ» as soon as the student registers.
+
+**How to apply:** Keep the welcome conversational and the age answer skippable; store only the student's own confirmed answers. These are self-reported preferences, never verified mastery or authorization to unlock additional books. Do not send these answers to an external AI merely to collect them.
+
 Approved teacher scope: overview of pending questions/referrals/recent conversations; unified referral inbox filterable by response status; scholarly profile with biography, specialties, teachers and ijazat review status; account/notification settings; accessible availability control.
 
 Approved admin scope: activity and review priorities; users/permissions/account states; teacher qualification review with accept/request information/reject and reason; tracks/levels/approved texts/order; assessment generation/pass/retake policy management and results; approved commentary sources, assistant answer issues and referrals; reports and administrative audit trail.

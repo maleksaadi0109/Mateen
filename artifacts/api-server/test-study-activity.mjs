@@ -22,7 +22,7 @@ try {
   pg("pg_ctl", ["-D", data, "-l", join(temp, "postgres.log"), "-o", `-k ${socket} -h '' -F`, "-w", "start"]); started = true;
   pg("createdb", ["-h", socket, "-U", "activity_test", "activity"]);
   pg("psql", ["-h", socket, "-U", "activity_test", "-d", "activity", "-v", "ON_ERROR_STOP=1", "-c",
-    "CREATE TYPE mateen_profile_role AS ENUM ('student','teacher'); CREATE TABLE mateen_profiles(clerk_id text PRIMARY KEY,name text NOT NULL DEFAULT '',role mateen_profile_role NOT NULL DEFAULT 'student',onboarded boolean NOT NULL DEFAULT false);"]);
+    "CREATE TYPE mateen_profile_role AS ENUM ('student','teacher'); CREATE TABLE mateen_profiles(clerk_id text PRIMARY KEY,name text NOT NULL DEFAULT '',role mateen_profile_role NOT NULL DEFAULT 'student',onboarded boolean NOT NULL DEFAULT false,learning_preferences jsonb);"]);
   for (const migration of ["0009_practice_reports.sql", "0011_study_activity.sql"])
     pg("psql", ["-h", socket, "-U", "activity_test", "-d", "activity", "-v", "ON_ERROR_STOP=1", "-f", join(root, "../../lib/db/migrations", migration)]);
   const outfile = join(temp, "tests.cjs");

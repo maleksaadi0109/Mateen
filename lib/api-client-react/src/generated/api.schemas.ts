@@ -408,11 +408,51 @@ export const ProfileRole = {
   teacher: 'teacher',
 } as const;
 
+export type LearningPreferencesGoal = typeof LearningPreferencesGoal[keyof typeof LearningPreferencesGoal];
+
+
+export const LearningPreferencesGoal = {
+  memorize: 'memorize',
+  review: 'review',
+  both: 'both',
+} as const;
+
+export type LearningPreferencesDailyMinutes = typeof LearningPreferencesDailyMinutes[keyof typeof LearningPreferencesDailyMinutes];
+
+
+export const LearningPreferencesDailyMinutes = {
+  NUMBER_10: 10,
+  NUMBER_15: 15,
+  NUMBER_30: 30,
+  NUMBER_45: 45,
+  NUMBER_60: 60,
+} as const;
+
+/**
+ * @nullable
+ */
+export type LearningPreferences = {
+  /**
+     * @minimum 1
+     * @maximum 120
+     * @nullable
+     */
+  age: number | null;
+  /**
+     * @minLength 1
+     * @maxLength 1000
+     */
+  memorized: string;
+  goal: LearningPreferencesGoal;
+  dailyMinutes: LearningPreferencesDailyMinutes;
+} | null;
+
 export interface Profile {
   id: string;
   name: string;
   role: ProfileRole;
   onboarded: boolean;
+  learningPreferences?: LearningPreferences | null;
 }
 
 export type ProfileInputRole = typeof ProfileInputRole[keyof typeof ProfileInputRole];
@@ -430,6 +470,7 @@ export interface ProfileInput {
      */
   name: string;
   role: ProfileInputRole;
+  learningPreferences?: LearningPreferences | null;
 }
 
 export interface ProgressInput {
