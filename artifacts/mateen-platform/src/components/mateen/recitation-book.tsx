@@ -172,7 +172,7 @@ function RecitationBookContent({ hadiths, initialHadith, sourceStatus, onModeCha
     <div className="space-y-4" data-testid="recitation-book">
       {activityError}
       {/* Navigator */}
-      <div className="sticky top-2 z-20 mx-auto flex max-w-[860px] flex-col-reverse items-stretch gap-2 rounded-2xl border bg-card/90 p-2 font-ui text-xs shadow-sm backdrop-blur sm:flex-row sm:items-center sm:justify-between" data-testid="book-navigator">
+      <div className="sticky top-[calc(var(--mateen-assistant-height)+var(--mateen-nav-height,0rem)+0.5rem)] z-20 mx-auto flex max-w-[860px] flex-col-reverse items-stretch gap-2 rounded-2xl border bg-card/90 p-2 font-ui text-xs shadow-sm backdrop-blur sm:flex-row sm:items-center sm:justify-between" data-testid="book-navigator">
         <div className="flex items-center justify-between gap-1">
           <button onClick={() => goPage(pageIdx - 1)} disabled={pageIdx === 0} aria-label="الصفحة السابقة" className="grid h-10 w-10 place-items-center rounded-full border bg-background hover:border-secondary/60 disabled:opacity-40" data-testid="button-book-prev-page"><ChevronRight size={16} /></button>
           <span className="min-w-[7.5rem] text-center font-bold" aria-live="polite" data-testid="text-book-page">صفحة {num(page.number)} من {num(book.pages.length)}</span>

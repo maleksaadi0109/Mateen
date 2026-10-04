@@ -4,6 +4,7 @@ import { getGetTeacherReviewsQueryKey, useDecideTeacherApplication, useGetTeache
 import type { ReviewDecisionInputDecision, TeacherReview } from '@workspace/api-client-react';
 import { AdminGate } from '@/components/admin/AdminGate';
 import { DocDownload, History, Pill, toneOf } from '@/components/admin/parts';
+import DocPreview from '@/components/admin/DocPreview';
 import { EmptyState, ErrorState, LoadingList, PageHeader } from '@/components/mateen/bits';
 import { APP_STATUS, DOC_KIND, DOC_STATUS, errMsg, fmtSize, invalidateReviewData } from '@/lib/admin';
 import { fmtDate, num, usePageMeta } from '@/lib/mateen';
@@ -22,7 +23,7 @@ function Decide({ r }: { r: TeacherReview }) {
   const [reason, setReason] = useState('');
   const [confirm, setConfirm] = useState(false);
   const docs = r.documents ?? [];
-  const cleanCount = docs.filter((x) => x.status === 'clean').length;
+  const cleanCount = docs.filter((x) => x.status === 'clean' && x.contentType === 'application/pdf').length;
   const ok = r.status === 'pending_review' && reason.trim().length >= 5 && (d !== 'approved' || cleanCount > 0);
   const go = () => m.mutate({ userId: r.userId, data: { revision: r.revision ?? 0, decision: d, reason: reason.trim() } }, {
     onSuccess: () => { toast({ title: 'سُجّل القرار' }); setReason(''); setConfirm(false); invalidateReviewData(qc); },
@@ -39,7 +40,7 @@ function Decide({ r }: { r: TeacherReview }) {
       </div>
       <textarea value={reason} onChange={(e) => setReason(e.target.value)} maxLength={2000} rows={4} aria-label="السبب" placeholder="السبب (خمسة أحرف على الأقل). يظهر للمعلم."
         className="w-full rounded-xl border bg-background px-4 py-3 font-arabic text-lg leading-loose outline-none focus:border-secondary" data-testid="input-decision-reason" />
-      {d === 'approved' && cleanCount === 0 ? <p className="font-ui text-xs text-red-800">لا تُقبل طلبات بلا وثيقة سليمة.</p> : null}
+      {d === 'approved' && cleanCount === 0 ? <p className="font-ui text-xs text-red-800">القبول يحتاج شهادة PDF اجتازت الفحص الأمني.</p> : null}
       {m.isError ? <p className="font-ui text-sm text-red-800" role="alert" data-testid="text-decision-error">{errMsg(m.error)}</p> : null}
       {!confirm ? (
         <button type="submit" disabled={!ok} className="rounded-full bg-secondary px-6 py-2 font-ui text-sm font-bold text-secondary-foreground disabled:opacity-50" data-testid="button-decision-review">مراجعة القرار</button>
@@ -61,10 +62,10 @@ function Queue() {
   if (q.isLoading) return <LoadingList rows={4} />;
   if (q.isError || !q.data) return <ErrorState message={errMsg(q.error)} onRetry={() => q.refetch()} />;
   const list = q.data.filter((t) => flt === 'all' || t.status === flt);
-  const cur = q.data.find((t) => t.userId === sel) ?? list[0];
+  const cur = list.find((t) => t.userId === sel) ?? list[0];
   return (
     <div>
-      <PageHeader eyebrow="مركز المراجعة" title="طلبات المعلمين">طلبات خاصة: الوثائق الأصلية لا تُنشر ولا تُعرض للطلاب، وتُنزَّل هنا بحساب موثّق فقط.</PageHeader>
+      <PageHeader eyebrow="مركز المراجعة" title="طلبات اعتماد المعلمين">افتح الطلب، اعرض شهادة PDF، ثم سجّل القبول أو الرفض مع السبب. الشهادات خاصة ولا تُعرض للطلاب.</PageHeader>
       <div className="mb-4 flex flex-wrap gap-2" role="tablist">
         {['pending_review', 'needs_information', 'approved', 'rejected', 'all'].map((s) => (
           <button key={s} onClick={() => setFlt(s)} role="tab" aria-selected={flt === s} data-testid={`filter-${s}`}
@@ -90,8 +91,11 @@ function Queue() {
                 <p className="mb-2 font-ui text-sm font-bold">الوثائق ({num((cur.documents ?? []).length)})</p>
                 <ul className="space-y-2">{(cur.documents ?? []).map((d) => (
                   <li key={d.id} className="flex flex-wrap items-center gap-3 rounded-xl border p-3 font-ui text-sm">
-                    <span className="font-bold">{d.name}</span><Pill>{DOC_KIND[d.kind]}</Pill><Pill tone={toneOf(d.status)}>{DOC_STATUS[d.status]}</Pill>
-                    <span className="text-xs text-muted-foreground">{fmtSize(d.size)}</span><span className="mr-auto"><DocDownload id={d.id} name={d.name} /></span>
+                    <span className="min-w-0 break-all font-bold">{d.name}</span><Pill>{DOC_KIND[d.kind]}</Pill><Pill tone={toneOf(d.status)}>{DOC_STATUS[d.status]}</Pill>
+                    <span className="text-xs text-muted-foreground">{fmtSize(d.size)}</span><span className="mr-auto flex flex-wrap gap-2">
+                      {d.status === 'clean' && d.contentType === 'application/pdf' ? <DocPreview id={d.id} name={d.name} /> : null}
+                      {d.status === 'clean' ? <DocDownload id={d.id} name={d.name} /> : null}
+                    </span>
                   </li>))}</ul>
               </div>
               <Decide key={`${cur.userId}-${cur.revision}-${cur.status}`} r={cur} />

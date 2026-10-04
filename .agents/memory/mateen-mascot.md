@@ -1,6 +1,6 @@
 ---
 name: Mateen mascot direction
-description: Approved character type and implementation constraint for the learning journey.
+description: Approved character type and guidance placement across Mateen.
 ---
 
 Use an original inanimate-object mascot with cartoon facial features for Mateen. The user explicitly chose this over both a faceless symbol and a human/animal character.
@@ -9,11 +9,17 @@ Use an original inanimate-object mascot with cartoon facial features for Mateen.
 
 **How to apply:** Keep the mascot code-rendered and reusable (for example, inline SVG), not dependent on generated raster artwork. Take inspiration from the learning-path experience without copying Duolingo's owl or brand.
 
-Book-cover imagery is a separate requirement: use photographs or actual published cover images, not geometric SVG book imitations.
+Keep the book companion permanently visible at the top across screens, without hide, dismiss, pause or docking controls.
 
-**Why:** On 2026-10-04 the user rejected the illustrated track covers as «الشكل سيء جدا» and repeated «نبي تحط صور حقيقة».
+**Why:** The user clarified after the strip removal that the assistant itself should remain above every screen and cannot be removed. The objection was to the dismissible/controllable presentation, not permanent companion visibility. This supersedes the earlier instruction interpreted as removing the whole strip.
 
-**How to apply:** Keep real covers identifiable, show them at a useful size, and distinguish a pictured commentary from an adopted study edition. This correction concerns track imagery, not the previously approved cartoon mascot.
+**How to apply:** Keep a compact always-visible companion, reserve layout space for it, respect reduced-motion preferences and do not revive saved hide preferences. Keep its contextual UI tips distinct from generated scholarly answers.
+
+Book-cover imagery is a separate requirement: use the user's supplied Mateen-branded Nawawi and Tuhfa images rather than code-drawn cover imitations or the earlier third-party covers.
+
+**Why:** After rejecting code-drawn covers and requesting real images, the user supplied replacement branded cover images on 2026-10-04 and explicitly asked to use them.
+
+**How to apply:** Preserve the provided cover artwork and proportions; do not substitute generic drawings. The supplied Tuhfa image incorrectly credits Ibn al-Jazari: the user was notified; do not copy that attribution into book metadata (the matn author is Sulayman al-Jamzuri).
 
 Do not display image-source captions, credit links beneath book covers, or the introductory cover disclaimer and single-open-book explanation on the tracks page.
 

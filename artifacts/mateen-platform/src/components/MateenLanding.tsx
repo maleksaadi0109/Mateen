@@ -24,7 +24,7 @@ function NavLink({ n, onClick }: { n: (typeof NAV)[number]; onClick?: () => void
 function Header() {
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
+    <header className="sticky top-[var(--mateen-assistant-height)] z-30 border-b border-border/70 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-3 md:px-10">
         <Link href="/" aria-label="مَتِين"><Logo className="h-12" /></Link>
         <nav className="hidden items-center gap-7 lg:flex" aria-label="التنقل">{NAV.map((n) => <NavLink key={n.id} n={n} />)}</nav>

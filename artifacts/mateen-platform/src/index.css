@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --mateen-assistant-height: 4.5rem;
   --background: 41 46% 96%;
   --foreground: 22 28% 18%;
   --card: 40 50% 99%;
@@ -55,7 +56,7 @@
 }
 
 * { border-color: hsl(var(--border)); }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--mateen-assistant-height) + 6rem); }
 body { 
   margin: 0; 
   min-width: 320px; 
@@ -129,4 +130,16 @@ body { font-family: var(--app-font-sans); -webkit-font-smoothing: antialiased; }
 .journey-ring { animation: journey-pulse 2.2s ease-out infinite; }
 @media (prefers-reduced-motion: reduce) {
   .mateen-bob, .mateen-eye, .mateen-page, .journey-ring { animation: none !important; }
+}
+
+/* Mateen companion motion */
+@keyframes mateen-wave { 0%,100% { transform: rotate(0) } 25% { transform: rotate(-24deg) } 60% { transform: rotate(14deg) } }
+@keyframes mateen-hop { 0%,100% { transform: translateY(0) scale(1) } 35% { transform: translateY(-10px) scale(1.04,.97) } 60% { transform: translateY(0) scale(.97,1.03) } }
+.mateen-hand { transform-box: fill-box; transform-origin: 85% 90%; }
+.mateen-pose-wave .mateen-hand { animation: mateen-wave 1.1s ease-in-out 2; }
+.mateen-pose-happy .mateen-hop { animation: mateen-hop .7s ease-out 1; }
+.mateen-hop { transform-box: fill-box; transform-origin: center bottom; }
+.mateen-still .mateen-bob, .mateen-still .mateen-eye, .mateen-still .mateen-page, .mateen-still .mateen-hand, .mateen-still .mateen-hop { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .mateen-hand, .mateen-hop { animation: none !important; }
 }

@@ -129,7 +129,7 @@ export default function StageAssistant({ hadith, selectedWord, wordRequest, onBu
   };
 
   return (
-    <section ref={panel} className="paper-card flex min-w-0 scroll-mt-20 flex-col p-4 lg:sticky lg:top-6 lg:max-h-[calc(100dvh-3rem)]" aria-label="المساعد السياقي" data-testid="panel-stage-assistant">
+    <section ref={panel} className="paper-card flex min-w-0 scroll-mt-20 flex-col p-4 lg:sticky lg:top-[calc(var(--mateen-assistant-height)+1.5rem)] lg:max-h-[calc(100dvh-var(--mateen-assistant-height)-3rem)]" aria-label="المساعد السياقي" data-testid="panel-stage-assistant">
       <button className="flex w-full items-center justify-between gap-2 border-b pb-3 text-start lg:cursor-default" onClick={() => setOpen((v) => !v)} aria-expanded={open} data-testid="button-toggle-assistant">
         <span className="flex items-center gap-2 font-display font-bold"><MessageSquareText size={18} className="text-secondary" />مساعد {unit} {num(hadith.number)}</span>
         <ChevronDown size={18} className={`transition-transform lg:hidden ${open ? 'rotate-180' : ''}`} />

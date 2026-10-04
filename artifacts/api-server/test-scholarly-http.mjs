@@ -10,6 +10,7 @@ import { spawn, spawnSync } from "node:child_process";
 
 const root = dirname(fileURLToPath(import.meta.url));
 const preview = process.argv.includes("--preview");
+const teacherReview = process.argv.includes("--teacher-review");
 const temp = await mkdtemp(join(tmpdir(), "mateen-participant-tests-"));
 const dbRequire = createRequire(join(root, "../../lib/db/package.json"));
 const { generateDrizzleJson, generateMigration } = dbRequire("drizzle-kit/api");
@@ -52,13 +53,13 @@ try {
   // production build has no test header, auth bypass, model stub or test router.
   const outfile = join(temp, preview ? "preview.test.cjs" : "participants.test.cjs");
   await build({
-    entryPoints: [join(root, preview ? "tests/scholarly.preview.test.ts" : "tests/scholarly.participants.test.ts")],
+    entryPoints: [join(root, teacherReview ? "tests/teacher-review.http.test.ts" : preview ? "tests/scholarly.preview.test.ts" : "tests/scholarly.participants.test.ts")],
     bundle: true, platform: "node", format: "cjs", outfile,
     plugins: [{
       name: "participant-test-boundaries",
       setup(builder) {
         builder.onResolve({ filter: /^@clerk\/express$/ }, () => ({
-          path: join(root, preview ? "tests/doubles/preview-auth.ts" : "tests/doubles/auth.ts"),
+          path: join(root, teacherReview ? "tests/doubles/teacher-review-auth.ts" : preview ? "tests/doubles/preview-auth.ts" : "tests/doubles/auth.ts"),
         }));
         if (preview) return; // Exercise the real admin router and provider implementation.
         builder.onResolve({ filter: /^\.\.\/lib\/scholarly-excerpts$/ }, () => ({

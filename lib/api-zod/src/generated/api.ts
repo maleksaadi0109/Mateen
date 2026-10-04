@@ -623,7 +623,7 @@ export const requestQualificationUploadBodySizeMax = 10485760;
 export const RequestQualificationUploadBody = zod.object({
   "name": zod.string().min(1).max(requestQualificationUploadBodyNameMax),
   "size": zod.number().int().min(1).max(requestQualificationUploadBodySizeMax),
-  "contentType": zod.enum(['application/pdf', 'image/jpeg', 'image/png']),
+  "contentType": zod.enum(['application/pdf']),
   "kind": zod.enum(['qualification', 'ijaza'])
 })
 

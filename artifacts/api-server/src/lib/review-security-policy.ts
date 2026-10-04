@@ -41,7 +41,10 @@ export function isEligibleTeacherAccount(state: Omit<ReviewSecurityState, "secur
   return (
     !state.banned &&
     !state.locked &&
-    state.verifiedEmail &&
-    state.mfaEnabled
+    state.verifiedEmail
   );
+}
+
+export function hasTeacherPdfCertificate(documents: readonly { status: string; contentType: string }[]) {
+  return documents.some((document) => document.status === "clean" && document.contentType === "application/pdf");
 }

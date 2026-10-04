@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/reac
 import { Route, Switch, Redirect, useLocation, Router as WouterRouter } from 'wouter';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthFrame } from '@/components/mateen/AuthFrame';
+import PersistentAssistant from '@/components/mateen/persistent-assistant';
 import { PortalGate } from '@/components/portal/PortalShell';
 import { usePageMeta } from '@/lib/mateen';
 import AboutPage from '@/pages/about';
@@ -196,6 +197,7 @@ function Routes() {
 function App() {
   return (
     <WouterRouter base={basePath}>
+      <PersistentAssistant />
       <Routes />
     </WouterRouter>
   );

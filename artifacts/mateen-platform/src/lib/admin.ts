@@ -13,12 +13,27 @@ export function errMsg(e: unknown, fallback = 'حدث خطأ غير متوقع.'
     const d = (e as { data?: unknown }).data;
     if (d && typeof d === 'object') {
       const o = d as Record<string, unknown>;
-      for (const k of ['message', 'error', 'detail', 'reason']) if (typeof o[k] === 'string' && o[k]) return o[k] as string;
+      for (const k of ['message', 'error', 'detail', 'reason']) if (typeof o[k] === 'string' && o[k]) return reviewErrorMessage(o[k] as string);
     }
     if (typeof d === 'string' && d) return d;
     if (e instanceof Error && e.message) return e.message;
   }
   return fallback;
+}
+function reviewErrorMessage(message: string) {
+  const messages: Record<string, string> = {
+    'A verified email is required to apply as a teacher': 'وثّق بريدك الإلكتروني من إعدادات الحساب، ثم أعد المحاولة. لا يلزم تفعيل المصادقة الثنائية لتقديم طلب المعلم.',
+    'This operation requires the teacher role': 'هذه الصفحة لحساب المعلم؛ تأكد من الدخول بالحساب الذي سجّلته كمعلم.',
+    'This account is disabled': 'هذا الحساب موقوف. لا يمكنه تقديم طلب أو الوصول إلى الوثائق.',
+    'Account security could not be verified': 'تعذّر الاتصال بخدمة التحقق من الحساب مؤقتاً. أعد المحاولة دون إنشاء طلب جديد.',
+    'Application revision changed or the application is not ready for submission': 'حدّث بيانات الطلب وارفع شهادة PDF تجتاز الفحص الأمني، ثم أعد الإرسال.',
+    'A security-checked PDF certificate is required before approval': 'لا يمكن القبول دون شهادة PDF اجتازت الفحص الأمني.',
+    'Teacher must have an active teacher account and verified email before approval': 'يلزم حساب معلم نشط وبريد موثّق قبل قبول الطلب.',
+    'Document validation is temporarily unavailable; the upload remains retryable': 'رُفع الملف، لكن خدمة الفحص غير متاحة مؤقتاً. اضغط «إعادة الفحص» دون رفع نسخة أخرى.',
+    'Document failed security validation': 'لم يجتز الملف الفحص الأمني. احذفه وارفع ملف PDF سليماً.',
+    'Private storage returned an invalid upload URL': 'تعذّر تجهيز رابط رفع خاص. أعد المحاولة لاحقاً.',
+  };
+  return messages[message] ?? message;
 }
 export function invalidateReviewData(qc: QueryClient) {
   const keys = [

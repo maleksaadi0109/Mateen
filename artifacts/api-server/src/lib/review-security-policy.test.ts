@@ -4,6 +4,7 @@ import {
   hasSecureReviewPermission,
   isEligibleTeacherAccount,
   hasVerifiedSecondFactor,
+  hasTeacherPdfCertificate,
 } from "./review-security-policy";
 
 const secureState = {
@@ -51,7 +52,7 @@ test("review permissions are separate and require backend metadata plus secure s
   );
 });
 
-test("teacher approval requires a live, verified, MFA-enabled Clerk account", () => {
+test("teacher approval requires an active verified account but does not require MFA", () => {
   assert.equal(
     isEligibleTeacherAccount({
       banned: false,
@@ -79,4 +80,19 @@ test("teacher approval requires a live, verified, MFA-enabled Clerk account", ()
     }),
     false,
   );
+});
+
+test("ordinary verified teachers may apply without MFA; reviewers still need it", () => {
+  const normalTeacher = { ...secureState, mfaEnabled: false, secureSession: false };
+  assert.equal(isEligibleTeacherAccount(normalTeacher), true);
+  assert.equal(hasSecureReviewPermission("qualification", normalTeacher, { mateenQualificationReviewer: true }), false);
+  assert.equal(isEligibleTeacherAccount({ ...normalTeacher, locked: true }), false);
+});
+
+test("a certificate must be a security-checked PDF, not an image or unfinished upload", () => {
+  assert.equal(hasTeacherPdfCertificate([]), false);
+  assert.equal(hasTeacherPdfCertificate([{ status: "clean", contentType: "image/png" }]), false);
+  assert.equal(hasTeacherPdfCertificate([{ status: "uploading", contentType: "application/pdf" }]), false);
+  assert.equal(hasTeacherPdfCertificate([{ status: "rejected", contentType: "application/pdf" }]), false);
+  assert.equal(hasTeacherPdfCertificate([{ status: "clean", contentType: "application/pdf" }]), true);
 });

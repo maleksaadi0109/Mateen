@@ -643,8 +643,6 @@ export type QualificationUploadInputContentType = typeof QualificationUploadInpu
 
 export const QualificationUploadInputContentType = {
   'application/pdf': 'application/pdf',
-  'image/jpeg': 'image/jpeg',
-  'image/png': 'image/png',
 } as const;
 
 export type QualificationUploadInputKind = typeof QualificationUploadInputKind[keyof typeof QualificationUploadInputKind];

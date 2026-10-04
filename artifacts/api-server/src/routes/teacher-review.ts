@@ -41,7 +41,7 @@ import {
   teacherProfileSaveTransition,
   type TeacherProfileStatus,
 } from "../lib/teacher-review-policy";
-import { isEligibleTeacherAccount } from "../lib/review-security-policy";
+import { hasTeacherPdfCertificate, isEligibleTeacherAccount } from "../lib/review-security-policy";
 import {
   getReviewAccess,
   mutationProtection,
@@ -701,7 +701,7 @@ router.post(
         .where(eq(teacherApplicationsTable.userId, userId))
         .limit(1);
       const documents = await tx
-        .select({ id: qualificationDocumentsTable.id })
+        .select({ status: qualificationDocumentsTable.status, contentType: qualificationDocumentsTable.contentType })
         .from(qualificationDocumentsTable)
         .where(
           and(
@@ -709,7 +709,7 @@ router.post(
             eq(qualificationDocumentsTable.status, "clean"),
           ),
         );
-      if (!application || documents.length === 0) {
+      if (!application || !hasTeacherPdfCertificate(documents)) {
         conflict = true;
         return;
       }
@@ -783,6 +783,7 @@ router.post(
     let conflict = false;
     let targetSecurityUnavailable = false;
     let targetNotEligible = false;
+    let certificateMissing = false;
     let targetProfile: { name: string } | undefined;
     await db.transaction(async (tx) => {
       const current = await makeDraft(tx, params.data.userId);
@@ -803,6 +804,14 @@ router.post(
         return;
       }
       if (parsed.data.decision === "approved") {
+        const documents = await tx.select({
+          status: qualificationDocumentsTable.status,
+          contentType: qualificationDocumentsTable.contentType,
+        }).from(qualificationDocumentsTable).where(eq(qualificationDocumentsTable.userId, params.data.userId));
+        if (!hasTeacherPdfCertificate(documents)) {
+          certificateMissing = true;
+          return;
+        }
         if (profile.role !== "teacher") {
           targetNotEligible = true;
           return;
@@ -862,11 +871,15 @@ router.post(
       appError(res, 503, "Teacher account security could not be verified");
       return;
     }
+    if (certificateMissing) {
+      appError(res, 422, "A security-checked PDF certificate is required before approval");
+      return;
+    }
     if (targetNotEligible) {
       appError(
         res,
         409,
-        "Teacher must have an active teacher account, verified email, and enabled MFA before approval",
+        "Teacher must have an active teacher account and verified email before approval",
       );
       return;
     }

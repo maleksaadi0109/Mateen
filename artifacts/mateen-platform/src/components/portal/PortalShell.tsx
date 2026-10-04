@@ -83,8 +83,8 @@ function Shell({ nav: navProp, name, role, children }: { nav: typeof studentNav;
   }
 
   return (
-    <div className="min-h-[100dvh] bg-background text-foreground md:flex">
-      <aside className="hidden w-72 shrink-0 flex-col border-l bg-card p-6 md:sticky md:top-0 md:flex md:h-[100dvh]">
+    <div className="min-h-[calc(100dvh-var(--mateen-assistant-height))] bg-background text-foreground [--mateen-nav-height:5.5625rem] md:flex md:[--mateen-nav-height:0rem]">
+      <aside className="hidden w-72 shrink-0 flex-col border-l bg-card p-6 md:sticky md:top-[var(--mateen-assistant-height)] md:flex md:h-[calc(100dvh-var(--mateen-assistant-height))]">
         <Link href={role === 'student' ? '/student' : '/teacher'} className="mb-8 block"><Logo className="h-14" /></Link>
         <nav className="flex-1 space-y-1" aria-label="التنقل الرئيسي">
           {nav.map((n) => (
@@ -109,7 +109,7 @@ function Shell({ nav: navProp, name, role, children }: { nav: typeof studentNav;
         </div>
       </aside>
       <div className="min-w-0 flex-1">
-        <div className="sticky top-0 z-30 border-b bg-background/90 backdrop-blur md:hidden">
+        <div className="sticky top-[var(--mateen-assistant-height)] z-30 border-b bg-background/90 backdrop-blur md:hidden">
           <div className="flex items-center justify-between px-4 py-2"><Logo className="h-9" />
             <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="rounded-full border p-2" aria-label="تبديل المظهر" data-testid="button-theme-mobile">
               {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}

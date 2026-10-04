@@ -9,10 +9,10 @@ const img = (f: string) => `${B}images/book-covers/${f}`;
 
 type Cover = { file: string; w: number; h: number; caption: string; source: string; url: string };
 const COVERS = {
-  nawawi: { file: 'nawawi-supplied.jpg', w: 908, h: 1361, caption: 'غلاف كتاب الأربعين النووية', source: 'صورة مقدمة من المستخدم', url: '' },
+  nawawi: { file: 'nawawi-mateen.png', w: 802, h: 1280, caption: 'غلاف الأربعين النووية بتصميم مَتِين', source: 'صورة مقدمة من المستخدم', url: '' },
   nawaqid: { file: 'nawaqid.jpg', w: 349, h: 500, caption: 'غلاف «فتح القدوس السلام بشرح نواقض الإسلام»', source: 'نصيحة', url: 'https://nasihaa.com/uploads/img/1679391879_SXT9H.jpg' },
   qawaid: { file: 'qawaid.jpg', w: 673, h: 1000, caption: 'غلاف «المطلع في شرح القواعد الأربع»', source: 'سلة', url: 'https://cdn.salla.sa/YvENm/vYEE9FDGPk05b67szO9e9SQKeKaSWsIHtJTQMHgY.jpg' },
-  tuhfa: { file: 'tuhfa-crop.webp', w: 332, h: 482, caption: 'غلاف «شرح تحفة الأطفال»', source: 'مكتبة دبي', url: 'https://shop.dubailibrary.com/cdn/shop/files/10_11c4f424-26a3-4954-b283-8843883d022a_800x.jpg?v=1695022480' },
+  tuhfa: { file: 'tuhfa-mateen.png', w: 802, h: 1280, caption: 'غلاف متن تحفة الأطفال لسليمان الجمزوري بتصميم مَتِين', source: 'صورة مقدمة من المستخدم؛ نسبة المؤلف المطبوعة على الصورة تحتاج تصحيحاً', url: '' },
 } satisfies Record<string, Cover>;
 
 function coverFor(id: string): Cover | undefined {

@@ -20,3 +20,15 @@ Participant-boundary regression tests may use synthetic approvals only in dispos
 **Why:** Automated privacy tests need repeatable identities and timing without granting real reviewer authority or publishing fictitious approval evidence.
 
 **How to apply:** Keep synthetic authority out of application databases and production code. Retain separate trusted-account review and real-model evaluation gates.
+
+Separate access to one's own teacher application from the stronger assurance needed for administrative review. Teachers may apply with ordinary verified accounts; this does not make them reviewers or approved teachers.
+
+**Why:** The user asked to make the teacher portal usable normally after its MFA requirement blocked access. Reviewer assurance should protect cross-account decisions, not prevent ordinary applicants from submitting credentials.
+
+**How to apply:** Preserve independent reviewer designation and reviewer MFA, private documents, active verified teacher accounts and explicit approval before receiving student referrals.
+
+Teacher applications must include a PDF certificate, not merely an image.
+
+**Why:** The user explicitly required «المعلم ضروري يرفع pdf يثبت فيه أنه لديه شهادة» and asked for the admin to inspect it and approve or reject.
+
+**How to apply:** Require a security-checked PDF at submission and approval, without implying that malware scanning verifies the credential's authenticity.

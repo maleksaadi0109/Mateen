@@ -3,11 +3,19 @@ import { getGetMateenTeacherReferralsQueryKey, useGetMateenTeacherReferrals } fr
 import { fmtDate, num } from '@/lib/mateen';
 import { PageHeader, SkeletonBlock } from '@/components/mateen/bits';
 import { StatusPill, useFinitePoll } from './shared';
+import { errStatus } from '@/lib/admin';
 
 export function TeacherReferralOverview() {
   const poll = useFinitePoll(15000);
   const q = useGetMateenTeacherReferrals(undefined, { query: { queryKey: getGetMateenTeacherReferralsQueryKey(), refetchInterval: poll } });
   if (q.isLoading) return <SkeletonBlock className="h-32" />;
+  if (q.isError && errStatus(q.error) === 403) return (
+    <div className="paper-card space-y-3 p-5" data-testid="state-teacher-awaiting-approval">
+      <h2 className="font-display text-lg font-bold">الإحالات تُتاح بعد اعتماد ملفك</h2>
+      <p className="font-ui text-sm text-muted-foreground">يمكنك تقديم طلبك ومتابعة قرار الإدارة الآن. لا تصلك إحالات الطلاب قبل مراجعة الشهادة واعتمادك.</p>
+      <Link href="/teacher" className="inline-flex min-h-11 items-center rounded-full bg-primary px-5 font-ui text-sm font-bold text-primary-foreground">عرض طلب الاعتماد</Link>
+    </div>
+  );
   if (q.isError || !q.data) return <div className="paper-card p-5 font-ui text-sm" role="alert">تعذّر تحميل الإحالات.</div>;
   const waiting = q.data.filter((r) => r.status === 'open').length;
   const answered = q.data.filter((r) => r.status === 'answered').length;

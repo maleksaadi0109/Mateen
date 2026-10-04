@@ -122,9 +122,9 @@ export function requireSecureTeacher(
       res.status(403).json({ error: "This account is disabled" });
       return;
     }
-    if (!security.verifiedEmail || !security.mfaEnabled || !security.secureSession) {
+    if (!security.verifiedEmail) {
       res.status(403).json({
-        error: "Verified email and an MFA-protected session are required",
+        error: "A verified email is required to apply as a teacher",
       });
       return;
     }

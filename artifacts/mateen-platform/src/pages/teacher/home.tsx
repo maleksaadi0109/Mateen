@@ -6,7 +6,8 @@ import {
 } from '@workspace/api-client-react';
 import type { QualificationUploadInput } from '@workspace/api-client-react';
 import { Trash2, Upload } from 'lucide-react';
-import { DocDownload, History, Pill, SecurityNotice, toneOf } from '@/components/admin/parts';
+import { DocDownload, History, Pill, toneOf } from '@/components/admin/parts';
+import DocPreview from '@/components/admin/DocPreview';
 import { ErrorState, LoadingList, Notice, PageHeader } from '@/components/mateen/bits';
 import { APP_STATUS, DOC_KIND, DOC_STATUS, errMsg, errStatus, fmtSize, invalidateReviewData } from '@/lib/admin';
 import { fmtDate, num, usePageMeta } from '@/lib/mateen';
@@ -14,18 +15,17 @@ import { useToast } from '@/hooks/use-toast';
 import { Switch } from '@/components/ui/switch';
 
 const DESC: Record<string, string> = {
-  draft: 'ملفك محفوظ ولم يُرسل بعد. ارفع وثيقة سليمة واحدة على الأقل ثم أرسل الطلب.',
+  draft: 'ملفك محفوظ ولم يُرسل بعد. ارفع شهادة PDF تجتاز الفحص الأمني ثم أرسل الطلب.',
   pending_review: 'طلبك قيد مراجعة المنصة. تُجمَّد النبذة والتخصصات والوثائق حتى صدور القرار.',
   approved: 'اعتمدت المنصة ملفك. أي تعديل على الوثائق يُبطل الاعتماد في الخادم ويعيدك إلى المراجعة.',
   needs_information: 'طلب المراجع معلومات إضافية. اقرأ السبب أدناه، عدّل ثم أعد الإرسال.',
   rejected: 'رُفض الطلب. اقرأ السبب أدناه؛ يمكنك تعديل ملفك وإعادة الإرسال.',
 };
-const TYPES = ['application/pdf', 'image/png', 'image/jpeg'];
 const MAX = 10485760;
 
 export default function TeacherHome() {
   usePageMeta('ملف المعلم | مَتِين', 'ملفك العلمي ووثائقك وحالة طلب الاعتماد.');
-  const q = useGetTeacher({ query: { enabled: true, queryKey: getGetTeacherQueryKey() } });
+  const q = useGetTeacher({ query: { enabled: true, queryKey: getGetTeacherQueryKey(), refetchInterval: 30_000 } });
   const save = useSaveTeacher();
   const reqUp = useRequestQualificationUpload();
   const complete = useCompleteQualificationUpload();
@@ -41,18 +41,27 @@ export default function TeacherHome() {
   const [upBusy, setUpBusy] = useState(false);
   const [warn, setWarn] = useState<null | { label: string; run: () => void }>(null);
   const [confirmSubmit, setConfirmSubmit] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const inited = useRef(false);
+  const lastAvailable = useRef<boolean | null>(null);
   useEffect(() => {
     if (q.data && !inited.current) { inited.current = true; setBio(q.data.biography); setSpec(q.data.specialties); setAvail(q.data.available); }
+    if (q.data) {
+      const previous = lastAvailable.current;
+      setAvail((current) => previous === null || current === previous ? q.data!.available : current);
+      lastAvailable.current = q.data.available;
+    }
   }, [q.data]);
 
   if (q.isLoading) return <LoadingList />;
   if (q.isError || !q.data) {
     if (errStatus(q.error) === 403) return (
       <div className="space-y-4" data-testid="state-teacher-forbidden">
-        <PageHeader eyebrow="المعلم" title="ملفك محمي بجلسة موثّقة" />
-        <SecurityNotice reason={errMsg(q.error, 'رفض الخادم الطلب لأن جلستك لا تستوفي شروط الأمان.')} />
+        <PageHeader eyebrow="المعلم" title="أكمل التحقق من حسابك" />
+        <Notice tone="amber" title="يلزم حساب معلم وبريد إلكتروني موثّق">
+          {errMsg(q.error, 'تحقق من بريدك الإلكتروني ومن اختيار دور المعلم في حسابك. المصادقة الثنائية ليست شرطاً لتقديم طلب المعلم.')}
+        </Notice>
         <button onClick={() => q.refetch()} className="rounded-full bg-secondary px-6 py-2 font-ui text-sm font-bold text-secondary-foreground" data-testid="button-recheck-teacher">إعادة المحاولة بعد الدخول من جديد</button>
       </div>
     );
@@ -61,8 +70,8 @@ export default function TeacherHome() {
   const t = q.data;
   const status = t.status;
   const docs = t.documents ?? [];
-  const locked = status === 'pending_review';
-  const cleanCount = docs.filter((d) => d.status === 'clean').length;
+  const locked = status === 'pending_review' || submitting;
+  const cleanCount = docs.filter((d) => d.status === 'clean' && d.contentType === 'application/pdf').length;
   const refresh = () => invalidateReviewData(qc);
 
   const onSave = (e: React.FormEvent) => {
@@ -80,12 +89,12 @@ export default function TeacherHome() {
 
   const doUpload = async (file: File) => {
     setUpMsg('');
-    if (!TYPES.includes(file.type)) { setUpMsg('النوع غير مدعوم: المسموح PDF أو PNG أو JPEG.'); return; }
+    if (!/\.pdf$/i.test(file.name) || (file.type && file.type !== 'application/pdf')) { setUpMsg('الشهادة يجب أن تكون ملف PDF، وليست صورة.'); return; }
     if (file.size < 1 || file.size > MAX) { setUpMsg('حجم الملف يجب ألا يتجاوز ١٠ ميبيبايت.'); return; }
     setUpBusy(true);
     try {
-      const r = await reqUp.mutateAsync({ data: { name: file.name.slice(0, 180), size: file.size, contentType: file.type as QualificationUploadInput['contentType'], kind } });
-      const put = await fetch(r.uploadURL, { method: 'PUT', headers: { 'Content-Type': file.type }, body: file });
+      const r = await reqUp.mutateAsync({ data: { name: file.name.slice(0, 180), size: file.size, contentType: 'application/pdf', kind } });
+      const put = await fetch(r.uploadURL, { method: 'PUT', headers: { 'Content-Type': 'application/pdf' }, body: file });
       if (!put.ok) throw new Error('فشل إرسال الملف إلى التخزين الخاص.');
       const done = await complete.mutateAsync({ documentId: r.documentId });
       if (done.status !== 'clean') throw new Error('لم يجتز الملف الفحص الأمني ولم يُقبل.');
@@ -99,11 +108,28 @@ export default function TeacherHome() {
     onSuccess: () => { refresh(); toast({ title: 'حُذفت الوثيقة' }); },
     onError: (err) => toast({ title: 'تعذّر الحذف', description: errMsg(err), variant: 'destructive' }),
   }));
-  const onSubmit = () => submitApp.mutate({ data: { revision: t.revision ?? 0 } }, {
-    onSuccess: () => { setConfirmSubmit(false); refresh(); toast({ title: 'أُرسل الطلب للمراجعة' }); },
-    onError: (err) => { setConfirmSubmit(false); toast({ title: 'تعذّر الإرسال', description: errMsg(err), variant: 'destructive' }); },
-  });
-  const canSubmit = (status === 'draft' || status === 'needs_information' || status === 'rejected') && cleanCount > 0 && !upBusy;
+  const retryScan = (id: string) => guard('استكمال فحص هذه الوثيقة', () => complete.mutate({ documentId: id }, {
+    onSuccess: () => { setUpMsg(''); refresh(); toast({ title: 'اكتمل فحص الوثيقة' }); },
+    onError: (err) => { setUpMsg(errMsg(err, 'تعذّر استكمال الفحص.')); refresh(); },
+  }));
+  const onSubmit = async () => {
+    if (submitting || upBusy || save.isPending || remove.isPending) return;
+    setSubmitting(true);
+    try {
+      // Save the values visible in the form, then submit the returned revision.
+      // Never submit a stale revision or silently omit unsaved teacher edits.
+      const saved = await save.mutateAsync({ data: { biography: bio.trim(), specialties: spec.trim(), available: false } });
+      await submitApp.mutateAsync({ data: { revision: saved.revision ?? 0 } });
+      toast({ title: 'أُرسل الطلب للمراجعة' });
+    } catch (err) {
+      toast({ title: 'تعذّر الإرسال', description: errMsg(err), variant: 'destructive' });
+    } finally {
+      setConfirmSubmit(false);
+      setSubmitting(false);
+      refresh();
+    }
+  };
+  const canSubmit = (status === 'draft' || status === 'needs_information' || status === 'rejected') && cleanCount > 0 && !upBusy && !submitting && !save.isPending && !remove.isPending && !complete.isPending;
 
   return (
     <div>
@@ -135,26 +161,28 @@ export default function TeacherHome() {
       </form>
 
       <section className="paper-card mb-6 space-y-5 p-7" data-testid="section-documents">
-        <h2 className="font-display text-xl font-bold">الوثائق والإجازات</h2>
+        <h2 className="font-display text-xl font-bold">شهادة المعلم — PDF إلزامي</h2>
         {status === 'approved' ? <Notice tone="amber" title="تنبيه: تعديل الوثائق يُبطل الاعتماد">رفع أو حذف أي وثيقة بعد الاعتماد يُسقط اعتمادك في الخادم فيعود طلبك إلى المراجعة، ولا تظهر للطلاب حتى يُعاد اعتمادك.</Notice> : null}
         <div className="flex flex-wrap items-end gap-3">
           <label className="font-ui text-xs font-bold">النوع
             <select value={kind} onChange={(e) => setKind(e.target.value as typeof kind)} disabled={locked || upBusy} className="mt-1 block rounded-xl border bg-background px-3 py-2 font-ui text-sm" data-testid="select-doc-kind">
               <option value="qualification">مؤهل</option><option value="ijaza">إجازة</option>
             </select></label>
-          <input ref={fileRef} type="file" accept="application/pdf,image/png,image/jpeg" className="sr-only" id="doc-file" disabled={locked || upBusy} onChange={(e) => onFile(e.target.files?.[0])} data-testid="input-doc-file" />
+          <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="sr-only" id="doc-file" disabled={locked || upBusy} onChange={(e) => onFile(e.target.files?.[0])} data-testid="input-doc-file" />
           <label htmlFor="doc-file" className={`inline-flex cursor-pointer items-center gap-2 rounded-full bg-primary px-6 py-2.5 font-ui text-sm font-bold text-primary-foreground ${locked || upBusy ? 'pointer-events-none opacity-50' : ''}`}><Upload size={16} /> {upBusy ? 'جارٍ الرفع والفحص…' : 'اختر ملفاً'}</label>
-          <p className="font-ui text-xs text-muted-foreground">PDF أو PNG أو JPEG، حتى ١٠ م.ب. تُفحص الملفات ويُرفض ما لا يجتاز الفحص.</p>
+          <p className="font-ui text-xs text-muted-foreground">ارفع شهادة أو إجازة تثبت مؤهلك، بصيغة PDF حتى ١٠ م.ب. تُحفظ خصوصياً وتُفحص قبل إتاحتها للمراجع.</p>
         </div>
         {upMsg ? <p className="rounded-xl bg-red-50 p-3 font-ui text-sm text-red-900" role="alert" data-testid="text-upload-error">{upMsg}</p> : null}
         {!docs.length ? <p className="rounded-xl border border-dashed p-6 text-center font-ui text-sm text-muted-foreground" data-testid="empty-documents">لم ترفع وثائق بعد.</p> : (
           <ul className="space-y-2" data-testid="list-documents">{docs.map((d) => (
             <li key={d.id} className="flex flex-wrap items-center gap-3 rounded-xl border p-3 font-ui text-sm" data-testid={`row-doc-${d.id}`}>
-              <span className="font-bold">{d.name}</span><Pill>{DOC_KIND[d.kind]}</Pill><Pill tone={toneOf(d.status)}>{DOC_STATUS[d.status]}</Pill>
+              <span className="min-w-0 break-all font-bold">{d.name}</span><Pill>{DOC_KIND[d.kind]}</Pill><Pill tone={toneOf(d.status)}>{DOC_STATUS[d.status]}</Pill>
               <span className="text-xs text-muted-foreground">{fmtSize(d.size)} · {fmtDate(d.uploadedAt)}</span>
               <span className="mr-auto flex items-center gap-2">
-                <DocDownload id={d.id} name={d.name} />
-                <button type="button" disabled={locked || remove.isPending} onClick={() => onRemove(d.id)} className="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-bold hover:bg-muted disabled:opacity-50" data-testid={`button-remove-${d.id}`}><Trash2 size={13} /> حذف</button>
+                {d.status === 'clean' && d.contentType === 'application/pdf' ? <DocPreview id={d.id} name={d.name} /> : null}
+                {d.status === 'clean' ? <DocDownload id={d.id} name={d.name} /> : null}
+                {d.status === 'uploading' ? <button type="button" disabled={locked || upBusy || complete.isPending} onClick={() => retryScan(d.id)} className="min-h-10 rounded-full border px-3 py-1 text-xs font-bold disabled:opacity-50" data-testid={`button-retry-scan-${d.id}`}>إعادة الفحص</button> : null}
+                <button type="button" disabled={locked || upBusy || remove.isPending || complete.isPending} onClick={() => onRemove(d.id)} className="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-bold hover:bg-muted disabled:opacity-50" data-testid={`button-remove-${d.id}`}><Trash2 size={13} /> حذف</button>
               </span>
             </li>))}</ul>
         )}
@@ -170,7 +198,7 @@ export default function TeacherHome() {
               <button onClick={() => setConfirmSubmit(true)} disabled={!canSubmit} className="rounded-full bg-secondary px-8 py-3 font-ui font-bold text-secondary-foreground disabled:opacity-50" data-testid="button-submit-application">إرسال الطلب للمراجعة</button>
             ) : (
               <div className="flex flex-wrap items-center gap-3"><span className="font-ui text-sm font-bold">بعد الإرسال تُجمَّد بياناتك حتى القرار. تأكيد؟</span>
-                <button onClick={onSubmit} disabled={submitApp.isPending} className="rounded-full bg-secondary px-6 py-2 font-ui text-sm font-bold text-secondary-foreground disabled:opacity-50" data-testid="button-confirm-submit">{submitApp.isPending ? 'جارٍ الإرسال…' : 'تأكيد الإرسال'}</button>
+                <button onClick={onSubmit} disabled={!canSubmit} className="rounded-full bg-secondary px-6 py-2 font-ui text-sm font-bold text-secondary-foreground disabled:opacity-50" data-testid="button-confirm-submit">{submitting ? 'جارٍ حفظ الملف وإرساله…' : 'تأكيد الإرسال'}</button>
                 <button onClick={() => setConfirmSubmit(false)} className="font-ui text-sm underline">رجوع</button></div>
             )}
             {!cleanCount ? <p className="mt-2 font-ui text-xs text-muted-foreground">يلزم رفع وثيقة سليمة واحدة على الأقل.</p> : null}
