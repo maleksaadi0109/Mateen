@@ -1,6 +1,6 @@
 import { Link } from 'wouter';
 import { getGetCatalogQueryKey, useGetCatalog } from '@workspace/api-client-react';
-import { Lock, ArrowLeft, Info } from 'lucide-react';
+import { Lock, ArrowLeft } from 'lucide-react';
 import { EmptyState, ErrorState, LoadingList, PageHeader, Reveal } from '@/components/mateen/bits';
 import { num, usePageMeta } from '@/lib/mateen';
 
@@ -37,14 +37,9 @@ export default function TracksPage() {
 
   return (
     <div>
-      <PageHeader eyebrow="المسارات" title="المتون والمستويات">متن واحد مفتوح اليوم. أما المتون الأخرى فمغلقة بوسم «قريباً» ولا يمكن دراستها قبل نشرها.</PageHeader>
+      <PageHeader eyebrow="المسارات" title="المتون والمستويات" />
       {q.isLoading ? <LoadingList rows={4} /> : q.isError ? <ErrorState onRetry={() => q.refetch()} /> : !items.length ? <EmptyState title="لا متون في الفهرس">سيظهر الفهرس هنا عند توفره.</EmptyState> : (
         <div className="space-y-10">
-          <div className="flex items-start gap-3 rounded-2xl border border-secondary/30 bg-secondary/5 px-4 py-3" data-testid="note-covers-disclaimer">
-            <Info size={18} className="mt-1 shrink-0 text-secondary" aria-hidden />
-            <p className="font-ui text-sm leading-relaxed text-foreground/80">الأغلفة للتعريف بالمتون؛ صور الشروح لا تعني اعتمادها للدراسة.</p>
-          </div>
-
           {openItems.map((t) => {
             const c = COVERS.nawawi;
             return (
