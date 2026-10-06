@@ -11,6 +11,26 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /storage/local-upload:
+    put:
+      operationId: putLocalPrivateUpload
+      summary: Transfer bytes using a short-lived private PUT capability
+      description: Local provider only. Obtain the URL from an authenticated document or audio upload request. The signed token authorizes only its temporary key; there is no corresponding GET route.
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema: { type: string, maxLength: 2048 }
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema: { type: string, format: binary }
+      responses:
+        "204": { description: Private temporary bytes stored }
+        "403": { description: Invalid or expired capability }
+        "404": { description: Local provider not selected }
+        "413": { description: Upload exceeded 10 MiB or could not be completed }
   /mateen/messages/{messageId}/source-status:
     get:
       operationId: getMateenMessageSourceStatus

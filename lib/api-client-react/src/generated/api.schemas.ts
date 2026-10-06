@@ -2404,6 +2404,13 @@ export type PracticeReportErrorResponse = {
   error: string;
 };
 
+export type PutLocalPrivateUploadParams = {
+/**
+ * @maxLength 2048
+ */
+token: string;
+};
+
 export type GetDailyPlanParams = {
 timezone?: string;
 planId?: string;

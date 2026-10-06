@@ -8,6 +8,21 @@
 import * as zod from 'zod';
 
 
+/**
+ * Local provider only. Obtain the URL from an authenticated document or audio upload request. The signed token authorizes only its temporary key; there is no corresponding GET route.
+ * @summary Transfer bytes using a short-lived private PUT capability
+ */
+export const putLocalPrivateUploadQueryTokenMax = 2048;
+
+
+
+export const PutLocalPrivateUploadQueryParams = zod.object({
+  "token": zod.coerce.string().max(putLocalPrivateUploadQueryTokenMax)
+})
+
+export const PutLocalPrivateUploadResponse = zod.void()
+
+
 export const GetMateenMessageSourceStatusParams = zod.object({
   "messageId": zod.coerce.string().uuid()
 })

@@ -3,6 +3,8 @@ import { access, stat, readFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import path from "node:path";
 import { ObjectStorageService, objectStorageClient } from "./objectStorage";
+import { storageProvider } from "./private-storage";
+import { localStorageReady } from "./local-private-storage";
 
 const storage = new ObjectStorageService();
 const expectedModelId = "Qwen/Qwen3-ASR-0.6B-hf";
@@ -163,6 +165,7 @@ export async function assessmentAudioCapabilitiesReady(): Promise<boolean> {
 
 export async function privateStorageReady(): Promise<boolean> {
   try {
+    if (storageProvider() === "local") return await localStorageReady();
     const privateDir = storage.getPrivateObjectDir().replace(/^\/+/, "");
     const separator = privateDir.indexOf("/");
     if (separator <= 0) return false;

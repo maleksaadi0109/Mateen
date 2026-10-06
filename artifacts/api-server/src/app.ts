@@ -4,6 +4,7 @@ import { clerkMiddleware } from "@clerk/express";
 import { publishableKeyFromHost } from "@clerk/shared/keys";
 import pinoHttp from "pino-http";
 import router from "./routes";
+import localStorageUploadRouter from "./routes/local-storage-upload";
 import { logger } from "./lib/logger";
 import {
   CLERK_PROXY_PATH,
@@ -35,6 +36,9 @@ app.use(
 app.use(CLERK_PROXY_PATH, clerkProxyMiddleware());
 
 app.use(cors({ origin: false }));
+// Stream signed PUT bytes before JSON parsing and Clerk; the capability is the
+// authorization, and the upload handler enforces its own bounded binary stream.
+app.use("/api", localStorageUploadRouter);
 // Only the consented report endpoint accepts the larger bounded JSON payload.
 app.use((req, res, next) => {
   if (req.method === "POST" && req.path === "/api/mateen/practice-reports") { next(); return; }

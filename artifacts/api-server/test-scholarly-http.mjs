@@ -11,7 +11,8 @@ import { spawn, spawnSync } from "node:child_process";
 const root = dirname(fileURLToPath(import.meta.url));
 const preview = process.argv.includes("--preview");
 const preparedImport = process.argv.includes("--prepared-import");
-const teacherReview = process.argv.includes("--teacher-review");
+const privateStorage = process.argv.includes("--private-storage");
+const teacherReview = process.argv.includes("--teacher-review") || privateStorage;
 const collation = process.argv.includes("--collation");
 const temp = await mkdtemp(join(tmpdir(), "mateen-participant-tests-"));
 const dbRequire = createRequire(join(root, "../../lib/db/package.json"));
@@ -26,6 +27,10 @@ const childEnv = {
   NODE_ENV: "test",
   DATABASE_URL: `postgresql://mateen_test@localhost/postgres?host=${encodeURIComponent(socket)}`,
   SCHOLARLY_TEST_CLUSTER: temp,
+  ...(privateStorage ? {
+    PRIVATE_STORAGE_PROVIDER: "local",
+    LOCAL_PRIVATE_STORAGE_DIR: join(temp, "private-objects"),
+  } : {}),
   ...(preview ? { NVIDIA_API_KEY: "synthetic-test-only-not-a-credential" } : {}),
 };
 function pg(command, args) {
@@ -62,14 +67,17 @@ try {
     }
   }
   await build({
-    entryPoints: [join(root, collation ? "tests/scholarly.collation.test.ts" : preparedImport ? "tests/scholarly.import.test.ts" : teacherReview ? "tests/teacher-review.http.test.ts" : preview ? "tests/scholarly.preview.test.ts" : "tests/scholarly.participants.test.ts")],
+    entryPoints: [join(root, privateStorage ? "tests/private-storage.http.test.ts" : collation ? "tests/scholarly.collation.test.ts" : preparedImport ? "tests/scholarly.import.test.ts" : teacherReview ? "tests/teacher-review.http.test.ts" : preview ? "tests/scholarly.preview.test.ts" : "tests/scholarly.participants.test.ts")],
     bundle: true, platform: "node", format: "cjs", outfile,
     ...(collation || preparedImport ? { define: { "import.meta.url": JSON.stringify(pathToFileURL(join(temp, "index.mjs")).href) } } : {}),
     plugins: [{
       name: "participant-test-boundaries",
       setup(builder) {
-        if (teacherReview) builder.onResolve({ filter: /^\.\.\/lib\/qualification-storage$/ }, () => ({
+        if (teacherReview && !privateStorage) builder.onResolve({ filter: /^\.\.\/lib\/qualification-storage$/ }, () => ({
           path: join(root, "tests/doubles/teacher-review-storage.ts"),
+        }));
+        if (privateStorage) builder.onResolve({ filter: /^\.\/malware-scanner$/ }, () => ({
+          path: join(root, "tests/doubles/private-storage-scanner.ts"),
         }));
         builder.onResolve({ filter: /^@clerk\/express$/ }, () => ({
           path: join(root, teacherReview ? "tests/doubles/teacher-review-auth.ts" : preview || preparedImport || collation ? "tests/doubles/preview-auth.ts" : "tests/doubles/auth.ts"),

@@ -113,8 +113,10 @@ router.post(
           return { kind: "limit" as const };
         }
         const uploadExpiresAt = new Date(Date.now() + UPLOAD_URL_TTL_MS);
-        const uploadUrl = await storage.getObjectEntityUploadURL();
-        const storagePath = storage.normalizeObjectEntityPath(uploadUrl);
+        // Persist the provider-neutral object key, never the upload capability.
+        // Local PUT URLs are transport endpoints, not resolvable object names.
+        const storagePath = storage.createObjectEntityUploadPath();
+        const uploadUrl = await storage.getObjectEntityUploadURLForPath(storagePath, uploadExpiresAt);
         await tx.insert(practiceRecitationsTable).values({
           id,
           userId: req.mateenUserId!,

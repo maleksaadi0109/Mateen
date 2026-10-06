@@ -1,0 +1,238 @@
+"format": "replit.sdm"
+"version": 1
+"size":
+  "width": 1920
+  "height": 1080
+"background":
+  "kind": "solid"
+  "color":
+    "kind": "rgb"
+    "value": "#12183F"
+"theme":
+  "colors":
+    "background": "#12183F"
+    "foreground": "#F2F4FF"
+    "accent": "#2EF2C2"
+    "surface": "#6150EA"
+    "panel": "#1D2557"
+  "fonts":
+    "display": "Readex Pro"
+    "body": "Readex Pro"
+"assets":
+  "image-2":
+    "src": "assets/imported-67cf982c-12ad-4390-a63f-42c20743eefd/image_2.png"
+  "image-6":
+    "src": "assets/imported-67cf982c-12ad-4390-a63f-42c20743eefd/image_6.png"
+  "referral":
+    "src": "images/referral.png"
+"elements":
+- "id": "e0"
+  "name": "Google Shape;899;p29"
+  "frame":
+    "x": 0
+    "y": 0
+    "width": 1920
+    "height": 1080
+  "altText": "Google Shape;899;p29"
+  "type": "image"
+  "assetId": "image-6"
+  "fit": "contain"
+- "id": "e2"
+  "name": "Google Shape;302;p55"
+  "frame":
+    "x": 112
+    "y": 75.86
+    "width": 360
+    "height": 92.29
+  "altText": "Google Shape;302;p55"
+  "type": "image"
+  "assetId": "image-2"
+  "fit": "contain"
+- "id": "section"
+  "type": "text"
+  "frame":
+    "x": 1080
+    "y": 102
+    "width": 688
+    "height": 62
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫من داخل المنصة‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 17
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "title"
+  "type": "text"
+  "frame":
+    "x": 148
+    "y": 205
+    "width": 1620
+    "height": 150
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫الإحالة تبدأ بموافقة الطالب‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 36
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "footer"
+  "type": "text"
+  "frame":
+    "x": 800
+    "y": 1000
+    "width": 968
+    "height": 48
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫تحدي الذكاء الاصطناعي في خدمة المحتوى الإسلامي‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 14.5
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "number"
+  "type": "text"
+  "frame":
+    "x": 112
+    "y": 1000
+    "width": 100
+    "height": 48
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "07"
+      "align": "left"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 16
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "screenFrame"
+  "type": "shape"
+  "frame":
+    "x": 155
+    "y": 375
+    "width": 970
+    "height": 550
+  "geometry":
+    "kind": "preset"
+    "preset": "roundRect"
+    "cornerRadius": 18
+  "fill":
+    "kind": "solid"
+    "color":
+      "kind": "token"
+      "token": "foreground"
+- "id": "capture"
+  "type": "image"
+  "assetId": "referral"
+  "fit": "contain"
+  "frame":
+    "x": 175
+    "y": 390
+    "width": 930
+    "height": 520
+- "id": "what"
+  "type": "text"
+  "frame":
+    "x": 1200
+    "y": 430
+    "width": 568
+    "height": 90
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫رسائل نصية فقط‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 26
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "meaning"
+  "type": "text"
+  "frame":
+    "x": 1200
+    "y": 545
+    "width": 568
+    "height": 355
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫واجهة محادثة الإحالة ببيانات تجريبية.‬\n‫التشغيل الفعلي يشترط معلّمًا\
+          \ معتمدًا ومتوافرًا.‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 23
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "caption"
+  "type": "text"
+  "frame":
+    "x": 180
+    "y": 930
+    "width": 1588
+    "height": 60
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫عرض تجريبي داخل الواجهة الحقيقية • لا يثبت اعتماد معلّم أو إرسال\
+          \ رسالة فعلية.‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 15.5
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"

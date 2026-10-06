@@ -1,0 +1,411 @@
+"format": "replit.sdm"
+"version": 1
+"size":
+  "width": 1920
+  "height": 1080
+"background":
+  "kind": "solid"
+  "color":
+    "kind": "rgb"
+    "value": "#12183F"
+"theme":
+  "colors":
+    "background": "#12183F"
+    "foreground": "#F2F4FF"
+    "accent": "#2EF2C2"
+    "surface": "#6150EA"
+    "panel": "#1D2557"
+  "fonts":
+    "display": "Readex Pro"
+    "body": "Readex Pro"
+"assets":
+  "image-2":
+    "src": "assets/imported-67cf982c-12ad-4390-a63f-42c20743eefd/image_2.png"
+  "image-6":
+    "src": "assets/imported-67cf982c-12ad-4390-a63f-42c20743eefd/image_6.png"
+"elements":
+- "id": "e0"
+  "name": "Google Shape;899;p29"
+  "frame":
+    "x": 0
+    "y": 0
+    "width": 1920
+    "height": 1080
+  "altText": "Google Shape;899;p29"
+  "type": "image"
+  "assetId": "image-6"
+  "fit": "contain"
+- "id": "e2"
+  "name": "Google Shape;302;p55"
+  "frame":
+    "x": 112
+    "y": 75.86
+    "width": 360
+    "height": 92.29
+  "altText": "Google Shape;302;p55"
+  "type": "image"
+  "assetId": "image-2"
+  "fit": "contain"
+- "id": "section"
+  "type": "text"
+  "frame":
+    "x": 1080
+    "y": 102
+    "width": 688
+    "height": 62
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫تقنيات الصوت‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 17
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "title"
+  "type": "text"
+  "frame":
+    "x": 148
+    "y": 205
+    "width": 1620
+    "height": 150
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫الصوت له مساران مختلفان وحدود واضحة‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 36
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "footer"
+  "type": "text"
+  "frame":
+    "x": 800
+    "y": 1000
+    "width": 968
+    "height": 48
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫تحدي الذكاء الاصطناعي في خدمة المحتوى الإسلامي‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 14.5
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "number"
+  "type": "text"
+  "frame":
+    "x": 112
+    "y": 1000
+    "width": 100
+    "height": 48
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "08"
+      "align": "left"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 16
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "track0"
+  "type": "text"
+  "frame":
+    "x": 1120
+    "y": 430
+    "width": 648
+    "height": 70
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫التسميع المباشر‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 26
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "inputPanel0"
+  "type": "shape"
+  "frame":
+    "x": 1050
+    "y": 510
+    "width": 718
+    "height": 165
+  "geometry":
+    "kind": "preset"
+    "preset": "roundRect"
+    "cornerRadius": 18
+  "fill":
+    "kind": "solid"
+    "color":
+      "kind": "token"
+      "token": "surface"
+- "id": "outputPanel0"
+  "type": "shape"
+  "frame":
+    "x": 180
+    "y": 510
+    "width": 718
+    "height": 165
+  "geometry":
+    "kind": "preset"
+    "preset": "roundRect"
+    "cornerRadius": 18
+  "fill":
+    "kind": "solid"
+    "color":
+      "kind": "token"
+      "token": "surface"
+- "id": "input0"
+  "type": "text"
+  "frame":
+    "x": 1080
+    "y": 520
+    "width": 658
+    "height": 155
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "Web Speech API\n‫صوت مباشر إلى نص‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 22
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "output0"
+  "type": "text"
+  "frame":
+    "x": 210
+    "y": 520
+    "width": 658
+    "height": 155
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫تطبيع ومطابقة الكلمات‬\n‫وفق دعم المتصفح‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 22
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "audioArrow0"
+  "type": "text"
+  "frame":
+    "x": 925
+    "y": 545
+    "width": 100
+    "height": 90
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "←"
+      "align": "center"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 32
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "track1"
+  "type": "text"
+  "frame":
+    "x": 1120
+    "y": 690
+    "width": 648
+    "height": 70
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫معالجة التسجيلات‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 26
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "inputPanel1"
+  "type": "shape"
+  "frame":
+    "x": 1050
+    "y": 770
+    "width": 718
+    "height": 165
+  "geometry":
+    "kind": "preset"
+    "preset": "roundRect"
+    "cornerRadius": 18
+  "fill":
+    "kind": "solid"
+    "color":
+      "kind": "token"
+      "token": "surface"
+- "id": "outputPanel1"
+  "type": "shape"
+  "frame":
+    "x": 180
+    "y": 770
+    "width": 718
+    "height": 165
+  "geometry":
+    "kind": "preset"
+    "preset": "roundRect"
+    "cornerRadius": 18
+  "fill":
+    "kind": "solid"
+    "color":
+      "kind": "token"
+      "token": "surface"
+- "id": "input1"
+  "type": "text"
+  "frame":
+    "x": 1080
+    "y": 780
+    "width": 658
+    "height": 155
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "Qwen3-ASR-0.6B\n‫تسجيل إلى نص محليًا‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 22
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "output1"
+  "type": "text"
+  "frame":
+    "x": 210
+    "y": 780
+    "width": 658
+    "height": 155
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫محاذاة مع النص‬\n‫نتيجة أولية غير معتمدة‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 22
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "audioArrow1"
+  "type": "text"
+  "frame":
+    "x": 925
+    "y": 805
+    "width": 100
+    "height": 90
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "←"
+      "align": "center"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 32
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "audioScope"
+  "type": "text"
+  "frame":
+    "x": 180
+    "y": 945
+    "width": 1588
+    "height": 60
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫لا تقييم للنطق أو التشكيل، ولا درجة معتمدة.‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 20
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"

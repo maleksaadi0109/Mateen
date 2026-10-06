@@ -81,6 +81,8 @@ const clerkAppearance = {
   options: {
     logoPlacement: 'none' as const,
     socialButtonsPlacement: 'bottom' as const,
+    // Appearance only: authentication environment and access controls are unchanged.
+    unsafe_disableDevelopmentModeWarnings: true,
   },
   variables: {
     colorPrimary: '#994703',

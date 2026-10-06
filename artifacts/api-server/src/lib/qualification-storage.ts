@@ -1,5 +1,7 @@
 import { randomUUID } from "node:crypto";
-import { Storage, type File } from "@google-cloud/storage";
+import { objectStorageClient } from "./objectStorage";
+import { storageProvider, type PrivateFile } from "./private-storage";
+import { LocalPrivateFile, LOCAL_PRIVATE_PREFIX, signLocalUpload } from "./local-private-storage";
 import { scanForMalware } from "./malware-scanner";
 
 const SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
@@ -7,20 +9,6 @@ const MAX_DOCUMENT_BYTES = 10 * 1024 * 1024;
 
 export class QualificationRejectedError extends Error {}
 
-const storage = new Storage({
-  credentials: {
-    audience: "replit",
-    subject_token_type: "access_token",
-    token_url: `${SIDECAR_ENDPOINT}/token`,
-    type: "external_account",
-    credential_source: {
-      url: `${SIDECAR_ENDPOINT}/credential`,
-      format: { type: "json", subject_token_field_name: "access_token" },
-    },
-    universe_domain: "googleapis.com",
-  },
-  projectId: "",
-});
 
 function storageLocation(path: string) {
   const parts = path.replace(/^\/+/, "").split("/");
@@ -32,14 +20,19 @@ function storageLocation(path: string) {
 }
 
 function privatePrefix() {
+  if (storageProvider() === "local") return LOCAL_PRIVATE_PREFIX;
   const directory = process.env.PRIVATE_OBJECT_DIR?.trim();
   if (!directory) throw new Error("Private App Storage is not configured");
   return directory.replace(/\/+$/, "");
 }
 
-function objectFile(objectPath: string): File {
+function objectFile(objectPath: string): PrivateFile {
+  if (storageProvider() === "local") {
+    if (!objectPath.startsWith(`${LOCAL_PRIVATE_PREFIX}/`)) throw new Error("Object belongs to another storage provider");
+    return new LocalPrivateFile(objectPath.slice(LOCAL_PRIVATE_PREFIX.length + 1));
+  }
   const location = storageLocation(objectPath);
-  return storage.bucket(location.bucket).file(location.object);
+  return objectStorageClient.bucket(location.bucket).file(location.object);
 }
 
 function objectPath(kind: "staging" | "clean", owner: string, id: string) {
@@ -48,6 +41,9 @@ function objectPath(kind: "staging" | "clean", owner: string, id: string) {
 }
 
 async function signUploadUrl(path: string) {
+  if (storageProvider() === "local") {
+    return signLocalUpload(path.slice(LOCAL_PRIVATE_PREFIX.length + 1), new Date(Date.now() + 10 * 60_000));
+  }
   const location = storageLocation(path);
   const response = await fetch(`${SIDECAR_ENDPOINT}/object-storage/signed-object-url`, {
     method: "POST",

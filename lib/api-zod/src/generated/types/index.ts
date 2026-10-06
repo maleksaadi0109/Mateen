@@ -107,6 +107,7 @@ export * from './profileInput';
 export * from './profileInputRole';
 export * from './profileRole';
 export * from './progressInput';
+export * from './putLocalPrivateUploadParams';
 export * from './qualificationDocument';
 export * from './qualificationDocumentKind';
 export * from './qualificationDocumentStatus';

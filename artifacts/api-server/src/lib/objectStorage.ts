@@ -1,6 +1,8 @@
 import { randomUUID } from 'crypto';
 import { Readable } from 'stream';
 import { File, Storage } from '@google-cloud/storage';
+import { storageProvider, type PrivateFile } from "./private-storage";
+import { LocalPrivateFile, LOCAL_PRIVATE_PREFIX, signLocalUpload } from "./local-private-storage";
 
 import {
   canAccessObject,
@@ -42,6 +44,7 @@ export class ObjectStorageService {
   constructor() {}
 
   getPublicObjectSearchPaths(): Array<string> {
+    if (storageProvider() === "local") throw new Error("Standalone private storage has no public object paths");
     const pathsStr = process.env.PUBLIC_OBJECT_SEARCH_PATHS || '';
     const paths = Array.from(
       new Set(
@@ -61,6 +64,7 @@ export class ObjectStorageService {
   }
 
   getPrivateObjectDir(): string {
+    if (storageProvider() === "local") return LOCAL_PRIVATE_PREFIX;
     const dir = process.env.PRIVATE_OBJECT_DIR || '';
     if (!dir) {
       throw new Error(
@@ -89,7 +93,7 @@ export class ObjectStorageService {
   }
 
   async downloadObject(
-    file: File,
+    file: PrivateFile,
     cacheTtlSec: number = 3600,
   ): Promise<Response> {
     const [metadata] = await file.getMetadata();
@@ -139,6 +143,7 @@ export class ObjectStorageService {
     if (!Number.isFinite(remainingMs) || remainingMs <= 0 || remainingMs > 900_000) {
       throw new Error("The reserved private upload has no safe signing interval remaining.");
     }
+    if (storageProvider() === "local") return signLocalUpload(entityPath, expiresAt);
     const fullPath = `${privateObjectDir}/${entityPath}`;
     const { bucketName, objectName } = parseObjectPath(fullPath);
     return signObjectURL({
@@ -149,7 +154,7 @@ export class ObjectStorageService {
     });
   }
 
-  async getObjectEntityFile(objectPath: string): Promise<File> {
+  async getObjectEntityFile(objectPath: string): Promise<PrivateFile> {
     if (!objectPath.startsWith('/objects/')) {
       throw new ObjectNotFoundError();
     }
@@ -160,6 +165,11 @@ export class ObjectStorageService {
     }
 
     const entityId = parts.slice(1).join('/');
+    if (storageProvider() === "local") {
+      const file = new LocalPrivateFile(entityId);
+      if (!(await file.exists())[0]) throw new ObjectNotFoundError();
+      return file;
+    }
     let entityDir = this.getPrivateObjectDir();
     if (!entityDir.endsWith('/')) {
       entityDir = `${entityDir}/`;
@@ -216,7 +226,7 @@ export class ObjectStorageService {
     requestedPermission,
   }: {
     userId?: string;
-    objectFile: File;
+    objectFile: PrivateFile;
     requestedPermission?: ObjectPermission;
   }): Promise<boolean> {
     return canAccessObject({

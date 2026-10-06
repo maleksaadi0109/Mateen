@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "storage:check": "tsx scripts/storage-readiness.ts",
+    "test:private-storage": "tsx --test src/lib/local-private-storage.test.ts && node ./test-scholarly-http.mjs --private-storage",
     "test:teacher-review": "tsx --test src/lib/review-security-policy.test.ts && node ./test-scholarly-http.mjs --teacher-review",
     "test:daily-plan": "tsx --test src/lib/daily-plan-policy.test.ts && node ./test-daily-plan.mjs",
     "test:scholarly:collation": "node ./test-scholarly-http.mjs --collation",

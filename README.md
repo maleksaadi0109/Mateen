@@ -80,7 +80,8 @@ This repository is a **pnpm monorepo**, not a single frontend project.
 | `docs` | Operational and technical documentation |
 
 Authentication uses Clerk. The main data store is PostgreSQL. Private uploaded
-files use the existing managed object-storage integration. The current default
+files use Replit managed storage by default, with an optional private-disk
+provider for standalone development. The current default
 study model is OpenRouter's `google/gemini-2.5-flash` when an OpenRouter key is
 configured; explicit configuration and separate NVIDIA preview tools still apply.
 
@@ -258,6 +259,9 @@ Only names and placeholders are documented here. Never publish real values.
 | `BASE_PATH` | Web artifact base path | `/` for the main local app |
 | `PRIVATE_OBJECT_DIR` | Private managed storage path | Upload-dependent features |
 | `PUBLIC_OBJECT_SEARCH_PATHS` | Public storage search paths | Storage-dependent features |
+| `PRIVATE_STORAGE_PROVIDER` | `replit` (default) or `local` | Optional explicit standalone choice |
+| `LOCAL_PRIVATE_STORAGE_DIR` | Absolute private directory outside the repository | Required for `local` |
+| `LOCAL_PRIVATE_STORAGE_ORIGIN` | Browser-facing origin that routes `/api` to the API | Required for `local` |
 
 Variables prefixed with `VITE_` are exposed to the browser. **Never** place
 provider secret keys, database passwords, or Clerk secret keys in them.
@@ -266,13 +270,55 @@ provider secret keys, database passwords, or Clerk secret keys in them.
 
 ### Private storage
 
-The current storage client is designed for Replit's managed storage and its
-credential service. Setting a bucket path alone does **not** make private uploads
-work on a standalone laptop. Qualification PDFs, audio uploads and private
-document previews require the actual authorised storage integration.
+The default `PRIVATE_STORAGE_PROVIDER=replit` keeps the existing managed storage
+and credential service unchanged. Setting a bucket path alone does **not**
+authorise access outside Replit. For standalone development, opt into real
+private disk storage in `.env.local`:
 
-Do not replace the storage layer with a public folder or remove access checks
-to make a demo pass. A portable standalone storage adapter is separate work.
+```bash
+PRIVATE_STORAGE_PROVIDER='local'
+LOCAL_PRIVATE_STORAGE_DIR='/home/YOUR_USER/.local/share/mateen-private'
+LOCAL_PRIVATE_STORAGE_ORIGIN='http://localhost:3000'
+```
+
+Replace the absolute path with one owned by the API process user **outside this
+repository**, never a web server document root or static/public directory.
+Use the origin you actually open in the browser (the local Caddy proxy above
+uses port 3000), with `/api` routed to the API. Upload URLs must be absolute for
+the existing audio API contract. Non-loopback origins must use HTTPS; do not put
+credentials, paths or query strings in this setting.
+The API creates the directory with mode `0700`, rejects symlinks and writes files
+with mode `0600`. Do not share that directory with untrusted processes running
+as the same OS user. Back up the entire directory privately, including its
+generated `.upload-signing-key`, together with the corresponding database.
+There is no public file route: downloads still use the authenticated owner or
+independent-reviewer routes. Upload URLs are bearer capabilities, last at most
+15 minutes (qualification PDFs: 10 minutes), permit PUT only, and accept at most
+10 MiB. Do not log or share them. They can be reused until expiry; validated
+documents and frozen recordings are written atomically to separate create-only
+keys that can never receive an upload URL.
+
+After sourcing `.env.local` as described above, verify storage before uploading:
+
+```bash
+pnpm --filter @workspace/api-server run storage:check
+pnpm --filter @workspace/api-server run test:private-storage
+```
+
+The local check writes, reads and deletes a small private probe and checks
+signing-key permissions; it fails with a clear error if storage is unavailable.
+The Replit check uses private-prefix permissions, not bucket metadata access.
+Neither check certifies the separate audio decoding or malware scanning tools:
+qualification completion still fails closed without working ClamAV, and audio
+validation still needs the documented runtime and FFmpeg.
+
+Provider selection is explicit: there is **no automatic fallback, file copy,
+database migration or rewrite of stored references**. Use a separate development
+database when trying local storage. Existing Replit objects remain in Replit and
+are unavailable while the local provider is selected; switch back to `replit`
+to use them. Do not change providers on a database containing uploaded files
+without a separately planned migration. The local provider is for a single
+host with a persistent private disk, not ephemeral or multi-host deployments.
 The database, reading UI and non-upload development work can be configured
 without pretending the upload integration is available.
 
@@ -366,6 +412,10 @@ it expects MFA enforcement for content reviewers, whereas the current
 permission. This suite is not fully passing; do not interpret its failure as
 an AI-provider outage or silently weaken a test to claim success.
 
+If a bundled HTTP test fails with `unable to determine transport target for
+"pino-pretty"`, that is a test-bundle logging/worker-resolution issue. Do not
+misreport it as a provider outage or remove application logging to hide it.
+
 ## Build and deployment
 
 For the main website and API, with the required environment loaded:
@@ -406,7 +456,7 @@ the filtered commands above when building only the main platform.
 | `DATABASE_URL must be set` | Source `.env.local` in that terminal |
 | PostgreSQL connection/schema error | Database is running; credentials are correct; development schema was applied |
 | Assistant cannot generate an answer | Provider key/credits, model configuration, policy and readiness; inspect safe server logs |
-| Upload or PDF preview fails | Authorised managed storage is required; bucket names alone are insufficient |
+| Upload or PDF preview fails | Run `storage:check`; select `local` with a private absolute directory for standalone use, or configure authorised Replit storage. Check ClamAV/audio runtime separately. |
 | Recitation unavailable | Python runtime, FFmpeg/ffprobe, model assets and manifest |
 | Native dependency installation fails | Current overrides favour Linux x86-64; use Linux/WSL |
 | Backend edits do not appear | The API development command is build-and-start, not a watcher |

@@ -1,0 +1,432 @@
+"format": "replit.sdm"
+"version": 1
+"size":
+  "width": 1920
+  "height": 1080
+"background":
+  "kind": "solid"
+  "color":
+    "kind": "rgb"
+    "value": "#12183F"
+"theme":
+  "colors":
+    "background": "#12183F"
+    "foreground": "#F2F4FF"
+    "accent": "#2EF2C2"
+    "surface": "#6150EA"
+    "panel": "#1D2557"
+  "fonts":
+    "display": "Readex Pro"
+    "body": "Readex Pro"
+"assets":
+  "image-2":
+    "src": "assets/imported-67cf982c-12ad-4390-a63f-42c20743eefd/image_2.png"
+  "image-6":
+    "src": "assets/imported-67cf982c-12ad-4390-a63f-42c20743eefd/image_6.png"
+  "image-11":
+    "src": "assets/imported-67cf982c-12ad-4390-a63f-42c20743eefd/image_11.png"
+  "image-12":
+    "src": "assets/imported-67cf982c-12ad-4390-a63f-42c20743eefd/image_12.png"
+  "image-13":
+    "src": "assets/imported-67cf982c-12ad-4390-a63f-42c20743eefd/image_13.png"
+  "image-14":
+    "src": "assets/imported-67cf982c-12ad-4390-a63f-42c20743eefd/image_14.png"
+"elements":
+- "id": "e0"
+  "name": "Google Shape;899;p29"
+  "frame":
+    "x": 0
+    "y": 0
+    "width": 1920
+    "height": 1080
+  "altText": "Google Shape;899;p29"
+  "type": "image"
+  "assetId": "image-6"
+  "fit": "contain"
+- "id": "e2"
+  "name": "Google Shape;302;p55"
+  "frame":
+    "x": 112
+    "y": 75.86
+    "width": 360
+    "height": 92.29
+  "altText": "Google Shape;302;p55"
+  "type": "image"
+  "assetId": "image-2"
+  "fit": "contain"
+- "id": "section"
+  "type": "text"
+  "frame":
+    "x": 1080
+    "y": 102
+    "width": 688
+    "height": 62
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫المشكلة‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 17
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "title"
+  "type": "text"
+  "frame":
+    "x": 148
+    "y": 205
+    "width": 1620
+    "height": 150
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫طالب المتون يحتاج أكثر من أداة منفردة‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 36
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "footer"
+  "type": "text"
+  "frame":
+    "x": 800
+    "y": 1000
+    "width": 968
+    "height": 48
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫تحدي الذكاء الاصطناعي في خدمة المحتوى الإسلامي‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 14.5
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "number"
+  "type": "text"
+  "frame":
+    "x": 112
+    "y": 1000
+    "width": 100
+    "height": 48
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "02"
+      "align": "left"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 16
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "card0"
+  "type": "shape"
+  "frame":
+    "x": 975
+    "y": 410
+    "width": 810
+    "height": 280
+  "geometry":
+    "kind": "preset"
+    "preset": "roundRect"
+    "cornerRadius": 18
+  "fill":
+    "kind": "solid"
+    "color":
+      "kind": "token"
+      "token": "panel"
+- "id": "h0"
+  "type": "text"
+  "frame":
+    "x": 1000
+    "y": 425
+    "width": 760
+    "height": 80
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫التسميع الذاتي‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 27
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "b0"
+  "type": "text"
+  "frame":
+    "x": 1000
+    "y": 515
+    "width": 760
+    "height": 190
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫يصعب اكتشاف الكلمات المتروكة أو المستبدلة أثناء مراجعة الحفظ.‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 23
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "card1"
+  "type": "shape"
+  "frame":
+    "x": 155
+    "y": 410
+    "width": 810
+    "height": 280
+  "geometry":
+    "kind": "preset"
+    "preset": "roundRect"
+    "cornerRadius": 18
+  "fill":
+    "kind": "solid"
+    "color":
+      "kind": "token"
+      "token": "panel"
+- "id": "h1"
+  "type": "text"
+  "frame":
+    "x": 180
+    "y": 425
+    "width": 760
+    "height": 80
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫تشتّت الشروح‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 27
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "b1"
+  "type": "text"
+  "frame":
+    "x": 180
+    "y": 515
+    "width": 760
+    "height": 190
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫يتنقل الطالب بين النص والشرح وأدوات المتابعة.‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 23
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "card2"
+  "type": "shape"
+  "frame":
+    "x": 975
+    "y": 690
+    "width": 810
+    "height": 280
+  "geometry":
+    "kind": "preset"
+    "preset": "roundRect"
+    "cornerRadius": 18
+  "fill":
+    "kind": "solid"
+    "color":
+      "kind": "token"
+      "token": "panel"
+- "id": "h2"
+  "type": "text"
+  "frame":
+    "x": 1000
+    "y": 705
+    "width": 760
+    "height": 80
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫حدود المساعد العام‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 27
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "b2"
+  "type": "text"
+  "frame":
+    "x": 1000
+    "y": 795
+    "width": 760
+    "height": 190
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫الجواب المقنع لغويًا قد لا يستند إلى مرجع مناسب.‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 23
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "card3"
+  "type": "shape"
+  "frame":
+    "x": 155
+    "y": 690
+    "width": 810
+    "height": 280
+  "geometry":
+    "kind": "preset"
+    "preset": "roundRect"
+    "cornerRadius": 18
+  "fill":
+    "kind": "solid"
+    "color":
+      "kind": "token"
+      "token": "panel"
+- "id": "h3"
+  "type": "text"
+  "frame":
+    "x": 180
+    "y": 705
+    "width": 760
+    "height": 80
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫الوصول إلى المختص‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 27
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "b3"
+  "type": "text"
+  "frame":
+    "x": 180
+    "y": 795
+    "width": 760
+    "height": 190
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫تحتاج الأسئلة المعقدة إلى توجيه بشري، لا جواب آلي حاسم.‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 23
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "templateIcon0"
+  "type": "image"
+  "assetId": "image-11"
+  "fit": "contain"
+  "frame":
+    "x": 1010
+    "y": 435
+    "width": 50
+    "height": 50
+- "id": "templateIcon1"
+  "type": "image"
+  "assetId": "image-12"
+  "fit": "contain"
+  "frame":
+    "x": 190
+    "y": 435
+    "width": 50
+    "height": 50
+- "id": "templateIcon2"
+  "type": "image"
+  "assetId": "image-13"
+  "fit": "contain"
+  "frame":
+    "x": 1010
+    "y": 715
+    "width": 50
+    "height": 50
+- "id": "templateIcon3"
+  "type": "image"
+  "assetId": "image-14"
+  "fit": "contain"
+  "frame":
+    "x": 190
+    "y": 715
+    "width": 50
+    "height": 50

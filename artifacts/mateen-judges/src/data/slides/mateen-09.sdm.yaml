@@ -1,0 +1,595 @@
+"format": "replit.sdm"
+"version": 1
+"size":
+  "width": 1920
+  "height": 1080
+"background":
+  "kind": "solid"
+  "color":
+    "kind": "rgb"
+    "value": "#12183F"
+"theme":
+  "colors":
+    "background": "#12183F"
+    "foreground": "#F2F4FF"
+    "accent": "#2EF2C2"
+    "surface": "#6150EA"
+    "panel": "#1D2557"
+  "fonts":
+    "display": "Readex Pro"
+    "body": "Readex Pro"
+"assets":
+  "image-2":
+    "src": "assets/imported-67cf982c-12ad-4390-a63f-42c20743eefd/image_2.png"
+  "image-6":
+    "src": "assets/imported-67cf982c-12ad-4390-a63f-42c20743eefd/image_6.png"
+"elements":
+- "id": "e0"
+  "name": "Google Shape;899;p29"
+  "frame":
+    "x": 0
+    "y": 0
+    "width": 1920
+    "height": 1080
+  "altText": "Google Shape;899;p29"
+  "type": "image"
+  "assetId": "image-6"
+  "fit": "contain"
+- "id": "e2"
+  "name": "Google Shape;302;p55"
+  "frame":
+    "x": 112
+    "y": 75.86
+    "width": 360
+    "height": 92.29
+  "altText": "Google Shape;302;p55"
+  "type": "image"
+  "assetId": "image-2"
+  "fit": "contain"
+- "id": "section"
+  "type": "text"
+  "frame":
+    "x": 1080
+    "y": 102
+    "width": 688
+    "height": 62
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫كيف يعمل ⁦RAG⁩؟‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 17
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "title"
+  "type": "text"
+  "frame":
+    "x": 148
+    "y": 205
+    "width": 1620
+    "height": 150
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫بحث نصّي ثم إعادة ترتيب دلالية‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 36
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "footer"
+  "type": "text"
+  "frame":
+    "x": 800
+    "y": 1000
+    "width": 968
+    "height": 48
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫تحدي الذكاء الاصطناعي في خدمة المحتوى الإسلامي‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 14.5
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "number"
+  "type": "text"
+  "frame":
+    "x": 112
+    "y": 1000
+    "width": 100
+    "height": 48
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "09"
+      "align": "left"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 16
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "subtitle"
+  "type": "text"
+  "frame":
+    "x": 148
+    "y": 350
+    "width": 1620
+    "height": 100
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫مسار تقني منفّذ؛ إتاحته للطالب مشروطة بمصادر مؤهلة وتقييم مطابق‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 21
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "box0"
+  "type": "shape"
+  "frame":
+    "x": 1440
+    "y": 485
+    "width": 360
+    "height": 425
+  "geometry":
+    "kind": "preset"
+    "preset": "roundRect"
+    "cornerRadius": 18
+  "fill":
+    "kind": "solid"
+    "color":
+      "kind": "token"
+      "token": "surface"
+- "id": "step0"
+  "type": "text"
+  "frame":
+    "x": 1465
+    "y": 510
+    "width": 310
+    "height": 70
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "01"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 25
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "head0"
+  "type": "text"
+  "frame":
+    "x": 1465
+    "y": 590
+    "width": 310
+    "height": 125
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫سؤال محدّد‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 24
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "body0"
+  "type": "text"
+  "frame":
+    "x": 1465
+    "y": 730
+    "width": 310
+    "height": 175
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫المتن وسياق الطالب‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 20
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "arrow0"
+  "type": "text"
+  "frame":
+    "x": 1382
+    "y": 620
+    "width": 50
+    "height": 75
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "←"
+      "align": "center"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 25
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "box1"
+  "type": "shape"
+  "frame":
+    "x": 1020
+    "y": 485
+    "width": 360
+    "height": 425
+  "geometry":
+    "kind": "preset"
+    "preset": "roundRect"
+    "cornerRadius": 18
+  "fill":
+    "kind": "solid"
+    "color":
+      "kind": "token"
+      "token": "surface"
+- "id": "step1"
+  "type": "text"
+  "frame":
+    "x": 1045
+    "y": 510
+    "width": 310
+    "height": 70
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "02"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 25
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "head1"
+  "type": "text"
+  "frame":
+    "x": 1045
+    "y": 590
+    "width": 310
+    "height": 125
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫ترشيح نصّي‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 24
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "body1"
+  "type": "text"
+  "frame":
+    "x": 1045
+    "y": 730
+    "width": 310
+    "height": 175
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫تطبيع عربي؛ حتى 30 مقطعًا‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 20
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "arrow1"
+  "type": "text"
+  "frame":
+    "x": 962
+    "y": 620
+    "width": 50
+    "height": 75
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "←"
+      "align": "center"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 25
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "box2"
+  "type": "shape"
+  "frame":
+    "x": 600
+    "y": 485
+    "width": 360
+    "height": 425
+  "geometry":
+    "kind": "preset"
+    "preset": "roundRect"
+    "cornerRadius": 18
+  "fill":
+    "kind": "solid"
+    "color":
+      "kind": "token"
+      "token": "surface"
+- "id": "step2"
+  "type": "text"
+  "frame":
+    "x": 625
+    "y": 510
+    "width": 310
+    "height": 70
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "03"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 25
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "head2"
+  "type": "text"
+  "frame":
+    "x": 625
+    "y": 590
+    "width": 310
+    "height": 125
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫ترتيب دلالي‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 24
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "body2"
+  "type": "text"
+  "frame":
+    "x": 625
+    "y": 730
+    "width": 310
+    "height": 175
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫نموذج لغوي؛ حتى 8 أدلة‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 20
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "arrow2"
+  "type": "text"
+  "frame":
+    "x": 542
+    "y": 620
+    "width": 50
+    "height": 75
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "←"
+      "align": "center"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 25
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "box3"
+  "type": "shape"
+  "frame":
+    "x": 180
+    "y": 485
+    "width": 360
+    "height": 425
+  "geometry":
+    "kind": "preset"
+    "preset": "roundRect"
+    "cornerRadius": 18
+  "fill":
+    "kind": "solid"
+    "color":
+      "kind": "token"
+      "token": "surface"
+- "id": "step3"
+  "type": "text"
+  "frame":
+    "x": 205
+    "y": 510
+    "width": 310
+    "height": 70
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "04"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 25
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "accent"
+- "id": "head3"
+  "type": "text"
+  "frame":
+    "x": 205
+    "y": 590
+    "width": 310
+    "height": 125
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫اقتباس وتحقّق‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 24
+        "weight": 700
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "body3"
+  "type": "text"
+  "frame":
+    "x": 205
+    "y": 730
+    "width": 310
+    "height": 175
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫نص مطابق ومرجع من الخادم‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 20
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "foreground"
+- "id": "ragLimit"
+  "type": "text"
+  "frame":
+    "x": 180
+    "y": 930
+    "width": 1588
+    "height": 65
+  "body":
+    "paragraphs":
+    - "runs":
+      - "text": "‫دون ⁦Embeddings⁩ أو قاعدة متجهات؛ الناتج اقتباسات فقط.‬"
+      "align": "right"
+      "lineHeight": 1.25
+      "spaceAfterPt": 0
+      "defaultRunStyle":
+        "font":
+          "kind": "token"
+          "token": "body"
+        "sizePt": 21
+        "weight": 400
+        "color":
+          "kind": "token"
+          "token": "accent"

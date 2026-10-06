@@ -1,0 +1,28 @@
+kind = "slides"
+previewPath = "/mateen-judges/"
+title = "مَتِين — عرض المشروع للمحكمين"
+description = "عرض عربي باستخدام قالب الجهات المرفق، يشرح رحلة الطالب والتقنيات الفعلية وحدود الموثوقية."
+version = "1.0.0"
+id = "artifacts/mateen-judges"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/mateen-judges/" ]
+localPort = 19622
+
+[services.development]
+run = "pnpm --filter @workspace/mateen-judges run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/mateen-judges", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/mateen-judges/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19622"
+BASE_PATH = "/mateen-judges/"
