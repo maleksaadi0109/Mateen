@@ -1,3 +1,5 @@
+import { fmt } from '@/lib/i18n';
+import { tr } from '@/lib/i18n';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Trash2, Volume2, VolumeX } from 'lucide-react';
 import { num } from '@/lib/mateen';
@@ -87,17 +89,17 @@ export function useRecitationHistory(userId: string | null) {
   useEffect(() => { if (state.user !== userId) setState({ user: userId, entries: read(userId) }); }, [userId, state.user]);
 
   const save = useCallback((entry: Omit<HistoryEntry, 'id' | 'at'>): { ok: boolean; message?: string } => {
-    if (!userId) return { ok: false, message: 'سجّل الدخول لحفظ النتيجة على هذا الجهاز.' };
+    if (!userId) return { ok: false, message: tr("سجّل الدخول لحفظ النتيجة على هذا الجهاز.") };
     const existing = read(userId);
     const previous = existing.find(e => e.attemptId === entry.attemptId);
     const fresh: HistoryEntry = { id: previous?.id ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`, at: previous?.at ?? Date.now(), ...entry };
     const next = sanitize([fresh, ...existing.filter(e => e.id !== previous?.id)]).slice(0, HISTORY_CAP);
     const serialized = JSON.stringify(next);
-    if (serialized.length > 1_000_000) return { ok: false, message: 'بلغ السجل المحلي حد الحجم؛ لم تُحفظ النتيجة ولم يُحذف السجل السابق.' };
+    if (serialized.length > 1_000_000) return { ok: false, message: tr("بلغ السجل المحلي حد الحجم؛ لم تُحفظ النتيجة ولم يُحذف السجل السابق.") };
     for (;;) {
       try { window.localStorage.setItem(keyFor(userId), serialized); break; }
       catch {
-        return { ok: false, message: 'مساحة التخزين في المتصفح ممتلئة أو غير متاحة، فلم تُحفظ النتيجة ولم يُحذف سجلك السابق.' };
+        return { ok: false, message: tr("مساحة التخزين في المتصفح ممتلئة أو غير متاحة، فلم تُحفظ النتيجة ولم يُحذف سجلك السابق.") };
       }
     }
     setState({ user: userId, entries: next });
@@ -105,9 +107,9 @@ export function useRecitationHistory(userId: string | null) {
   }, [userId]);
 
   const clear = useCallback((): { ok: boolean; message?: string } => {
-    if (!userId) return { ok: false, message: 'سجّل الدخول لإدارة السجل.' };
+    if (!userId) return { ok: false, message: tr("سجّل الدخول لإدارة السجل.") };
     try { window.localStorage.removeItem(keyFor(userId)); }
-    catch { return { ok: false, message: 'تعذّر مسح السجل من تخزين المتصفح؛ لم يُحذف شيء.' }; }
+    catch { return { ok: false, message: tr("تعذّر مسح السجل من تخزين المتصفح؛ لم يُحذف شيء.") }; }
     setState({ user: userId, entries: [] });
     return { ok: true };
   }, [userId]);
@@ -156,9 +158,9 @@ export function useArabicSpeech(onBeforeSpeak?: () => void) {
       synth.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.voice = voice; u.lang = voice.lang; u.rate = 0.8;
-      u.onerror = (e) => { if (e.error !== 'canceled' && e.error !== 'interrupted') setError('تعذّر تشغيل نطق الكلمة في المتصفح.'); };
+      u.onerror = (e) => { if (e.error !== 'canceled' && e.error !== 'interrupted') setError(tr("تعذّر تشغيل نطق الكلمة في المتصفح.")); };
       synth.speak(u);
-    } catch { setError('تعذّر تشغيل نطق الكلمة في المتصفح.'); }
+    } catch { setError(tr("تعذّر تشغيل نطق الكلمة في المتصفح.")); }
   }, [supported, voice]);
   const cancel = useCallback(() => { if (supported) window.speechSynthesis.cancel(); }, [supported]);
   return { available: Boolean(voice), checked, speak, cancel, error };
@@ -166,13 +168,12 @@ export function useArabicSpeech(onBeforeSpeak?: () => void) {
 
 export function PronounceButton({ word, speech }: { word: string; speech: ReturnType<typeof useArabicSpeech> }) {
   if (!speech.available) {
-    return <span className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-dashed px-3 font-ui text-[11px] text-muted-foreground" data-testid="text-pronounce-unavailable"><VolumeX size={13} aria-hidden />{speech.checked ? 'لا يتوفر صوت عربي في المتصفح' : 'جارٍ البحث عن صوت عربي'}</span>;
+    return <span className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-dashed px-3 font-ui text-[11px] text-muted-foreground" data-testid="text-pronounce-unavailable"><VolumeX size={13} aria-hidden />{speech.checked ? tr("لا يتوفر صوت عربي في المتصفح") : tr("جارٍ البحث عن صوت عربي")}</span>;
   }
   return (
-    <button type="button" onClick={() => speech.speak(word)} aria-label={`انطق الكلمة المتوقعة ${word}`}
+    <button type="button" onClick={() => speech.speak(word)} aria-label={fmt("انطق الكلمة المتوقعة {a}", "Pronounce the expected word {a}", { a: word })}
       className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-secondary/50 bg-card px-3 font-ui text-xs font-bold text-foreground hover:bg-secondary/10" data-testid="button-pronounce">
-      <Volume2 size={13} aria-hidden />استمع — نطق آلي
-    </button>
+      <Volume2 size={13} aria-hidden />{tr("استمع — نطق آلي")}</button>
   );
 }
 
@@ -189,41 +190,41 @@ export function RecitationHistory({ entries, onClear, signedIn, speech }: { entr
     <section className="mx-auto max-w-[860px] rounded-2xl border bg-card/70 p-4 font-ui sm:p-5" aria-labelledby="recitation-history-title" data-testid="recitation-history">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <h3 id="recitation-history-title" className="font-display text-lg font-bold">محاولاتك المحفوظة</h3>
-          <p className="mt-1 text-[11px] text-muted-foreground" data-testid="text-history-local">محفوظة على هذا الجهاز وهذا المتصفح فقط، لحسابك الحالي. لا تُرفع إلى الخادم ولا تحتوي تسجيلاً صوتياً أو نصاً مسموعاً كاملاً. يُحتفظ بآخر {num(HISTORY_CAP)} محاولة، وحتى {num(MAX_ISSUES)} اختلاف لكل محاولة.</p>
+          <h3 id="recitation-history-title" className="font-display text-lg font-bold">{tr("محاولاتك المحفوظة")}</h3>
+          <p className="mt-1 text-[11px] text-muted-foreground" data-testid="text-history-local">{tr("محفوظة على هذا الجهاز وهذا المتصفح فقط، لحسابك الحالي. لا تُرفع إلى الخادم ولا تحتوي تسجيلاً صوتياً أو نصاً مسموعاً كاملاً. يُحتفظ بآخر")}{' '}{num(HISTORY_CAP)}{' '}{tr("محاولة، وحتى")}{' '}{num(MAX_ISSUES)}{' '}{tr("اختلاف لكل محاولة.")}</p>
         </div>
         {entries.length > 0 && (confirm
           ? <div className="flex gap-1">
-              <button type="button" onClick={() => { setClearMsg(onClear()); setConfirm(false); }} className="min-h-9 rounded-full bg-destructive px-3 text-xs font-bold text-destructive-foreground" data-testid="button-history-clear-confirm">تأكيد المسح</button>
-              <button type="button" onClick={() => setConfirm(false)} className="min-h-9 rounded-full border px-3 text-xs font-bold" data-testid="button-history-clear-cancel">إلغاء</button>
+              <button type="button" onClick={() => { setClearMsg(onClear()); setConfirm(false); }} className="min-h-9 rounded-full bg-destructive px-3 text-xs font-bold text-destructive-foreground" data-testid="button-history-clear-confirm">{tr("تأكيد المسح")}</button>
+              <button type="button" onClick={() => setConfirm(false)} className="min-h-9 rounded-full border px-3 text-xs font-bold" data-testid="button-history-clear-cancel">{tr("إلغاء")}</button>
             </div>
-          : <button type="button" onClick={() => { setConfirm(true); timer.current = window.setTimeout(() => setConfirm(false), 6000); }} className="inline-flex min-h-9 items-center gap-1.5 rounded-full border px-3 text-xs font-bold text-muted-foreground hover:text-destructive" data-testid="button-history-clear"><Trash2 size={13} aria-hidden />مسح السجل</button>)}
+          : <button type="button" onClick={() => { setConfirm(true); timer.current = window.setTimeout(() => setConfirm(false), 6000); }} className="inline-flex min-h-9 items-center gap-1.5 rounded-full border px-3 text-xs font-bold text-muted-foreground hover:text-destructive" data-testid="button-history-clear"><Trash2 size={13} aria-hidden />{tr("مسح السجل")}</button>)}
       </div>
-      {clearMsg && <p role={clearMsg.ok ? 'status' : 'alert'} className={`mt-3 rounded-lg px-3 py-1.5 text-[11px] ${clearMsg.ok ? 'bg-secondary/10' : 'bg-destructive/10 text-destructive'}`} data-testid="text-history-clear-status">{clearMsg.ok ? 'مُسح السجل من هذا المتصفح.' : clearMsg.message}</p>}
+      {clearMsg && <p role={clearMsg.ok ? 'status' : 'alert'} className={`mt-3 rounded-lg px-3 py-1.5 text-[11px] ${clearMsg.ok ? 'bg-secondary/10' : 'bg-destructive/10 text-destructive'}`} data-testid="text-history-clear-status">{clearMsg.ok ? tr("مُسح السجل من هذا المتصفح.") : clearMsg.message}</p>}
       <div className="mt-2"><SpeechError speech={speech} /></div>
-      {!signedIn ? <p className="mt-3 text-xs text-muted-foreground">سجّل الدخول لعرض سجلك المحلي.</p>
-        : entries.length === 0 ? <p className="mt-4 rounded-xl border border-dashed p-4 text-center text-xs text-muted-foreground" data-testid="text-history-empty">لا توجد محاولات محفوظة بعد. بعد إنهاء التسميع يمكنك اختيار «حفظ النتيجة».</p>
+      {!signedIn ? <p className="mt-3 text-xs text-muted-foreground">{tr("سجّل الدخول لعرض سجلك المحلي.")}</p>
+        : entries.length === 0 ? <p className="mt-4 rounded-xl border border-dashed p-4 text-center text-xs text-muted-foreground" data-testid="text-history-empty">{tr("لا توجد محاولات محفوظة بعد. بعد إنهاء التسميع يمكنك اختيار «حفظ النتيجة».")}</p>
         : <ol className="mt-4 divide-y" data-testid="list-history">
             {entries.map((e) => (
               <li key={e.id} className="py-2.5 text-xs" data-testid={`history-entry-${e.id}`}>
                 <details className="group">
                 <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-2 rounded-lg px-1 py-1 hover:bg-muted/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-secondary">
                 <time dateTime={new Date(e.at).toISOString()} className="text-muted-foreground">{new Date(e.at).toLocaleString('ar', { dateStyle: 'medium', timeStyle: 'short' })}</time>
-                <span className="font-bold">تطابق تقريبي {num(e.attempted ? Math.round((e.matched / e.attempted) * 100) : 0)}٪ <span className="font-normal text-muted-foreground">({num(e.matched)} من {num(e.attempted)} كلمة)</span></span>
-                <span className="text-muted-foreground">{num(e.attempted - e.matched)} اختلاف محتمل <span className="text-secondary group-open:hidden">· عرض</span></span>
+                <span className="font-bold">{tr("تطابق تقريبي")}{' '}{num(e.attempted ? Math.round((e.matched / e.attempted) * 100) : 0)}{tr("٪")}{' '}<span className="font-normal text-muted-foreground">({num(e.matched)}{' '}{tr("من")}{' '}{num(e.attempted)}{' '}{tr("كلمة)")}</span></span>
+                <span className="text-muted-foreground">{num(e.attempted - e.matched)}{' '}{tr("اختلاف محتمل")}{' '}<span className="text-secondary group-open:hidden">{tr("· عرض")}</span></span>
                 </summary>
                 {e.analyses?.length ? <ul className="mt-3 space-y-2" data-testid="history-hadith-analyses">
                   {e.analyses.map(h => <li key={h.id} className="rounded-lg border p-3 leading-relaxed" data-testid={`history-hadith-${h.number}`}>
-                    <p className="font-bold">الحديث {num(h.number)} · {h.title}</p>
-                    <p>مطابقة تقريبية {num(h.successPercent)}٪ · اختلاف {num(h.differencePercent)}٪</p>
-                    <p className="text-muted-foreground">التقط المتصفح {num(h.heard)} كلمة · طابق {num(h.matched)} · اختلافات {num(h.substitutions + h.omissions + h.extras)} · الجزء المُغطّى {num(h.covered)} من {num(h.totalWords)}</p>
+                    <p className="font-bold">{tr("الحديث")}{' '}{num(h.number)} · {h.title}</p>
+                    <p>{tr("مطابقة تقريبية")}{' '}{num(h.successPercent)}{tr("٪ · اختلاف")}{' '}{num(h.differencePercent)}{tr("٪")}</p>
+                    <p className="text-muted-foreground">{tr("التقط المتصفح")}{' '}{num(h.heard)}{' '}{tr("كلمة · طابق")}{' '}{num(h.matched)}{' '}{tr("· اختلافات")}{' '}{num(h.substitutions + h.omissions + h.extras)}{' '}{tr("· الجزء المُغطّى")}{' '}{num(h.covered)}{' '}{tr("من")}{' '}{num(h.totalWords)}</p>
                   </li>)}
-                </ul> : <p className="mt-2 text-muted-foreground">لا يوجد تفصيل حسب الحديث لهذه المحاولة السابقة.</p>}
-                {e.issues.length === 0 ? <p className="mt-2 text-muted-foreground">لا اختلافات محفوظة.</p> : (
+                </ul> : <p className="mt-2 text-muted-foreground">{tr("لا يوجد تفصيل حسب الحديث لهذه المحاولة السابقة.")}</p>}
+                {e.issues.length === 0 ? <p className="mt-2 text-muted-foreground">{tr("لا اختلافات محفوظة.")}</p> : (
                   <ul className="mt-2 space-y-1.5">
                     {e.issues.map((i, k) => (
                       <li key={k} className="flex flex-wrap items-center gap-3 rounded-lg border bg-background/70 px-3 py-2" data-testid={`history-issue-${e.id}-${k}`}>
-                        {i.index != null && <span className="text-[11px] text-muted-foreground">الكلمة {num(i.index + 1)}</span>}
+                        {i.index != null && <span className="text-[11px] text-muted-foreground">{tr("الكلمة")}{' '}{num(i.index + 1)}</span>}
                         {i.kind !== 'extra' && <span className="hadith-text text-lg"><span className="sr-only">المتوقع: </span>{i.expected}</span>}
                         {i.kind !== 'omission' && i.heard && <span className="hadith-text text-base text-red-700 dark:text-red-400"><span className="sr-only">المسموع: </span>{i.heard}</span>}
                         {i.kind !== 'extra' && i.expected && <PronounceButton word={i.expected} speech={speech} />}

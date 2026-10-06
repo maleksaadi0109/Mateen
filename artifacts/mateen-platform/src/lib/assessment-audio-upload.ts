@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 type UploadAllocation = { uploadUrl: string; expiresAt: string };
 type Acknowledgement = { acknowledged: boolean };
 type UploadState = {
@@ -23,14 +24,14 @@ export function createAssessmentAudioUpload<T extends Acknowledgement>() {
   let running: Promise<T> | null = null;
 
   const reset = () => {
-    if (running) throw new Error('انتظر انتهاء إرسال التسجيل.');
+    if (running) throw new Error(tr("انتظر انتهاء إرسال التسجيل."));
     state = null;
   };
 
   const send = (operations: UploadOperations<T>): Promise<T> => {
     if (running) return running;
     if (state && state.blob !== operations.blob) {
-      return Promise.reject(new Error('ألغِ الرفع السابق قبل إرسال تسجيل مختلف.'));
+      return Promise.reject(new Error(tr("ألغِ الرفع السابق قبل إرسال تسجيل مختلف.")));
     }
     state ??= { blob: operations.blob, sequence: operations.sequence, allocation: null, phase: 'allocate', allocate: operations.allocate };
     const current = state;
@@ -47,7 +48,7 @@ export function createAssessmentAudioUpload<T extends Acknowledgement>() {
         current.phase = 'put';
       }
       if (current.phase === 'put') {
-        if (!current.allocation) throw new Error('لم يصل عنوان الرفع من الخادم.');
+        if (!current.allocation) throw new Error(tr("لم يصل عنوان الرفع من الخادم."));
         await operations.put(current.allocation, current.blob);
         current.phase = 'confirm';
       }

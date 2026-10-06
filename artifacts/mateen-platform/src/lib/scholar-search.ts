@@ -1,3 +1,4 @@
+// i18n-canonical: Arabic search normalisation
 export function normalizeArabic(s: string): string {
   return s
     .normalize('NFKC')

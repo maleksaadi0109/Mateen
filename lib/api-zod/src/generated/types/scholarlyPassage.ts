@@ -17,4 +17,11 @@ export interface ScholarlyPassage {
   /** @nullable */
   pdfPage: number | null;
   indexed: boolean;
+  /** @nullable */
+  sourceUrl?: string | null;
+  /**
+     * Website viewer page only; not a printed or PDF page.
+     * @nullable
+     */
+  viewerPage?: number | null;
 }

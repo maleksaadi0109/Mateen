@@ -1,0 +1,40 @@
+:root {
+  --mateen-assistant-height: 0rem;
+  --background: 41 46% 96%;
+  --foreground: 22 28% 18%;
+  --card: 40 50% 99%;
+  --card-foreground: 22 28% 18%;
+  --border: 30 18% 87%;
+  --primary: 19 28% 33%;
+  --primary-foreground: 41 46% 96%;
+  --secondary: 27 96% 31%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 36 20% 90%;
+  --muted-foreground: 20 15% 45%;
+  --accent: 45 100% 15%;
+  --accent-foreground: 41 46% 96%;
+  --input: 30 18% 87%;
+  --ring: 27 96% 31%;
+  --radius: 1.25rem;
+  --app-font-sans: 'Cairo', sans-serif;
+  --app-font-serif: 'Noto Naskh Arabic', serif;
+  --app-font-display: 'Kufam', sans-serif;
+}
+
+.dark {
+  --background: 24 15% 10%;
+  --foreground: 36 33% 92%;
+  --card: 24 12% 13%;
+  --card-foreground: 36 33% 92%;
+  --border: 24 10% 20%;
+  --primary: 28 35% 65%;
+  --primary-foreground: 24 15% 10%;
+  --secondary: 27 80% 45%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 24 12% 17%;
+  --muted-foreground: 36 20% 65%;
+  --accent: 40 60% 50%;
+  --accent-foreground: 24 15% 10%;
+  --input: 24 10% 20%;
+  --ring: 27 80% 45%;
+}

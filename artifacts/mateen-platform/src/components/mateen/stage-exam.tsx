@@ -1,3 +1,4 @@
+import { tr } from '@/lib/i18n';
 import { useEffect, useRef, useState } from 'react';
 import { useUser } from '@clerk/react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -50,12 +51,12 @@ function StageExamContent({ hadith, onClose, textId = 'nawawi', nextHref }: Prop
       const localHash = Array.from(new Uint8Array(bytes), b => b.toString(16).padStart(2, '0')).join('');
       if (!mounted.current) return;
       if (next.sourceHash !== localHash) {
-        setError('تغيّرت نسخة النص. أعد تحميل الصفحة قبل بدء محاولة جديدة حتى يتطابق النص مع التدريب.');
+        setError(tr("تغيّرت نسخة النص. أعد تحميل الصفحة قبل بدء محاولة جديدة حتى يتطابق النص مع التدريب."));
         return;
       }
       setAttempt(next); r.reset(); r.start();
     } catch {
-      if (mounted.current) setError('تعذّر بدء التدريب. تحقق من الاتصال وأن المرحلة السابقة مجتازة، ثم أعد المحاولة.');
+      if (mounted.current) setError(tr("تعذّر بدء التدريب. تحقق من الاتصال وأن المرحلة السابقة مجتازة، ثم أعد المحاولة."));
     } finally {
       inFlight.current = false;
       if (mounted.current) setBusy(false);
@@ -79,7 +80,7 @@ function StageExamContent({ hadith, onClose, textId = 'nawawi', nextHref }: Prop
       setOutcome(result);
       void qc.invalidateQueries({ queryKey: getGetLearningMapQueryKey(textId) });
     } catch {
-      if (mounted.current) setError('تعذّر تثبيت النتيجة. لا تُفتح المرحلة التالية قبل تأكيد الخادم. يمكنك إعادة إرسال المحاولة نفسها دون تكرار التسميع؛ وإذا انتهت مهلة الساعة فابدأ محاولة جديدة.');
+      if (mounted.current) setError(tr("تعذّر تثبيت النتيجة. لا تُفتح المرحلة التالية قبل تأكيد الخادم. يمكنك إعادة إرسال المحاولة نفسها دون تكرار التسميع؛ وإذا انتهت مهلة الساعة فابدأ محاولة جديدة."));
     } finally {
       inFlight.current = false;
       if (mounted.current) setBusy(false);
@@ -93,29 +94,29 @@ function StageExamContent({ hadith, onClose, textId = 'nawawi', nextHref }: Prop
 
   return (
     <section className="mx-auto max-w-3xl space-y-5 py-3" data-testid="stage-exam">
-      <button type="button" className={secondary} onClick={close} disabled={busy} data-testid="button-stage-exam-back"><ArrowRight size={16} />العودة للدراسة</button>
+      <button type="button" className={secondary} onClick={close} disabled={busy} data-testid="button-stage-exam-back"><ArrowRight size={16} />{tr("العودة للدراسة")}</button>
       <header className="paper-card space-y-3 p-5 sm:p-8">
-        <p className="font-ui text-xs font-bold text-secondary">{poem ? 'تدريب تسميع الباب' : 'تدريب المرحلة'} {num(hadith.number)}</p>
+        <p className="font-ui text-xs font-bold text-secondary">{poem ? tr("تدريب تسميع الباب") : tr("تدريب المرحلة")} {num(hadith.number)}</p>
         <h1 className="font-display text-3xl font-bold">{hadith.title}</h1>
         <p className="font-ui text-sm leading-loose text-muted-foreground">{poem
-          ? 'سمّع أبيات الباب كلها بالترتيب في محاولة واحدة، بالشطر الأول ثم الثاني لكل بيت. يُفتح الباب التالي بعد إكمال المقطع وتطابق أكثر من ٩٠٪ من كلماته (٩٠٪ تمامًا لا تكفي). تظهر الكلمات أثناء التسميع، وتُعرض الاختلافات بعد الإنهاء.'
-          : 'سمّع الحديث كاملًا كما درسته، بالسند والعزو. يُفتح الحديث التالي عند إكمال المقطع وتطابق أكثر من ٩٠٪ من كلماته (٩٠٪ تمامًا لا تكفي). تظهر كلماتك في صفحة الكتاب كلما سمّعتها، وتُعرض الاختلافات كلها بعد الإنهاء فقط. بعد كل سبع مراحل مجتازة يُفتح امتحان المجموعة في الخريطة.'}</p>
-        <p className="rounded-xl border border-secondary/30 bg-secondary/5 p-3 font-ui text-xs leading-loose" data-testid="stage-exam-disclaimer">هذا اجتياز تدريبي تقريبي بالتعرّف الآلي؛ ليس اعتمادًا للحفظ ولا تقييمًا للنطق أو التشكيل.</p>
+          ? tr("سمّع أبيات الباب كلها بالترتيب في محاولة واحدة، بالشطر الأول ثم الثاني لكل بيت. يُفتح الباب التالي بعد إكمال المقطع وتطابق أكثر من ٩٠٪ من كلماته (٩٠٪ تمامًا لا تكفي). تظهر الكلمات أثناء التسميع، وتُعرض الاختلافات بعد الإنهاء.")
+          : tr("سمّع الحديث كاملًا كما درسته، بالسند والعزو. يُفتح الحديث التالي عند إكمال المقطع وتطابق أكثر من ٩٠٪ من كلماته (٩٠٪ تمامًا لا تكفي). تظهر كلماتك في صفحة الكتاب كلما سمّعتها، وتُعرض الاختلافات كلها بعد الإنهاء فقط. بعد كل سبع مراحل مجتازة يُفتح امتحان المجموعة في الخريطة.")}</p>
+        <p className="rounded-xl border border-secondary/30 bg-secondary/5 p-3 font-ui text-xs leading-loose" data-testid="stage-exam-disclaimer">{tr("هذا اجتياز تدريبي تقريبي بالتعرّف الآلي؛ ليس اعتمادًا للحفظ ولا تقييمًا للنطق أو التشكيل.")}</p>
       </header>
 
       {outcome ? (
         <div className="paper-card space-y-5 p-4 sm:p-8" data-testid="stage-exam-result">
           {snapshot ? <ExamReview snapshot={snapshot} outcome={outcome} title={hadith.title} unit={poem ? 'الباب' : 'الحديث'} /> : <>
-            <h2 className="font-display text-2xl font-bold" data-testid="stage-result-title">{outcome.passed ? 'اجتزت هذه المرحلة' : !outcome.complete ? 'لم يكتمل المقطع بعد' : 'تحتاج إلى مزيد من التدريب'}</h2>
-            <p className="font-display text-5xl font-bold text-primary" data-testid="stage-result-percent">{num(outcome.percent)}٪</p>
+            <h2 className="font-display text-2xl font-bold" data-testid="stage-result-title">{outcome.passed ? tr("اجتزت هذه المرحلة") : !outcome.complete ? tr("لم يكتمل المقطع بعد") : tr("تحتاج إلى مزيد من التدريب")}</h2>
+            <p className="font-display text-5xl font-bold text-primary" data-testid="stage-result-percent">{num(outcome.percent)}{tr("٪")}</p>
           </>}
-          <h2 className="sr-only" data-testid={snapshot ? 'stage-result-title' : undefined}>{outcome.passed ? 'اجتزت هذه المرحلة' : !outcome.complete ? 'لم يكتمل المقطع بعد' : 'تحتاج إلى مزيد من التدريب'}</h2>
+          <h2 className="sr-only" data-testid={snapshot ? 'stage-result-title' : undefined}>{outcome.passed ? tr("اجتزت هذه المرحلة") : !outcome.complete ? tr("لم يكتمل المقطع بعد") : tr("تحتاج إلى مزيد من التدريب")}</h2>
           <div className="flex flex-wrap justify-center gap-2">
-            {outcome.nextStage && (!poem || nextHref) && <Link className={primary} href={nextHref ?? `/student/learn/nawawi/${outcome.nextStage}`} data-testid="button-stage-next">{poem ? 'الباب التالي' : 'المرحلة التالية'}</Link>}
-            {outcome.passed && !outcome.nextStage && !poem && <Link className={primary} href="/student/learn/nawawi/checkpoint/6" data-testid="button-stage-final-checkpoint">امتحان المجموعة الأخيرة</Link>}
-            {outcome.passed && !outcome.nextStage && poem && <p role="status" className="font-bold text-secondary">أتممت تسميع أبيات تحفة الأطفال.</p>}
-            <Link className={secondary} href={`/student/learn/${textId}`} data-testid="button-stage-result-map">خريطة التعلّم</Link>
-            <button type="button" className={secondary} onClick={reset} data-testid="button-stage-retry">محاولة جديدة</button>
+            {outcome.nextStage && (!poem || nextHref) && <Link className={primary} href={nextHref ?? `/student/learn/nawawi/${outcome.nextStage}`} data-testid="button-stage-next">{poem ? tr("الباب التالي") : tr("المرحلة التالية")}</Link>}
+            {outcome.passed && !outcome.nextStage && !poem && <Link className={primary} href="/student/learn/nawawi/checkpoint/6" data-testid="button-stage-final-checkpoint">{tr("امتحان المجموعة الأخيرة")}</Link>}
+            {outcome.passed && !outcome.nextStage && poem && <p role="status" className="font-bold text-secondary">{tr("أتممت تسميع أبيات تحفة الأطفال.")}</p>}
+            <Link className={secondary} href={`/student/learn/${textId}`} data-testid="button-stage-result-map">{tr("خريطة التعلّم")}</Link>
+            <button type="button" className={secondary} onClick={reset} data-testid="button-stage-retry">{tr("محاولة جديدة")}</button>
           </div>
         </div>
       ) : (
@@ -123,20 +124,20 @@ function StageExamContent({ hadith, onClose, textId = 'nawawi', nextHref }: Prop
           {!attempt ? <>
             <label className="flex items-start gap-3 rounded-xl border bg-background p-4 font-ui text-sm leading-loose">
               <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} disabled={busy} className="mt-2 h-4 w-4 shrink-0" data-testid="checkbox-stage-consent" />
-              <span>أوافق على استخدام الميكروفون. قد تعالج خدمة المتصفح الصوت خارجيًا. عند إنهاء التدريب تُرسل مواضع الكلمات المطابقة وأنواع الاختلافات لحساب نتيجة المرحلة وحفظ تقدّمي في حسابي، دون تسجيل صوتي أو نص مسموع كامل.</span>
+              <span>{tr("أوافق على استخدام الميكروفون. قد تعالج خدمة المتصفح الصوت خارجيًا. عند إنهاء التدريب تُرسل مواضع الكلمات المطابقة وأنواع الاختلافات لحساب نتيجة المرحلة وحفظ تقدّمي في حسابي، دون تسجيل صوتي أو نص مسموع كامل.")}</span>
             </label>
-            {r.supported === false && <p role="alert" className="font-ui text-sm" data-testid="stage-mic-unsupported">التعرّف الصوتي غير متاح في متصفحك. يمكنك العودة للدراسة والتجربة بمتصفح يدعمه؛ لن تُسجّل نتيجة وهمية.</p>}
-            <button type="button" className={`${primary} w-full`} onClick={begin} disabled={!consent || !r.supported || busy} data-testid="button-stage-start"><Mic size={18} />{busy ? 'جارٍ بدء المحاولة…' : 'بدء تدريب المرحلة'}</button>
+            {r.supported === false && <p role="alert" className="font-ui text-sm" data-testid="stage-mic-unsupported">{tr("التعرّف الصوتي غير متاح في متصفحك. يمكنك العودة للدراسة والتجربة بمتصفح يدعمه؛ لن تُسجّل نتيجة وهمية.")}</p>}
+            <button type="button" className={`${primary} w-full`} onClick={begin} disabled={!consent || !r.supported || busy} data-testid="button-stage-start"><Mic size={18} />{busy ? tr("جارٍ بدء المحاولة…") : tr("بدء تدريب المرحلة")}</button>
           </> : <>
-            <p className="flex items-center justify-center gap-2 font-ui text-sm font-bold" role="status" data-testid="stage-listening-status"><Mic size={16} className={r.listening ? 'animate-pulse text-secondary motion-reduce:animate-none' : 'text-muted-foreground'} />{r.listening ? 'يستمع الآن — تابع التسميع' : 'الميكروفون متوقف'}</p>
+            <p className="flex items-center justify-center gap-2 font-ui text-sm font-bold" role="status" data-testid="stage-listening-status"><Mic size={16} className={r.listening ? 'animate-pulse text-secondary motion-reduce:animate-none' : 'text-muted-foreground'} />{r.listening ? tr("يستمع الآن — تابع التسميع") : tr("الميكروفون متوقف")}</p>
             <LiveExamBook words={r.words} revealed={r.revealed} interimIndices={r.interimIndices} listening={r.listening} title={hadith.title} />
-            <p className="text-center font-ui text-xs text-muted-foreground">المحاولة متاحة لمدة ساعة. إغلاق الصفحة قبل تثبيت النتيجة يتطلب بدء محاولة جديدة.</p>
+            <p className="text-center font-ui text-xs text-muted-foreground">{tr("المحاولة متاحة لمدة ساعة. إغلاق الصفحة قبل تثبيت النتيجة يتطلب بدء محاولة جديدة.")}</p>
             {!payload && <div className="flex flex-wrap justify-center gap-2">
-              <button type="button" className={secondary} disabled={busy || r.finishing} onClick={r.listening ? r.stop : r.start} data-testid="button-stage-pause">{r.listening ? <><Pause size={16} />إيقاف مؤقت</> : <><Mic size={16} />متابعة التسميع</>}</button>
-              <button type="button" className={primary} disabled={busy || r.finishing || r.attemptedCount === 0} onClick={finish} data-testid="button-stage-finish"><Flag size={16} />{busy ? 'جارٍ احتساب النتيجة…' : 'إنهاء التدريب'}</button>
+              <button type="button" className={secondary} disabled={busy || r.finishing} onClick={r.listening ? r.stop : r.start} data-testid="button-stage-pause">{r.listening ? <><Pause size={16} />{tr("إيقاف مؤقت")}</> : <><Mic size={16} />{tr("متابعة التسميع")}</>}</button>
+              <button type="button" className={primary} disabled={busy || r.finishing || r.attemptedCount === 0} onClick={finish} data-testid="button-stage-finish"><Flag size={16} />{busy ? tr("جارٍ احتساب النتيجة…") : tr("إنهاء التدريب")}</button>
             </div>}
-            {payload && !outcome && <button type="button" className={`${primary} w-full`} disabled={busy} onClick={finish} data-testid="button-stage-submit-retry">{busy ? 'جارٍ تثبيت النتيجة…' : 'إعادة إرسال النتيجة'}</button>}
-            <button type="button" className={secondary} disabled={busy} onClick={reset} data-testid="button-stage-reset">بدء محاولة جديدة</button>
+            {payload && !outcome && <button type="button" className={`${primary} w-full`} disabled={busy} onClick={finish} data-testid="button-stage-submit-retry">{busy ? tr("جارٍ تثبيت النتيجة…") : tr("إعادة إرسال النتيجة")}</button>}
+            <button type="button" className={secondary} disabled={busy} onClick={reset} data-testid="button-stage-reset">{tr("بدء محاولة جديدة")}</button>
           </>}
           {(error || r.error) && <p role="alert" className="rounded-xl border border-destructive/30 bg-destructive/5 p-3 font-ui text-sm text-destructive" data-testid="stage-exam-error">{error || r.error}</p>}
         </div>

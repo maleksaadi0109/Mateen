@@ -1,0 +1,4 @@
+/* Companion overrides for the refreshed book mascot; base keyframes live in index.css. */
+.mateen-mascot { overflow: visible; }
+.mateen-mascot .mateen-hand { transform-origin: 90% 95%; }
+.dark .mateen-mascot { filter: drop-shadow(0 0 .5px hsl(42 60% 80% / .35)); }

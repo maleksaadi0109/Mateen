@@ -1,3 +1,4 @@
+import { tr } from '@/lib/i18n';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'wouter';
 import { useQueryClient } from '@tanstack/react-query';
@@ -12,7 +13,7 @@ import { STATUS_LABEL, clock, errorMessage, isFinal, isPending, clampCursor, new
 import { num, usePageMeta } from '@/lib/mateen';
 
 export default function ExamAttemptPage() {
-  usePageMeta('اختبار المستوى | مَتِين', 'محاولة اختبار المستوى.');
+  usePageMeta(tr("اختبار المستوى | مَتِين"), tr("محاولة اختبار المستوى."));
   const { attemptId = '' } = useParams<{ attemptId: string }>();
   const qc = useQueryClient();
   const sessionId = tabSessionId();
@@ -79,7 +80,7 @@ export default function ExamAttemptPage() {
   }, [visible, restoreTick, serverPos, total]);
 
   if (q.isLoading) return <LoadingList rows={4} />;
-  if (q.isError || !q.data) return <ErrorState message="تعذّر تحميل المحاولة." onRetry={() => q.refetch()} />;
+  if (q.isError || !q.data) return <ErrorState message={tr("تعذّر تحميل المحاولة.")} onRetry={() => q.refetch()} />;
   const a = q.data;
   const disconnected = a.status === 'paused_connection' || lost || !online;
 
@@ -90,20 +91,20 @@ export default function ExamAttemptPage() {
       setConfirming(false);
       qc.invalidateQueries({ queryKey: key });
       qc.invalidateQueries({ queryKey: getGetAssessmentSummaryQueryKey() });
-    } catch (e) { setMsg(errorMessage(e, 'تعذّر التسليم. أعد المحاولة؛ إجاباتك محفوظة.')); }
+    } catch (e) { setMsg(errorMessage(e, tr("تعذّر التسليم. أعد المحاولة؛ إجاباتك محفوظة."))); }
   };
 
   return (
     <div>
-      <PageHeader eyebrow="اختبار المستوى" title={STATUS_LABEL[a.status]}>
+      <PageHeader eyebrow={tr("اختبار المستوى")} title={STATUS_LABEL[a.status]}>
         {live && left !== null && <span className="font-display text-2xl" data-testid="text-remaining">{clock(left)}</span>}
       </PageHeader>
       <div className="space-y-5">
         {msg && <p role="alert" className="font-ui text-sm font-semibold text-secondary">{msg}</p>}
         {live && disconnected && (
           <div role="alert" className="paper-card flex items-start gap-3 p-6"><WifiOff className="text-secondary" />
-            <div><p className="font-display font-bold">انقطع الاتصال بالخادم</p>
-              <p className="font-arabic text-lg">أُخفيت الأسئلة وعُطّلت الإجابات والعدّ متوقف. عند عودة الاتصال تُستأنف المحاولة نفسها.</p></div></div>
+            <div><p className="font-display font-bold">{tr("انقطع الاتصال بالخادم")}</p>
+              <p className="font-arabic text-lg">{tr("أُخفيت الأسئلة وعُطّلت الإجابات والعدّ متوقف. عند عودة الاتصال تُستأنف المحاولة نفسها.")}</p></div></div>
         )}
         {questionsVisible(a.status, lost, online) && (
           <>
@@ -111,41 +112,40 @@ export default function ExamAttemptPage() {
               {a.questions.map((qu, i) => <ExamQuestion key={qu.id} index={i} onFocusQuestion={setCursor} attemptId={attemptId} sessionId={sessionId} q={qu} disabled={false} onChanged={() => qc.invalidateQueries({ queryKey: key })} />)}
             </ul>
             {!confirming ? (
-              <button onClick={() => setConfirming(true)} className="rounded-full bg-secondary px-7 py-3 font-ui font-bold text-secondary-foreground" data-testid="button-submit-exam">تسليم الاختبار</button>
+              <button onClick={() => setConfirming(true)} className="rounded-full bg-secondary px-7 py-3 font-ui font-bold text-secondary-foreground" data-testid="button-submit-exam">{tr("تسليم الاختبار")}</button>
             ) : (
-              <Notice title="تأكيد التسليم">لن تتمكن من تعديل أي إجابة بعد التسليم. الأسئلة غير المجابة تُحتسب بلا درجة.
-                <span className="mt-3 flex gap-2">
-                  <button onClick={doSubmit} disabled={submit.isPending} className="rounded-full bg-secondary px-5 py-2 font-ui text-sm font-bold text-secondary-foreground disabled:opacity-50">{submit.isPending ? 'جارٍ التسليم...' : 'سلّم الآن'}</button>
-                  <button onClick={() => setConfirming(false)} className="rounded-full border px-5 py-2 font-ui text-sm font-bold">رجوع</button>
+              <Notice title={tr("تأكيد التسليم")}>{tr("لن تتمكن من تعديل أي إجابة بعد التسليم. الأسئلة غير المجابة تُحتسب بلا درجة.")}<span className="mt-3 flex gap-2">
+                  <button onClick={doSubmit} disabled={submit.isPending} className="rounded-full bg-secondary px-5 py-2 font-ui text-sm font-bold text-secondary-foreground disabled:opacity-50">{submit.isPending ? tr("جارٍ التسليم...") : tr("سلّم الآن")}</button>
+                  <button onClick={() => setConfirming(false)} className="rounded-full border px-5 py-2 font-ui text-sm font-bold">{tr("رجوع")}</button>
                 </span></Notice>
             )}
           </>
         )}
         {!live && <AttemptAudioPrivacy attemptId={attemptId} sessionId={sessionId} questions={a.questions} />}
         {isPending(a.status) && (
-          <Notice title={a.status === 'technical_review' ? 'مراجعة تقنية' : 'بانتظار المراجعة البشرية'}>
-            {a.status === 'technical_review' ? 'ظهرت مشكلة تقنية في بعض التسجيلات. لا درجة معروضة، ولا انتظار تعليمي بسبب العطل التقني.' : 'سلّمت اختبارك. يستمع مراجع بشري إلى التسجيلات الشفوية، ولا تُعرض درجة قبل اكتمال ذلك.'}
+          <Notice title={a.status === 'technical_review' ? tr("مراجعة تقنية") : tr("بانتظار المراجعة البشرية")}>
+            {a.status === 'technical_review' ? tr("ظهرت مشكلة تقنية في بعض التسجيلات. لا درجة معروضة، ولا انتظار تعليمي بسبب العطل التقني.") : tr("سلّمت اختبارك. يستمع مراجع بشري إلى التسجيلات الشفوية، ولا تُعرض درجة قبل اكتمال ذلك.")}
           </Notice>
         )}
         {isFinal(a.status) && a.result && (
           <section className="paper-card p-6" data-testid="panel-exam-result">
-            <p className="font-display text-4xl font-bold">{num(a.result.score)} <span className="text-xl text-muted-foreground">من ٣٠</span></p>
-            <p className="mt-2 font-arabic text-xl">{a.result.passed ? 'اجتزت المستوى التمهيدي.' : 'لم تبلغ درجة النجاح.'}</p>
-            <p className="font-ui text-sm text-muted-foreground">تحريري {num(a.result.writtenScore)} · شفوي {num(a.result.oralScore)}</p>
-            {a.result.retryAvailableAt && <p className="mt-2 font-ui text-sm">تُتاح المحاولة التالية: {new Date(a.result.retryAvailableAt).toLocaleString('ar')}</p>}
+            <p className="font-display text-4xl font-bold">{num(a.result.score)} <span className="text-xl text-muted-foreground">{tr("من ٣٠")}</span></p>
+            <p className="mt-2 font-arabic text-xl">{a.result.passed ? tr("اجتزت المستوى التمهيدي.") : tr("لم تبلغ درجة النجاح.")}</p>
+            <p className="font-ui text-sm text-muted-foreground">{tr("تحريري")}{' '}{num(a.result.writtenScore)}{' '}{tr("· شفوي")}{' '}{num(a.result.oralScore)}</p>
+            {a.result.retryAvailableAt && <p className="mt-2 font-ui text-sm">{tr("تُتاح المحاولة التالية:")}{' '}{new Date(a.result.retryAvailableAt).toLocaleString('ar')}</p>}
             <p className="mt-3 font-ui text-xs leading-6 text-muted-foreground">{a.result.retentionNotice}</p>
-            {a.result.answers.some((x) => x.differences.length > 0) && <h3 className="mt-5 font-display font-bold">فروق مؤكدة بعد المراجعة</h3>}
+            {a.result.answers.some((x) => x.differences.length > 0) && <h3 className="mt-5 font-display font-bold">{tr("فروق مؤكدة بعد المراجعة")}</h3>}
             <ul className="mt-2 space-y-3">
               {a.result.answers.filter((x) => x.differences.length > 0).map((x) => (
                 <li key={x.questionId} className="rounded-xl border p-3 font-arabic text-lg leading-9">
-                  <p><span className="font-ui text-xs text-muted-foreground">المرجع: </span>{x.expectedText}</p>
-                  <p><span className="font-ui text-xs text-muted-foreground">{x.provenance === 'human_verified_oral' ? 'ما سمعه المراجع: ' : 'إجابتك: '}</span>{x.submittedText ?? 'لا إجابة'}</p>
+                  <p><span className="font-ui text-xs text-muted-foreground">{tr("المرجع:")}{' '}</span>{x.expectedText}</p>
+                  <p><span className="font-ui text-xs text-muted-foreground">{x.provenance === 'human_verified_oral' ? tr("ما سمعه المراجع: ") : tr("إجابتك: ")}</span>{x.submittedText ?? tr("لا إجابة")}</p>
                 </li>
               ))}
             </ul>
           </section>
         )}
-        <Link href="/student/exams" className="inline-block font-ui font-bold text-secondary underline underline-offset-4">إلى صفحة الاختبارات</Link>
+        <Link href="/student/exams" className="inline-block font-ui font-bold text-secondary underline underline-offset-4">{tr("إلى صفحة الاختبارات")}</Link>
       </div>
     </div>
   );

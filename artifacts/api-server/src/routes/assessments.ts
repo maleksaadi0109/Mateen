@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { finishDailyReview } from "../lib/daily-plan-review-completion";
 import { Router, type Response } from "express";
 import {
   AdjudicateAssessmentOralBody,
@@ -1816,6 +1817,8 @@ router.post(
     }
     const now = new Date();
     const result = await db.transaction(async (tx) => {
+      // Same account lock as daily-plan writes: answer and task completion are atomic.
+      await tx.select().from(profilesTable).where(eq(profilesTable.clerkId, req.mateenUserId!)).for("no key update");
       const [review] = await tx.select().from(scheduledReviewsTable)
         .where(and(
           eq(scheduledReviewsTable.id, params.data.reviewId),
@@ -1860,6 +1863,7 @@ router.post(
           updatedAt: now,
         })
         .where(eq(scheduledReviewsTable.id, review.id));
+      await finishDailyReview(tx, review, now);
       if (review.sourceAttemptId) {
         await tx.insert(assessmentAuditEventsTable).values({
           id: randomUUID(),

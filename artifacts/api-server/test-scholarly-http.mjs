@@ -1,16 +1,18 @@
 // No application database or credentials are used. A fresh Unix-socket-only
 // PostgreSQL cluster and a test-only route bundle are destroyed on every run.
 import { build } from "esbuild";
-import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, rm, writeFile, copyFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawn, spawnSync } from "node:child_process";
 
 const root = dirname(fileURLToPath(import.meta.url));
 const preview = process.argv.includes("--preview");
+const preparedImport = process.argv.includes("--prepared-import");
 const teacherReview = process.argv.includes("--teacher-review");
+const collation = process.argv.includes("--collation");
 const temp = await mkdtemp(join(tmpdir(), "mateen-participant-tests-"));
 const dbRequire = createRequire(join(root, "../../lib/db/package.json"));
 const { generateDrizzleJson, generateMigration } = dbRequire("drizzle-kit/api");
@@ -52,16 +54,27 @@ try {
   // Resolution replacements exist only in this temporary test bundle. The
   // production build has no test header, auth bypass, model stub or test router.
   const outfile = join(temp, preview ? "preview.test.cjs" : "participants.test.cjs");
+  if (collation || preparedImport) {
+    await mkdir(join(temp, "collation-evidence"));
+    for (const page of ["005", "006", "007"]) {
+      await copyFile(join(root, "../../deliverables/aljam3-commentary/evidence", `pdf-${page}.png`),
+        join(temp, "collation-evidence", `pdf-${page}.png`));
+    }
+  }
   await build({
-    entryPoints: [join(root, teacherReview ? "tests/teacher-review.http.test.ts" : preview ? "tests/scholarly.preview.test.ts" : "tests/scholarly.participants.test.ts")],
+    entryPoints: [join(root, collation ? "tests/scholarly.collation.test.ts" : preparedImport ? "tests/scholarly.import.test.ts" : teacherReview ? "tests/teacher-review.http.test.ts" : preview ? "tests/scholarly.preview.test.ts" : "tests/scholarly.participants.test.ts")],
     bundle: true, platform: "node", format: "cjs", outfile,
+    ...(collation || preparedImport ? { define: { "import.meta.url": JSON.stringify(pathToFileURL(join(temp, "index.mjs")).href) } } : {}),
     plugins: [{
       name: "participant-test-boundaries",
       setup(builder) {
-        builder.onResolve({ filter: /^@clerk\/express$/ }, () => ({
-          path: join(root, teacherReview ? "tests/doubles/teacher-review-auth.ts" : preview ? "tests/doubles/preview-auth.ts" : "tests/doubles/auth.ts"),
+        if (teacherReview) builder.onResolve({ filter: /^\.\.\/lib\/qualification-storage$/ }, () => ({
+          path: join(root, "tests/doubles/teacher-review-storage.ts"),
         }));
-        if (preview) return; // Exercise the real admin router and provider implementation.
+        builder.onResolve({ filter: /^@clerk\/express$/ }, () => ({
+          path: join(root, teacherReview ? "tests/doubles/teacher-review-auth.ts" : preview || preparedImport || collation ? "tests/doubles/preview-auth.ts" : "tests/doubles/auth.ts"),
+        }));
+        if (preview || preparedImport || collation) return; // Exercise the real admin router and provider implementation.
         builder.onResolve({ filter: /^\.\.\/lib\/scholarly-excerpts$/ }, () => ({
           path: join(root, "tests/doubles/excerpts.ts"),
         }));
@@ -74,14 +87,21 @@ try {
       },
     }],
   });
-  const child = spawn(process.execPath, ["--test", "--test-timeout=90000", outfile], {
-    env: childEnv, stdio: "inherit",
-  });
-  const code = await new Promise((resolve, reject) => {
-    child.on("error", reject);
-    child.on("exit", (status) => resolve(status ?? 1));
-  });
-  process.exitCode = code;
+  // Separate process-local rate-limit budgets for the two coherent suites;
+  // do not weaken or replace production rate limiting to grow the test suite.
+  const groups = preview || teacherReview || preparedImport || collation ? [[]] : [
+    ["--test-skip-pattern=^RAG "], ["--test-name-pattern=^RAG "],
+  ];
+  for (const group of groups) {
+    const child = spawn(process.execPath, ["--test", "--test-timeout=90000", ...group, outfile], {
+      env: childEnv, stdio: "inherit",
+    });
+    const code = await new Promise((resolve, reject) => {
+      child.on("error", reject);
+      child.on("exit", (status) => resolve(status ?? 1));
+    });
+    if (code) { process.exitCode = code; break; }
+  }
 } finally {
   try {
     if (started) pg("pg_ctl", ["-D", data, "-m", "immediate", "-w", "stop"]);

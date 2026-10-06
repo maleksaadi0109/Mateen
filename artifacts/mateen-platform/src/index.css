@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --mateen-assistant-height: 4.5rem;
+  --mateen-assistant-height: 0rem;
   --background: 41 46% 96%;
   --foreground: 22 28% 18%;
   --card: 40 50% 99%;
@@ -56,10 +56,12 @@
 }
 
 * { border-color: hsl(var(--border)); }
+/* Shared offset keeps portal navigation below the companion when it is visible. */
+:root:has(.mateen-companion) { --mateen-assistant-height: 4.5rem; }
 html { scroll-behavior: smooth; scroll-padding-top: calc(var(--mateen-assistant-height) + 6rem); }
 body { 
   margin: 0; 
-  min-width: 320px; 
+  min-width: 0;
   background: hsl(var(--background)); 
   color: hsl(var(--foreground)); 
   font-family: var(--app-font-sans); 
@@ -90,7 +92,8 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--app-font-display); }
   background-image: radial-gradient(hsl(var(--primary) / 0.04) 1.5px, transparent 1.5px);
 }
 
-html { direction: rtl; }
+html[dir='rtl'] { direction: rtl; }
+html[dir='ltr'] { direction: ltr; }
 body { font-family: var(--app-font-sans); -webkit-font-smoothing: antialiased; }
 :focus-visible { outline: 2px solid hsl(var(--secondary)); outline-offset: 3px; border-radius: 6px; }
 .star-pattern {
@@ -143,3 +146,15 @@ body { font-family: var(--app-font-sans); -webkit-font-smoothing: antialiased; }
 @media (prefers-reduced-motion: reduce) {
   .mateen-hand, .mateen-hop { animation: none !important; }
 }
+
+/* Mobile auth + dock */
+.mateen-dock { padding-bottom: calc(0.5rem + env(safe-area-inset-bottom)); }
+.mateen-sheet { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
+
+/* Directional icons follow reading direction (icons are authored for RTL). */
+html[dir='ltr'] .lucide-arrow-left, html[dir='ltr'] .lucide-arrow-right,
+html[dir='ltr'] .lucide-chevron-left, html[dir='ltr'] .lucide-chevron-right { transform: scaleX(-1); }
+html[lang='en'] body { font-feature-settings: normal; }
+@keyframes mateen-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.mateen-rise { animation: mateen-rise .7s cubic-bezier(.2,.7,.2,1) both; }
+@media (prefers-reduced-motion: reduce) { .mateen-rise { animation: none; } }

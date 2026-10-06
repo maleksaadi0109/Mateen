@@ -5,8 +5,11 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { ConversationMessageInputAnswerMode } from './conversationMessageInputAnswerMode';
 
 export interface ConversationMessageInput {
+  /** Explicit mode for this turn; omission means study, never inferred from earlier text. */
+  answerMode?: ConversationMessageInputAnswerMode;
   /**
      * @minLength 1
      * @maxLength 8000

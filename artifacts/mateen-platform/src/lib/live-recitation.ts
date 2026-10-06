@@ -1,5 +1,6 @@
 // Matching aids practice, not grading. A gap stays blank rather than becoming
 // an asserted learner error, and arbitrary ASR output is never rendered as matn.
+// i18n-canonical: Arabic normalisation tables and honorific expansions (matching logic, not UI)
 export function normalizeRecitationWord(word: string): string {
   const normalized = word.normalize('NFKC')
     .replace(/[\u064B-\u065F\u0670\u06D6-\u06EDـ]/g, '')
@@ -76,6 +77,7 @@ export function matchContinuousRecitation(words: string[], transcript: string, s
   return { indices, cursor, issues, mismatchIndex: issues[0]?.index ?? null };
 }
 
+// i18n-canonical: canonical honorific text used for matching
 export function recitationWords(text: string): string[] {
   // Expand the source's honorific ligatures into their written words so the
   // recognizer can match speech to them (Unicode normalization misses FD4C).

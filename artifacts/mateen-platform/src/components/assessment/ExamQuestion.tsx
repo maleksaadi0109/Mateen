@@ -1,3 +1,5 @@
+import { fmt } from '@/lib/i18n';
+import { tr } from '@/lib/i18n';
 import { useRef, useState } from 'react';
 import { Mic, Square, Trash2, Save, UploadCloud } from 'lucide-react';
 import {
@@ -31,9 +33,9 @@ export function ExamQuestion({ index, onFocusQuestion, attemptId, sessionId, q, 
     try {
       const ack = await save.mutateAsync({ attemptId, questionId: q.id, data: { sessionId, sequence: seq, mutationId: mutationIdFor(ids.current, seq, text), writtenAnswer: text } });
       if (ack.acknowledged) clearDraft(localStorage, attemptId, q.id);
-      setMsg(ack.acknowledged ? 'أقرّ الخادم بحفظ إجابتك.' : 'لم يُقرّ الخادم بالحفظ بعد. أعد المحاولة.');
+      setMsg(ack.acknowledged ? tr("أقرّ الخادم بحفظ إجابتك.") : tr("لم يُقرّ الخادم بالحفظ بعد. أعد المحاولة."));
       onChanged();
-    } catch (e) { setMsg(errorMessage(e, 'تعذّر الحفظ. إجابتك ما زالت هنا؛ أعد المحاولة.')); }
+    } catch (e) { setMsg(errorMessage(e, tr("تعذّر الحفظ. إجابتك ما زالت هنا؛ أعد المحاولة."))); }
   };
 
   const sendAudio = async () => {
@@ -47,14 +49,14 @@ export function ExamQuestion({ index, onFocusQuestion, attemptId, sessionId, q, 
         allocate: (sequence) => request.mutateAsync({ attemptId, questionId: q.id, data: { sessionId, sequence, contentType: blob.type, sizeBytes: blob.size, durationSeconds: Math.min(60, Math.max(1, rec.seconds)), consent: true } }),
         put: async (up, audio) => {
           const result = await fetch(up.uploadUrl, { method: 'PUT', credentials: 'omit', headers: { 'Content-Type': audio.type }, body: audio });
-          if (!result.ok) throw new Error('تعذّر رفع الملف؛ التسجيل محفوظ محلياً لإعادة المحاولة.');
+          if (!result.ok) throw new Error(tr("تعذّر رفع الملف؛ التسجيل محفوظ محلياً لإعادة المحاولة."));
         },
         confirm: (sequence) => confirm.mutateAsync({ attemptId, questionId: q.id, data: { sessionId, sequence } }),
         cancel: () => del.mutateAsync({ attemptId, questionId: q.id }),
       });
-      setMsg(ack.acknowledged ? 'وصل تسجيلك وأقرّ الخادم باستلامه.' : 'لم يُقرّ الخادم بالاستلام.');
+      setMsg(ack.acknowledged ? tr("وصل تسجيلك وأقرّ الخادم باستلامه.") : tr("لم يُقرّ الخادم بالاستلام."));
       if (ack.acknowledged) { rec.discard(); setConsent(false); onChanged(); }
-    } catch (e) { setMsg(errorMessage(e, 'تعذّر رفع التسجيل. يمكنك إعادة المحاولة بنفس التسجيل.')); }
+    } catch (e) { setMsg(errorMessage(e, tr("تعذّر رفع التسجيل. يمكنك إعادة المحاولة بنفس التسجيل."))); }
     finally { audioBusy.current = false; setBusy(false); }
   };
 
@@ -62,8 +64,8 @@ export function ExamQuestion({ index, onFocusQuestion, attemptId, sessionId, q, 
     if (audioBusy.current) return;
     audioBusy.current = true;
     setBusy(true); setMsg(null);
-    try { await del.mutateAsync({ attemptId, questionId: q.id }); audioUpload.current.reset(); setConsent(false); setMsg('أزيل التسجيل من هذا السؤال. تُستكمل إزالة نسخة الرفع المؤقتة بعد انتهاء رابطها، ولا تبقى متاحة للتقييم.'); onChanged(); }
-    catch (e) { setMsg(errorMessage(e, 'تعذّر الحذف. أعد المحاولة.')); }
+    try { await del.mutateAsync({ attemptId, questionId: q.id }); audioUpload.current.reset(); setConsent(false); setMsg(tr("أزيل التسجيل من هذا السؤال. تُستكمل إزالة نسخة الرفع المؤقتة بعد انتهاء رابطها، ولا تبقى متاحة للتقييم.")); onChanged(); }
+    catch (e) { setMsg(errorMessage(e, tr("تعذّر الحذف. أعد المحاولة."))); }
     finally { audioBusy.current = false; setBusy(false); }
   };
 
@@ -78,43 +80,41 @@ export function ExamQuestion({ index, onFocusQuestion, attemptId, sessionId, q, 
       }
       setConsent(false);
       await rec.start();
-    } catch (e) { setMsg(errorMessage(e, 'تعذّر إلغاء الرفع السابق؛ احتفظنا بالتسجيل لإعادة المحاولة.')); }
+    } catch (e) { setMsg(errorMessage(e, tr("تعذّر إلغاء الرفع السابق؛ احتفظنا بالتسجيل لإعادة المحاولة."))); }
     finally { audioBusy.current = false; setBusy(false); }
   };
 
   return (
-    <li id={questionAnchor(index)} tabIndex={-1} aria-label={`السؤال ${q.position}`} onFocusCapture={() => onFocusQuestion(index)} onPointerDown={() => onFocusQuestion(index)} className="paper-card scroll-mt-24 p-5 outline-none" data-testid={`exam-q-${q.position}`}>
-      <p className="font-ui text-xs font-bold text-secondary">{num(q.position)} · {q.kind === 'written' ? 'تحريري' : 'شفوي'}</p>
+    <li id={questionAnchor(index)} tabIndex={-1} aria-label={fmt("السؤال {a}", "Question {a}", { a: q.position })} onFocusCapture={() => onFocusQuestion(index)} onPointerDown={() => onFocusQuestion(index)} className="paper-card scroll-mt-24 p-5 outline-none" data-testid={`exam-q-${q.position}`}>
+      <p className="font-ui text-xs font-bold text-secondary">{num(q.position)} · {q.kind === 'written' ? tr("تحريري") : tr("شفوي")}</p>
       <p className="mt-2 font-arabic text-xl leading-10">{q.prompt}</p>
       {q.kind === 'written' ? (
         <div className="mt-4 space-y-2">
           <textarea dir="rtl" value={text} onChange={(e) => { setText(e.target.value); saveDraft(localStorage, attemptId, q.id, e.target.value); }} disabled={disabled} rows={4} maxLength={20000}
-            className="w-full rounded-xl border bg-background p-3 font-arabic text-lg leading-9 disabled:opacity-50" aria-label={`إجابة السؤال ${q.position}`} />
+            className="w-full rounded-xl border bg-background p-3 font-arabic text-lg leading-9 disabled:opacity-50" aria-label={fmt("إجابة السؤال {a}", "Answer to question {a}", { a: q.position })} />
           <button onClick={saveWritten} disabled={disabled || !text.trim() || save.isPending} className="inline-flex items-center gap-2 rounded-full bg-secondary px-5 py-2 font-ui text-sm font-bold text-secondary-foreground disabled:opacity-50">
-            <Save size={15} /> {save.isPending ? 'جارٍ الحفظ...' : 'احفظ الإجابة'}
+            <Save size={15} /> {save.isPending ? tr("جارٍ الحفظ...") : tr("احفظ الإجابة")}
           </button>
-          {q.answerSequence > 0 && <p className="font-ui text-xs text-muted-foreground">حُفظت إجابة سابقة على الخادم؛ حفظ جديد يستبدلها.</p>}
+          {q.answerSequence > 0 && <p className="font-ui text-xs text-muted-foreground">{tr("حُفظت إجابة سابقة على الخادم؛ حفظ جديد يستبدلها.")}</p>}
         </div>
       ) : (
         <div className="mt-4 space-y-3">
-          <p className="font-ui text-xs leading-6 text-muted-foreground">الحد الأقصى للتسجيل: ٦٠ ثانية وحجم ١٠ ميبيبايت. تُعرض مشكلة تقنية إذا تعذّر تقييم الصوت، ولا تُحتسب درجة آلية منه.</p>
-          <p className="font-ui text-sm">{q.audioReceived ? 'استلم الخادم تسجيلاً لهذا السؤال.' : 'لم يُرسل تسجيل بعد.'}</p>
+          <p className="font-ui text-xs leading-6 text-muted-foreground">{tr("الحد الأقصى للتسجيل: ٦٠ ثانية وحجم ١٠ ميبيبايت. تُعرض مشكلة تقنية إذا تعذّر تقييم الصوت، ولا تُحتسب درجة آلية منه.")}</p>
+          <p className="font-ui text-sm">{q.audioReceived ? tr("استلم الخادم تسجيلاً لهذا السؤال.") : tr("لم يُرسل تسجيل بعد.")}</p>
           {rec.audioUrl && <audio controls src={rec.audioUrl} className="w-full" />}
           {rec.error && <p role="alert" className="font-ui text-sm text-secondary">{rec.error}</p>}
           <div className="flex flex-wrap gap-2">
             {(rec.status === 'idle' || rec.status === 'error' || rec.status === 'ready') && (
-              <button onClick={startAudio} disabled={disabled || busy} className="inline-flex items-center gap-2 rounded-full border px-4 py-2 font-ui text-sm font-bold disabled:opacity-50"><Mic size={15} /> {rec.status === 'ready' ? 'سجّل من جديد' : 'ابدأ التسجيل'}</button>
+              <button onClick={startAudio} disabled={disabled || busy} className="inline-flex items-center gap-2 rounded-full border px-4 py-2 font-ui text-sm font-bold disabled:opacity-50"><Mic size={15} /> {rec.status === 'ready' ? tr("سجّل من جديد") : tr("ابدأ التسجيل")}</button>
             )}
-            {rec.status === 'recording' && <button onClick={rec.stop} className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 font-ui text-sm font-bold text-secondary-foreground"><Square size={15} /> إيقاف ({num(rec.seconds)} ث)</button>}
-            {q.audioDeletionAvailable && <button onClick={removeAudio} disabled={disabled || busy} className="inline-flex items-center gap-2 rounded-full border px-4 py-2 font-ui text-sm font-bold disabled:opacity-50"><Trash2 size={15} /> احذف التسجيل المرسل</button>}
+            {rec.status === 'recording' && <button onClick={rec.stop} className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 font-ui text-sm font-bold text-secondary-foreground"><Square size={15} />{' '}{tr("إيقاف (")}{num(rec.seconds)}{' '}{tr("ث)")}</button>}
+            {q.audioDeletionAvailable && <button onClick={removeAudio} disabled={disabled || busy} className="inline-flex items-center gap-2 rounded-full border px-4 py-2 font-ui text-sm font-bold disabled:opacity-50"><Trash2 size={15} />{' '}{tr("احذف التسجيل المرسل")}</button>}
           </div>
           {rec.status === 'ready' && (
             <div className="space-y-2 rounded-xl border p-3">
               <label className="flex items-start gap-2 font-ui text-xs leading-6">
-                <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1" />
-                أوافق اختيارياً على إرسال هذا التسجيل خاصاً إلى مراجع بشري للتقييم، بحد ٦٠ ثانية و١٠ ميبيبايت، ويُحتفظ به ٣٠ يوماً ويمكنني حذفه قبل ذلك.
-              </label>
-              <button onClick={sendAudio} disabled={!consent || busy || disabled} className="inline-flex items-center gap-2 rounded-full bg-secondary px-5 py-2 font-ui text-sm font-bold text-secondary-foreground disabled:opacity-50"><UploadCloud size={15} /> {busy ? 'جارٍ الإرسال...' : 'أرسل التسجيل'}</button>
+                <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1" />{tr("أوافق اختيارياً على إرسال هذا التسجيل خاصاً إلى مراجع بشري للتقييم، بحد ٦٠ ثانية و١٠ ميبيبايت، ويُحتفظ به ٣٠ يوماً ويمكنني حذفه قبل ذلك.")}</label>
+              <button onClick={sendAudio} disabled={!consent || busy || disabled} className="inline-flex items-center gap-2 rounded-full bg-secondary px-5 py-2 font-ui text-sm font-bold text-secondary-foreground disabled:opacity-50"><UploadCloud size={15} /> {busy ? tr("جارٍ الإرسال...") : tr("أرسل التسجيل")}</button>
             </div>
           )}
         </div>

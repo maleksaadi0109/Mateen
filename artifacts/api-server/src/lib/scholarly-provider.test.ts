@@ -59,6 +59,40 @@ it("generates labelled study answers without accessing administrator previews or
   }
 });
 
+it("rejects every foreign alphabet in Arabic study answers without deleting provider words", async () => {
+  const originalFetch = globalThis.fetch;
+  const saved = process.env.NVIDIA_API_KEY;
+  process.env.NVIDIA_API_KEY = "synthetic-nvidia-test-key";
+  try {
+    for (const foreign of ["这句话", "intention", "намерение", "πρόθεση"]) {
+      let calls = 0;
+      globalThis.fetch = async () => {
+        calls++;
+        return new Response(JSON.stringify({ choices: [{ message: {
+          content: JSON.stringify({ answer: `النية هي ${foreign} في القلب.`, needsTeacher: false }),
+        } }] }));
+      };
+      await assert.rejects(generateStudyAnswer("ما النية؟", null, NVIDIA_SCHOLARLY_MODEL),
+        /Arabic-only answer/);
+      assert.equal(calls, 2);
+    }
+    let calls = 0;
+    globalThis.fetch = async () => {
+      calls++;
+      return new Response(JSON.stringify({ choices: [{ message: {
+        content: JSON.stringify({ answer: calls === 1 ? "النية这句话" : "النِّيَّةُ: قَصْدُ العمل في القلب، ١٢٣.", needsTeacher: false }),
+      } }] }));
+    };
+    assert.equal(await generateStudyAnswer("ما النية؟", null, NVIDIA_SCHOLARLY_MODEL),
+      `${UNVERIFIED_STUDY_NOTICE}\n\nالنِّيَّةُ: قَصْدُ العمل في القلب، ١٢٣.`);
+    assert.equal(calls, 2);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (saved === undefined) delete process.env.NVIDIA_API_KEY;
+    else process.env.NVIDIA_API_KEY = saved;
+  }
+});
+
 it("unverified scriptural attribution is withheld rather than displayed as an educational answer", async () => {
   const originalFetch = globalThis.fetch;
   const saved = process.env.NVIDIA_API_KEY;

@@ -1,3 +1,4 @@
+import { tr } from '@/lib/i18n';
 import { useEffect, useRef, useState } from 'react';
 import { Redirect, useLocation } from 'wouter';
 import { useUser } from '@clerk/react';
@@ -21,7 +22,7 @@ export default function OnboardingPage() {
 }
 
 function OnboardingFlow() {
-  usePageMeta('إكمال الحساب | مَتِين', 'اختر اسمك ودورك في المنصة.');
+  usePageMeta(tr("إكمال الحساب | مَتِين"), tr("اختر اسمك ودورك في المنصة."));
   const { isLoaded, isSignedIn, ready } = useAuthReady();
   const { user } = useUser();
   const [chat, setChat] = useState(false);
@@ -54,7 +55,7 @@ function OnboardingFlow() {
         [getGetProfileQueryKey(), getGetDashboardQueryKey(), getGetProgressQueryKey(), getGetTeacherQueryKey(), getGetReferralsQueryKey()].forEach((k) => qc.invalidateQueries({ queryKey: k }));
         setLocation(p.role === 'teacher' ? '/teacher' : '/student/tracks');
       },
-      onError: () => { busy.current = false; toast({ title: 'تعذّر حفظ البيانات', description: 'حاول مرة أخرى.', variant: 'destructive' }); },
+      onError: () => { busy.current = false; toast({ title: tr("تعذّر حفظ البيانات"), description: tr("حاول مرة أخرى."), variant: 'destructive' }); },
     });
   };
   const submit = (e: React.FormEvent) => {
@@ -64,8 +65,8 @@ function OnboardingFlow() {
   };
 
   const roles = [
-    { v: 'student' as const, t: 'طالب علم', d: 'أدرس المتون المتاحة وأتابع موضع توقفي وعلاماتي.', I: BookOpen },
-    { v: 'teacher' as const, t: 'معلم', d: 'أقدّم ملفي ووثائقي الخاصة للمراجعة. لا أستقبل إحالات قبل الاعتماد.', I: ScrollText },
+    { v: 'student' as const, t: tr("طالب علم"), d: tr("أدرس المتون المتاحة وأتابع موضع توقفي وعلاماتي."), I: BookOpen },
+    { v: 'teacher' as const, t: tr("معلم"), d: tr("أقدّم ملفي ووثائقي الخاصة للمراجعة. لا أستقبل إحالات قبل الاعتماد."), I: ScrollText },
   ];
 
   if (chat && role === 'student') return <AuthFrame><OnboardingAssistant name={name.trim()} saving={save.isPending} error={save.isError} onSave={doSave} onBack={() => setChat(false)} /></AuthFrame>;
@@ -76,34 +77,34 @@ function OnboardingFlow() {
         <div className="flex items-start gap-4">
           <BookMascot size={80} mood="cheer" className="shrink-0" />
           <div className="min-w-0">
-            <h1 className="font-display text-3xl font-bold">أهلاً، أنا مَتِين</h1>
-            <p className="mt-2 font-arabic text-lg text-muted-foreground">مساعدك في رحلة التعلّم. دعنا نتعرّف عليك أولاً، ثم أسألك عن حفظك وهدفك.</p>
+            <h1 className="font-display text-3xl font-bold">{tr("أهلاً، أنا مَتِين")}</h1>
+            <p className="mt-2 font-arabic text-lg text-muted-foreground">{tr("مساعدك في رحلة التعلّم. دعنا نتعرّف عليك أولاً، ثم أسألك عن حفظك وهدفك.")}</p>
           </div>
         </div>
         {profile.isLoading ? <div className="mt-8"><SkeletonBlock className="h-40" /></div> : profile.isError ? <div className="mt-8"><ErrorState onRetry={() => profile.refetch()} /></div> : (
           <>
-            <label className="mt-8 block font-ui text-sm font-bold" htmlFor="name">كيف تحب أن أناديك؟</label>
-            <input id="name" value={name} onChange={(e) => { setTouched(true); setName(e.target.value); }} maxLength={100} placeholder="الاسم كما تحب أن يظهر"
+            <label className="mt-8 block font-ui text-sm font-bold" htmlFor="name">{tr("كيف تحب أن أناديك؟")}</label>
+            <input id="name" value={name} onChange={(e) => { setTouched(true); setName(e.target.value); }} maxLength={100} placeholder={tr("الاسم كما تحب أن يظهر")}
               className="mt-2 w-full rounded-xl border bg-background px-4 py-3 font-ui outline-none focus:border-secondary" data-testid="input-name" />
-            {!valid && touched && <p className="mt-1 font-ui text-sm text-secondary">أدخل اسماً من حرفين على الأقل.</p>}
+            {!valid && touched && <p className="mt-1 font-ui text-sm text-secondary">{tr("أدخل اسماً من حرفين على الأقل.")}</p>}
             <fieldset className="mt-6">
-              <legend className="font-ui text-sm font-bold">أنا</legend>
+              <legend className="font-ui text-sm font-bold">{tr("أنا")}</legend>
               <div className="mt-2 grid gap-3 sm:grid-cols-2">
                 {roles.map((r) => (
                   <button type="button" key={r.v} onClick={() => setRole(r.v)} aria-pressed={role === r.v} data-testid={`button-role-${r.v}`}
-                    className={cn('rounded-2xl border-2 p-5 text-right transition', role === r.v ? 'border-secondary bg-secondary/10' : 'border-border hover:border-primary/40')}>
+                    className={cn('rounded-2xl border-2 p-5 text-start transition', role === r.v ? 'border-secondary bg-secondary/10' : 'border-border hover:border-primary/40')}>
                     <r.I className="mb-3 text-secondary" size={24} />
                     <p className="font-display font-bold">{r.t}</p>
                     <p className="mt-1 font-arabic text-sm leading-relaxed text-muted-foreground">{r.d}</p>
                   </button>
                 ))}
               </div>
-              <p className="mt-3 font-ui text-xs text-muted-foreground">لا يمكن تغيير الدور بعد الحفظ.</p>
+              <p className="mt-3 font-ui text-xs text-muted-foreground">{tr("لا يمكن تغيير الدور بعد الحفظ.")}</p>
             </fieldset>
             <button type="submit" disabled={!valid || save.isPending} className="mt-8 w-full rounded-full bg-secondary py-3.5 font-ui font-bold text-secondary-foreground transition disabled:opacity-50" data-testid="button-onboarding-submit">
-              {save.isPending ? 'جارٍ الحفظ…' : 'متابعة'}
+              {save.isPending ? tr("جارٍ الحفظ…") : tr("متابعة")}
             </button>
-            {!valid && <p className="mt-2 text-center font-ui text-xs text-muted-foreground">يتفعّل الزر بعد إدخال اسم صحيح.</p>}
+            {!valid && <p className="mt-2 text-center font-ui text-xs text-muted-foreground">{tr("يتفعّل الزر بعد إدخال اسم صحيح.")}</p>}
           </>
         )}
       </form>

@@ -8,6 +8,600 @@
 import * as zod from 'zod';
 
 
+export const GetMateenMessageSourceStatusParams = zod.object({
+  "messageId": zod.coerce.string().uuid()
+})
+
+export const GetMateenMessageSourceStatusResponseItem = zod.object({
+  "sourceId": zod.string().uuid(),
+  "state": zod.enum(['eligible', 'withdrawn', 'ineligible', 'unavailable']),
+  "versionChanged": zod.boolean().nullable(),
+  "checkedAt": zod.coerce.date()
+})
+export const GetMateenMessageSourceStatusResponse = zod.array(GetMateenMessageSourceStatusResponseItem)
+
+
+export const GetDailyPlanQueryParams = zod.object({
+  "timezone": zod.coerce.string().optional(),
+  "planId": zod.coerce.string().uuid().optional()
+})
+
+
+
+
+export const GetDailyPlanResponse = zod.object({
+  "id": zod.string().nullable(),
+  "day": zod.string().nullable(),
+  "today": zod.string().nullable(),
+  "timezone": zod.string().nullable(),
+  "revision": zod.number().int(),
+  "status": zod.enum(['ready', 'completed', 'empty', 'needs_preferences', 'needs_calendar', 'expired']),
+  "dailyMinutes": zod.number().int(),
+  "goal": zod.union([zod.literal('memorize'),zod.literal('review'),zod.literal('both'),zod.literal(null)]).nullable(),
+  "preferencesChanged": zod.boolean(),
+  "committedOverBudget": zod.boolean(),
+  "deferredCount": zod.number().int(),
+  "staleCount": zod.number().int(),
+  "tasks": zod.array(zod.object({
+  "id": zod.string().uuid(),
+  "kind": zod.enum(['confirmed_review', 'word_practice', 'new_learning']),
+  "sourceKey": zod.string(),
+  "sourceHash": zod.string(),
+  "title": zod.string(),
+  "reason": zod.string(),
+  "href": zod.string(),
+  "minutes": zod.number().int().min(1),
+  "status": zod.enum(['pending', 'started', 'completed', 'unavailable']),
+  "startedAt": zod.string().nullable(),
+  "completedAt": zod.string().nullable()
+}))
+})
+
+
+
+
+
+export const RedistributeDailyPlanBody = zod.object({
+  "planId": zod.string().uuid(),
+  "revision": zod.number().int().min(1)
+})
+
+
+
+
+export const RedistributeDailyPlanResponse = zod.object({
+  "id": zod.string().nullable(),
+  "day": zod.string().nullable(),
+  "today": zod.string().nullable(),
+  "timezone": zod.string().nullable(),
+  "revision": zod.number().int(),
+  "status": zod.enum(['ready', 'completed', 'empty', 'needs_preferences', 'needs_calendar', 'expired']),
+  "dailyMinutes": zod.number().int(),
+  "goal": zod.union([zod.literal('memorize'),zod.literal('review'),zod.literal('both'),zod.literal(null)]).nullable(),
+  "preferencesChanged": zod.boolean(),
+  "committedOverBudget": zod.boolean(),
+  "deferredCount": zod.number().int(),
+  "staleCount": zod.number().int(),
+  "tasks": zod.array(zod.object({
+  "id": zod.string().uuid(),
+  "kind": zod.enum(['confirmed_review', 'word_practice', 'new_learning']),
+  "sourceKey": zod.string(),
+  "sourceHash": zod.string(),
+  "title": zod.string(),
+  "reason": zod.string(),
+  "href": zod.string(),
+  "minutes": zod.number().int().min(1),
+  "status": zod.enum(['pending', 'started', 'completed', 'unavailable']),
+  "startedAt": zod.string().nullable(),
+  "completedAt": zod.string().nullable()
+}))
+})
+
+
+export const ActOnDailyPlanTaskParams = zod.object({
+  "planId": zod.coerce.string().uuid(),
+  "taskId": zod.coerce.string().uuid()
+})
+
+export const ActOnDailyPlanTaskBody = zod.object({
+  "action": zod.enum(['start', 'acknowledge'])
+})
+
+
+
+
+export const ActOnDailyPlanTaskResponse = zod.object({
+  "id": zod.string().nullable(),
+  "day": zod.string().nullable(),
+  "today": zod.string().nullable(),
+  "timezone": zod.string().nullable(),
+  "revision": zod.number().int(),
+  "status": zod.enum(['ready', 'completed', 'empty', 'needs_preferences', 'needs_calendar', 'expired']),
+  "dailyMinutes": zod.number().int(),
+  "goal": zod.union([zod.literal('memorize'),zod.literal('review'),zod.literal('both'),zod.literal(null)]).nullable(),
+  "preferencesChanged": zod.boolean(),
+  "committedOverBudget": zod.boolean(),
+  "deferredCount": zod.number().int(),
+  "staleCount": zod.number().int(),
+  "tasks": zod.array(zod.object({
+  "id": zod.string().uuid(),
+  "kind": zod.enum(['confirmed_review', 'word_practice', 'new_learning']),
+  "sourceKey": zod.string(),
+  "sourceHash": zod.string(),
+  "title": zod.string(),
+  "reason": zod.string(),
+  "href": zod.string(),
+  "minutes": zod.number().int().min(1),
+  "status": zod.enum(['pending', 'started', 'completed', 'unavailable']),
+  "startedAt": zod.string().nullable(),
+  "completedAt": zod.string().nullable()
+}))
+})
+
+
+export const getWordPracticeReferencePathHadithIdMax = 42;
+
+
+
+export const GetWordPracticeReferenceParams = zod.object({
+  "hadithId": zod.coerce.number().int().min(1).max(getWordPracticeReferencePathHadithIdMax)
+})
+
+export const GetWordPracticeReferenceResponse = zod.object({
+  "hadithId": zod.number().int(),
+  "title": zod.string(),
+  "fingerprint": zod.string(),
+  "tokenizerVersion": zod.string(),
+  "words": zod.array(zod.string())
+})
+
+
+export const listWordPracticesResponseAttemptsItemCoveredMin = 0;
+export const listWordPracticesResponseAttemptsItemCoveredMax = 120;
+
+export const listWordPracticesResponseAttemptsItemMatchedMin = 0;
+export const listWordPracticesResponseAttemptsItemMatchedMax = 120;
+
+
+
+export const ListWordPracticesResponseItem = zod.object({
+  "id": zod.string(),
+  "createdAt": zod.coerce.date(),
+  "reference": zod.object({
+  "hadithId": zod.number().int(),
+  "title": zod.string(),
+  "fingerprint": zod.string(),
+  "tokenizerVersion": zod.string(),
+  "words": zod.array(zod.string())
+}),
+  "start": zod.number().int(),
+  "end": zod.number().int(),
+  "targets": zod.array(zod.number().int()),
+  "attempts": zod.array(zod.object({
+  "requestId": zod.string().uuid(),
+  "status": zod.enum(['comparable', 'incomplete', 'unavailable']),
+  "covered": zod.number().int().min(listWordPracticesResponseAttemptsItemCoveredMin).max(listWordPracticesResponseAttemptsItemCoveredMax),
+  "matched": zod.number().int().min(listWordPracticesResponseAttemptsItemMatchedMin).max(listWordPracticesResponseAttemptsItemMatchedMax)
+})),
+  "stale": zod.boolean()
+})
+export const ListWordPracticesResponse = zod.array(ListWordPracticesResponseItem)
+
+
+export const saveWordPracticeBodyHadithIdMax = 42;
+
+export const saveWordPracticeBodyFingerprintRegExp = new RegExp('^[a-f0-9]{64}$');
+export const saveWordPracticeBodyStartMin = 0;
+
+
+export const saveWordPracticeBodyTargetsItemMin = 0;
+
+export const saveWordPracticeBodyTargetsMax = 20;
+
+export const saveWordPracticeBodyAttemptsItemCoveredMin = 0;
+export const saveWordPracticeBodyAttemptsItemCoveredMax = 120;
+
+export const saveWordPracticeBodyAttemptsItemMatchedMin = 0;
+export const saveWordPracticeBodyAttemptsItemMatchedMax = 120;
+
+export const saveWordPracticeBodyAttemptsMax = 20;
+
+
+
+export const SaveWordPracticeBody = zod.object({
+  "requestId": zod.string().uuid(),
+  "consent": zod.literal(true),
+  "hadithId": zod.number().int().min(1).max(saveWordPracticeBodyHadithIdMax),
+  "fingerprint": zod.string().regex(saveWordPracticeBodyFingerprintRegExp),
+  "tokenizerVersion": zod.enum(['arabic-whitespace-v1']),
+  "start": zod.number().int().min(saveWordPracticeBodyStartMin),
+  "end": zod.number().int().min(1),
+  "targets": zod.array(zod.number().int().min(saveWordPracticeBodyTargetsItemMin)).min(1).max(saveWordPracticeBodyTargetsMax),
+  "attempts": zod.array(zod.object({
+  "requestId": zod.string().uuid(),
+  "status": zod.enum(['comparable', 'incomplete', 'unavailable']),
+  "covered": zod.number().int().min(saveWordPracticeBodyAttemptsItemCoveredMin).max(saveWordPracticeBodyAttemptsItemCoveredMax),
+  "matched": zod.number().int().min(saveWordPracticeBodyAttemptsItemMatchedMin).max(saveWordPracticeBodyAttemptsItemMatchedMax)
+})).max(saveWordPracticeBodyAttemptsMax)
+})
+
+export const saveWordPracticeResponseAttemptsItemCoveredMin = 0;
+export const saveWordPracticeResponseAttemptsItemCoveredMax = 120;
+
+export const saveWordPracticeResponseAttemptsItemMatchedMin = 0;
+export const saveWordPracticeResponseAttemptsItemMatchedMax = 120;
+
+
+
+export const SaveWordPracticeResponse = zod.object({
+  "id": zod.string(),
+  "createdAt": zod.coerce.date(),
+  "reference": zod.object({
+  "hadithId": zod.number().int(),
+  "title": zod.string(),
+  "fingerprint": zod.string(),
+  "tokenizerVersion": zod.string(),
+  "words": zod.array(zod.string())
+}),
+  "start": zod.number().int(),
+  "end": zod.number().int(),
+  "targets": zod.array(zod.number().int()),
+  "attempts": zod.array(zod.object({
+  "requestId": zod.string().uuid(),
+  "status": zod.enum(['comparable', 'incomplete', 'unavailable']),
+  "covered": zod.number().int().min(saveWordPracticeResponseAttemptsItemCoveredMin).max(saveWordPracticeResponseAttemptsItemCoveredMax),
+  "matched": zod.number().int().min(saveWordPracticeResponseAttemptsItemMatchedMin).max(saveWordPracticeResponseAttemptsItemMatchedMax)
+})),
+  "stale": zod.boolean()
+})
+
+
+export const GetWordPracticeParams = zod.object({
+  "id": zod.coerce.string().uuid()
+})
+
+export const getWordPracticeResponseAttemptsItemCoveredMin = 0;
+export const getWordPracticeResponseAttemptsItemCoveredMax = 120;
+
+export const getWordPracticeResponseAttemptsItemMatchedMin = 0;
+export const getWordPracticeResponseAttemptsItemMatchedMax = 120;
+
+
+
+export const GetWordPracticeResponse = zod.object({
+  "id": zod.string(),
+  "createdAt": zod.coerce.date(),
+  "reference": zod.object({
+  "hadithId": zod.number().int(),
+  "title": zod.string(),
+  "fingerprint": zod.string(),
+  "tokenizerVersion": zod.string(),
+  "words": zod.array(zod.string())
+}),
+  "start": zod.number().int(),
+  "end": zod.number().int(),
+  "targets": zod.array(zod.number().int()),
+  "attempts": zod.array(zod.object({
+  "requestId": zod.string().uuid(),
+  "status": zod.enum(['comparable', 'incomplete', 'unavailable']),
+  "covered": zod.number().int().min(getWordPracticeResponseAttemptsItemCoveredMin).max(getWordPracticeResponseAttemptsItemCoveredMax),
+  "matched": zod.number().int().min(getWordPracticeResponseAttemptsItemMatchedMin).max(getWordPracticeResponseAttemptsItemMatchedMax)
+})),
+  "stale": zod.boolean()
+})
+
+
+export const DeleteWordPracticeParams = zod.object({
+  "id": zod.coerce.string().uuid()
+})
+
+export const DeleteWordPracticeResponse = zod.void()
+
+
+export const SaveWordPracticeAttemptParams = zod.object({
+  "id": zod.coerce.string().uuid()
+})
+
+export const saveWordPracticeAttemptBodyAttemptCoveredMin = 0;
+export const saveWordPracticeAttemptBodyAttemptCoveredMax = 120;
+
+export const saveWordPracticeAttemptBodyAttemptMatchedMin = 0;
+export const saveWordPracticeAttemptBodyAttemptMatchedMax = 120;
+
+
+
+export const SaveWordPracticeAttemptBody = zod.object({
+  "consent": zod.literal(true),
+  "fingerprint": zod.string(),
+  "attempt": zod.object({
+  "requestId": zod.string().uuid(),
+  "status": zod.enum(['comparable', 'incomplete', 'unavailable']),
+  "covered": zod.number().int().min(saveWordPracticeAttemptBodyAttemptCoveredMin).max(saveWordPracticeAttemptBodyAttemptCoveredMax),
+  "matched": zod.number().int().min(saveWordPracticeAttemptBodyAttemptMatchedMin).max(saveWordPracticeAttemptBodyAttemptMatchedMax)
+})
+})
+
+export const saveWordPracticeAttemptResponseAttemptsItemCoveredMin = 0;
+export const saveWordPracticeAttemptResponseAttemptsItemCoveredMax = 120;
+
+export const saveWordPracticeAttemptResponseAttemptsItemMatchedMin = 0;
+export const saveWordPracticeAttemptResponseAttemptsItemMatchedMax = 120;
+
+
+
+export const SaveWordPracticeAttemptResponse = zod.object({
+  "id": zod.string(),
+  "createdAt": zod.coerce.date(),
+  "reference": zod.object({
+  "hadithId": zod.number().int(),
+  "title": zod.string(),
+  "fingerprint": zod.string(),
+  "tokenizerVersion": zod.string(),
+  "words": zod.array(zod.string())
+}),
+  "start": zod.number().int(),
+  "end": zod.number().int(),
+  "targets": zod.array(zod.number().int()),
+  "attempts": zod.array(zod.object({
+  "requestId": zod.string().uuid(),
+  "status": zod.enum(['comparable', 'incomplete', 'unavailable']),
+  "covered": zod.number().int().min(saveWordPracticeAttemptResponseAttemptsItemCoveredMin).max(saveWordPracticeAttemptResponseAttemptsItemCoveredMax),
+  "matched": zod.number().int().min(saveWordPracticeAttemptResponseAttemptsItemMatchedMin).max(saveWordPracticeAttemptResponseAttemptsItemMatchedMax)
+})),
+  "stale": zod.boolean()
+})
+
+
+export const GetScholarlyCollationParams = zod.object({
+  "sourceId": zod.coerce.string().uuid()
+})
+
+export const getScholarlyCollationResponseGeometryItemRectanglesItemXMin = 0;
+export const getScholarlyCollationResponseGeometryItemRectanglesItemXMax = 1;
+
+export const getScholarlyCollationResponseGeometryItemRectanglesItemYMin = 0;
+export const getScholarlyCollationResponseGeometryItemRectanglesItemYMax = 1;
+
+export const getScholarlyCollationResponseGeometryItemRectanglesItemWidthExclusiveMin = 0;
+export const getScholarlyCollationResponseGeometryItemRectanglesItemWidthMax = 1;
+
+export const getScholarlyCollationResponseGeometryItemRectanglesItemHeightExclusiveMin = 0;
+export const getScholarlyCollationResponseGeometryItemRectanglesItemHeightMax = 1;
+
+export const getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemXMin = 0;
+export const getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemXMax = 1;
+
+export const getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemYMin = 0;
+export const getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemYMax = 1;
+
+export const getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemWidthExclusiveMin = 0;
+export const getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemWidthMax = 1;
+
+export const getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemHeightExclusiveMin = 0;
+export const getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemHeightMax = 1;
+
+
+
+export const GetScholarlyCollationResponseItem = zod.object({
+  "passageId": zod.string().uuid(),
+  "originalText": zod.string(),
+  "originalTextSha256": zod.string(),
+  "geometry": zod.array(zod.object({
+  "excerptId": zod.string(),
+  "imageSha256": zod.string(),
+  "originalTextSha256": zod.string(),
+  "rectangles": zod.array(zod.object({
+  "x": zod.number().min(getScholarlyCollationResponseGeometryItemRectanglesItemXMin).max(getScholarlyCollationResponseGeometryItemRectanglesItemXMax),
+  "y": zod.number().min(getScholarlyCollationResponseGeometryItemRectanglesItemYMin).max(getScholarlyCollationResponseGeometryItemRectanglesItemYMax),
+  "width": zod.number().gt(getScholarlyCollationResponseGeometryItemRectanglesItemWidthExclusiveMin).max(getScholarlyCollationResponseGeometryItemRectanglesItemWidthMax),
+  "height": zod.number().gt(getScholarlyCollationResponseGeometryItemRectanglesItemHeightExclusiveMin).max(getScholarlyCollationResponseGeometryItemRectanglesItemHeightMax)
+})),
+  "note": zod.string(),
+  "method": zod.enum(['manual_visual']),
+  "recordedAt": zod.coerce.date()
+})),
+  "geometryStates": zod.array(zod.object({
+  "excerptId": zod.string(),
+  "revision": zod.string().nullable(),
+  "current": zod.union([zod.object({
+  "excerptId": zod.string(),
+  "imageSha256": zod.string(),
+  "originalTextSha256": zod.string(),
+  "rectangles": zod.array(zod.object({
+  "x": zod.number().min(getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemXMin).max(getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemXMax),
+  "y": zod.number().min(getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemYMin).max(getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemYMax),
+  "width": zod.number().gt(getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemWidthExclusiveMin).max(getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemWidthMax),
+  "height": zod.number().gt(getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemHeightExclusiveMin).max(getScholarlyCollationResponseGeometryStatesItemCurrentOneRectanglesItemHeightMax)
+})),
+  "note": zod.string(),
+  "method": zod.enum(['manual_visual']),
+  "recordedAt": zod.coerce.date()
+}),zod.null()])
+})),
+  "correctedDraft": zod.string().nullable(),
+  "exclusionReason": zod.string(),
+  "viewerPage": zod.number().int(),
+  "pdfPage": zod.number().int().nullable(),
+  "printedPage": zod.string().nullable(),
+  "imageSha256": zod.string().nullable(),
+  "imageAvailable": zod.boolean(),
+  "excerpts": zod.array(zod.object({
+  "id": zod.string(),
+  "originalText": zod.string(),
+  "correctedText": zod.string(),
+  "originalStart": zod.number().int(),
+  "originalEnd": zod.number().int(),
+  "location": zod.string(),
+  "difference": zod.string(),
+  "scope": zod.string()
+})),
+  "limitations": zod.array(zod.string()),
+  "paginationNote": zod.string()
+})
+export const GetScholarlyCollationResponse = zod.array(GetScholarlyCollationResponseItem)
+
+
+export const GetScholarlyCollationImageParams = zod.object({
+  "sourceId": zod.coerce.string().uuid(),
+  "passageId": zod.coerce.string().uuid()
+})
+
+export const GetScholarlyCollationImageResponse = zod.unknown()
+
+
+export const getScholarlyGeometryHistoryPathExcerptIdMax = 200;
+
+
+
+export const GetScholarlyGeometryHistoryParams = zod.object({
+  "sourceId": zod.coerce.string().uuid(),
+  "passageId": zod.coerce.string().uuid(),
+  "excerptId": zod.coerce.string().min(1).max(getScholarlyGeometryHistoryPathExcerptIdMax)
+})
+
+export const getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemXMin = 0;
+export const getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemXMax = 1;
+
+export const getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemYMin = 0;
+export const getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemYMax = 1;
+
+export const getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemWidthExclusiveMin = 0;
+export const getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemWidthMax = 1;
+
+export const getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemHeightExclusiveMin = 0;
+export const getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemHeightMax = 1;
+
+export const getScholarlyGeometryHistoryResponseAfterOneRectanglesItemXMin = 0;
+export const getScholarlyGeometryHistoryResponseAfterOneRectanglesItemXMax = 1;
+
+export const getScholarlyGeometryHistoryResponseAfterOneRectanglesItemYMin = 0;
+export const getScholarlyGeometryHistoryResponseAfterOneRectanglesItemYMax = 1;
+
+export const getScholarlyGeometryHistoryResponseAfterOneRectanglesItemWidthExclusiveMin = 0;
+export const getScholarlyGeometryHistoryResponseAfterOneRectanglesItemWidthMax = 1;
+
+export const getScholarlyGeometryHistoryResponseAfterOneRectanglesItemHeightExclusiveMin = 0;
+export const getScholarlyGeometryHistoryResponseAfterOneRectanglesItemHeightMax = 1;
+
+
+
+export const GetScholarlyGeometryHistoryResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "actorId": zod.string(),
+  "createdAt": zod.coerce.date(),
+  "reason": zod.string(),
+  "change": zod.enum(['recorded', 'revoked', 'invalid']),
+  "before": zod.union([zod.object({
+  "excerptId": zod.string(),
+  "imageSha256": zod.string(),
+  "originalTextSha256": zod.string(),
+  "excerptSha256": zod.string(),
+  "rectangles": zod.array(zod.object({
+  "x": zod.number().min(getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemXMin).max(getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemXMax),
+  "y": zod.number().min(getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemYMin).max(getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemYMax),
+  "width": zod.number().gt(getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemWidthExclusiveMin).max(getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemWidthMax),
+  "height": zod.number().gt(getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemHeightExclusiveMin).max(getScholarlyGeometryHistoryResponseBeforeOneRectanglesItemHeightMax)
+})),
+  "note": zod.string(),
+  "method": zod.enum(['manual_visual']),
+  "recordedAt": zod.coerce.date(),
+  "imageMatches": zod.boolean(),
+  "textMatches": zod.boolean()
+}),zod.null()]),
+  "after": zod.union([zod.object({
+  "excerptId": zod.string(),
+  "imageSha256": zod.string(),
+  "originalTextSha256": zod.string(),
+  "excerptSha256": zod.string(),
+  "rectangles": zod.array(zod.object({
+  "x": zod.number().min(getScholarlyGeometryHistoryResponseAfterOneRectanglesItemXMin).max(getScholarlyGeometryHistoryResponseAfterOneRectanglesItemXMax),
+  "y": zod.number().min(getScholarlyGeometryHistoryResponseAfterOneRectanglesItemYMin).max(getScholarlyGeometryHistoryResponseAfterOneRectanglesItemYMax),
+  "width": zod.number().gt(getScholarlyGeometryHistoryResponseAfterOneRectanglesItemWidthExclusiveMin).max(getScholarlyGeometryHistoryResponseAfterOneRectanglesItemWidthMax),
+  "height": zod.number().gt(getScholarlyGeometryHistoryResponseAfterOneRectanglesItemHeightExclusiveMin).max(getScholarlyGeometryHistoryResponseAfterOneRectanglesItemHeightMax)
+})),
+  "note": zod.string(),
+  "method": zod.enum(['manual_visual']),
+  "recordedAt": zod.coerce.date(),
+  "imageMatches": zod.boolean(),
+  "textMatches": zod.boolean()
+}),zod.null()])
+})
+export const GetScholarlyGeometryHistoryResponse = zod.array(GetScholarlyGeometryHistoryResponseItem)
+
+
+export const RecordScholarlyGeometryParams = zod.object({
+  "sourceId": zod.coerce.string().uuid(),
+  "passageId": zod.coerce.string().uuid()
+})
+
+export const recordScholarlyGeometryBodyExcerptIdMax = 200;
+
+export const recordScholarlyGeometryBodyImageSha256RegExp = new RegExp('^[a-f0-9]{64}$');
+export const recordScholarlyGeometryBodyOriginalTextSha256RegExp = new RegExp('^[a-f0-9]{64}$');
+export const recordScholarlyGeometryBodyRectanglesItemXMin = 0;
+export const recordScholarlyGeometryBodyRectanglesItemXMax = 1;
+
+export const recordScholarlyGeometryBodyRectanglesItemYMin = 0;
+export const recordScholarlyGeometryBodyRectanglesItemYMax = 1;
+
+export const recordScholarlyGeometryBodyRectanglesItemWidthExclusiveMin = 0;
+export const recordScholarlyGeometryBodyRectanglesItemWidthMax = 1;
+
+export const recordScholarlyGeometryBodyRectanglesItemHeightExclusiveMin = 0;
+export const recordScholarlyGeometryBodyRectanglesItemHeightMax = 1;
+
+export const recordScholarlyGeometryBodyRectanglesMax = 20;
+
+export const recordScholarlyGeometryBodyNoteMin = 10;
+export const recordScholarlyGeometryBodyNoteMax = 2000;
+
+
+
+export const RecordScholarlyGeometryBody = zod.object({
+  "expectedRevision": zod.string().nullable().describe('Latest audit fingerprint seen when editing; null only when no record exists'),
+  "excerptId": zod.string().min(1).max(recordScholarlyGeometryBodyExcerptIdMax),
+  "imageSha256": zod.string().regex(recordScholarlyGeometryBodyImageSha256RegExp),
+  "originalTextSha256": zod.string().regex(recordScholarlyGeometryBodyOriginalTextSha256RegExp),
+  "rectangles": zod.array(zod.object({
+  "x": zod.number().min(recordScholarlyGeometryBodyRectanglesItemXMin).max(recordScholarlyGeometryBodyRectanglesItemXMax),
+  "y": zod.number().min(recordScholarlyGeometryBodyRectanglesItemYMin).max(recordScholarlyGeometryBodyRectanglesItemYMax),
+  "width": zod.number().gt(recordScholarlyGeometryBodyRectanglesItemWidthExclusiveMin).max(recordScholarlyGeometryBodyRectanglesItemWidthMax),
+  "height": zod.number().gt(recordScholarlyGeometryBodyRectanglesItemHeightExclusiveMin).max(recordScholarlyGeometryBodyRectanglesItemHeightMax)
+})).max(recordScholarlyGeometryBodyRectanglesMax),
+  "note": zod.string().min(recordScholarlyGeometryBodyNoteMin).max(recordScholarlyGeometryBodyNoteMax),
+  "manuallyVerified": zod.literal(true)
+})
+
+export const recordScholarlyGeometryResponseRectanglesItemXMin = 0;
+export const recordScholarlyGeometryResponseRectanglesItemXMax = 1;
+
+export const recordScholarlyGeometryResponseRectanglesItemYMin = 0;
+export const recordScholarlyGeometryResponseRectanglesItemYMax = 1;
+
+export const recordScholarlyGeometryResponseRectanglesItemWidthExclusiveMin = 0;
+export const recordScholarlyGeometryResponseRectanglesItemWidthMax = 1;
+
+export const recordScholarlyGeometryResponseRectanglesItemHeightExclusiveMin = 0;
+export const recordScholarlyGeometryResponseRectanglesItemHeightMax = 1;
+
+
+
+export const RecordScholarlyGeometryResponse = zod.object({
+  "excerptId": zod.string(),
+  "imageSha256": zod.string(),
+  "originalTextSha256": zod.string(),
+  "rectangles": zod.array(zod.object({
+  "x": zod.number().min(recordScholarlyGeometryResponseRectanglesItemXMin).max(recordScholarlyGeometryResponseRectanglesItemXMax),
+  "y": zod.number().min(recordScholarlyGeometryResponseRectanglesItemYMin).max(recordScholarlyGeometryResponseRectanglesItemYMax),
+  "width": zod.number().gt(recordScholarlyGeometryResponseRectanglesItemWidthExclusiveMin).max(recordScholarlyGeometryResponseRectanglesItemWidthMax),
+  "height": zod.number().gt(recordScholarlyGeometryResponseRectanglesItemHeightExclusiveMin).max(recordScholarlyGeometryResponseRectanglesItemHeightMax)
+})),
+  "note": zod.string(),
+  "method": zod.enum(['manual_visual']),
+  "recordedAt": zod.coerce.date()
+})
+
+
 export const getStudyActivityResponseCurrentStreakMin = 0;
 
 export const getStudyActivityResponseLongestStreakMin = 0;
@@ -1234,7 +1828,11 @@ export const GetCapabilitiesResponse = zod.object({
 })
 
 
+
+
+
 export const GetMateenAssistantQuestionsResponseItem = zod.object({
+  "answerMode": zod.enum(['legacy', 'study', 'sources']).optional(),
   "conversationId": zod.string().uuid(),
   "questionId": zod.string().uuid(),
   "question": zod.string(),
@@ -1245,6 +1843,11 @@ export const GetMateenAssistantQuestionsResponseItem = zod.object({
   "status": zod.enum(['answered', 'unverified', 'abstained', 'waiting_for_teacher', 'referred']),
   "answer": zod.string().nullable(),
   "citations": zod.array(zod.object({
+  "snapshotAt": zod.coerce.date().optional(),
+  "sourceStatusAtAnswer": zod.enum(['indexed']).optional().describe('Retrieval eligibility in this corpus only, not claim-level or external scientific/rights approval.'),
+  "viewerPage": zod.number().int().min(1).nullish(),
+  "publicSourceUrl": zod.string().nullish().describe('Server-allowed public published reference only; never private evidence or signed storage.'),
+  "sourceVersion": zod.string().nullish(),
   "passageId": zod.string().uuid(),
   "sourceId": zod.string().uuid(),
   "sourceTitle": zod.string(),
@@ -1271,12 +1874,17 @@ export const askMateenAssistantBodyTextContextMax = 3000;
 
 
 export const AskMateenAssistantBody = zod.object({
+  "answerMode": zod.enum(['study', 'sources']).optional().describe('Explicit mode; omission keeps legacy unreviewed study behavior.'),
   "question": zod.string().min(1).max(askMateenAssistantBodyQuestionMax),
   "textContext": zod.string().max(askMateenAssistantBodyTextContextMax).nullish(),
   "textId": zod.union([zod.literal('nawawi'),zod.literal('usul-thalatha'),zod.literal('tuhfa'),zod.literal(null)]).nullish().describe('Selected study book. Omitted or null values retain the legacy Nawawi default.')
 })
 
+
+
+
 export const AskMateenAssistantResponse = zod.object({
+  "answerMode": zod.enum(['legacy', 'study', 'sources']).optional(),
   "conversationId": zod.string().uuid(),
   "questionId": zod.string().uuid(),
   "question": zod.string(),
@@ -1287,6 +1895,11 @@ export const AskMateenAssistantResponse = zod.object({
   "status": zod.enum(['answered', 'unverified', 'abstained', 'waiting_for_teacher', 'referred']),
   "answer": zod.string().nullable(),
   "citations": zod.array(zod.object({
+  "snapshotAt": zod.coerce.date().optional(),
+  "sourceStatusAtAnswer": zod.enum(['indexed']).optional().describe('Retrieval eligibility in this corpus only, not claim-level or external scientific/rights approval.'),
+  "viewerPage": zod.number().int().min(1).nullish(),
+  "publicSourceUrl": zod.string().nullish().describe('Server-allowed public published reference only; never private evidence or signed storage.'),
+  "sourceVersion": zod.string().nullish(),
   "passageId": zod.string().uuid(),
   "sourceId": zod.string().uuid(),
   "sourceTitle": zod.string(),
@@ -1306,12 +1919,14 @@ export const AskMateenAssistantResponse = zod.object({
 
 
 export const GetMateenAssistantReadinessResponse = zod.object({
-  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b']),
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b', 'google/gemini-2.5-flash']),
   "providerConfigured": zod.boolean(),
   "evaluationPassed": zod.boolean(),
   "reviewedSourceCount": zod.number().int(),
   "assistantEnabled": zod.boolean(),
-  "studyAnswersEnabled": zod.boolean().optional().describe('General unverified student answers can be generated without approved commentary sources.')
+  "studyAnswersEnabled": zod.boolean().optional().describe('General unverified student answers can be generated without approved commentary sources.'),
+  "sourceBlockers": zod.array(zod.enum(['no_sources', 'corpus_incomplete', 'provider_unconfigured', 'evaluation_required'])).optional(),
+  "sourceBooks": zod.array(zod.enum(['nawawi', 'usul-thalatha', 'tuhfa'])).optional()
 })
 
 
@@ -1361,12 +1976,21 @@ export const GetMateenConversationMessagesParams = zod.object({
   "conversationId": zod.coerce.string().uuid()
 })
 
+
+
+
 export const GetMateenConversationMessagesResponseItem = zod.object({
+  "answerMode": zod.union([zod.literal('legacy'),zod.literal('study'),zod.literal('sources'),zod.literal(null)]).nullish(),
   "id": zod.string().uuid(),
   "role": zod.enum(['student', 'assistant', 'teacher']),
   "text": zod.string(),
   "createdAt": zod.coerce.date(),
   "citations": zod.array(zod.object({
+  "snapshotAt": zod.coerce.date().optional(),
+  "sourceStatusAtAnswer": zod.enum(['indexed']).optional().describe('Retrieval eligibility in this corpus only, not claim-level or external scientific/rights approval.'),
+  "viewerPage": zod.number().int().min(1).nullish(),
+  "publicSourceUrl": zod.string().nullish().describe('Server-allowed public published reference only; never private evidence or signed storage.'),
+  "sourceVersion": zod.string().nullish(),
   "passageId": zod.string().uuid(),
   "sourceId": zod.string().uuid(),
   "sourceTitle": zod.string(),
@@ -1390,11 +2014,16 @@ export const sendMateenFollowUpBodyTextMax = 8000;
 
 
 export const SendMateenFollowUpBody = zod.object({
+  "answerMode": zod.enum(['study', 'sources']).optional().describe('Explicit mode for this turn; omission means study, never inferred from earlier text.'),
   "text": zod.string().min(1).max(sendMateenFollowUpBodyTextMax),
   "requestId": zod.string().uuid().optional().describe('Stable message identifier retained when retrying a failed send.')
 })
 
+
+
+
 export const SendMateenFollowUpResponse = zod.object({
+  "answerMode": zod.enum(['legacy', 'study', 'sources']).optional(),
   "conversationId": zod.string().uuid(),
   "questionId": zod.string().uuid(),
   "question": zod.string(),
@@ -1405,6 +2034,11 @@ export const SendMateenFollowUpResponse = zod.object({
   "status": zod.enum(['answered', 'unverified', 'abstained', 'waiting_for_teacher', 'referred']),
   "answer": zod.string().nullable(),
   "citations": zod.array(zod.object({
+  "snapshotAt": zod.coerce.date().optional(),
+  "sourceStatusAtAnswer": zod.enum(['indexed']).optional().describe('Retrieval eligibility in this corpus only, not claim-level or external scientific/rights approval.'),
+  "viewerPage": zod.number().int().min(1).nullish(),
+  "publicSourceUrl": zod.string().nullish().describe('Server-allowed public published reference only; never private evidence or signed storage.'),
+  "sourceVersion": zod.string().nullish(),
   "passageId": zod.string().uuid(),
   "sourceId": zod.string().uuid(),
   "sourceTitle": zod.string(),
@@ -1487,16 +2121,26 @@ export const replyMateenReferralBodyTextMax = 8000;
 
 
 export const ReplyMateenReferralBody = zod.object({
+  "answerMode": zod.enum(['study', 'sources']).optional().describe('Explicit mode for this turn; omission means study, never inferred from earlier text.'),
   "text": zod.string().min(1).max(replyMateenReferralBodyTextMax),
   "requestId": zod.string().uuid().optional().describe('Stable message identifier retained when retrying a failed send.')
 })
 
+
+
+
 export const ReplyMateenReferralResponse = zod.object({
+  "answerMode": zod.union([zod.literal('legacy'),zod.literal('study'),zod.literal('sources'),zod.literal(null)]).nullish(),
   "id": zod.string().uuid(),
   "role": zod.enum(['student', 'assistant', 'teacher']),
   "text": zod.string(),
   "createdAt": zod.coerce.date(),
   "citations": zod.array(zod.object({
+  "snapshotAt": zod.coerce.date().optional(),
+  "sourceStatusAtAnswer": zod.enum(['indexed']).optional().describe('Retrieval eligibility in this corpus only, not claim-level or external scientific/rights approval.'),
+  "viewerPage": zod.number().int().min(1).nullish(),
+  "publicSourceUrl": zod.string().nullish().describe('Server-allowed public published reference only; never private evidence or signed storage.'),
+  "sourceVersion": zod.string().nullish(),
   "passageId": zod.string().uuid(),
   "sourceId": zod.string().uuid(),
   "sourceTitle": zod.string(),
@@ -1537,7 +2181,31 @@ export const MarkMateenNotificationReadResponse = zod.object({
 })
 
 
+export const GetAljam3ImportResponse = zod.object({
+  "title": zod.string(),
+  "version": zod.string(),
+  "sourceUrl": zod.string(),
+  "passageCount": zod.number().int(),
+  "authorizationStatement": zod.string(),
+  "warnings": zod.array(zod.string())
+})
+
+
+export const ImportAljam3SourceBody = zod.object({
+  "confirmUnreviewed": zod.literal(true)
+})
+
+export const ImportAljam3SourceResponse = zod.object({
+  "sourceId": zod.string().uuid(),
+  "outcome": zod.enum(['imported', 'already_imported']),
+  "totalCount": zod.number().int(),
+  "importedCount": zod.number().int(),
+  "existingCount": zod.number().int()
+})
+
+
 export const ListScholarlySourcesResponseItem = zod.object({
+  "textId": zod.union([zod.literal('nawawi'),zod.literal('usul-thalatha'),zod.literal('tuhfa'),zod.literal(null)]).nullish(),
   "id": zod.string().uuid(),
   "title": zod.string(),
   "author": zod.string(),
@@ -1569,6 +2237,7 @@ export const createScholarlySourceBodyVersionMax = 100;
 
 
 export const CreateScholarlySourceBody = zod.object({
+  "textId": zod.union([zod.literal('nawawi'),zod.literal('usul-thalatha'),zod.literal('tuhfa'),zod.literal(null)]).nullish().describe('Explicit book scope reviewed with this immutable source version. Unscoped sources cannot answer student source-mode questions.'),
   "title": zod.string().min(1).max(createScholarlySourceBodyTitleMax),
   "author": zod.string().min(1).max(createScholarlySourceBodyAuthorMax),
   "edition": zod.string().min(1).max(createScholarlySourceBodyEditionMax),
@@ -1579,6 +2248,7 @@ export const CreateScholarlySourceBody = zod.object({
 })
 
 export const CreateScholarlySourceResponse = zod.object({
+  "textId": zod.union([zod.literal('nawawi'),zod.literal('usul-thalatha'),zod.literal('tuhfa'),zod.literal(null)]).nullish(),
   "id": zod.string().uuid(),
   "title": zod.string(),
   "author": zod.string(),
@@ -1605,7 +2275,9 @@ export const ListScholarlyPassagesResponseItem = zod.object({
   "volume": zod.number().int().nullable(),
   "printedPage": zod.string().nullable(),
   "pdfPage": zod.number().int().nullable(),
-  "indexed": zod.boolean()
+  "indexed": zod.boolean(),
+  "sourceUrl": zod.string().nullish(),
+  "viewerPage": zod.number().int().nullish().describe('Website viewer page only; not a printed or PDF page.')
 })
 export const ListScholarlyPassagesResponse = zod.array(ListScholarlyPassagesResponseItem)
 
@@ -1651,6 +2323,7 @@ export const ReviewScholarlySourceBody = zod.object({
 })
 
 export const ReviewScholarlySourceResponse = zod.object({
+  "textId": zod.union([zod.literal('nawawi'),zod.literal('usul-thalatha'),zod.literal('tuhfa'),zod.literal(null)]).nullish(),
   "id": zod.string().uuid(),
   "title": zod.string(),
   "author": zod.string(),
@@ -1675,6 +2348,7 @@ export const IndexScholarlySourceBody = zod.object({
 })
 
 export const IndexScholarlySourceResponse = zod.object({
+  "textId": zod.union([zod.literal('nawawi'),zod.literal('usul-thalatha'),zod.literal('tuhfa'),zod.literal(null)]).nullish(),
   "id": zod.string().uuid(),
   "title": zod.string(),
   "author": zod.string(),
@@ -1704,6 +2378,7 @@ export const WithdrawScholarlySourceBody = zod.object({
 })
 
 export const WithdrawScholarlySourceResponse = zod.object({
+  "textId": zod.union([zod.literal('nawawi'),zod.literal('usul-thalatha'),zod.literal('tuhfa'),zod.literal(null)]).nullish(),
   "id": zod.string().uuid(),
   "title": zod.string(),
   "author": zod.string(),
@@ -1730,6 +2405,9 @@ export const ReportScholarlyIssueBody = zod.object({
   "description": zod.string().min(reportScholarlyIssueBodyDescriptionMin).max(reportScholarlyIssueBodyDescriptionMax)
 })
 
+
+
+
 export const ReportScholarlyIssueResponse = zod.object({
   "id": zod.string().uuid(),
   "questionId": zod.string().uuid(),
@@ -1737,6 +2415,11 @@ export const ReportScholarlyIssueResponse = zod.object({
   "question": zod.string(),
   "answer": zod.string().nullable(),
   "citations": zod.array(zod.object({
+  "snapshotAt": zod.coerce.date().optional(),
+  "sourceStatusAtAnswer": zod.enum(['indexed']).optional().describe('Retrieval eligibility in this corpus only, not claim-level or external scientific/rights approval.'),
+  "viewerPage": zod.number().int().min(1).nullish(),
+  "publicSourceUrl": zod.string().nullish().describe('Server-allowed public published reference only; never private evidence or signed storage.'),
+  "sourceVersion": zod.string().nullish(),
   "passageId": zod.string().uuid(),
   "sourceId": zod.string().uuid(),
   "sourceTitle": zod.string(),
@@ -1759,6 +2442,9 @@ export const ListScholarlyIssuesQueryParams = zod.object({
   "status": zod.enum(['open', 'reviewed', 'resolved']).optional()
 })
 
+
+
+
 export const ListScholarlyIssuesResponseItem = zod.object({
   "id": zod.string().uuid(),
   "questionId": zod.string().uuid(),
@@ -1766,6 +2452,11 @@ export const ListScholarlyIssuesResponseItem = zod.object({
   "question": zod.string(),
   "answer": zod.string().nullable(),
   "citations": zod.array(zod.object({
+  "snapshotAt": zod.coerce.date().optional(),
+  "sourceStatusAtAnswer": zod.enum(['indexed']).optional().describe('Retrieval eligibility in this corpus only, not claim-level or external scientific/rights approval.'),
+  "viewerPage": zod.number().int().min(1).nullish(),
+  "publicSourceUrl": zod.string().nullish().describe('Server-allowed public published reference only; never private evidence or signed storage.'),
+  "sourceVersion": zod.string().nullish(),
   "passageId": zod.string().uuid(),
   "sourceId": zod.string().uuid(),
   "sourceTitle": zod.string(),
@@ -1799,6 +2490,9 @@ export const ModerateScholarlyIssueBody = zod.object({
   "note": zod.string().min(moderateScholarlyIssueBodyNoteMin).max(moderateScholarlyIssueBodyNoteMax)
 })
 
+
+
+
 export const ModerateScholarlyIssueResponse = zod.object({
   "id": zod.string().uuid(),
   "questionId": zod.string().uuid(),
@@ -1806,6 +2500,11 @@ export const ModerateScholarlyIssueResponse = zod.object({
   "question": zod.string(),
   "answer": zod.string().nullable(),
   "citations": zod.array(zod.object({
+  "snapshotAt": zod.coerce.date().optional(),
+  "sourceStatusAtAnswer": zod.enum(['indexed']).optional().describe('Retrieval eligibility in this corpus only, not claim-level or external scientific/rights approval.'),
+  "viewerPage": zod.number().int().min(1).nullish(),
+  "publicSourceUrl": zod.string().nullish().describe('Server-allowed public published reference only; never private evidence or signed storage.'),
+  "sourceVersion": zod.string().nullish(),
   "passageId": zod.string().uuid(),
   "sourceId": zod.string().uuid(),
   "sourceTitle": zod.string(),
@@ -1825,26 +2524,30 @@ export const ModerateScholarlyIssueResponse = zod.object({
 
 
 export const GetScholarlyConfigResponse = zod.object({
-  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b']),
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b', 'google/gemini-2.5-flash']),
   "providerConfigured": zod.boolean(),
   "evaluationPassed": zod.boolean(),
   "reviewedSourceCount": zod.number().int(),
   "assistantEnabled": zod.boolean(),
-  "studyAnswersEnabled": zod.boolean().optional().describe('General unverified student answers can be generated without approved commentary sources.')
+  "studyAnswersEnabled": zod.boolean().optional().describe('General unverified student answers can be generated without approved commentary sources.'),
+  "sourceBlockers": zod.array(zod.enum(['no_sources', 'corpus_incomplete', 'provider_unconfigured', 'evaluation_required'])).optional(),
+  "sourceBooks": zod.array(zod.enum(['nawawi', 'usul-thalatha', 'tuhfa'])).optional()
 })
 
 
 export const UpdateScholarlyConfigBody = zod.object({
-  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b'])
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b', 'google/gemini-2.5-flash'])
 })
 
 export const UpdateScholarlyConfigResponse = zod.object({
-  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b']),
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b', 'google/gemini-2.5-flash']),
   "providerConfigured": zod.boolean(),
   "evaluationPassed": zod.boolean(),
   "reviewedSourceCount": zod.number().int(),
   "assistantEnabled": zod.boolean(),
-  "studyAnswersEnabled": zod.boolean().optional().describe('General unverified student answers can be generated without approved commentary sources.')
+  "studyAnswersEnabled": zod.boolean().optional().describe('General unverified student answers can be generated without approved commentary sources.'),
+  "sourceBlockers": zod.array(zod.enum(['no_sources', 'corpus_incomplete', 'provider_unconfigured', 'evaluation_required'])).optional(),
+  "sourceBooks": zod.array(zod.enum(['nawawi', 'usul-thalatha', 'tuhfa'])).optional()
 })
 
 
@@ -1876,7 +2579,7 @@ export const recordScholarlyEvaluationBodyNoteMax = 3000;
 
 
 export const RecordScholarlyEvaluationBody = zod.object({
-  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b']),
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b', 'google/gemini-2.5-flash']),
   "arabicQualityPassed": zod.boolean(),
   "groundingPassed": zod.boolean(),
   "abstentionPassed": zod.boolean(),
@@ -1884,12 +2587,14 @@ export const RecordScholarlyEvaluationBody = zod.object({
 })
 
 export const RecordScholarlyEvaluationResponse = zod.object({
-  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b']),
+  "model": zod.enum(['gpt-5.4-mini', 'gpt-5.4', 'nvidia/nemotron-3.5-lightning-30b-a3b', 'google/gemini-2.5-flash']),
   "providerConfigured": zod.boolean(),
   "evaluationPassed": zod.boolean(),
   "reviewedSourceCount": zod.number().int(),
   "assistantEnabled": zod.boolean(),
-  "studyAnswersEnabled": zod.boolean().optional().describe('General unverified student answers can be generated without approved commentary sources.')
+  "studyAnswersEnabled": zod.boolean().optional().describe('General unverified student answers can be generated without approved commentary sources.'),
+  "sourceBlockers": zod.array(zod.enum(['no_sources', 'corpus_incomplete', 'provider_unconfigured', 'evaluation_required'])).optional(),
+  "sourceBooks": zod.array(zod.enum(['nawawi', 'usul-thalatha', 'tuhfa'])).optional()
 })
 
 

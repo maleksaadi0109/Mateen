@@ -16,14 +16,14 @@ const secureState = {
 };
 
 test("only a verified second factor age satisfies session protection", () => {
-  for (const value of [undefined, null, [0, null], [0, -1], [0, NaN], [0, Infinity]]) {
+  for (const value of [undefined, null, [0, null], [0, -1], [0, NaN], [0, Infinity], [0], [0, "0"], { fva: [0, 0] }]) {
     assert.equal(hasVerifiedSecondFactor(value), false);
   }
   assert.equal(hasVerifiedSecondFactor([0, 0]), true);
   assert.equal(hasVerifiedSecondFactor([0, 20]), true);
 });
 
-test("review permissions are separate and require backend metadata plus secure session", () => {
+test("review permissions are separate and require trusted metadata, active account and verified email", () => {
   assert.equal(
     hasSecureReviewPermission("qualification", secureState, {
       mateenQualificationReviewer: true,
@@ -42,7 +42,7 @@ test("review permissions are separate and require backend metadata plus secure s
       { ...secureState, secureSession: false },
       { mateenQualificationReviewer: true },
     ),
-    false,
+    true,
   );
   assert.equal(
     hasSecureReviewPermission("qualification", secureState, {
@@ -82,11 +82,26 @@ test("teacher approval requires an active verified account but does not require 
   );
 });
 
-test("ordinary verified teachers may apply without MFA; reviewers still need it", () => {
+test("ordinary verified teachers and granted reviewers do not require MFA", () => {
   const normalTeacher = { ...secureState, mfaEnabled: false, secureSession: false };
   assert.equal(isEligibleTeacherAccount(normalTeacher), true);
-  assert.equal(hasSecureReviewPermission("qualification", normalTeacher, { mateenQualificationReviewer: true }), false);
+  assert.equal(hasSecureReviewPermission("qualification", normalTeacher, { mateenQualificationReviewer: true }), true);
   assert.equal(isEligibleTeacherAccount({ ...normalTeacher, locked: true }), false);
+});
+
+test("both scopes ignore enrollment and factor age but reject disabled or unverified accounts", () => {
+  for (const permission of ["qualification", "content"] as const) {
+    const metadata = { mateenContentReviewer: true, mateenQualificationReviewer: true };
+    for (const mfaEnabled of [false, true]) {
+      for (const secureSession of [false, true]) {
+        assert.equal(hasSecureReviewPermission(permission, { ...secureState, mfaEnabled, secureSession }, metadata), true);
+      }
+    }
+    for (const denied of [{ banned: true }, { locked: true }, { verifiedEmail: false }]) {
+      assert.equal(hasSecureReviewPermission(permission, { ...secureState, ...denied }, metadata), false);
+    }
+    assert.equal(hasSecureReviewPermission(permission, secureState, {}), false);
+  }
 });
 
 test("a certificate must be a security-checked PDF, not an image or unfinished upload", () => {

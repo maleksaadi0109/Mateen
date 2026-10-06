@@ -4,6 +4,8 @@ import {
   GetMateenAssistantQuestionsResponse,
   GetMateenConversationMessagesParams,
   GetMateenConversationMessagesResponse,
+  GetMateenMessageSourceStatusParams,
+  GetMateenMessageSourceStatusResponse,
   GetMateenConversationStatusParams,
   GetMateenConversationStatusResponse,
   GetMateenConversationsResponse,
@@ -44,8 +46,15 @@ import {
   ne,
 } from "drizzle-orm";
 import { Router } from "express";
+import { logger } from "../lib/logger";
 import {
   generateStudyAnswer,
+  classifyHadithQuestion,
+  HADITH_SCOPE_NOTICE,
+  lexicalRank,
+  semanticRank,
+  answerFromPassages,
+  composeVerifiedQuotationAnswer,
   filterTeacherConversationMessages,
   isApprovedAvailableTeacher,
   requiresHumanGuidance,
@@ -69,11 +78,14 @@ import {
   requireStudent,
   rateLimit,
   sameOrigin,
+  publicCitations,
   type AuthedRequest,
 } from "./scholarly.shared";
 
 import { STUDY_BOOKS, USUL_STUDY_CONTEXT, isStudyBookId, studyBookId } from "../lib/scholarly-study-books";
 import { tuhfaVerses } from "../data/tuhfa";
+import type { Citation } from "@workspace/api-zod";
+import { currentCitationStates, publicReferenceUrl } from "../lib/citation-provenance";
 
 export { getMateenScholarlyReadiness };
 
@@ -101,6 +113,7 @@ async function questionPayload(question: typeof scholarlyQuestionsTable.$inferSe
     reason: question.reason ?? "",
     status: question.status,
     answer: question.answer,
+    answerMode: question.answerMode,
     citations: await getQuestionCitations(question.id),
     referral: referral
       ? {
@@ -126,23 +139,14 @@ async function createAssistantQuestion(
   textId: string | null,
   existingConversationId?: string,
   requestId?: string,
+  answerMode: "study" | "sources" = "study",
 ) {
   const gate = await getScholarlyReadiness();
   const selectedBook = studyBookId(textId);
   const isNawawi = selectedBook === "nawawi";
   const question = questionText.trim();
   let answer: string | null = null;
-  let citations: Array<{
-    passageId: string;
-    sourceId: string;
-    sourceTitle: string;
-    author: string;
-    edition: string;
-    volume: number | null;
-    printedPage: string | null;
-    pdfPage: number | null;
-    quote: string;
-  }> = [];
+  let citations: Citation[] = [];
   let reason = "";
   let status = "unverified";
   let providerFailed = false;
@@ -158,9 +162,56 @@ async function createAssistantQuestion(
       .orderBy(desc(scholarlyMessagesTable.createdAt)).limit(12);
     history = messages.reverse();
   }
-  // Always generate a new explanation. References identify the passage internally;
-  // they do not replace the explanation or expose private administrator drafts.
   try {
+    const scope = await classifyHadithQuestion(question, gate.model, history);
+    if (scope === "out_of_scope") {
+      // Persist as a policy response, not an abstention eligible for referral.
+      answer = HADITH_SCOPE_NOTICE;
+      reason = HADITH_SCOPE_NOTICE;
+      status = "unverified";
+      responseModel = "hadith-scope-policy";
+    } else if (scope === "uncertain") {
+      status = "abstained";
+      reason = "لم أتمكن من تحديد المقصود أو تقديم إجابة موثوقة. يمكنك توضيح الحديث الذي تسأل عنه أو إحالة الحوار إلى شيخ متاح.";
+    } else if (answerMode === "sources") {
+      status = "abstained";
+      const scopedPassages = gate.corpus.passages.filter(p => p.textId === selectedBook);
+      reason = requiredGuidance ??
+        (!gate.corpus.complete ? "مجموعة المصادر تتجاوز حدود الاسترجاع الآمن؛ الإجابة من المصادر غير متاحة الآن."
+          : !scopedPassages.length ? "لا توجد مقاطع مؤهلة لهذا الكتاب حالياً؛ لم تُولّد إجابة من المصادر."
+          : !gate.providerConfigured ? "مزوّد الإجابة من المصادر غير مهيأ حالياً."
+          : !gate.evaluationPassed ? "الإجابة من المصادر غير متاحة قبل اجتياز تقييم النموذج والمصادر الحالية."
+          : "");
+      if (!reason) {
+        const deadline = AbortSignal.timeout(50_000);
+        // Only the owner's student turns identify follow-ups. Earlier model
+        // prose never enters the evidence pool (including unreviewed replies).
+        const studentHistory = history.filter(m => m.role === "student").slice(-2).map(m => m.text.slice(0, 800));
+        const followUpContext = {
+          selectedBook: STUDY_BOOKS[selectedBook],
+          studyContext: textContext?.slice(0, 800) ?? null, previousStudentQuestions: studentHistory,
+        };
+        const retrievalQuestion = JSON.stringify({ ...followUpContext, currentQuestion: question.slice(0, 4000) });
+        const lexical = lexicalRank([question, textContext, ...studentHistory].filter(Boolean).join("\n"), scopedPassages);
+        const ranked = await semanticRank(retrievalQuestion, lexical, gate.model, deadline);
+        const evidence = ranked.slice(0, 8).map(p => ({ ...p, text: p.text.slice(0, 4000) }));
+        const result = composeVerifiedQuotationAnswer(
+          await answerFromPassages(question, JSON.stringify(followUpContext), evidence, gate.model, deadline), evidence,
+        );
+        answer = result.answer;
+        status = result.abstain ? "abstained" : "answered";
+        reason = result.abstain
+          ? "لم تكفِ المقاطع المؤهلة للإجابة عن سؤالك. يمكنك اختيار الشرح التعليمي غير المراجع أو طلب إحالة."
+          : "اقتباسات مطابقة للمقاطع المسترجعة آلياً؛ ليست شرحاً بشرياً معتمداً ولا فتوى.";
+        citations = result.citations.map(c => {
+          const p = evidence.find(p => p.id === c.passageId)!;
+          return { passageId: p.id, sourceId: p.sourceId, sourceTitle: p.title,
+            author: p.author, edition: p.edition, sourceVersion: p.version ?? null,
+            volume: p.volume, printedPage: p.printedPage, pdfPage: p.pdfPage, quote: c.quote,
+            viewerPage: p.viewerPage ?? null, publicSourceUrl: publicReferenceUrl(p.publicSourceUrl) };
+        });
+      }
+    } else {
       const records = isNawawi ? (await getNawawiStudyRecords()).hadiths : [];
       const currentResolution = isNawawi ? resolveNawawiHadith(question, records, textContext) : null;
       const resolution = currentResolution?.number != null ? currentResolution
@@ -183,11 +234,13 @@ async function createAssistantQuestion(
       answer = requiredGuidance ? null : await generateStudyAnswer(question, studyContext, gate.model, STUDY_BOOKS[selectedBook], history);
       citations = [];
       status = answer === null ? "abstained" : "unverified";
-      reason = requiredGuidance ?? (answer === null
+      reason = answer === HADITH_SCOPE_NOTICE ? HADITH_SCOPE_NOTICE : requiredGuidance ?? (answer === null
         ? "لا أستطيع تقديم جواب موثوق لهذا السؤال. يمكن إحالة هذه المحادثة إلى معلم ليطّلع على الحوار ويكمل معك."
         : UNVERIFIED_STUDY_NOTICE);
+    }
   } catch (error) {
       if (!(error instanceof ScholarlyProviderUnavailableError)) throw error;
+      logger.warn({ model: gate.model, failure: error.message }, "Assistant provider request failed");
       status = "abstained";
       reason = "تعذّر الاتصال بالنموذج أو قراءة إجابته الآن. لم تُولّد إجابة صالحة؛ أعد المحاولة أو اطلب إحالة.";
       providerFailed = true;
@@ -211,15 +264,24 @@ async function createAssistantQuestion(
       const lockedSources = await tx.select({
         id: scholarlySourcesTable.id,
         status: scholarlySourcesTable.status,
+        version: scholarlySourcesTable.version,
+        textId: scholarlySourcesTable.textId,
       }).from(scholarlySourcesTable)
         .where(inArray(scholarlySourcesTable.id, sourceIds))
         .for("update");
       if (lockedSources.length !== sourceIds.length ||
-          lockedSources.some((source) => source.status !== "indexed")) {
+          lockedSources.some((source) => source.status !== "indexed" ||
+            source.textId !== selectedBook ||
+            citations.some(c => c.sourceId === source.id && c.sourceVersion !== source.version))) {
         answer = null;
         citations = [];
         status = "abstained";
         reason = "تغيّرت حالة أحد المصادر أثناء التحقق. لم تُنشر إجابة؛ يمكنك إعادة المحاولة.";
+      } else {
+        // This snapshot is taken only after the locked eligibility/version check,
+        // and saved atomically with the message. Never backfill old messages.
+        const snapshotAt = new Date();
+        citations = citations.map(c => ({ ...c, snapshotAt, sourceStatusAtAnswer: "indexed" }));
       }
     }
     const [conversation] = existingConversationId
@@ -239,7 +301,7 @@ async function createAssistantQuestion(
     if (requestId) {
       const [previous] = await tx.select().from(scholarlyQuestionsTable)
         .where(eq(scholarlyQuestionsTable.id, requestId)).limit(1);
-      if (previous) return previous.studentId === userId && previous.conversationId === conversation.id && previous.question === question ? previous : null;
+      if (previous) return previous.studentId === userId && previous.conversationId === conversation.id && previous.question === question && previous.answerMode === answerMode ? previous : null;
     }
     const [created] = await tx.insert(scholarlyQuestionsTable).values({
       ...(requestId ? { id: requestId } : {}),
@@ -249,6 +311,8 @@ async function createAssistantQuestion(
       textContext,
       textId: selectedBook,
       answer,
+      answerMode,
+      evaluationId: answerMode === "sources" ? gate.evaluationId : null,
       status,
       reason: reason || null,
       model: responseModel,
@@ -268,7 +332,8 @@ async function createAssistantQuestion(
         senderId: null,
         role: "assistant",
         text: answer ?? reason,
-        citations,
+        citations: citations.map(c => ({ ...c })),
+        answerMode,
       });
     }
     await tx.update(scholarlyConversationsTable).set({ updatedAt: new Date() })
@@ -304,7 +369,7 @@ router.post(
   authenticationRequired,
   async (req: AuthedRequest, res) => {
     if (!await requireStudent(req, res)) return;
-    if (!hasOnlyKeys(req.body, ["question", "textContext", "textId"])) {
+    if (!hasOnlyKeys(req.body, ["question", "textContext", "textId", "answerMode"])) {
       res.status(400).json({ error: "Unexpected assistant question fields" });
       return;
     }
@@ -322,6 +387,9 @@ router.post(
       parsed.data.question,
       parsed.data.textContext ?? null,
       parsed.data.textId ?? null,
+      undefined,
+      undefined,
+      parsed.data.answerMode ?? "study",
     );
     if (saved.kind === "provider-failed") {
       res.status(503).json({
@@ -572,6 +640,48 @@ async function hasConversationAccess(userId: string, conversationId: string): Pr
   return Boolean(referral);
 }
 
+async function visibleConversationMessages(userId: string, conversationId: string) {
+  const profile = await getProfile(userId);
+  const rows = await db.select().from(scholarlyMessagesTable)
+    .where(eq(scholarlyMessagesTable.conversationId, conversationId))
+    .orderBy(scholarlyMessagesTable.createdAt);
+  if (profile?.role !== "teacher") return rows;
+  const [referral] = await db.select({
+    questionId: scholarlyReferralsTable.questionId, context: scholarlyReferralsTable.contextShared,
+  }).from(scholarlyReferralsTable).where(and(
+    eq(scholarlyReferralsTable.conversationId, conversationId),
+    eq(scholarlyReferralsTable.teacherId, userId),
+  )).limit(1);
+  return referral?.context?.startsWith(`${FULL_THREAD_SHARE}\n`) ? rows :
+    referral ? filterTeacherConversationMessages(rows, referral.questionId) : [];
+}
+
+router.get("/mateen/messages/:messageId/source-status", authenticationRequired, async (req: AuthedRequest, res) => {
+  const params = GetMateenMessageSourceStatusParams.safeParse(req.params);
+  if (!params.success) { res.status(400).json({ error: "Invalid message" }); return; }
+  const [message] = await db.select({
+    conversationId: scholarlyMessagesTable.conversationId,
+  }).from(scholarlyMessagesTable).where(eq(scholarlyMessagesTable.id, params.data.messageId)).limit(1);
+  if (!message || !await hasConversationAccess(req.scholarlyUserId!, message.conversationId)) {
+    res.status(404).json({ error: "Message not found" }); return;
+  }
+  const visible = await visibleConversationMessages(req.scholarlyUserId!, message.conversationId);
+  const row = visible.find(m => m.id === params.data.messageId);
+  if (!row) { res.status(404).json({ error: "Message not found" }); return; }
+  res.set("Cache-Control", "private, no-store");
+  const citations = publicCitations(row.citations);
+  const ids = [...new Set(citations.map(c => c.sourceId))];
+  try {
+    const sources = ids.length ? await db.select({
+      id: scholarlySourcesTable.id, status: scholarlySourcesTable.status, version: scholarlySourcesTable.version,
+    }).from(scholarlySourcesTable).where(inArray(scholarlySourcesTable.id, ids)) : [];
+    res.json(GetMateenMessageSourceStatusResponse.parse(currentCitationStates(citations, sources)));
+  } catch {
+    req.log.warn("Unable to check cited source eligibility");
+    res.status(503).json({ error: "Current source state unavailable" });
+  }
+});
+
 router.get(
   "/mateen/conversations/:conversationId/messages",
   authenticationRequired,
@@ -585,33 +695,14 @@ router.get(
       res.status(404).json({ error: "Conversation not found" });
       return;
     }
-    const profile = await getProfile(req.scholarlyUserId!);
-    let referredQuestionId: string | null = null;
-    let fullThreadShared = false;
-    if (profile?.role === "teacher") {
-      const [referral] = await db.select({ questionId: scholarlyReferralsTable.questionId, context: scholarlyReferralsTable.contextShared })
-        .from(scholarlyReferralsTable)
-        .where(and(
-          eq(scholarlyReferralsTable.conversationId, params.data.conversationId),
-          eq(scholarlyReferralsTable.teacherId, req.scholarlyUserId!),
-        )).limit(1);
-      referredQuestionId = referral?.questionId ?? null;
-      fullThreadShared = referral?.context?.startsWith(`${FULL_THREAD_SHARE}\n`) === true;
-    }
-    const rows = await db.select().from(scholarlyMessagesTable)
-      .where(eq(scholarlyMessagesTable.conversationId, params.data.conversationId))
-      .orderBy(scholarlyMessagesTable.createdAt);
-    const visibleRows = profile?.role === "teacher"
-      ? fullThreadShared ? rows : referredQuestionId
-        ? filterTeacherConversationMessages(rows, referredQuestionId)
-        : []
-      : rows;
+    const visibleRows = await visibleConversationMessages(req.scholarlyUserId!, params.data.conversationId);
     res.json(GetMateenConversationMessagesResponse.parse(visibleRows.map((row) => ({
       id: row.id,
       role: row.role,
       text: row.text,
       createdAt: row.createdAt,
-      citations: row.citations,
+      citations: publicCitations(row.citations),
+      answerMode: row.role === "assistant" ? row.answerMode ?? "legacy" : null,
     }))));
   },
 );
@@ -623,7 +714,7 @@ router.post(
   async (req: AuthedRequest, res) => {
     const params = SendMateenFollowUpParams.safeParse(req.params);
     const body = SendMateenFollowUpBody.safeParse(req.body);
-    if (!params.success || !body.success || !hasOnlyKeys(req.body, ["text", "requestId"])) {
+    if (!params.success || !body.success || !hasOnlyKeys(req.body, ["text", "requestId", "answerMode"])) {
       res.status(400).json({ error: "Invalid text-only assistant follow-up" });
       return;
     }
@@ -701,7 +792,7 @@ router.post(
       const [previous] = await db.select().from(scholarlyQuestionsTable)
         .where(eq(scholarlyQuestionsTable.id, body.data.requestId)).limit(1);
       if (previous) {
-        if (previous.studentId !== req.scholarlyUserId! || previous.conversationId !== owned.id || previous.question !== body.data.text.trim()) {
+        if (previous.studentId !== req.scholarlyUserId! || previous.conversationId !== owned.id || previous.question !== body.data.text.trim() || previous.answerMode !== (body.data.answerMode ?? "study")) {
           res.status(409).json({ error: "The message identifier was already used for different content" });
           return;
         }
@@ -716,6 +807,7 @@ router.post(
       latestQuestion?.textId ?? null,
       params.data.conversationId,
       body.data.requestId,
+      body.data.answerMode ?? "study",
     );
     if (saved.kind === "not-found") {
       res.status(404).json({ error: "Conversation not found" });

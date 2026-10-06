@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { build as esbuild } from "esbuild";
 import esbuildPluginPino from "esbuild-plugin-pino";
-import { rm } from "node:fs/promises";
+import { rm, mkdir, copyFile, access } from "node:fs/promises";
 import { installPythonRuntime } from "../../scripts/install-python-runtime.mjs";
 
 // Plugins (e.g. 'esbuild-plugin-pino') may use `require` to resolve dependencies
@@ -15,6 +15,31 @@ async function buildAll() {
   await installPythonRuntime();
   const distDir = path.resolve(artifactDir, "dist");
   await rm(distDir, { recursive: true, force: true });
+  const evidenceDir = path.join(distDir, "collation-evidence");
+  await mkdir(evidenceDir, { recursive: true });
+  const privatePackageDir = path.join(distDir, "private-scholarly-package");
+  await mkdir(privatePackageDir, { recursive: true });
+  async function copyOptionalPrivateAsset(source, target) {
+    try {
+      await access(source);
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+      console.warn(`Optional private review asset unavailable: ${path.basename(source)}. Its review feature requires authorised local files.`);
+      return;
+    }
+    await copyFile(source, target);
+  }
+  for (const file of ["passages.json", "collation.json"]) {
+    await copyOptionalPrivateAsset(
+      path.resolve(artifactDir, "../../deliverables/aljam3-commentary", file),
+      path.join(privatePackageDir, file),
+    );
+  }
+  for (const page of ["005", "006", "007"]) {
+    const file = `pdf-${page}.png`;
+    await copyOptionalPrivateAsset(path.resolve(artifactDir, "../../deliverables/aljam3-commentary/evidence", file),
+      path.join(evidenceDir, file));
+  }
 
   await esbuild({
     entryPoints: [path.resolve(artifactDir, "src/index.ts")],

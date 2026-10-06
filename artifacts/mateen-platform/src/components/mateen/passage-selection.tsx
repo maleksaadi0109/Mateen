@@ -1,3 +1,5 @@
+import { fmt } from '@/lib/i18n';
+import { tr } from '@/lib/i18n';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { recitationWords } from '@/lib/live-recitation';
 
@@ -12,7 +14,7 @@ export default function PassageSelection({ text, selected, onSelect, onAsk, busy
   const [error, setError] = useState('');
   const choose = (value: string) => {
     const clean = value.replace(/\s+/g, ' ').trim();
-    if (clean.length > 3000) { setError('المقطع طويل؛ حدّد مقطعًا أقصر من ٣٠٠٠ حرف.'); onSelect(null); return; }
+    if (clean.length > 3000) { setError(tr("المقطع طويل؛ حدّد مقطعًا أقصر من ٣٠٠٠ حرف.")); onSelect(null); return; }
     setError(''); onSelect(clean || null);
   };
   useEffect(() => {
@@ -37,29 +39,27 @@ export default function PassageSelection({ text, selected, onSelect, onAsk, busy
   };
   return (
     <div>
-      <p className="mb-3 font-ui text-sm text-muted-foreground">
-        حدّد عبارة أو مقطعًا بالسحب، أو بالضغط المطوّل على الجوال ثم تحريك مقابض التحديد.
-      </p>
+      <p className="mb-3 font-ui text-sm text-muted-foreground">{tr("حدّد عبارة أو مقطعًا بالسحب، أو بالضغط المطوّل على الجوال ثم تحريك مقابض التحديد.")}</p>
       <button type="button" disabled={busy} aria-pressed={manual} className="mb-4 min-h-11 rounded-xl border px-3 font-ui text-sm"
         data-testid="button-range-mode" onClick={() => { clear(); setManual(v => !v); }}>
-        {manual ? 'العودة إلى التحديد بالسحب' : 'تحديد بالنقر على أول وآخر كلمة'}
+        {manual ? tr("العودة إلى التحديد بالسحب") : tr("تحديد بالنقر على أول وآخر كلمة")}
       </button>
-      {manual && <p role="status" className="mb-3 font-ui text-sm text-secondary">{start === null ? 'اضغط أول كلمة، ثم آخر كلمة في المقطع المطلوب.' : 'الآن اضغط آخر كلمة؛ سيُحدّد كل ما بينهما.'}</p>}
+      {manual && <p role="status" className="mb-3 font-ui text-sm text-secondary">{start === null ? tr("اضغط أول كلمة، ثم آخر كلمة في المقطع المطلوب.") : tr("الآن اضغط آخر كلمة؛ سيُحدّد كل ما بينهما.")}</p>}
       {(() => {
         const mark = (i: number, word: string) => manual
           ? <span key={i}><button type="button" disabled={busy} onClick={() => pick(i)}
-            aria-label={`تحديد الكلمة ${i + 1}: ${word}`} aria-pressed={!!range && i >= range[0] && i <= range[1]}
+            aria-label={fmt("تحديد الكلمة {a}: {b}", "Select word {a}: {b}", { a: i + 1, b: word })} aria-pressed={!!range && i >= range[0] && i <= range[1]}
             className={`min-h-11 rounded px-0.5 ${range && i >= range[0] && i <= range[1] ? 'bg-secondary/20 text-secondary' : 'hover:bg-secondary/10'}`}
             data-testid={`button-word-${i}`}>{word}</button>{' '}</span>
           : <span key={i} data-word-index={i}>{word}{' '}</span>;
         if (!poem) return (
-          <p ref={body as React.RefObject<HTMLParagraphElement>} className={`hadith-text text-2xl sm:text-[1.7rem] ${manual ? 'select-none' : 'select-text'}`} data-testid="text-hadith-body">
+          <p lang="ar" dir="rtl" ref={body as React.RefObject<HTMLParagraphElement>} className={`hadith-text text-2xl sm:text-[1.7rem] ${manual ? 'select-none' : 'select-text'}`} data-testid="text-hadith-body">
             {words.map((word, i) => mark(i, word))}
           </p>
         );
         let g = 0;
         return (
-          <div ref={body as React.RefObject<HTMLDivElement>} className={`space-y-2 ${manual ? 'select-none' : 'select-text'}`} data-testid="text-hadith-body">
+          <div lang="ar" dir="rtl" ref={body as React.RefObject<HTMLDivElement>} className={`space-y-2 ${manual ? 'select-none' : 'select-text'}`} data-testid="text-hadith-body">
             {poem.map((v) => {
               const lines = v.text.split('\n').map((l) => l.trim()).filter(Boolean);
               let halves: string[][] = lines.map((l) => recitationWords(l));
@@ -81,11 +81,11 @@ export default function PassageSelection({ text, selected, onSelect, onAsk, busy
       })()}
       {error && <p role="alert" className="mt-3 font-ui text-sm text-destructive">{error}</p>}
       {selected && <div className="mt-4 rounded-xl border border-secondary/30 bg-secondary/5 p-4" data-testid="selection-actions">
-        <p className="font-ui text-xs font-bold text-secondary">المقطع المحدّد</p>
+        <p className="font-ui text-xs font-bold text-secondary">{tr("المقطع المحدّد")}</p>
         <blockquote className="my-2 max-h-40 overflow-y-auto break-words font-arabic text-lg" data-testid="text-selected-passage">{selected}</blockquote>
         <div className="flex flex-wrap gap-2">
-          <button type="button" disabled={busy} onClick={onAsk} data-testid="button-ask-passage" className="min-h-11 rounded-full bg-secondary px-4 font-ui font-bold text-secondary-foreground">اسأل عن المقطع</button>
-          <button type="button" disabled={busy} onClick={clear} data-testid="button-clear-passage" className="min-h-11 rounded-full border px-4 font-ui text-sm">إلغاء التحديد</button>
+          <button type="button" disabled={busy} onClick={onAsk} data-testid="button-ask-passage" className="min-h-11 rounded-full bg-secondary px-4 font-ui font-bold text-secondary-foreground">{tr("اسأل عن المقطع")}</button>
+          <button type="button" disabled={busy} onClick={clear} data-testid="button-clear-passage" className="min-h-11 rounded-full border px-4 font-ui text-sm">{tr("إلغاء التحديد")}</button>
         </div>
       </div>}
     </div>

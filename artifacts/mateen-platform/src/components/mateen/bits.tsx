@@ -1,3 +1,4 @@
+import { tr } from '@/lib/i18n';
 import { type ReactNode, useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
@@ -5,7 +6,7 @@ import logoPath from '@assets/MateeeeeeeeenLOGO_1790090010886.png';
 import { cn } from '@/lib/utils';
 
 export function Logo({ className = 'h-12' }: { className?: string }) {
-  return <img src={logoPath} alt="مَتِين" className={cn('brand-logo w-auto object-contain', className)} data-testid="img-logo" />;
+  return <img src={logoPath} alt={tr("مَتِين")} className={cn('brand-logo w-auto object-contain', className)} data-testid="img-logo" />;
 }
 export { logoPath };
 
@@ -47,7 +48,7 @@ export function SkeletonBlock({ className = 'h-24' }: { className?: string }) {
 
 export function LoadingList({ rows = 3 }: { rows?: number }) {
   return (
-    <div className="space-y-4" role="status" aria-label="جارٍ التحميل" data-testid="status-loading">
+    <div className="space-y-4" role="status" aria-label={tr("جارٍ التحميل")} data-testid="status-loading">
       {Array.from({ length: rows }).map((_, i) => (
         <SkeletonBlock key={i} className="h-28" />
       ))}
@@ -55,15 +56,14 @@ export function LoadingList({ rows = 3 }: { rows?: number }) {
   );
 }
 
-export function ErrorState({ message = 'تعذّر تحميل البيانات.', onRetry }: { message?: string; onRetry?: () => void }) {
+export function ErrorState({ message = tr("تعذّر تحميل البيانات."), onRetry }: { message?: string; onRetry?: () => void }) {
   return (
     <div className="paper-card flex flex-col items-center gap-4 p-10 text-center" role="alert" data-testid="status-error">
       <AlertTriangle className="text-secondary" size={32} />
       <p className="font-ui text-foreground">{message}</p>
       {onRetry && (
         <button onClick={onRetry} className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 font-ui text-sm font-semibold text-primary-foreground" data-testid="button-retry">
-          <RefreshCw size={15} /> إعادة المحاولة
-        </button>
+          <RefreshCw size={15} />{' '}{tr("إعادة المحاولة")}</button>
       )}
     </div>
   );

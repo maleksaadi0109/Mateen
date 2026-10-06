@@ -11,6 +11,237 @@ tags:
   - name: health
     description: Health operations
 paths:
+  /mateen/messages/{messageId}/source-status:
+    get:
+      operationId: getMateenMessageSourceStatus
+      parameters:
+        - { name: messageId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200":
+          description: Current eligibility of sources in a readable message only; never historical approval
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/CitationSourceStatus" }
+        "404": { description: Message not readable }
+        "503": { description: Current state could not be checked }
+  /mateen/daily-plan:
+    get:
+      operationId: getDailyPlan
+      parameters:
+        - { in: query, name: timezone, schema: { type: string } }
+        - { in: query, name: planId, schema: { type: string, format: uuid } }
+      responses:
+        "200":
+          description: Account calendar daily plan, never activity evidence
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DailyPlan" }
+        "503": { $ref: "#/components/responses/PracticeReportError" }
+    post:
+      operationId: redistributeDailyPlan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/DailyPlanRevisionInput" }
+      responses:
+        "200":
+          description: Remaining work redistributed without erasing completed work
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DailyPlan" }
+        "409": { $ref: "#/components/responses/PracticeReportError" }
+  /mateen/daily-plan/{planId}/tasks/{taskId}:
+    post:
+      operationId: actOnDailyPlanTask
+      parameters:
+        - { in: path, name: planId, required: true, schema: { type: string, format: uuid } }
+        - { in: path, name: taskId, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/DailyPlanTaskInput" }
+      responses:
+        "200":
+          description: Idempotent activity acknowledgement on original plan day
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DailyPlan" }
+        "409": { $ref: "#/components/responses/PracticeReportError" }
+  /mateen/word-practice/reference/{hadithId}:
+    get:
+      operationId: getWordPracticeReference
+      parameters:
+        - { in: path, name: hadithId, required: true, schema: { type: integer, minimum: 1, maximum: 42 } }
+      responses:
+        "400": { $ref: "#/components/responses/PracticeReportError" }
+        "401": { $ref: "#/components/responses/PracticeReportError" }
+        "403": { $ref: "#/components/responses/PracticeReportError" }
+        "404": { $ref: "#/components/responses/PracticeReportError" }
+        "200":
+          description: Currently available server reference
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/WordPracticeReference" }
+  /mateen/word-practice:
+    get:
+      operationId: listWordPractices
+      responses:
+        "401": { $ref: "#/components/responses/PracticeReportError" }
+        "403": { $ref: "#/components/responses/PracticeReportError" }
+        "200":
+          description: Bounded account exercises
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/WordPractice" } }
+    post:
+      operationId: saveWordPractice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/WordPracticeInput" }
+      responses:
+        "400": { $ref: "#/components/responses/PracticeReportError" }
+        "401": { $ref: "#/components/responses/PracticeReportError" }
+        "403": { $ref: "#/components/responses/PracticeReportError" }
+        "409": { $ref: "#/components/responses/PracticeReportError" }
+        "413": { $ref: "#/components/responses/PracticeReportError" }
+        "429": { $ref: "#/components/responses/PracticeReportError" }
+        "201":
+          description: Explicitly saved exercise
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/WordPractice" }
+  /mateen/word-practice/{id}:
+    get:
+      operationId: getWordPractice
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "400": { $ref: "#/components/responses/PracticeReportError" }
+        "401": { $ref: "#/components/responses/PracticeReportError" }
+        "403": { $ref: "#/components/responses/PracticeReportError" }
+        "404": { $ref: "#/components/responses/PracticeReportError" }
+        "200":
+          description: Owned exercise
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/WordPractice" }
+    delete:
+      operationId: deleteWordPractice
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "400": { $ref: "#/components/responses/PracticeReportError" }
+        "401": { $ref: "#/components/responses/PracticeReportError" }
+        "403": { $ref: "#/components/responses/PracticeReportError" }
+        "204": { description: Exercise and attempts removed }
+  /mateen/word-practice/{id}/attempts:
+    post:
+      operationId: saveWordPracticeAttempt
+      parameters:
+        - { in: path, name: id, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/WordPracticeAttemptInput" }
+      responses:
+        "400": { $ref: "#/components/responses/PracticeReportError" }
+        "401": { $ref: "#/components/responses/PracticeReportError" }
+        "403": { $ref: "#/components/responses/PracticeReportError" }
+        "404": { $ref: "#/components/responses/PracticeReportError" }
+        "409": { $ref: "#/components/responses/PracticeReportError" }
+        "413": { $ref: "#/components/responses/PracticeReportError" }
+        "429": { $ref: "#/components/responses/PracticeReportError" }
+        "200":
+          description: Bounded explicitly saved attempts
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/WordPractice" }
+  /mateen/admin/scholarly/sources/{sourceId}/collation:
+    get:
+      operationId: getScholarlyCollation
+      tags: [Scholarly]
+      parameters:
+        - { name: sourceId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200":
+          description: Private bounded transcription comparison, never approval
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ScholarlyCollation" }
+        "403": { description: Authorized content reviewer required }
+        "503": { description: Missing or changed comparison evidence }
+  /mateen/admin/scholarly/sources/{sourceId}/collation/{passageId}/image:
+    get:
+      operationId: getScholarlyCollationImage
+      tags: [Scholarly]
+      parameters:
+        - { name: sourceId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: passageId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200":
+          description: Hash-checked private page image
+          content:
+            image/png:
+              schema: { type: string, format: binary }
+        "403": { description: Authorized content reviewer required }
+        "404": { description: No matching bounded evidence }
+  /mateen/admin/scholarly/sources/{sourceId}/collation/{passageId}/geometry/history/{excerptId}:
+    get:
+      operationId: getScholarlyGeometryHistory
+      tags: [Scholarly]
+      parameters:
+        - { name: sourceId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: passageId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: excerptId, in: path, required: true, schema: { type: string, minLength: 1, maxLength: 200 } }
+      responses:
+        "200":
+          description: Newest-first private audit history, never effective geometry or approval
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/CollationGeometryHistoryEvent" }
+        "400": { description: Invalid identifiers }
+        "401": { description: Authentication required }
+        "403": { description: Authorized content reviewer required }
+        "404": { description: No matched excerpt }
+        "503": { description: Evidence unavailable }
+  /mateen/admin/scholarly/sources/{sourceId}/collation/{passageId}/geometry:
+    post:
+      operationId: recordScholarlyGeometry
+      tags: [Scholarly]
+      parameters:
+        - { name: sourceId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: passageId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CollationGeometryInput" }
+      responses:
+        "200":
+          description: Independent manual visual evidence recorded, empty rectangles revoke it; never scientific approval
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CollationGeometry" }
+        "400": { description: Invalid bounds or missing human confirmation }
+        "403": { description: Authorized content reviewer required }
+        "404": { description: No matched excerpt }
+        "409":
+          description: Evidence changed or another reviewer saved or revoked the bounds
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CollationGeometryConflict" }
+        "503": { description: Evidence unavailable }
   /mateen/study-activity:
     get:
       operationId: getStudyActivity
@@ -776,6 +1007,37 @@ paths:
             application/json:
               schema: { $ref: "#/components/schemas/NotificationState" }
         "404": { description: Notification not found }
+  /mateen/admin/scholarly/imports/aljam3:
+    get:
+      operationId: getAljam3Import
+      responses:
+        "200":
+          description: Prepared unreviewed local package, restricted to source administrators
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlyPreparedPackage" }
+        "401": { description: Authentication required }
+        "403": { description: Authorized content reviewer session required }
+        "503": { description: Package or authorization unavailable }
+    post:
+      operationId: importAljam3Source
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ScholarlyPreparedImportInput" }
+      responses:
+        "200":
+          description: Atomic import completed or previous import returned without duplication
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScholarlyPreparedImportResult" }
+        "400": { description: Invalid confirmation }
+        "401": { description: Authentication required }
+        "403": { description: Authorized content reviewer session and same origin required }
+        "409": { description: Conflicting existing source version }
+        "429": { description: Too many requests }
+        "503": { description: Import could not be confirmed; safe to retry }
   /mateen/admin/scholarly/sources:
     get:
       operationId: listScholarlySources
@@ -1374,6 +1636,216 @@ components:
             properties:
               error: { type: string }
   schemas:
+    DailyPlanRevisionInput:
+      type: object
+      additionalProperties: false
+      required: [planId, revision]
+      properties:
+        planId: { type: string, format: uuid }
+        revision: { type: integer, minimum: 1 }
+    DailyPlanTaskInput:
+      type: object
+      additionalProperties: false
+      required: [action]
+      properties:
+        action: { type: string, enum: [start, acknowledge] }
+    DailyPlanTask:
+      type: object
+      required: [id, kind, sourceKey, sourceHash, title, reason, href, minutes, status, startedAt, completedAt]
+      properties:
+        id: { type: string, format: uuid }
+        kind: { type: string, enum: [confirmed_review, word_practice, new_learning] }
+        sourceKey: { type: string }
+        sourceHash: { type: string }
+        title: { type: string }
+        reason: { type: string }
+        href: { type: string }
+        minutes: { type: integer, minimum: 1 }
+        status: { type: string, enum: [pending, started, completed, unavailable] }
+        startedAt: { type: [string, "null"] }
+        completedAt: { type: [string, "null"] }
+    DailyPlan:
+      type: object
+      required: [id, day, today, timezone, revision, status, dailyMinutes, goal, preferencesChanged, committedOverBudget, deferredCount, staleCount, tasks]
+      properties:
+        id: { type: [string, "null"] }
+        day: { type: [string, "null"] }
+        today: { type: [string, "null"] }
+        timezone: { type: [string, "null"] }
+        revision: { type: integer }
+        status: { type: string, enum: [ready, completed, empty, needs_preferences, needs_calendar, expired] }
+        dailyMinutes: { type: integer }
+        goal: { type: [string, "null"], enum: [memorize, review, both, null] }
+        preferencesChanged: { type: boolean }
+        committedOverBudget: { type: boolean }
+        deferredCount: { type: integer }
+        staleCount: { type: integer }
+        tasks: { type: array, items: { $ref: "#/components/schemas/DailyPlanTask" } }
+    WordPracticeReference:
+      type: object
+      required: [hadithId, title, fingerprint, tokenizerVersion, words]
+      properties:
+        hadithId: { type: integer }
+        title: { type: string }
+        fingerprint: { type: string }
+        tokenizerVersion: { type: string }
+        words: { type: array, items: { type: string } }
+    WordPracticeAttempt:
+      type: object
+      additionalProperties: false
+      required: [requestId, status, covered, matched]
+      properties:
+        requestId: { type: string, format: uuid }
+        status: { type: string, enum: [comparable, incomplete, unavailable] }
+        covered: { type: integer, minimum: 0, maximum: 120 }
+        matched: { type: integer, minimum: 0, maximum: 120 }
+    WordPracticeInput:
+      type: object
+      additionalProperties: false
+      required: [requestId, consent, hadithId, fingerprint, tokenizerVersion, start, end, targets, attempts]
+      properties:
+        requestId: { type: string, format: uuid }
+        consent: { type: boolean, enum: [true] }
+        hadithId: { type: integer, minimum: 1, maximum: 42 }
+        fingerprint: { type: string, pattern: "^[a-f0-9]{64}$" }
+        tokenizerVersion: { type: string, enum: [arabic-whitespace-v1] }
+        start: { type: integer, minimum: 0 }
+        end: { type: integer, minimum: 1 }
+        targets: { type: array, minItems: 1, maxItems: 20, uniqueItems: true, items: { type: integer, minimum: 0 } }
+        attempts: { type: array, maxItems: 20, items: { $ref: "#/components/schemas/WordPracticeAttempt" } }
+    WordPracticeAttemptInput:
+      type: object
+      additionalProperties: false
+      required: [consent, fingerprint, attempt]
+      properties:
+        consent: { type: boolean, enum: [true] }
+        fingerprint: { type: string }
+        attempt: { $ref: "#/components/schemas/WordPracticeAttempt" }
+    WordPractice:
+      type: object
+      required: [id, createdAt, reference, start, end, targets, attempts, stale]
+      properties:
+        id: { type: string }
+        createdAt: { type: string, format: date-time }
+        reference: { $ref: "#/components/schemas/WordPracticeReference" }
+        start: { type: integer }
+        end: { type: integer }
+        targets: { type: array, items: { type: integer } }
+        attempts: { type: array, items: { $ref: "#/components/schemas/WordPracticeAttempt" } }
+        stale: { type: boolean }
+    CollationRectangle:
+      type: object
+      additionalProperties: false
+      required: [x, y, width, height]
+      properties:
+        x: { type: number, minimum: 0, maximum: 1 }
+        y: { type: number, minimum: 0, maximum: 1 }
+        width: { type: number, exclusiveMinimum: 0, maximum: 1 }
+        height: { type: number, exclusiveMinimum: 0, maximum: 1 }
+    CollationGeometryInput:
+      type: object
+      additionalProperties: false
+      required: [excerptId, imageSha256, originalTextSha256, rectangles, note, manuallyVerified, expectedRevision]
+      properties:
+        expectedRevision: { type: [string, "null"], description: Latest audit fingerprint seen when editing; null only when no record exists }
+        excerptId: { type: string, minLength: 1, maxLength: 200 }
+        imageSha256: { type: string, pattern: "^[a-f0-9]{64}$" }
+        originalTextSha256: { type: string, pattern: "^[a-f0-9]{64}$" }
+        rectangles: { type: array, maxItems: 20, items: { $ref: "#/components/schemas/CollationRectangle" } }
+        note: { type: string, minLength: 10, maxLength: 2000 }
+        manuallyVerified: { type: boolean, enum: [true] }
+    CollationGeometry:
+      type: object
+      required: [excerptId, imageSha256, originalTextSha256, rectangles, note, method, recordedAt]
+      properties:
+        excerptId: { type: string }
+        imageSha256: { type: string }
+        originalTextSha256: { type: string }
+        rectangles: { type: array, items: { $ref: "#/components/schemas/CollationRectangle" } }
+        note: { type: string }
+        method: { type: string, enum: [manual_visual] }
+        recordedAt: { type: string, format: date-time }
+    CollationGeometrySnapshot:
+      type: object
+      required: [excerptId, imageSha256, originalTextSha256, excerptSha256, rectangles, note, method, recordedAt, imageMatches, textMatches]
+      properties:
+        excerptId: { type: string }
+        imageSha256: { type: string }
+        originalTextSha256: { type: string }
+        excerptSha256: { type: string }
+        rectangles: { type: array, items: { $ref: "#/components/schemas/CollationRectangle" } }
+        note: { type: string }
+        method: { type: string, enum: [manual_visual] }
+        recordedAt: { type: string, format: date-time }
+        imageMatches: { type: boolean }
+        textMatches: { type: boolean }
+    CollationGeometryHistoryEvent:
+      type: object
+      required: [id, actorId, createdAt, reason, change, before, after]
+      properties:
+        id: { type: string, format: uuid }
+        actorId: { type: string }
+        createdAt: { type: string, format: date-time }
+        reason: { type: string }
+        change: { type: string, enum: [recorded, revoked, invalid] }
+        before:
+          oneOf:
+            - { $ref: "#/components/schemas/CollationGeometrySnapshot" }
+            - { type: "null" }
+        after:
+          oneOf:
+            - { $ref: "#/components/schemas/CollationGeometrySnapshot" }
+            - { type: "null" }
+    ScholarlyCollationExcerpt:
+      type: object
+      required: [id, originalText, correctedText, originalStart, originalEnd, location, difference, scope]
+      properties:
+        id: { type: string }
+        originalText: { type: string }
+        correctedText: { type: string }
+        originalStart: { type: integer }
+        originalEnd: { type: integer }
+        location: { type: string }
+        difference: { type: string }
+        scope: { type: string }
+    CollationGeometryState:
+      type: object
+      required: [excerptId, revision, current]
+      properties:
+        excerptId: { type: string }
+        revision: { type: [string, "null"] }
+        current:
+          oneOf:
+            - { $ref: "#/components/schemas/CollationGeometry" }
+            - { type: "null" }
+    CollationGeometryConflict:
+      type: object
+      required: [error, code]
+      properties:
+        error: { type: string }
+        code: { type: string, enum: [geometry_conflict, evidence_changed] }
+        state: { $ref: "#/components/schemas/CollationGeometryState" }
+    ScholarlyCollation:
+      type: object
+      required: [passageId, originalText, originalTextSha256, geometry, geometryStates, correctedDraft, exclusionReason, viewerPage, pdfPage, printedPage, imageSha256, imageAvailable, excerpts, limitations, paginationNote]
+      properties:
+        passageId: { type: string, format: uuid }
+        originalText: { type: string }
+        originalTextSha256: { type: string }
+        geometry: { type: array, items: { $ref: "#/components/schemas/CollationGeometry" } }
+        geometryStates: { type: array, items: { $ref: "#/components/schemas/CollationGeometryState" } }
+        correctedDraft: { type: [string, "null"] }
+        exclusionReason: { type: string }
+        viewerPage: { type: integer }
+        pdfPage: { type: [integer, "null"] }
+        printedPage: { type: [string, "null"] }
+        imageSha256: { type: [string, "null"] }
+        imageAvailable: { type: boolean }
+        excerpts:
+          type: array
+          items: { $ref: "#/components/schemas/ScholarlyCollationExcerpt" }
+        limitations: { type: array, items: { type: string } }
+        paginationNote: { type: string }
     StudyActivityStartInput:
       type: object
       additionalProperties: false
@@ -1953,6 +2425,7 @@ components:
       type: object
       required: [question]
       properties:
+        answerMode: { type: string, enum: [study, sources], description: "Explicit mode; omission keeps legacy unreviewed study behavior." }
         question: { type: string, minLength: 1, maxLength: 8000 }
         textContext: { type: ["string", "null"], maxLength: 3000 }
         textId: { type: ["string", "null"], enum: [nawawi, usul-thalatha, tuhfa, null], description: "Selected study book. Omitted or null values retain the legacy Nawawi default." }
@@ -1960,12 +2433,18 @@ components:
       type: object
       required: [text]
       properties:
+        answerMode: { type: string, enum: [study, sources], description: "Explicit mode for this turn; omission means study, never inferred from earlier text." }
         text: { type: string, minLength: 1, maxLength: 8000 }
         requestId: { type: string, format: uuid, description: "Stable message identifier retained when retrying a failed send." }
     Citation:
       type: object
       required: [passageId, sourceId, sourceTitle, author, edition, volume, printedPage, pdfPage, quote]
       properties:
+        snapshotAt: { type: string, format: date-time }
+        sourceStatusAtAnswer: { type: string, enum: [indexed], description: "Retrieval eligibility in this corpus only, not claim-level or external scientific/rights approval." }
+        viewerPage: { type: ["integer", "null"], minimum: 1 }
+        publicSourceUrl: { type: ["string", "null"], description: "Server-allowed public published reference only; never private evidence or signed storage." }
+        sourceVersion: { type: ["string", "null"] }
         passageId: { type: string, format: uuid }
         sourceId: { type: string, format: uuid }
         sourceTitle: { type: string }
@@ -1975,10 +2454,19 @@ components:
         printedPage: { type: ["string", "null"] }
         pdfPage: { type: ["integer", "null"] }
         quote: { type: string }
+    CitationSourceStatus:
+      type: object
+      required: [sourceId, state, versionChanged, checkedAt]
+      properties:
+        sourceId: { type: string, format: uuid }
+        state: { type: string, enum: [eligible, withdrawn, ineligible, unavailable] }
+        versionChanged: { type: ["boolean", "null"] }
+        checkedAt: { type: string, format: date-time }
     AssistantQuestion:
       type: object
       required: [conversationId, questionId, question, textId, textContext, createdAt, reason, status, answer, citations, referral, model]
       properties:
+        answerMode: { type: string, enum: [legacy, study, sources] }
         conversationId: { type: string, format: uuid }
         questionId: { type: string, format: uuid }
         question: { type: string }
@@ -2043,6 +2531,7 @@ components:
       type: object
       required: [id, role, text, createdAt, citations]
       properties:
+        answerMode: { type: ["string", "null"], enum: [legacy, study, sources, null] }
         id: { type: string, format: uuid }
         role: { type: string, enum: [student, assistant, teacher] }
         text: { type: string }
@@ -2085,10 +2574,35 @@ components:
       properties:
         unreadCount: { type: integer }
         latestAt: { type: ["string", "null"], format: date-time }
+    ScholarlyPreparedPackage:
+      type: object
+      required: [title, version, sourceUrl, passageCount, authorizationStatement, warnings]
+      properties:
+        title: { type: string }
+        version: { type: string }
+        sourceUrl: { type: string }
+        passageCount: { type: integer }
+        authorizationStatement: { type: string }
+        warnings: { type: array, items: { type: string } }
+    ScholarlyPreparedImportInput:
+      type: object
+      required: [confirmUnreviewed]
+      properties:
+        confirmUnreviewed: { type: boolean, const: true }
+    ScholarlyPreparedImportResult:
+      type: object
+      required: [sourceId, outcome, totalCount, importedCount, existingCount]
+      properties:
+        sourceId: { type: string, format: uuid }
+        outcome: { type: string, enum: [imported, already_imported] }
+        totalCount: { type: integer }
+        importedCount: { type: integer }
+        existingCount: { type: integer }
     ScholarlySourceInput:
       type: object
       required: [title, author, edition, legalAuthorization, authorizationReference, version]
       properties:
+        textId: { type: ["string", "null"], enum: [nawawi, usul-thalatha, tuhfa, null], description: "Explicit book scope reviewed with this immutable source version. Unscoped sources cannot answer student source-mode questions." }
         title: { type: string, minLength: 1, maxLength: 500 }
         author: { type: string, minLength: 1, maxLength: 300 }
         edition: { type: string, minLength: 1, maxLength: 300 }
@@ -2100,6 +2614,7 @@ components:
       type: object
       required: [id, title, author, edition, publisher, legalAuthorization, authorizationReference, version, status, passageCount, reviewedAt, indexedAt]
       properties:
+        textId: { type: ["string", "null"], enum: [nawawi, usul-thalatha, tuhfa, null] }
         id: { type: string, format: uuid }
         title: { type: string }
         author: { type: string }
@@ -2139,6 +2654,8 @@ components:
         printedPage: { type: ["string", "null"] }
         pdfPage: { type: ["integer", "null"] }
         indexed: { type: boolean }
+        sourceUrl: { type: ["string", "null"] }
+        viewerPage: { type: ["integer", "null"], description: "Website viewer page only; not a printed or PDF page." }
     ScholarlyIndexInput:
       type: object
       required: [confirmReviewed]
@@ -2200,17 +2717,23 @@ components:
       type: object
       required: [model, providerConfigured, evaluationPassed, reviewedSourceCount, assistantEnabled]
       properties:
-        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4, nvidia/nemotron-3.5-lightning-30b-a3b] }
+        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4, nvidia/nemotron-3.5-lightning-30b-a3b, google/gemini-2.5-flash] }
         providerConfigured: { type: boolean }
         evaluationPassed: { type: boolean }
         reviewedSourceCount: { type: integer }
         assistantEnabled: { type: boolean }
         studyAnswersEnabled: { type: boolean, description: General unverified student answers can be generated without approved commentary sources. }
+        sourceBlockers:
+          type: array
+          items: { type: string, enum: [no_sources, corpus_incomplete, provider_unconfigured, evaluation_required] }
+        sourceBooks:
+          type: array
+          items: { type: string, enum: [nawawi, usul-thalatha, tuhfa] }
     ScholarlyConfigInput:
       type: object
       required: [model]
       properties:
-        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4, nvidia/nemotron-3.5-lightning-30b-a3b] }
+        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4, nvidia/nemotron-3.5-lightning-30b-a3b, google/gemini-2.5-flash] }
     ScholarlyPreviewInput:
       type: object
       additionalProperties: false
@@ -2230,7 +2753,7 @@ components:
       type: object
       required: [model, arabicQualityPassed, groundingPassed, abstentionPassed, note]
       properties:
-        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4, nvidia/nemotron-3.5-lightning-30b-a3b] }
+        model: { type: string, enum: [gpt-5.4-mini, gpt-5.4, nvidia/nemotron-3.5-lightning-30b-a3b, google/gemini-2.5-flash] }
         arabicQualityPassed: { type: boolean }
         groundingPassed: { type: boolean }
         abstentionPassed: { type: boolean }

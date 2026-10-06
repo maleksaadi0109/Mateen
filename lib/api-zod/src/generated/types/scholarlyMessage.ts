@@ -6,9 +6,12 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { Citation } from './citation';
+import type { ScholarlyMessageAnswerMode } from './scholarlyMessageAnswerMode';
 import type { ScholarlyMessageRole } from './scholarlyMessageRole';
 
 export interface ScholarlyMessage {
+  /** @nullable */
+  answerMode?: ScholarlyMessageAnswerMode;
   id: string;
   role: ScholarlyMessageRole;
   text: string;

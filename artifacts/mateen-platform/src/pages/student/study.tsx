@@ -1,3 +1,5 @@
+import { fmt } from '@/lib/i18n';
+import { tr } from '@/lib/i18n';
 import { useMemo, useRef, useState, type ReactNode } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link, useParams, useSearch } from 'wouter';
@@ -18,7 +20,7 @@ export type StudyAssistantContext = {
 
 export default function StudyPage({ assistant }: { assistant?: (ctx: StudyAssistantContext) => ReactNode } = {}) {
   const { textId = 'nawawi' } = useParams<{ textId: string }>();
-  usePageMeta('الدراسة | مَتِين', 'اقرأ الأربعين النووية كاملة صفحة صفحة، ثم سمّعها لتظهر كلماتها مع صوتك.');
+  usePageMeta(tr("الدراسة | مَتِين"), tr("اقرأ الأربعين النووية كاملة صفحة صفحة، ثم سمّعها لتظهر كلماتها مع صوتك."));
   const search = useSearch();
   const catalog = useGetCatalog({ query: { enabled: true, queryKey: getGetCatalogQueryKey() } });
   const entry = catalog.data?.find((t) => t.id === textId);
@@ -69,21 +71,21 @@ export default function StudyPage({ assistant }: { assistant?: (ctx: StudyAssist
   if (catalog.isError) return <ErrorState onRetry={() => catalog.refetch()} />;
   if (!entry || locked) {
     return (
-      <EmptyState icon={<Lock size={28} />} title={entry ? `${entry.title}: قريباً` : 'متن غير موجود'}
-        action={<Link href="/student/tracks" className="rounded-full bg-primary px-6 py-2.5 font-ui font-bold text-primary-foreground">عودة إلى المسارات</Link>}>
-        {entry ? 'هذا المتن غير منشور بعد ولا يمكن دراسته.' : 'لا يوجد متن بهذا المعرّف في الفهرس.'}
+      <EmptyState icon={<Lock size={28} />} title={entry ? fmt("{a}: قريباً", "{a}: coming soon", { a: entry.title }) : tr("متن غير موجود")}
+        action={<Link href="/student/tracks" className="rounded-full bg-primary px-6 py-2.5 font-ui font-bold text-primary-foreground">{tr("عودة إلى المسارات")}</Link>}>
+        {entry ? tr("هذا المتن غير منشور بعد ولا يمكن دراسته.") : tr("لا يوجد متن بهذا المعرّف في الفهرس.")}
       </EmptyState>
     );
   }
-  if (text.isError || !text.data) return <ErrorState message="تعذّر تحميل النص." onRetry={() => text.refetch()} />;
-  if (progress.isError) return <ErrorState message="تعذّر تحميل تقدمك المحفوظ." onRetry={() => progress.refetch()} />;
+  if (text.isError || !text.data) return <ErrorState message={tr("تعذّر تحميل النص.")} onRetry={() => text.refetch()} />;
+  if (progress.isError) return <ErrorState message={tr("تعذّر تحميل تقدمك المحفوظ.")} onRetry={() => progress.refetch()} />;
   const t = text.data;
   if (hadiths.length === 0) {
     return (
       <div className="space-y-4">
         <h1 className="font-display text-3xl font-bold">{t.title}</h1>
-        <Notice title="النص غير متاح الآن">تعذّر استرجاع النص من مصدره، فلا يعرض الخادم أحاديث. لم نعرض بديلاً غير موثّق. حاول لاحقاً.</Notice>
-        <button onClick={() => text.refetch()} className="rounded-full bg-primary px-6 py-2.5 font-ui font-bold text-primary-foreground" data-testid="button-retry-text">إعادة المحاولة</button>
+        <Notice title={tr("النص غير متاح الآن")}>{tr("تعذّر استرجاع النص من مصدره، فلا يعرض الخادم أحاديث. لم نعرض بديلاً غير موثّق. حاول لاحقاً.")}</Notice>
+        <button onClick={() => text.refetch()} className="rounded-full bg-primary px-6 py-2.5 font-ui font-bold text-primary-foreground" data-testid="button-retry-text">{tr("إعادة المحاولة")}</button>
       </div>
     );
   }
@@ -100,20 +102,18 @@ export default function StudyPage({ assistant }: { assistant?: (ctx: StudyAssist
       <StudyContinuity />
       {mode === 'read' && (
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <nav className="flex flex-wrap items-center gap-1" aria-label="تنقل الدراسة">
-            <Link href="/student/tracks" className="inline-flex min-h-9 items-center gap-1 rounded-full px-3 font-ui text-xs text-muted-foreground hover:bg-muted hover:text-foreground" data-testid="link-back-tracks"><ArrowRight size={14} />المسارات</Link>
-            <Link href="/student/study" className="inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 font-ui text-xs text-muted-foreground hover:bg-muted hover:text-foreground" data-testid="link-study-library"><Library size={14} />المكتبة</Link>
-            <Link href="/student/study/reports" className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-secondary/40 px-3 font-ui text-xs font-bold text-secondary hover:bg-secondary/10" data-testid="link-study-reports"><BarChart3 size={14} />تقارير التسميع</Link>
+          <nav className="flex flex-wrap items-center gap-1" aria-label={tr("تنقل الدراسة")}>
+            <Link href="/student/tracks" className="inline-flex min-h-9 items-center gap-1 rounded-full px-3 font-ui text-xs text-muted-foreground hover:bg-muted hover:text-foreground" data-testid="link-back-tracks"><ArrowRight size={14} />{tr("المسارات")}</Link>
+            <Link href="/student/study" className="inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 font-ui text-xs text-muted-foreground hover:bg-muted hover:text-foreground" data-testid="link-study-library"><Library size={14} />{tr("المكتبة")}</Link>
+            <Link href="/student/study/reports" className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-secondary/40 px-3 font-ui text-xs font-bold text-secondary hover:bg-secondary/10" data-testid="link-study-reports"><BarChart3 size={14} />{tr("تقارير التسميع")}</Link>
           </nav>
           <h1 className="font-display text-xl font-bold sm:text-2xl" data-testid="text-study-title">{t.title}</h1>
         </div>
       )}
-      {saveError !== null && <div role="alert" className="rounded-xl border p-3 font-ui text-sm">
-        تعذّر حفظ موضع الدراسة. يمكنك متابعة القراءة، لكن موضع العودة لم يتحدث.
-        <button className="mx-2 min-h-10 underline" onClick={() => savePosition(saveError)}>إعادة الحفظ</button>
+      {saveError !== null && <div role="alert" className="rounded-xl border p-3 font-ui text-sm">{tr("تعذّر حفظ موضع الدراسة. يمكنك متابعة القراءة، لكن موضع العودة لم يتحدث.")}<button className="mx-2 min-h-10 underline" onClick={() => savePosition(saveError)}>{tr("إعادة الحفظ")}</button>
       </div>}
       <div className={assistant ? 'grid items-start gap-5 lg:grid-cols-[minmax(19rem,24rem)_minmax(0,1fr)]' : ''} dir={assistant ? 'ltr' : undefined}>
-        <div dir="rtl" className={assistant ? `min-w-0 lg:order-2 ${showAssistant ? '' : 'lg:col-span-2'}` : undefined}>
+        <div className={assistant ? `min-w-0 lg:order-2 ${showAssistant ? '' : 'lg:col-span-2'}` : undefined}>
           <RecitationBook key={textId} hadiths={hadiths} initialHadith={initial} sourceStatus={t.sourceStatus} onModeChange={setMode} onNavigate={savePosition} navigationPending={save.isPending}
             {...(assistant ? {
               onActiveHadith: changeActive,
@@ -121,7 +121,7 @@ export default function StudyPage({ assistant }: { assistant?: (ctx: StudyAssist
             } : {})} />
         </div>
         {showAssistant && activeHadith && (
-          <aside dir="rtl" className="min-w-0 lg:order-1" data-testid="study-assistant-column">
+          <aside className="min-w-0 lg:order-1" data-testid="study-assistant-column">
             {assistant({ textId, hadith: { number: activeHadith.number, title: activeHadith.title, text: activeHadith.text }, selected, wordRequest, onBusyChange: setAssistantBusy })}
           </aside>
         )}

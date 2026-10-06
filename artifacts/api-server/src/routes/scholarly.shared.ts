@@ -8,6 +8,22 @@ import {
 import { and, eq } from "drizzle-orm";
 import type { NextFunction, Request, Response } from "express";
 import { getReviewAccess } from "../middlewares/review-security";
+import type { Citation } from "@workspace/api-zod";
+import { publicReferenceUrl } from "../lib/citation-provenance";
+
+export function publicCitations(value: Array<Record<string, unknown>>) {
+  // Never project arbitrary stored metadata into a public response.
+  return value.map(c => ({
+    passageId: c.passageId, sourceId: c.sourceId, sourceTitle: c.sourceTitle,
+    author: c.author, edition: c.edition, volume: c.volume, printedPage: c.printedPage,
+    pdfPage: c.pdfPage, quote: c.quote,
+    ...(c.sourceVersion !== undefined ? { sourceVersion: c.sourceVersion } : {}),
+    ...(c.viewerPage !== undefined ? { viewerPage: c.viewerPage } : {}),
+    ...(c.snapshotAt !== undefined ? { snapshotAt: c.snapshotAt } : {}),
+    ...(c.sourceStatusAtAnswer !== undefined ? { sourceStatusAtAnswer: c.sourceStatusAtAnswer } : {}),
+    ...(c.publicSourceUrl !== undefined ? { publicSourceUrl: publicReferenceUrl(c.publicSourceUrl) } : {}),
+  })) as Citation[];
+}
 
 export type AuthedRequest = Request & { scholarlyUserId?: string };
 
@@ -85,17 +101,7 @@ export async function getQuestionCitations(questionId: string) {
       eq(scholarlyMessagesTable.questionId, questionId),
       eq(scholarlyMessagesTable.role, "assistant"),
     )).limit(1);
-  return (message?.citations ?? []) as Array<{
-    passageId: string;
-    sourceId: string;
-    sourceTitle: string;
-    author: string;
-    edition: string;
-    volume: number | null;
-    printedPage: string | null;
-    pdfPage: number | null;
-    quote: string;
-  }>;
+  return publicCitations(message?.citations ?? []);
 }
 
 async function ensureProfile(userId: string): Promise<void> {
@@ -136,8 +142,12 @@ export async function requireApprovedTeacher(
 export async function requireAdmin(req: AuthedRequest, res: Response): Promise<boolean> {
   try {
     const access = await getReviewAccess(req);
-    if (!access.contentReviewer || !access.verifiedEmail || !access.mfaEnabled || !access.secureSession) {
-      res.status(403).json({ error: "Content-review permission and a verified MFA-protected session are required" });
+    if (!access.verifiedEmail) {
+      res.status(403).json({ error: "A verified email is required for administrative review" });
+      return false;
+    }
+    if (!access.contentReviewer) {
+      res.status(403).json({ error: "Content-review permission is required" });
       return false;
     }
     await ensureProfile(req.scholarlyUserId!);

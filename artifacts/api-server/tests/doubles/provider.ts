@@ -1,12 +1,18 @@
 import type { GroundedAnswer, PassageCandidate } from "../../src/lib/scholarly";
 export * from "../../src/lib/scholarly";
 
+export async function classifyHadithQuestion(question: string) {
+  return /الطقس|كرة القدم|اكتب برنامج/.test(question) ? "out_of_scope" as const : "hadith" as const;
+}
+
 type Completion = (passages: PassageCandidate[]) => Promise<GroundedAnswer>;
 let completion: Completion = async () => ({
   abstain: true, reason: "امتناع اختباري", answer: null, citations: [],
 });
 export function setCompletion(value: Completion) { completion = value; }
-export function isScholarlyProviderConfigured() { return true; }
+let configured = true;
+export function setProviderConfigured(value: boolean) { configured = value; }
+export function isScholarlyProviderConfigured() { return configured; }
 let studyCalls = 0;
 export function getStudyCallCount() { return studyCalls; }
 let lastStudyInput: { question: string; context: string | null; book: string | undefined } | null = null;
@@ -24,7 +30,18 @@ export async function generateStudyAnswer(question: string, context: string | nu
   lastHistory = history;
   return answerStudyQuestion(question, context, model, book);
 }
-export async function semanticRank(_question: string, passages: PassageCandidate[]) { return passages; }
+let lastSourceInput = "";
+let sourceCalls = 0;
+export function getLastSourceInput() { return lastSourceInput; }
+export function getSourceCallCount() { return sourceCalls; }
+export async function semanticRank(question: string, passages: PassageCandidate[]) {
+  lastSourceInput = question;
+  return passages;
+}
 export async function answerFromPassages(
   _question: string, _context: string | null, passages: PassageCandidate[],
-) { return completion(passages); }
+) {
+  sourceCalls++;
+  if (!passages.length) return { abstain: true, reason: "", answer: null, citations: [] };
+  return completion(passages);
+}

@@ -1,3 +1,6 @@
+import { fmt } from '@/lib/i18n';
+import { tr } from '@/lib/i18n';
+import { TaskSessionBanner } from '@/components/mateen/task-session-banner';
 import { useState } from 'react';
 import { Link, useParams } from 'wouter';
 import { useUser } from '@clerk/react';
@@ -12,7 +15,7 @@ import JourneyGuide from '@/components/mateen/journey/journey-guide';
 import { chapterStatus, useTuhfaMap, useTuhfaText } from './tuhfa-map';
 
 type Mode = 'study' | 'exam';
-const back = <Link href="/student/learn/tuhfa" className="font-bold text-secondary" data-testid="link-back-tuhfa">العودة لأبواب التحفة</Link>;
+const back = <Link href="/student/learn/tuhfa" className="font-bold text-secondary" data-testid="link-back-tuhfa">{tr("العودة لأبواب التحفة")}</Link>;
 
 export default function TuhfaChapterPage() {
   const { chapterNumber } = useParams<{ chapterNumber: string }>();
@@ -21,7 +24,7 @@ export default function TuhfaChapterPage() {
   const map = useTuhfaMap();
   const text = useTuhfaText();
   const chapter = text.data?.chapters.find((c) => c.number === cn_);
-  usePageMeta(`${chapter?.title ?? 'باب من التحفة'} | مَتِين`, 'اقرأ الباب كاملاً، ثم سمّع أبياته كلها في محاولة واحدة.');
+  usePageMeta(fmt("{a} | مَتِين", "{a} | Mateen", { a: chapter?.title ?? tr("باب من التحفة") }), tr("اقرأ الباب كاملاً، ثم سمّع أبياته كلها في محاولة واحدة."));
 
   const stages = map.data?.stages ?? [];
   const [mode, setMode] = useState<Mode>('study');
@@ -35,15 +38,15 @@ export default function TuhfaChapterPage() {
   const [modeKey, setModeKey] = useState(chatKey);
   if (modeKey !== chatKey) { setModeKey(chatKey); setMode('study'); setWord(null); setBusy(false); setReq(0); }
 
-  if (!Number.isInteger(cn_) || cn_ < 1) return <EmptyState title="باب غير موجود">{back}</EmptyState>;
+  if (!Number.isInteger(cn_) || cn_ < 1) return <EmptyState title={tr("باب غير موجود")}>{back}</EmptyState>;
   if (map.isLoading || text.isLoading) return <div className="grid gap-4 lg:grid-cols-[22rem_1fr]"><SkeletonBlock className="h-96" /><SkeletonBlock className="h-96" /></div>;
-  if (map.isError) return <ErrorState message="تعذّر تحميل حالة الباب." onRetry={() => map.refetch()} />;
-  if (text.isError) return <ErrorState message="تعذّر تحميل نص الباب." onRetry={() => text.refetch()} />;
-  if (!chapter) return <EmptyState icon={<BookMascot size={72} mood="rest" />} title="باب غير موجود">{back}</EmptyState>;
+  if (map.isError) return <ErrorState message={tr("تعذّر تحميل حالة الباب.")} onRetry={() => map.refetch()} />;
+  if (text.isError) return <ErrorState message={tr("تعذّر تحميل نص الباب.")} onRetry={() => text.refetch()} />;
+  if (!chapter) return <EmptyState icon={<BookMascot size={72} mood="rest" />} title={tr("باب غير موجود")}>{back}</EmptyState>;
   const status = chapterStatus(chapter, stages);
   if (status === 'locked') return (
-    <EmptyState icon={<Lock size={30} className="text-muted-foreground" />} title={`${chapter.title} مغلق`}>
-      <span data-testid="text-chapter-locked">أتمم الباب السابق بأكثر من {num(map.data?.threshold ?? 90)}٪ ليُفتح هذا الباب.</span>{' '}{back}
+    <EmptyState icon={<Lock size={30} className="text-muted-foreground" />} title={fmt("{a} مغلق", "{a} is locked", { a: chapter.title })}>
+      <span data-testid="text-chapter-locked">{tr("أتمم الباب السابق بأكثر من")}{' '}{num(map.data?.threshold ?? 90)}{tr("٪ ليُفتح هذا الباب.")}</span>{' '}{back}
     </EmptyState>
   );
 
@@ -62,24 +65,24 @@ export default function TuhfaChapterPage() {
 
   return (
     <div>
+      <TaskSessionBanner />
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <Link href="/student/learn/tuhfa" className="inline-flex items-center gap-1.5 font-ui text-sm font-semibold text-secondary" data-testid="link-tuhfa-map"><ArrowRight size={15} />أبواب التحفة</Link>
-        <span className="font-ui text-sm text-muted-foreground" data-testid="text-chapter-status">
-          الباب {num(chapter.number)} · {status === 'passed' ? `مُسمّع${best != null ? ` (${num(best)}٪)` : ''}` : 'الحالي'}
+        <Link href="/student/learn/tuhfa" className="inline-flex items-center gap-1.5 font-ui text-sm font-semibold text-secondary" data-testid="link-tuhfa-map"><ArrowRight size={15} />{tr("أبواب التحفة")}</Link>
+        <span className="font-ui text-sm text-muted-foreground" data-testid="text-chapter-status">{tr("الباب")}{' '}{num(chapter.number)} · {status === 'passed' ? fmt("مُسمّع{a}", "Recited{a}", { a: best != null ? fmt(" ({a}٪)", " ({a}%)", { a: num(best) }) : '' }) : tr("الحالي")}
         </span>
       </div>
 
       <section className="paper-card mb-5 overflow-hidden p-4 sm:p-7" data-testid="card-chapter-text">
-        <p className="font-ui text-xs font-semibold text-secondary">الباب {num(chapter.number)} · {num(chapter.verses.length)} أبيات</p>
+        <p className="font-ui text-xs font-semibold text-secondary">{tr("الباب")}{' '}{num(chapter.number)} · {num(chapter.verses.length)}{' '}{tr("أبيات")}</p>
         <h1 className="mt-1 py-1 font-display text-2xl font-bold leading-[2] sm:text-3xl" data-testid="text-chapter-title">{chapter.title}</h1>
-        <JourneyGuide mood={status === 'passed' ? 'calm' : 'cheer'} message="اقرأ الباب كاملاً أولاً. حدّد كلمة أو مقطعاً متصلاً لتسأل المساعد عنه، ثم سمّع الباب كله في محاولة واحدة." />
+        <JourneyGuide mood={status === 'passed' ? 'calm' : 'cheer'} message={tr("اقرأ الباب كاملاً أولاً. حدّد كلمة أو مقطعاً متصلاً لتسأل المساعد عنه، ثم سمّع الباب كله في محاولة واحدة.")} />
         <div className="ornament my-3"><span className="text-xs">*</span></div>
         <PassageSelection key={chatKey} text={full} poem={chapter.verses.map((v) => ({ number: v.number, text: v.text }))} selected={word} onSelect={setWord} onAsk={() => setReq((r) => r + 1)} busy={busy} />
         <div className="mt-8 border-t pt-5">
           <button className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-full bg-secondary px-8 py-3 font-ui text-lg font-bold text-secondary-foreground shadow-[0_4px_0_hsl(24_90%_20%)] transition active:translate-y-1 active:shadow-none sm:w-auto" onClick={() => setMode('exam')} data-testid="button-recite-chapter">
-            <GraduationCap size={20} />{status === 'passed' ? 'أعد تسميع الباب' : 'سمّع الباب كاملاً'}
+            <GraduationCap size={20} />{status === 'passed' ? tr("أعد تسميع الباب") : tr("سمّع الباب كاملاً")}
           </button>
-          <p className="mt-3 font-ui text-xs leading-6 text-muted-foreground">تُسمَّع كل أبيات الباب في محاولة واحدة، والنجاح بأكثر من {num(threshold)}٪. هذا تدريب تقريبي لمطابقة الكلمات، وليس تقييمًا للنطق أو التجويد.</p>
+          <p className="mt-3 font-ui text-xs leading-6 text-muted-foreground">{tr("تُسمَّع كل أبيات الباب في محاولة واحدة، والنجاح بأكثر من")}{' '}{num(threshold)}{tr("٪. هذا تدريب تقريبي لمطابقة الكلمات، وليس تقييمًا للنطق أو التجويد.")}</p>
         </div>
       </section>
 

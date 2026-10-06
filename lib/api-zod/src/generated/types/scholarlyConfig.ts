@@ -6,6 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { ScholarlyConfigModel } from './scholarlyConfigModel';
+import type { ScholarlyConfigSourceBlockersItem } from './scholarlyConfigSourceBlockersItem';
+import type { ScholarlyConfigSourceBooksItem } from './scholarlyConfigSourceBooksItem';
 
 export interface ScholarlyConfig {
   model: ScholarlyConfigModel;
@@ -15,4 +17,6 @@ export interface ScholarlyConfig {
   assistantEnabled: boolean;
   /** General unverified student answers can be generated without approved commentary sources. */
   studyAnswersEnabled?: boolean;
+  sourceBlockers?: ScholarlyConfigSourceBlockersItem[];
+  sourceBooks?: ScholarlyConfigSourceBooksItem[];
 }

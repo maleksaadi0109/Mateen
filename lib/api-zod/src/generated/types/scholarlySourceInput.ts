@@ -6,8 +6,14 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { ScholarlySourceInputLegalAuthorization } from './scholarlySourceInputLegalAuthorization';
+import type { ScholarlySourceInputTextId } from './scholarlySourceInputTextId';
 
 export interface ScholarlySourceInput {
+  /**
+     * Explicit book scope reviewed with this immutable source version. Unscoped sources cannot answer student source-mode questions.
+     * @nullable
+     */
+  textId?: ScholarlySourceInputTextId;
   /**
      * @minLength 1
      * @maxLength 500

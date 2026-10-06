@@ -1,3 +1,4 @@
+import { tr } from '@/lib/i18n';
 import { type ReactNode } from 'react';
 import { Link } from 'wouter';
 import { getGetCapabilitiesQueryKey, useGetCapabilities } from '@workspace/api-client-react';
@@ -14,11 +15,11 @@ function Unavailable({ eyebrow, title, icon, lead, ready, children }: { eyebrow:
         <div className="space-y-5">
           <div className="paper-card star-pattern p-10 text-center">
             <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-full border border-secondary/40 bg-card text-secondary">{icon}</div>
-            <h2 className="font-display text-2xl font-bold" data-testid="text-unavailable">{ready(q.data) ? 'الخدمة مفعّلة من الخادم' : 'غير متاح في هذا الإصدار'}</h2>
+            <h2 className="font-display text-2xl font-bold" data-testid="text-unavailable">{ready(q.data) ? tr("الخدمة مفعّلة من الخادم") : tr("غير متاح في هذا الإصدار")}</h2>
             <div className="mx-auto mt-3 max-w-lg font-arabic text-lg leading-loose text-muted-foreground">{children}</div>
           </div>
-          {q.data.notice && <Notice title="إشعار المنصة">{q.data.notice}</Notice>}
-          <Link href="/student/study/nawawi" className="inline-block font-ui font-bold text-secondary underline underline-offset-4">ارجع إلى القراءة</Link>
+          {q.data.notice && <Notice title={tr("إشعار المنصة")}>{q.data.notice}</Notice>}
+          <Link href="/student/study/nawawi" className="inline-block font-ui font-bold text-secondary underline underline-offset-4">{tr("ارجع إلى القراءة")}</Link>
         </div>
       )}
     </div>
@@ -26,11 +27,9 @@ function Unavailable({ eyebrow, title, icon, lead, ready, children }: { eyebrow:
 }
 
 export function AssistantPage() {
-  usePageMeta('المساعد العلمي | مَتِين', 'المساعد العلمي غير مفعّل بعد.');
+  usePageMeta(tr("المساعد العلمي | مَتِين"), tr("المساعد العلمي غير مفعّل بعد."));
   return (
-    <Unavailable eyebrow="المساعد العلمي" title="المساعد العلمي" icon={<Sparkles size={28} />} ready={(c) => c.assistantReady}
-      lead="سيجيب من كتب الشروح المعتمدة مع ذكر المصدر والصفحة، ويحيل ما عداه إلى معلم معتمد.">
-      لا يُعرض هنا أي جواب حتى تكتمل مراجعة المصادر. لا فتاوى ولا اجتهاد.
-    </Unavailable>
+    <Unavailable eyebrow={tr("المساعد العلمي")} title={tr("المساعد العلمي")} icon={<Sparkles size={28} />} ready={(c) => c.assistantReady}
+      lead={tr("سيجيب من كتب الشروح المعتمدة مع ذكر المصدر والصفحة، ويحيل ما عداه إلى معلم معتمد.")}>{tr("لا يُعرض هنا أي جواب حتى تكتمل مراجعة المصادر. لا فتاوى ولا اجتهاد.")}</Unavailable>
   );
 }

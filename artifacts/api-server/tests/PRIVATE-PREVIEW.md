@@ -21,7 +21,7 @@ does not replace either that router or the scholarly provider implementation.
 - The real provider parser runs against synthetic transport responses. Its
   transport rejects unexpected URLs rather than allowing a network fallback.
 - HTTP tests exercise secure content reviewers, student and qualification-only
-  denial, MFA/session/email/account security, in-flight permission revocation,
+  denial, ordinary sessions with optional MFA, verified email/active account, in-flight permission revocation,
   invalid bodies, the per-actor rate limit and provider failures.
 - Every HTTP case compares complete before/after rows in all scholarly tables
   except the audit. Protected tables contain nonempty synthetic fixtures, so the

@@ -26,11 +26,19 @@ try {
     "CREATE TYPE mateen_profile_role AS ENUM ('student','teacher'); CREATE TABLE mateen_profiles(clerk_id text PRIMARY KEY,name text NOT NULL DEFAULT '',role mateen_profile_role NOT NULL DEFAULT 'student',onboarded boolean NOT NULL DEFAULT false,learning_preferences jsonb);"]);
   pg("psql", ["-h", socket, "-U", "report_test", "-d", "reports", "-v", "ON_ERROR_STOP=1", "-f",
     join(root, "../../lib/db/migrations/0009_practice_reports.sql")]);
+  pg("psql", ["-h", socket, "-U", "report_test", "-d", "reports", "-v", "ON_ERROR_STOP=1", "-f",
+    join(root, "../../lib/db/migrations/0017_word_practices.sql")]);
   const outfile = join(temp, "tests.cjs");
   await build({
-    entryPoints: [join(root, "tests/practice-reports.http.test.ts")], bundle: true,
+    entryPoints: [join(root, process.argv.includes("--word-practice") ? "tests/word-practice.http.test.ts" : "tests/practice-reports.http.test.ts")], bundle: true,
     platform: "node", format: "cjs", outfile,
     plugins: [{ name: "test-clerk-discovery", setup(b) {
+      if (process.argv.includes("--word-practice")) {
+        b.onResolve({ filter: /\/lib\/source-review$/ }, () => ({ path: "source", namespace: "test-source" }));
+        b.onLoad({ filter: /.*/, namespace: "test-source" }, () => ({
+          contents: "export async function getNawawiStudyRecords(){return {hadiths:[{id:1,title:'test',text:'الله الله كلمة أخرى نهاية'}]}}", loader: "js",
+        }));
+      }
       b.onResolve({ filter: /^@clerk\/express$/ }, () => ({ path: "clerk", namespace: "test-auth" }));
       b.onLoad({ filter: /.*/, namespace: "test-auth" }, () => ({
         contents: "export const getAuth = req => ({ userId: req.headers['x-test-user'] || null });", loader: "js",

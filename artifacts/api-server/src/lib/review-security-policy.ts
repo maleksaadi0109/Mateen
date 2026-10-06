@@ -4,6 +4,7 @@ export interface ReviewSecurityState {
   banned: boolean;
   locked: boolean;
   verifiedEmail: boolean;
+  // Informational compatibility fields; administrative permission ignores MFA.
   mfaEnabled: boolean;
   secureSession: boolean;
 }
@@ -26,9 +27,7 @@ export function hasSecureReviewPermission(
   if (
     state.banned ||
     state.locked ||
-    !state.verifiedEmail ||
-    !state.mfaEnabled ||
-    !state.secureSession
+    !state.verifiedEmail
   ) {
     return false;
   }

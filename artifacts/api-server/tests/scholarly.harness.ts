@@ -9,7 +9,7 @@ import {
 import router from "../src/routes/scholarly";
 import { getScholarlyCorpus } from "../src/routes/scholarly.readiness";
 import { SCHOLARLY_MODEL } from "../src/lib/scholarly";
-import { setCompletion } from "./doubles/provider";
+import { setCompletion, setProviderConfigured } from "./doubles/provider";
 
 export { db, pool };
 export async function startHarness() {
@@ -67,6 +67,7 @@ export async function resetFixtures() {
     { userId: "teacher-b", status: "approved", available: true },
   ]);
   setCompletion(async () => ({ abstain: true, reason: "امتناع اختباري", answer: null, citations: [] }));
+  setProviderConfigured(true);
 }
 
 export async function question(
@@ -92,6 +93,7 @@ export async function question(
 export async function readyCorpus() {
   const [source] = await db.insert(scholarlySourcesTable).values({
     title: "مصدر اصطناعي للاختبار", author: "مؤلف اختباري", edition: "اختبار",
+    textId: "nawawi",
     version: "fixture", legalAuthorization: "public_domain",
     authorizationReference: "synthetic fixture, not a real approval", status: "indexed",
     createdBy: "student-a",

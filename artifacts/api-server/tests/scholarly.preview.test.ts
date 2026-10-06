@@ -167,9 +167,16 @@ test("unauthenticated, cross-origin, student and qualification-only requests can
   assert.deepEqual(await db.select().from(scholarlyAuditTable), auditInitial);
 });
 
-test("MFA, verified second factor, verified email and active account are all required", async () => {
+test("verified content reviewers can use ordinary sessions with or without optional MFA", async () => {
   for (const identity of [
-    { content: true, mfa: false }, { content: true, factorAge: [0, null] as [number, null] },
+    { content: true, mfa: false, factorAge: [0, null] as [number, null] },
+    { content: true, mfa: true, factorAge: [0, null] as [number, null] },
+  ]) assert.equal((await request(actor(identity))).status, 200);
+  assert.equal(calls.length, 2);
+});
+
+test("verified email and active account remain required", async () => {
+  for (const identity of [
     { content: true, verified: false }, { content: true, banned: true }, { content: true, locked: true },
   ]) assert.equal((await request(actor(identity))).status, 403);
   assert.equal(calls.length, 0);

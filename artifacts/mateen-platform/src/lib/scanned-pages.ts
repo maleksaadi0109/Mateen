@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RecitationPages, RecitationPageRegion } from '@workspace/api-client-react';
 
 export type ScannedGate =
@@ -53,10 +54,10 @@ export function visibleRegions(regions: RecitationPageRegion[], revealed: boolea
 }
 
 export const GATE_MESSAGES: Record<Exclude<ScannedGate['kind'], 'ready' | 'idle'>, string> = {
-  loading: 'جارٍ التحقق من توفر صفحات الكتاب المصوّرة…',
-  error: 'تعذّر التحقق من صفحات الكتاب المصوّرة. تستمر صفحة التسميع النصية كما هي.',
-  rights_pending: 'صفحات الكتاب المصوّرة بانتظار استيفاء حقوق الاستخدام. تستمر صفحة التسميع النصية كما هي.',
-  mapping_pending: 'لم تكتمل مطابقة كلمات هذا الحديث على الصفحات المصوّرة بعد. تستمر صفحة التسميع النصية كما هي.',
-  mismatch: 'نص الصفحات المصوّرة لا يطابق نص التسميع حرفياً، فلم نعرضها احتياطاً. تستمر صفحة التسميع النصية.',
-  invalid: 'بيانات الصفحات المصوّرة غير مكتملة، فلم نعرضها. تستمر صفحة التسميع النصية.',
+  get loading() { return tr("جارٍ التحقق من توفر صفحات الكتاب المصوّرة…"); },
+  get error() { return tr("تعذّر التحقق من صفحات الكتاب المصوّرة. تستمر صفحة التسميع النصية كما هي."); },
+  get rights_pending() { return tr("صفحات الكتاب المصوّرة بانتظار استيفاء حقوق الاستخدام. تستمر صفحة التسميع النصية كما هي."); },
+  get mapping_pending() { return tr("لم تكتمل مطابقة كلمات هذا الحديث على الصفحات المصوّرة بعد. تستمر صفحة التسميع النصية كما هي."); },
+  get mismatch() { return tr("نص الصفحات المصوّرة لا يطابق نص التسميع حرفياً، فلم نعرضها احتياطاً. تستمر صفحة التسميع النصية."); },
+  get invalid() { return tr("بيانات الصفحات المصوّرة غير مكتملة، فلم نعرضها. تستمر صفحة التسميع النصية."); },
 };

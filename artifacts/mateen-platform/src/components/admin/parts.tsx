@@ -1,3 +1,4 @@
+import { tr } from '@/lib/i18n';
 import { type ReactNode, useState } from 'react';
 import { Link } from 'wouter';
 import { Download, ShieldAlert } from 'lucide-react';
@@ -17,13 +18,10 @@ export const toneOf = (s: string): 'muted' | 'ok' | 'warn' | 'bad' =>
 export function SecurityNotice({ settingsHref = '/teacher/settings', reason }: { settingsHref?: string; reason?: string }) {
   return (
     <div className="space-y-3" data-testid="notice-security">
-      <Notice tone="amber" title="هذه الصفحة تتطلب جلسة موثّقة بعاملين">
-        {reason ? <span className="block">{reason}</span> : null}
-        يلزم بريد إلكتروني موثّق، وتفعيل المصادقة الثنائية (تطبيق مصادقة) في حسابك، ثم <b>تسجيل الخروج وإعادة الدخول</b> وإكمال خطوة التحقق الثانية في الجلسة الجديدة؛ فالجلسات القديمة لا تحمل العامل الثاني.
-      </Notice>
+      <Notice tone="amber" title={tr("تحقق من صلاحية الحساب وتوثيق البريد")}>
+        {reason ? <span className="block">{reason}</span> : null}{tr("يلزم حساب نشط وبريد إلكتروني موثّق وصلاحية مراجعة يمنحها مسؤول النظام. المصادقة الثنائية اختيارية وليست شرطًا للمراجعة.")}</Notice>
       <Link href={settingsHref} className="inline-flex items-center gap-2 rounded-full border px-5 py-2 font-ui text-sm font-bold hover:bg-muted" data-testid="link-account-security">
-        <ShieldAlert size={16} /> إعدادات أمان الحساب
-      </Link>
+        <ShieldAlert size={16} />{' '}{tr("إعدادات أمان الحساب")}</Link>
     </div>
   );
 }
@@ -39,22 +37,22 @@ export function DocDownload({ id, name }: { id: string; name: string }) {
       const a = document.createElement('a');
       a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 5000);
-    } catch (e) { setErr(errMsg(e, 'تعذّر تنزيل الوثيقة.')); } finally { setBusy(false); }
+    } catch (e) { setErr(errMsg(e, tr("تعذّر تنزيل الوثيقة."))); } finally { setBusy(false); }
   };
   return (
     <span className="inline-flex flex-col items-start">
       <button type="button" onClick={go} disabled={busy} className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-ui text-xs font-bold hover:bg-muted disabled:opacity-50" data-testid={`button-download-${id}`}>
-        <Download size={13} /> {busy ? 'جارٍ التنزيل…' : 'تنزيل'}
+        <Download size={13} /> {busy ? tr("جارٍ التنزيل…") : tr("تنزيل")}
       </button>
       {err ? <span className="mt-1 font-ui text-xs text-red-800" role="alert">{err}</span> : null}
     </span>
   );
 }
 
-export function History({ items, empty = 'لا سجل بعد.' }: { items: ReviewAudit[]; empty?: string }) {
+export function History({ items, empty = tr("لا سجل بعد.") }: { items: ReviewAudit[]; empty?: string }) {
   if (!items.length) return <p className="font-ui text-sm text-muted-foreground">{empty}</p>;
   return (
-    <ol className="space-y-2 border-r-2 pr-4" data-testid="list-history">
+    <ol className="space-y-2 border-s-2 ps-4" data-testid="list-history">
       {[...items].reverse().map((h) => (
         <li key={h.id} className="font-ui text-sm">
           <span className="font-bold">{h.action}</span> <span className="text-xs text-muted-foreground">· {fmtDate(h.createdAt)}</span>

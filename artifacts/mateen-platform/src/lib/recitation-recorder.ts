@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 // Audio stays local until the user explicitly sends it; never an assessment.
 export const MAX_RECORDING_SECONDS = 60;
 export const MAX_RECORDING_BYTES = 10 * 1024 * 1024;
@@ -26,11 +27,11 @@ export interface RecorderEnvironment {
 function microphoneError(error: unknown): string {
   const name = error instanceof Error ? error.name : '';
   if (name === 'NotAllowedError' || name === 'SecurityError') {
-    return 'لم يُسمح باستخدام الميكروفون. فعّل الإذن لهذا الموقع من إعدادات المتصفح ثم حاول مجددًا.';
+    return tr("لم يُسمح باستخدام الميكروفون. فعّل الإذن لهذا الموقع من إعدادات المتصفح ثم حاول مجددًا.");
   }
-  if (name === 'NotFoundError') return 'لم نجد ميكروفونًا متصلًا. وصّل ميكروفونًا ثم حاول مجددًا.';
-  if (name === 'NotReadableError') return 'تعذّر الوصول إلى الميكروفون. تحقق من أنه لا يُستخدم في تطبيق آخر.';
-  return 'تعذّر بدء التسجيل. تحقق من الميكروفون وإعدادات المتصفح ثم حاول مجددًا.';
+  if (name === 'NotFoundError') return tr("لم نجد ميكروفونًا متصلًا. وصّل ميكروفونًا ثم حاول مجددًا.");
+  if (name === 'NotReadableError') return tr("تعذّر الوصول إلى الميكروفون. تحقق من أنه لا يُستخدم في تطبيق آخر.");
+  return tr("تعذّر بدء التسجيل. تحقق من الميكروفون وإعدادات المتصفح ثم حاول مجددًا.");
 }
 
 export function browserRecorderEnvironment(): RecorderEnvironment {
@@ -121,7 +122,7 @@ export class RecitationRecorderController {
   start = async () => {
     if (!['idle', 'error'].includes(this.snapshot.status)) return;
     if (!this.env.supported) {
-      this.fail('التسجيل غير مدعوم هنا. افتح المنصة عبر اتصال آمن في متصفح يدعم تسجيل الصوت.');
+      this.fail(tr("التسجيل غير مدعوم هنا. افتح المنصة عبر اتصال آمن في متصفح يدعم تسجيل الصوت."));
       return;
     }
     this.discard();
@@ -146,17 +147,17 @@ export class RecitationRecorderController {
         if (generation !== this.generation || !event.data.size) return;
         this.byteCount += event.data.size;
         if (this.byteCount > MAX_RECORDING_BYTES) {
-          this.fail('تجاوز التسجيل حد ١٠ ميغابايت وحُذف. حاول تسجيل مقطع أقصر.');
+          this.fail(tr("تجاوز التسجيل حد ١٠ ميغابايت وحُذف. حاول تسجيل مقطع أقصر."));
           return;
         }
         this.chunks.push(event.data);
       };
       recorder.onerror = () => {
-        if (generation === this.generation) this.fail('انقطع التسجيل بسبب خطأ تقني وحُذف. حاول مجددًا.');
+        if (generation === this.generation) this.fail(tr("انقطع التسجيل بسبب خطأ تقني وحُذف. حاول مجددًا."));
       };
       stream.getTracks().forEach((track) => {
         track.onended = () => {
-          if (generation === this.generation) this.fail('انقطع اتصال الميكروفون وحُذف التسجيل غير المكتمل. حاول مجددًا.');
+          if (generation === this.generation) this.fail(tr("انقطع اتصال الميكروفون وحُذف التسجيل غير المكتمل. حاول مجددًا."));
         };
       });
       recorder.onstop = () => {
@@ -167,13 +168,13 @@ export class RecitationRecorderController {
         this.chunks = [];
         this.byteCount = 0;
         if (!blob.size) {
-          this.fail('لم يصل صوت من الميكروفون. تحقق منه ثم حاول مجددًا.');
+          this.fail(tr("لم يصل صوت من الميكروفون. تحقق منه ثم حاول مجددًا."));
           return;
         }
         try {
           this.update({ ...this.initial(), status: 'ready', seconds, audioUrl: this.env.createUrl(blob), blob });
         } catch {
-          this.fail('تعذّر تجهيز الصوت للاستماع وحُذف التسجيل. حاول مجددًا.');
+          this.fail(tr("تعذّر تجهيز الصوت للاستماع وحُذف التسجيل. حاول مجددًا."));
         }
       };
       this.startedAt = this.env.now();
@@ -194,7 +195,7 @@ export class RecitationRecorderController {
     if (this.timer !== null) this.env.clearInterval(this.timer);
     this.timer = null;
     this.update({ ...this.snapshot, status: 'stopping' });
-    try { this.recorder.stop(); } catch { this.fail('تعذّر إنهاء التسجيل وحُذف. حاول مجددًا.'); }
+    try { this.recorder.stop(); } catch { this.fail(tr("تعذّر إنهاء التسجيل وحُذف. حاول مجددًا.")); }
     // Stop capture immediately, without waiting for asynchronous final data.
     this.stream?.getTracks().forEach((track) => {
       track.onended = null;

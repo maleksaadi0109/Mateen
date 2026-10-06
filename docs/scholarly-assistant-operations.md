@@ -14,7 +14,7 @@ Read the live readiness indicator for the configured provider and current corpus
 
 ## Administrative workflow
 
-Use `/admin/scholarly`. Access uses the shared content-review authority: a verified email, MFA-protected session and trusted `mateenContentReviewer` grant in Clerk private metadata. The student's or teacher's browser cannot grant review access.
+Use `/admin/scholarly`. Access uses the shared content-review authority: an ordinary authenticated session, a verified primary email, an active (not banned or locked) account and a trusted `mateenContentReviewer` grant in Clerk private metadata. MFA enrollment and second-factor session verification are not required by Mateen. The student's or teacher's browser cannot grant review access.
 
 1. Create a distinct source version with its book, author, edition, publisher, rights basis and authorization reference.
 2. Add extracted text passages. Keep the printed page and PDF page distinct; a viewer page is not a printed-page citation.
@@ -67,7 +67,7 @@ reuse clearance and scientific review remain separate requirements.
 
 ## Private NVIDIA experiment
 
-The **تجربة خاصة** tab at `/admin/scholarly` generates an unreviewed draft through `POST /api/mateen/admin/scholarly/preview`. It requires the same content-review permission and secured session as the other administrative operations; it does not grant access or disable MFA.
+The **تجربة خاصة** tab at `/admin/scholarly` generates an unreviewed draft through `POST /api/mateen/admin/scholarly/preview`. It requires the same content-review permission, verified email and active account as the other administrative operations, with an ordinary authenticated session. It does not grant access or change the identity provider's optional MFA or sign-in requirements.
 
 - This experiment does not require an indexed corpus or a passing scientific evaluation. Its fixed NVIDIA model is independent of the student assistant's configured model.
 - The question is sent to NVIDIA; do not enter private student questions or personal information. Provider-side retention is governed by NVIDIA's own policies.

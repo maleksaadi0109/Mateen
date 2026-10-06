@@ -1,3 +1,5 @@
+import { fmt } from '@/lib/i18n';
+import { tr } from '@/lib/i18n';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'wouter';
 import { useUser } from '@clerk/react';
@@ -39,25 +41,25 @@ function pickFive(numbers: number[]): number[] {
 export default function LearningCheckpointPage() {
   const { textId, group } = useParams<{ textId: string; group: string }>();
   const g = Number(group);
-  usePageMeta(`امتحان المجموعة ${num(g || 0)} | مَتِين`, 'امتحان تدريبي بخمسة أحاديث عشوائية من سبع مراحل مجتازة.');
+  usePageMeta(fmt("امتحان المجموعة {a} | مَتِين", "Group {a} exam | Mateen", { a: num(g || 0) }), tr("امتحان تدريبي بخمسة أحاديث عشوائية من سبع مراحل مجتازة."));
   const { user } = useUser();
   const map = useNawawiMap();
   const text = useGetStudyText('nawawi', { query: { queryKey: getGetStudyTextQueryKey('nawawi') } });
-  const back = <Link href="/student/learn/nawawi" className="font-bold text-secondary" data-testid="link-back-map">العودة للخريطة</Link>;
+  const back = <Link href="/student/learn/nawawi" className="font-bold text-secondary" data-testid="link-back-map">{tr("العودة للخريطة")}</Link>;
 
-  if (textId !== 'nawawi' || !Number.isInteger(g) || g < 1) return <EmptyState title="امتحان غير موجود">{back}</EmptyState>;
+  if (textId !== 'nawawi' || !Number.isInteger(g) || g < 1) return <EmptyState title={tr("امتحان غير موجود")}>{back}</EmptyState>;
   if (map.isLoading || text.isLoading) return <div className="mx-auto grid max-w-2xl gap-4"><SkeletonBlock className="h-40" /><SkeletonBlock className="h-72" /></div>;
-  if (map.isError) return <ErrorState message="تعذّر تحميل حالة المراحل." onRetry={() => map.refetch()} />;
-  if (text.isError) return <ErrorState message="تعذّر تحميل نصوص الأحاديث." onRetry={() => text.refetch()} />;
+  if (map.isError) return <ErrorState message={tr("تعذّر تحميل حالة المراحل.")} onRetry={() => map.refetch()} />;
+  if (text.isError) return <ErrorState message={tr("تعذّر تحميل نصوص الأحاديث.")} onRetry={() => text.refetch()} />;
 
   const from = (g - 1) * CHECKPOINT_SIZE + 1, to = g * CHECKPOINT_SIZE;
   const stages = (map.data?.stages ?? []).filter((s) => s.number >= from && s.number <= to);
   const hadiths = (text.data?.hadiths ?? []).filter((h) => h.number >= from && h.number <= to);
-  if (stages.length !== CHECKPOINT_SIZE || hadiths.length !== CHECKPOINT_SIZE) return <EmptyState title="امتحان غير موجود">{back}</EmptyState>;
+  if (stages.length !== CHECKPOINT_SIZE || hadiths.length !== CHECKPOINT_SIZE) return <EmptyState title={tr("امتحان غير موجود")}>{back}</EmptyState>;
   const passed = stages.filter((s) => s.status === 'passed').length;
   if (passed < CHECKPOINT_SIZE) return (
-    <EmptyState icon={<Lock size={30} className="text-muted-foreground" />} title={`امتحان المجموعة ${num(g)} مغلق`}>
-      <span data-testid="text-checkpoint-locked">يُفتح بعد اجتياز المراحل {num(from)}–{num(to)} كلها بتدريب المرحلة. اجتزت {num(passed)} من {num(CHECKPOINT_SIZE)}.</span>{' '}{back}
+    <EmptyState icon={<Lock size={30} className="text-muted-foreground" />} title={fmt("امتحان المجموعة {a} مغلق", "Group {a} exam is locked", { a: num(g) })}>
+      <span data-testid="text-checkpoint-locked">{tr("يُفتح بعد اجتياز المراحل")}{' '}{num(from)}–{num(to)}{' '}{tr("كلها بتدريب المرحلة. اجتزت")}{' '}{num(passed)}{' '}{tr("من")}{' '}{num(CHECKPOINT_SIZE)}.</span>{' '}{back}
     </EmptyState>
   );
   return <CheckpointRun key={`${user?.id ?? 'guest'}:${g}`} group={g} from={from} to={to} hadiths={hadiths} sourceStatus={text.data?.sourceStatus} />;
@@ -81,31 +83,31 @@ function CheckpointRun({ group, from, to, hadiths }: { group: number; from: numb
 
   return (
     <section className="mx-auto max-w-3xl space-y-5 py-2" data-testid="checkpoint-exam">
-      <Link href="/student/learn/nawawi" className={cn(secondary, locked && 'pointer-events-none opacity-40')} aria-disabled={locked} data-testid="button-checkpoint-back"><ArrowRight size={16} />الخريطة</Link>
+      <Link href="/student/learn/nawawi" className={cn(secondary, locked && 'pointer-events-none opacity-40')} aria-disabled={locked} data-testid="button-checkpoint-back"><ArrowRight size={16} />{tr("الخريطة")}</Link>
       <header className="paper-card relative overflow-hidden p-5 sm:p-8">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-2">
-            <p className="font-ui text-xs font-bold text-secondary" data-testid="text-checkpoint-range">امتحان المجموعة {num(group)} · الأحاديث {num(from)}–{num(to)}</p>
-            <h1 className="font-display text-3xl font-bold sm:text-4xl">خمسة أحاديث من سبعة</h1>
-            <p className="font-ui text-sm leading-loose text-muted-foreground">اختيرت خمسة أحاديث مختلفة عشوائياً من هذه المجموعة. سمّع كل حديث كاملاً بالسند والعزو؛ تظهر كلماتك في صفحة الكتاب كلما سمّعتها، والاختلافات بعد إنهاء كل سؤال. يُعدّ السؤال مجتازًا عند تجاوز ٩٠٪ تمامًا.</p>
+            <p className="font-ui text-xs font-bold text-secondary" data-testid="text-checkpoint-range">{tr("امتحان المجموعة")}{' '}{num(group)}{' '}{tr("· الأحاديث")}{' '}{num(from)}–{num(to)}</p>
+            <h1 className="font-display text-3xl font-bold sm:text-4xl">{tr("خمسة أحاديث من سبعة")}</h1>
+            <p className="font-ui text-sm leading-loose text-muted-foreground">{tr("اختيرت خمسة أحاديث مختلفة عشوائياً من هذه المجموعة. سمّع كل حديث كاملاً بالسند والعزو؛ تظهر كلماتك في صفحة الكتاب كلما سمّعتها، والاختلافات بعد إنهاء كل سؤال. يُعدّ السؤال مجتازًا عند تجاوز ٩٠٪ تمامًا.")}</p>
           </div>
           <BookMascot size={64} mood={done ? 'calm' : 'cheer'} className="shrink-0" />
         </div>
-        <ol className="mt-5 flex gap-2" aria-label="تقدم الأسئلة">
+        <ol className="mt-5 flex gap-2" aria-label={tr("تقدم الأسئلة")}>
           {picks.map((p, i) => {
             const r = results[i];
             return <li key={`${round}-${p}`} className={cn('h-2.5 flex-1 rounded-full transition-colors duration-500', r ? (r.outcome.passed ? 'bg-secondary' : 'bg-destructive/60') : i === index && !done ? 'bg-secondary/40' : 'bg-muted')} />;
           })}
         </ol>
-        <p className="mt-4 rounded-xl border border-secondary/30 bg-secondary/5 p-3 font-ui text-xs leading-loose" data-testid="checkpoint-disclaimer"><ShieldAlert size={14} className="me-1 inline" />امتحان تدريبي تقريبي بالتعرّف الآلي، وليس اعتماداً رسمياً للحفظ ولا شهادة.</p>
-        <p className="mt-2 font-ui text-xs leading-loose text-muted-foreground">ملخص هذه الجولة يبقى في الصفحة فقط؛ مغادرتها أو تحديثها يبدأ اختيارًا عشوائيًا جديدًا.</p>
+        <p className="mt-4 rounded-xl border border-secondary/30 bg-secondary/5 p-3 font-ui text-xs leading-loose" data-testid="checkpoint-disclaimer"><ShieldAlert size={14} className="me-1 inline" />{tr("امتحان تدريبي تقريبي بالتعرّف الآلي، وليس اعتماداً رسمياً للحفظ ولا شهادة.")}</p>
+        <p className="mt-2 font-ui text-xs leading-loose text-muted-foreground">{tr("ملخص هذه الجولة يبقى في الصفحة فقط؛ مغادرتها أو تحديثها يبدأ اختيارًا عشوائيًا جديدًا.")}</p>
       </header>
 
       {done ? <Summary results={results} onRestart={restart} /> : !consent ? (
         <div className="paper-card space-y-4 p-5 sm:p-8">
           <label className="flex items-start gap-3 rounded-xl border bg-background p-4 font-ui text-sm leading-loose">
             <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-2 h-4 w-4 shrink-0" data-testid="checkbox-checkpoint-consent" />
-            <span>أوافق على استخدام الميكروفون لخمسة أسئلة متتالية. قد تعالج خدمة المتصفح الصوت خارجياً. تُرسل مواضع الكلمات المطابقة وأنواع الاختلافات فقط، دون تسجيل صوتي أو نص كامل.</span>
+            <span>{tr("أوافق على استخدام الميكروفون لخمسة أسئلة متتالية. قد تعالج خدمة المتصفح الصوت خارجياً. تُرسل مواضع الكلمات المطابقة وأنواع الاختلافات فقط، دون تسجيل صوتي أو نص كامل.")}</span>
           </label>
         </div>
       ) : (
@@ -143,10 +145,10 @@ function Question({ hadith, position, onLock, onOutcome, onNext, isLast }: { had
       const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(hadith.text));
       const localHash = Array.from(new Uint8Array(bytes), (b) => b.toString(16).padStart(2, '0')).join('');
       if (!mounted.current) return;
-      if (next.sourceHash !== localHash) { setError('تغيّرت نسخة الحديث. أعد تحميل الصفحة قبل المتابعة حتى يتطابق النص مع الامتحان.'); return; }
+      if (next.sourceHash !== localHash) { setError(tr("تغيّرت نسخة الحديث. أعد تحميل الصفحة قبل المتابعة حتى يتطابق النص مع الامتحان.")); return; }
       setAttempt(next); r.reset(); r.start();
     } catch {
-      if (mounted.current) setError('تعذّر بدء السؤال. تحقق من الاتصال ثم أعد المحاولة.');
+      if (mounted.current) setError(tr("تعذّر بدء السؤال. تحقق من الاتصال ثم أعد المحاولة."));
     } finally { inFlight.current = false; if (mounted.current) setBusy(false); }
   };
 
@@ -167,37 +169,37 @@ function Question({ hadith, position, onLock, onOutcome, onNext, isLast }: { had
       setOutcome(result);
       void qc.invalidateQueries({ queryKey: getGetLearningMapQueryKey('nawawi') });
     } catch {
-      if (mounted.current) setError('تعذّر تثبيت نتيجة السؤال. يمكنك إعادة الإرسال دون تكرار التسميع.');
+      if (mounted.current) setError(tr("تعذّر تثبيت نتيجة السؤال. يمكنك إعادة الإرسال دون تكرار التسميع."));
     } finally { inFlight.current = false; if (mounted.current) setBusy(false); }
   };
 
   return (
     <div className="paper-card space-y-5 p-5 sm:p-8" data-testid="checkpoint-question">
       <div className="flex items-baseline justify-between gap-3">
-        <p className="font-ui text-sm font-bold text-secondary" data-testid="text-question-position">السؤال {num(position)} من {num(QUESTIONS)}</p>
-        <p className="font-ui text-xs text-muted-foreground">الحديث {num(hadith.number)}</p>
+        <p className="font-ui text-sm font-bold text-secondary" data-testid="text-question-position">{tr("السؤال")}{' '}{num(position)}{' '}{tr("من")}{' '}{num(QUESTIONS)}</p>
+        <p className="font-ui text-xs text-muted-foreground">{tr("الحديث")}{' '}{num(hadith.number)}</p>
       </div>
       <h2 className="font-display text-2xl font-bold sm:text-3xl" data-testid="text-question-title">{hadith.title}</h2>
       {outcome ? (
         <div className="space-y-4">
-          {snapshot ? <ExamReview snapshot={snapshot} outcome={outcome} title={hadith.title} /> : <p className="font-display text-4xl font-bold text-primary">{num(outcome.percent)}٪</p>}
-          <button type="button" className={`${primary} w-full`} onClick={() => { onOutcome(outcome, snapshot); if (!isLast) onNext(); }} data-testid="button-question-next">{isLast ? 'عرض الملخص' : 'السؤال التالي'}</button>
+          {snapshot ? <ExamReview snapshot={snapshot} outcome={outcome} title={hadith.title} /> : <p className="font-display text-4xl font-bold text-primary">{num(outcome.percent)}{tr("٪")}</p>}
+          <button type="button" className={`${primary} w-full`} onClick={() => { onOutcome(outcome, snapshot); if (!isLast) onNext(); }} data-testid="button-question-next">{isLast ? tr("عرض الملخص") : tr("السؤال التالي")}</button>
         </div>
       ) : !attempt ? (
         <>
-          {r.supported === false && <p role="alert" className="font-ui text-sm">التعرّف الصوتي غير متاح في متصفحك؛ لن تُسجّل نتيجة وهمية.</p>}
-          <button type="button" className={`${primary} w-full`} onClick={begin} disabled={!r.supported || busy} data-testid="button-question-start"><Mic size={18} />{busy ? 'جارٍ البدء…' : 'ابدأ تسميع هذا الحديث'}</button>
+          {r.supported === false && <p role="alert" className="font-ui text-sm">{tr("التعرّف الصوتي غير متاح في متصفحك؛ لن تُسجّل نتيجة وهمية.")}</p>}
+          <button type="button" className={`${primary} w-full`} onClick={begin} disabled={!r.supported || busy} data-testid="button-question-start"><Mic size={18} />{busy ? tr("جارٍ البدء…") : tr("ابدأ تسميع هذا الحديث")}</button>
         </>
       ) : (
         <>
-          <p className="flex items-center justify-center gap-2 font-ui text-sm font-bold" role="status" data-testid="text-question-listening"><Mic size={16} className={cn(r.listening ? 'animate-pulse text-secondary motion-reduce:animate-none' : 'text-muted-foreground')} />{r.listening ? 'يستمع الآن، تابع التسميع' : 'الميكروفون متوقف'}</p>
+          <p className="flex items-center justify-center gap-2 font-ui text-sm font-bold" role="status" data-testid="text-question-listening"><Mic size={16} className={cn(r.listening ? 'animate-pulse text-secondary motion-reduce:animate-none' : 'text-muted-foreground')} />{r.listening ? tr("يستمع الآن، تابع التسميع") : tr("الميكروفون متوقف")}</p>
           <LiveExamBook words={r.words} revealed={r.revealed} interimIndices={r.interimIndices} listening={r.listening} title={hadith.title} />
           {!payload ? (
             <div className="flex flex-wrap justify-center gap-2">
-              <button type="button" className={secondary} disabled={busy || r.finishing} onClick={r.listening ? r.stop : r.start} data-testid="button-question-pause">{r.listening ? <><Pause size={16} />إيقاف مؤقت</> : <><Mic size={16} />متابعة</>}</button>
-              <button type="button" className={primary} disabled={busy || r.finishing || r.attemptedCount === 0} onClick={finish} data-testid="button-question-finish"><Flag size={16} />{busy ? 'جارٍ الاحتساب…' : 'إنهاء السؤال'}</button>
+              <button type="button" className={secondary} disabled={busy || r.finishing} onClick={r.listening ? r.stop : r.start} data-testid="button-question-pause">{r.listening ? <><Pause size={16} />{tr("إيقاف مؤقت")}</> : <><Mic size={16} />{tr("متابعة")}</>}</button>
+              <button type="button" className={primary} disabled={busy || r.finishing || r.attemptedCount === 0} onClick={finish} data-testid="button-question-finish"><Flag size={16} />{busy ? tr("جارٍ الاحتساب…") : tr("إنهاء السؤال")}</button>
             </div>
-          ) : <button type="button" className={`${primary} w-full`} disabled={busy} onClick={finish} data-testid="button-question-resubmit">{busy ? 'جارٍ التثبيت…' : 'إعادة إرسال النتيجة'}</button>}
+          ) : <button type="button" className={`${primary} w-full`} disabled={busy} onClick={finish} data-testid="button-question-resubmit">{busy ? tr("جارٍ التثبيت…") : tr("إعادة إرسال النتيجة")}</button>}
         </>
       )}
       {(error || r.error) && <p role="alert" className="rounded-xl border border-destructive/30 bg-destructive/5 p-3 font-ui text-sm text-destructive" data-testid="checkpoint-error">{error || r.error}</p>}
@@ -210,9 +212,9 @@ function Summary({ results, onRestart }: { results: Result[]; onRestart: () => v
   return (
     <div className="paper-card space-y-5 p-5 sm:p-8" data-testid="checkpoint-summary">
       <div className="text-center">
-        <p className="font-ui text-xs font-bold text-secondary">الملخص التقريبي</p>
+        <p className="font-ui text-xs font-bold text-secondary">{tr("الملخص التقريبي")}</p>
         <p className="mt-1 font-display text-5xl font-bold text-primary" data-testid="text-summary-score">{num(ok)} / {num(QUESTIONS)}</p>
-        <p className="mt-2 font-ui text-sm text-muted-foreground">{ok === QUESTIONS ? 'تجاوزت ٩٠٪ في الأحاديث الخمسة لهذه المحاولة.' : 'افتح كل حديث لترى اختلافاته، ثم أعد الامتحان.'}</p>
+        <p className="mt-2 font-ui text-sm text-muted-foreground">{ok === QUESTIONS ? tr("تجاوزت ٩٠٪ في الأحاديث الخمسة لهذه المحاولة.") : tr("افتح كل حديث لترى اختلافاته، ثم أعد الامتحان.")}</p>
       </div>
       <ul className="space-y-2">
         {results.map((r, i) => (
@@ -220,23 +222,23 @@ function Summary({ results, onRestart }: { results: Result[]; onRestart: () => v
             <details className="group">
               <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 p-3 font-ui text-sm [&::-webkit-details-marker]:hidden">
                 <span className={cn('grid h-8 w-8 shrink-0 place-items-center rounded-full', r.outcome.passed ? 'bg-secondary/15 text-secondary' : 'bg-destructive/10 text-destructive')}>{r.outcome.passed ? <Check size={16} /> : <X size={16} />}</span>
-                <span className="min-w-0 flex-1"><span className="text-xs text-muted-foreground">{num(i + 1)}. الحديث {num(r.number)}</span><span className="block truncate font-bold">{r.title}</span></span>
-                <span className="shrink-0 text-end"><span className="block font-bold">{num(r.outcome.percent)}٪</span><span className="text-xs text-muted-foreground">{num(r.outcome.matched)}/{num(r.outcome.total)}{!r.outcome.complete && ' · غير مكتمل'}</span></span>
+                <span className="min-w-0 flex-1"><span className="text-xs text-muted-foreground">{num(i + 1)}{tr(". الحديث")}{' '}{num(r.number)}</span><span className="block truncate font-bold">{r.title}</span></span>
+                <span className="shrink-0 text-end"><span className="block font-bold">{num(r.outcome.percent)}{tr("٪")}</span><span className="text-xs text-muted-foreground">{num(r.outcome.matched)}/{num(r.outcome.total)}{!r.outcome.complete && tr(" · غير مكتمل")}</span></span>
                 <ChevronDown size={18} aria-hidden className="shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
-                <span className="sr-only">عرض التفاصيل</span>
+                <span className="sr-only">{tr("عرض التفاصيل")}</span>
               </summary>
               <div className="space-y-3 border-t p-3 sm:p-5">
-                {r.snapshot ? <ExamReview snapshot={r.snapshot} outcome={r.outcome} title={r.title} compact /> : <p className="font-ui text-xs text-muted-foreground">تفاصيل الكلمات غير متاحة لهذا السؤال.</p>}
-                <Link href={`/student/learn/nawawi/${r.number}`} className="inline-flex min-h-11 items-center font-ui text-xs font-bold text-secondary underline underline-offset-4">مراجعة الحديث</Link>
+                {r.snapshot ? <ExamReview snapshot={r.snapshot} outcome={r.outcome} title={r.title} compact /> : <p className="font-ui text-xs text-muted-foreground">{tr("تفاصيل الكلمات غير متاحة لهذا السؤال.")}</p>}
+                <Link href={`/student/learn/nawawi/${r.number}`} className="inline-flex min-h-11 items-center font-ui text-xs font-bold text-secondary underline underline-offset-4">{tr("مراجعة الحديث")}</Link>
               </div>
             </details>
           </li>
         ))}
       </ul>
-      <p className="font-ui text-xs leading-loose text-muted-foreground">نتيجة تدريبية تقريبية فقط؛ ليست شهادة ولا اعتماداً رسمياً، ولا تغيّر فتح المراحل الحالي.</p>
+      <p className="font-ui text-xs leading-loose text-muted-foreground">{tr("نتيجة تدريبية تقريبية فقط؛ ليست شهادة ولا اعتماداً رسمياً، ولا تغيّر فتح المراحل الحالي.")}</p>
       <div className="flex flex-wrap justify-center gap-2">
-        <button type="button" className={primary} onClick={onRestart} data-testid="button-checkpoint-restart"><RotateCcw size={16} />إعادة الامتحان كاملاً</button>
-        <Link href="/student/learn/nawawi" className={secondary}>خريطة التعلّم</Link>
+        <button type="button" className={primary} onClick={onRestart} data-testid="button-checkpoint-restart"><RotateCcw size={16} />{tr("إعادة الامتحان كاملاً")}</button>
+        <Link href="/student/learn/nawawi" className={secondary}>{tr("خريطة التعلّم")}</Link>
       </div>
     </div>
   );

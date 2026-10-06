@@ -4,13 +4,19 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test:review-access": "node ./test-review-access.mjs",
+    "test:source-card": "node ./test-source-card.mjs",
+    "test:scholarly:collation": "node ./test-collation.mjs",
     "dev": "vite --config vite.config.ts --host 0.0.0.0",
     "build": "vite build --config vite.config.ts",
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:word-practice": "node ./test-word-practice.mjs",
     "test:message-drafts": "node ./test-message-drafts.mjs",
     "test:learning-preferences": "node ./test-learning-preferences.mjs",
-    "test:scholarly:preview": "node ./test-private-preview.mjs"
+    "test:scholarly:preview": "node ./test-private-preview.mjs",
+    "test:scholarly:import": "node ./test-prepared-import.mjs",
+    "i18n:audit": "node scripts/i18n-audit.cjs"
   },
   "devDependencies": {
     "@clerk/localizations": "^4.21.1",

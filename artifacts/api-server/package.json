@@ -4,9 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test:teacher-review": "tsx --test src/lib/review-security-policy.test.ts && node ./test-scholarly-http.mjs --teacher-review",
+    "test:daily-plan": "tsx --test src/lib/daily-plan-policy.test.ts && node ./test-daily-plan.mjs",
+    "test:scholarly:collation": "node ./test-scholarly-http.mjs --collation",
     "test:study-activity": "tsx --test src/lib/study-activity-policy.test.ts && node ./test-study-activity.mjs",
     "test:learning-stages": "tsx --test src/lib/learning-stage-policy.test.ts && node ./test-learning-stages.mjs",
     "test:practice-reports": "node ./test-practice-reports.mjs",
+    "test:word-practice": "node ./test-practice-reports.mjs --word-practice",
     "test:recitation-pages": "tsx --test src/lib/recitation-pages.test.ts",
     "dev": "export NODE_ENV=development && pnpm run build && pnpm run start",
     "build": "node ./build.mjs",
@@ -19,6 +23,7 @@
     "test:scholarly": "node ./test-scholarly.mjs && node ./test-scholarly-http.mjs && pnpm run test:scholarly:preview",
     "test:scholarly:preview": "node ./test-scholarly-http.mjs --preview && pnpm --filter @workspace/mateen-platform run test:scholarly:preview",
     "test:scholarly:http": "node ./test-scholarly-http.mjs",
+    "test:scholarly:import": "node ./test-scholarly-http.mjs --prepared-import",
     "evaluate:scholarly:content": "tsx scripts/evaluate-scholarly-content.ts",
     "test:assessment:integration": "node ./test-assessment-audio-integration.mjs"
   },

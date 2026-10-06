@@ -1,3 +1,4 @@
+import { tr } from '@/lib/i18n';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { matchRecitation, matchContinuousRecitation, normalizeRecitationWord, recitationWords, type RecitationIssue } from '@/lib/live-recitation';
 
@@ -118,11 +119,11 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
     if (recognition.current) return;
     const Constructor = speechConstructor();
     if (!Constructor || !window.isSecureContext) {
-      setError('التسميع المباشر غير متاح في هذا المتصفح. استخدم متصفحاً يدعم التعرّف على الكلام عبر اتصال آمن، أو اكشف النص للقراءة.');
+      setError(tr("التسميع المباشر غير متاح في هذا المتصفح. استخدم متصفحاً يدعم التعرّف على الكلام عبر اتصال آمن، أو اكشف النص للقراءة."));
       return;
     }
     if (!words.length || cursor.current >= words.length) {
-      setError('أعد الصفحة فارغة لبدء تسميع جديد.');
+      setError(tr("أعد الصفحة فارغة لبدء تسميع جديد."));
       return;
     }
     if (!keepListening.current) emptyRestarts.current = 0;
@@ -172,7 +173,7 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
       // Never silently truncate a long continuous book session and then appear
       // to stop making progress. Resume explicitly from the committed position.
       if (final.length + interim.length > 250_000) {
-        setError('بلغت جلسة التعرّف حدّها. استكمل التسميع من موضعك لبدء جلسة جديدة.');
+        setError(tr("بلغت جلسة التعرّف حدّها. استكمل التسميع من موضعك لبدء جلسة جديدة."));
         stop();
         return;
       }
@@ -206,14 +207,14 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
       // session next; onend reconnects without losing the committed position.
       if (code === 'no-speech' && keepListening.current && !pendingFinish.current) return;
       const messages: Record<string, string> = {
-        'not-allowed': 'لم يُسمح بالميكروفون. اسمح باستخدامه من إعدادات الموقع ثم حاول مجدداً.',
-        'service-not-allowed': 'خدمة التعرّف على الكلام غير مسموحة في هذا المتصفح. جرّب متصفحاً يدعمها.',
-        'audio-capture': 'لم نعثر على ميكروفون متاح. تحقّق من توصيله وإعداداته.',
-        'network': 'تعذّر الاتصال بخدمة التعرّف على الصوت. تحقّق من الاتصال ثم استكمل التسميع.',
-        'no-speech': 'لم يُلتقط كلام واضح. اقترب من الميكروفون ثم استكمل التسميع.',
-        'language-not-supported': 'التعرّف على العربية غير متاح في هذا المتصفح.',
+        'not-allowed': tr("لم يُسمح بالميكروفون. اسمح باستخدامه من إعدادات الموقع ثم حاول مجدداً."),
+        'service-not-allowed': tr("خدمة التعرّف على الكلام غير مسموحة في هذا المتصفح. جرّب متصفحاً يدعمها."),
+        'audio-capture': tr("لم نعثر على ميكروفون متاح. تحقّق من توصيله وإعداداته."),
+        'network': tr("تعذّر الاتصال بخدمة التعرّف على الصوت. تحقّق من الاتصال ثم استكمل التسميع."),
+        'no-speech': tr("لم يُلتقط كلام واضح. اقترب من الميكروفون ثم استكمل التسميع."),
+        'language-not-supported': tr("التعرّف على العربية غير متاح في هذا المتصفح."),
       };
-      if (code !== 'aborted') setError(messages[code] ?? 'توقف التعرّف على الصوت. يمكنك استكمال التسميع من موضعك.');
+      if (code !== 'aborted') setError(messages[code] ?? tr("توقف التعرّف على الصوت. يمكنك استكمال التسميع من موضعك."));
       stop();
     };
     active.onend = () => {
@@ -230,7 +231,7 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
       } else {
         setListening(false);
         keepListening.current = false;
-        if (restarting) setError('تعذّر استمرار خدمة الصوت بعد عدة محاولات. تحقّق من الميكروفون ثم اضغط متابعة؛ موضعك محفوظ.');
+        if (restarting) setError(tr("تعذّر استمرار خدمة الصوت بعد عدة محاولات. تحقّق من الميكروفون ثم اضغط متابعة؛ موضعك محفوظ."));
       }
     };
     try {
@@ -238,7 +239,7 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
       setListening(true);
     } catch {
       stop();
-      setError('تعذّر بدء الميكروفون. تأكّد من الإذن وعدم استخدامه في تطبيق آخر.');
+      setError(tr("تعذّر بدء الميكروفون. تأكّد من الإذن وعدم استخدامه في تطبيق آخر."));
     }
   };
   startRef.current = start;
@@ -267,7 +268,7 @@ export function useLiveRecitation(text: string, options: { continuousFeedback?: 
     return new Promise(resolve => {
       const timer = window.setTimeout(() => { settleFinish(true); stop(); }, 2000);
       pendingFinish.current = { resolve, timer };
-      try { active.stop!(); } catch { settleFinish(false); stop(); setError('تعذّر إنهاء التقاط الصوت. يمكنك إعادة فتح مراجعة الكلمات المثبتة.'); }
+      try { active.stop!(); } catch { settleFinish(false); stop(); setError(tr("تعذّر إنهاء التقاط الصوت. يمكنك إعادة فتح مراجعة الكلمات المثبتة.")); }
     });
   };
   const revealAll = () => {

@@ -5,6 +5,7 @@ import express from "express";
 import { eq } from "drizzle-orm";
 import { qualificationDocumentsTable, teacherReviewsTable } from "@workspace/db";
 import teacherReviewRouter from "../src/routes/teacher-review";
+import sourceReviewRouter from "../src/routes/source-review";
 import { db, pool, resetFixtures } from "./scholarly.harness";
 
 // The runner generates the schema in a disposable, socket-only PostgreSQL cluster.
@@ -15,6 +16,7 @@ before(async () => {
   const app = express();
   app.use(express.json());
   app.use("/api", teacherReviewRouter);
+  app.use("/api", sourceReviewRouter);
   server = app.listen(0, "127.0.0.1");
   await new Promise<void>((resolve) => server.once("listening", resolve));
   const address = server.address();
@@ -37,8 +39,8 @@ async function request(actor: string, method: string, path: string, body?: unkno
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   const bodyData: unknown = await response.json();
-  assert.ok(bodyData && typeof bodyData === "object" && !Array.isArray(bodyData));
-  return { status: response.status, body: bodyData as Record<string, unknown> };
+  assert.ok(bodyData && typeof bodyData === "object");
+  return { status: response.status, body: bodyData as Record<string, unknown>, headers: response.headers };
 }
 async function document(contentType = "application/pdf", status = "clean") {
   const id = randomUUID();
@@ -114,4 +116,106 @@ test("approval refuses pending applications without a clean PDF", async () => {
   assert.equal(result.status, 422);
   const [review] = await db.select().from(teacherReviewsTable).where(eq(teacherReviewsTable.userId, "teacher-a"));
   assert.equal(review.status, "pending_review");
+});
+
+test("ordinary reviewer sessions read queues, private PDFs and audit without MFA; unauthorized requests fail closed", async () => {
+  const revision = await submitted();
+  const [doc] = await db.select().from(qualificationDocumentsTable);
+  for (const [actor, mfa, secure] of [
+    ["reviewer-no-mfa", false, false], ["reviewer-old", true, false], ["reviewer-ok", true, true],
+  ] as const) {
+    const access = await request(actor, "GET", "/review-access");
+    assert.equal(access.status, 200);
+    assert.equal(access.headers.get("cache-control"), "private, no-store");
+    assert.equal(access.body.qualificationReviewer, true);
+    assert.equal(access.body.mfaEnabled, mfa);
+    assert.equal(access.body.secureSession, secure);
+  }
+  for (const actor of ["anonymous", "student-a", "content-reviewer", "reviewer-unverified", "reviewer-disabled", "reviewer-locked"]) {
+    const expected = actor === "anonymous" ? 401 : 403;
+    assert.equal((await request(actor, "GET", "/admin/teachers")).status, expected, actor);
+    assert.equal((await request(actor, "GET", `/documents/${doc.id}/download`)).status, expected, actor);
+    if (actor !== "content-reviewer") assert.equal((await request(actor, "GET", "/admin/audit")).status, expected, actor);
+    for (const decision of ["approved", "rejected"]) {
+      assert.equal((await request(actor, "POST", "/admin/teachers/teacher-a/decision", {
+        revision, decision, reason: "Isolated security regression",
+      })).status, expected, `${actor}: ${decision}`);
+    }
+  }
+  for (const actor of ["reviewer-no-mfa", "reviewer-old", "reviewer-ok"]) {
+    const queue = await request(actor, "GET", "/admin/teachers");
+    assert.equal(queue.status, 200);
+    assert.equal(queue.headers.get("cache-control"), "private, no-store");
+    assert.equal(Array.isArray(queue.body), true);
+    const pdf = await fetch(`${origin}/api/mateen/documents/${doc.id}/download`, { headers: { "x-test-participant": actor } });
+    assert.equal(pdf.status, 200);
+    assert.equal(pdf.headers.get("content-type"), "application/octet-stream");
+    assert.ok((await pdf.text()).startsWith("%PDF-"));
+    const audit = await request(actor, "GET", "/admin/audit");
+    assert.equal(audit.status, 200);
+    assert.ok(JSON.stringify(audit.body).includes("teacher_document_downloaded"));
+  }
+  assert.equal((await db.select().from(teacherReviewsTable))[0].status, "pending_review");
+});
+
+test("ordinary sessions can approve and reject; stale and self decisions stay denied", async () => {
+  for (const actor of ["reviewer-no-mfa", "reviewer-old", "reviewer-ok"]) {
+    for (const decision of ["approved", "rejected"]) {
+      await resetFixtures();
+      await db.delete(qualificationDocumentsTable);
+      await db.delete(teacherReviewsTable);
+      await document();
+      const revision = 1;
+      await db.insert(teacherReviewsTable).values({ userId: "teacher-a", status: "pending_review", revision });
+      const result = await request(actor, "POST", "/admin/teachers/teacher-a/decision", {
+        revision, decision, reason: "Isolated ordinary-session decision",
+      });
+      assert.equal(result.status, 200, `${actor}: ${decision}`);
+      assert.equal(result.body.status, decision);
+      assert.equal((await request(actor, "POST", "/admin/teachers/teacher-a/decision", {
+        revision, decision, reason: "Stale revision must not be accepted",
+      })).status, 409);
+    }
+  }
+  assert.equal((await request("self-reviewer", "POST", "/admin/teachers/self-reviewer/decision", {
+    revision: 0, decision: "approved", reason: "Self-review must stay forbidden",
+  })).status, 403);
+});
+
+test("audit scopes stay separate and unverified email has a specific denial", async () => {
+  await submitted();
+  const contentAudit = await request("content-reviewer", "GET", "/admin/audit");
+  assert.equal(contentAudit.status, 200);
+  assert.deepEqual(contentAudit.body, []);
+  for (const path of ["/admin/audit", "/admin/teachers"]) {
+    assert.equal((await request("reviewer-unverified", "GET", path)).body.error,
+      "A verified email is required for administrative review");
+  }
+});
+
+test("direct source requests keep content scope and allow a content reviewer without MFA", async () => {
+  for (const actor of ["anonymous", "student-a", "reviewer-no-mfa", "reviewer-old", "reviewer-unverified", "reviewer-disabled", "reviewer-locked"]) {
+    const expected = actor === "anonymous" ? 401 : 403;
+    assert.equal((await request(actor, "GET", "/admin/sources")).status, expected, actor);
+    assert.equal((await request(actor, "POST", "/admin/sources", {})).status, expected, actor);
+    assert.equal((await request(actor, "POST", "/admin/sources/isolated-version/decision", {})).status, expected, actor);
+  }
+  const created = await request("content-reviewer", "POST", "/admin/sources", {
+    hadithNumber: 1, text: "Synthetic policy regression wording, not an approved religious source.",
+    printedPage: 1, viewerPage: 1, viewerUrl: "https://example.invalid/test",
+    edition: "Synthetic isolated edition", changeReason: "Disposable policy regression only",
+    rightsEvidence: "", rightsUrl: "",
+  });
+  assert.equal(created.status, 201);
+  assert.equal((await request("content-reviewer", "GET", "/admin/sources")).status, 200);
+  const decision = await request("content-reviewer", "POST", `/admin/sources/${created.body.id}/decision`, {
+    decision: "rejected", scientificStatus: "rejected", rightsStatus: "pending",
+    reason: "Synthetic content, not for publication",
+  });
+  assert.equal(decision.status, 200);
+  assert.equal(decision.body.status, "rejected");
+  const contentAudit = await request("content-reviewer", "GET", "/admin/audit");
+  assert.ok(JSON.stringify(contentAudit.body).includes(String(created.body.id)));
+  const qualificationAudit = await request("reviewer-no-mfa", "GET", "/admin/audit");
+  assert.ok(!JSON.stringify(qualificationAudit.body).includes(String(created.body.id)));
 });

@@ -1,7 +1,9 @@
+import { tr } from '@/lib/i18n';
 import { useEffect, useRef } from 'react';
 import { ClerkProvider, SignIn, SignUp, useClerk } from '@clerk/react';
 import { publishableKeyFromHost } from '@clerk/react/internal';
-import { arSA } from '@clerk/localizations';
+import { arSA, enUS } from '@clerk/localizations';
+import { useLocale } from '@/lib/i18n';
 import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
 import { Route, Switch, Redirect, useLocation, Router as WouterRouter } from 'wouter';
 import { Toaster } from '@/components/ui/toaster';
@@ -23,6 +25,7 @@ import LearningStagePage from '@/pages/student/learning-stage';
 import TuhfaMapPage from '@/pages/student/tuhfa-map';
 import TuhfaChapterPage from '@/pages/student/tuhfa-chapter';
 import ReviewsPage from '@/pages/student/reviews';
+import WordPracticesPage from '@/pages/student/word-practices';
 import ScholarsPage from '@/pages/student/scholars';
 import ScholarProfilePage from '@/pages/student/scholar-profile';
 import MessagesPage from '@/pages/student/messages';
@@ -39,6 +42,7 @@ import HomeGate from '@/pages/home-gate';
 import { claimAssessmentStorage } from '@/lib/assessment';
 import AdminAssessments from '@/pages/admin/assessments';
 import { draftOwner, messageDrafts } from '@/lib/message-drafts';
+import { reviewReturn } from '@/lib/review-return';
 
 const clerkPubKey = publishableKeyFromHost(window.location.hostname, import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
 const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
@@ -50,21 +54,26 @@ function stripBase(path: string): string {
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false, staleTime: 15_000 } } });
 
-const mateenLocale = {
+// i18n-canonical: Arabic Clerk locale (English counterpart in mateenLocaleEn)
+const mateenLocaleAr = {
   ...arSA,
   formFieldInputPlaceholder__emailAddress: 'أدخل بريدك الإلكتروني',
   formFieldInputPlaceholder__password: 'أدخل كلمة المرور',
   formFieldInputPlaceholder__signUpPassword: 'اختر كلمة مرور آمنة',
   formFieldInputPlaceholder__firstName: 'الاسم الأول',
   formFieldInputPlaceholder__lastName: 'اسم العائلة',
-  signIn: {
-    ...arSA.signIn,
-    start: { ...arSA.signIn?.start, title: 'تسجيل الدخول إلى مَتِين', subtitle: 'تابع دراستك من حيث توقفت.' },
-  },
-  signUp: {
-    ...arSA.signUp,
-    start: { ...arSA.signUp?.start, title: 'أنشئ حسابك في مَتِين', subtitle: 'ابدأ الدراسة، أو احفظ ملفك كمعلم.' },
-  },
+  signIn: { ...arSA.signIn, start: { ...arSA.signIn?.start, title: 'تسجيل الدخول إلى مَتِين', subtitle: 'تابع دراستك من حيث توقفت.' } },
+  signUp: { ...arSA.signUp, start: { ...arSA.signUp?.start, title: 'أنشئ حسابك في مَتِين', subtitle: 'ابدأ الدراسة، أو احفظ ملفك كمعلم.' } },
+};
+const mateenLocaleEn = {
+  ...enUS,
+  formFieldInputPlaceholder__emailAddress: 'Enter your email',
+  formFieldInputPlaceholder__password: 'Enter your password',
+  formFieldInputPlaceholder__signUpPassword: 'Choose a secure password',
+  formFieldInputPlaceholder__firstName: 'First name',
+  formFieldInputPlaceholder__lastName: 'Last name',
+  signIn: { ...enUS.signIn, start: { ...enUS.signIn?.start, title: 'Sign in to Mateen', subtitle: 'Pick up your study where you left off.' } },
+  signUp: { ...enUS.signUp, start: { ...enUS.signUp?.start, title: 'Create your Mateen account', subtitle: 'Start studying, or save your teacher profile.' } },
 };
 
 const clerkAppearance = {
@@ -82,35 +91,44 @@ const clerkAppearance = {
     colorInput: '#fdf9f3',
     colorInputForeground: '#3a2a22',
     colorNeutral: '#6D4C3D',
-    fontFamily: 'Cairo, sans-serif',
+    fontFamily: 'Cairo, "IBM Plex Sans", sans-serif',
     borderRadius: '0.9rem',
   },
   elements: {
-    rootBox: 'w-full flex justify-center',
-    cardBox: 'bg-[#fffdf8] rounded-3xl w-[440px] max-w-full overflow-hidden border border-[#e6dccf] shadow-[0_30px_60px_-40px_rgba(109,76,61,0.6)]',
+    rootBox: '!w-full !max-w-full flex justify-center',
+    cardBox: 'bg-[#fffdf8] rounded-3xl !w-full sm:!w-[440px] !max-w-full min-w-0 overflow-hidden border border-[#e6dccf] shadow-[0_30px_60px_-40px_rgba(109,76,61,0.6)]',
     card: '!shadow-none !border-0 !bg-transparent !rounded-none',
     footer: '!shadow-none !border-0 !bg-transparent !rounded-none',
     headerTitle: 'font-bold text-[#3a2a22]',
     headerSubtitle: 'text-[#6b5a50]',
     socialButtonsBlockButtonText: 'text-[#3a2a22] font-semibold',
     formFieldLabel: 'text-[#3a2a22] font-semibold',
-    footerActionLink: 'text-[#994703] font-bold',
+    footerActionLink: 'text-[#994703] font-bold max-sm:inline-flex max-sm:items-center max-sm:min-h-11',
     footerActionText: 'text-[#6b5a50]',
     dividerText: 'text-[#6b5a50]',
-    formButtonPrimary: 'bg-[#994703] hover:bg-[#7d3a02] text-white font-bold',
+    formButtonPrimary: 'bg-[#994703] hover:bg-[#7d3a02] text-white font-bold min-h-11',
+    formFieldInput: 'min-h-11 text-base',
+    socialButtonsBlockButton: 'min-h-11',
+    otpCodeFieldInput: 'min-h-11 text-base',
+    formFieldInputShowPasswordButton: 'max-sm:min-w-11 max-sm:min-h-11',
+    formFieldAction: 'max-sm:inline-flex max-sm:items-center max-sm:min-h-11',
   },
 };
 
 function SignInPage() {
-  usePageMeta('تسجيل الدخول | مَتِين', 'ادخل إلى حسابك في منصة مَتِين لمتابعة دراستك.');
+  usePageMeta(tr("تسجيل الدخول | مَتِين"), tr("ادخل إلى حسابك في منصة مَتِين لمتابعة دراستك."));
+  // Retain the allowed destination across Clerk's /sign-in/* step navigation.
+  const returnPath = useRef(new URLSearchParams(window.location.search).get('reviewReturn')).current;
+  const destination = returnPath ? reviewReturn(returnPath, basePath) : undefined;
   return (
     <AuthFrame>
-      <div className="flex justify-center"><SignIn routing="path" path={`${basePath}/sign-in`} signUpUrl={`${basePath}/sign-up`} /></div>
+      {destination ? <p className="mb-4 font-ui text-sm leading-7">{tr("أكمل تسجيل الدخول؛ ستعود إلى صفحة المراجعة.")}</p> : null}
+      <div className="flex justify-center"><SignIn routing="path" path={`${basePath}/sign-in`} signUpUrl={`${basePath}/sign-up`} forceRedirectUrl={destination} /></div>
     </AuthFrame>
   );
 }
 function SignUpPage() {
-  usePageMeta('إنشاء حساب | مَتِين', 'أنشئ حسابك في منصة مَتِين طالباً أو معلماً.');
+  usePageMeta(tr("إنشاء حساب | مَتِين"), tr("أنشئ حسابك في منصة مَتِين طالباً أو معلماً."));
   return (
     <AuthFrame>
       <div className="flex justify-center"><SignUp routing="path" path={`${basePath}/sign-up`} signInUrl={`${basePath}/sign-in`} /></div>
@@ -141,17 +159,19 @@ function Portal({ role, children }: { role: 'student' | 'teacher'; children: Rea
 
 function Routes() {
   const [, setLocation] = useLocation();
+  const { locale } = useLocale();
   return (
     <ClerkProvider
       publishableKey={clerkPubKey}
       proxyUrl={clerkProxyUrl}
       appearance={clerkAppearance}
-      localization={mateenLocale}
+      localization={locale === 'en' ? mateenLocaleEn : mateenLocaleAr}
       signInUrl={`${basePath}/sign-in`}
       signUpUrl={`${basePath}/sign-up`}
       routerPush={(to) => setLocation(stripBase(to))}
       routerReplace={(to) => setLocation(stripBase(to), { replace: true })}
     >
+      <PersistentAssistant />
       <QueryClientProvider client={queryClient}>
         <ClerkQueryClientCacheInvalidator />
         <Switch>
@@ -171,6 +191,7 @@ function Routes() {
           <Route path="/student/study/reports"><Portal role="student"><StudyReportsPage /></Portal></Route>
           <Route path="/student/study/:textId"><Portal role="student"><StudyReaderPage /></Portal></Route>
           <Route path="/student/reviews"><Portal role="student"><ReviewsPage /></Portal></Route>
+          <Route path="/student/word-practice"><Portal role="student"><WordPracticesPage /></Portal></Route>
           <Route path="/student/scholars"><Portal role="student"><ScholarsPage /></Portal></Route>
           <Route path="/student/scholars/:teacherId"><Portal role="student"><ScholarProfilePage /></Portal></Route>
           <Route path="/student/messages"><Portal role="student"><MessagesPage /></Portal></Route>
@@ -199,7 +220,6 @@ function Routes() {
 function App() {
   return (
     <WouterRouter base={basePath}>
-      <PersistentAssistant />
       <Routes />
     </WouterRouter>
   );

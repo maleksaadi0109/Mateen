@@ -1,3 +1,5 @@
+import { fmt } from '@/lib/i18n';
+import { tr } from '@/lib/i18n';
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { RecitationPages } from '@workspace/api-client-react';
@@ -27,7 +29,7 @@ export function ScannedPages({ data, revealed, onImageError, idPrefix = 'scan' }
     <div className="space-y-3" data-testid="scanned-pages">
       <div className="mx-auto w-full max-w-[820px] overflow-hidden rounded-xl border border-secondary/30 bg-[hsl(var(--card))] shadow-sm">
         <svg viewBox={`0 0 ${page.width} ${page.height}`} className="block h-auto w-full" role="img"
-          aria-label={`صفحة الكتاب ${num(page.page)}: ظهر ${num(shown.length)} موضع`} data-testid={`scan-page-${page.page}`}>
+          aria-label={fmt("صفحة الكتاب {a}: ظهر {b} موضع", "Book page {a}: {b} position(s) shown", { a: num(page.page), b: num(shown.length) })} data-testid={`scan-page-${page.page}`}>
           <rect width={page.width} height={page.height} fill="hsl(var(--background))" />
           {clips > 0 && <>
             <defs>
@@ -43,17 +45,16 @@ export function ScannedPages({ data, revealed, onImageError, idPrefix = 'scan' }
       </div>
       {pages.length > 1 && (
         <div className="flex items-center justify-center gap-3 font-ui text-sm">
-          <button type="button" onClick={() => setIndex(i - 1)} disabled={i === 0} aria-label="الصفحة السابقة"
-            className="inline-flex min-h-10 items-center gap-1 rounded-full border px-4 disabled:opacity-40" data-testid="button-scan-prev"><ChevronRight size={15} />السابقة</button>
-          <span aria-live="polite" data-testid="text-scan-page-count">صفحة {num(i + 1)} من {num(pages.length)}</span>
-          <button type="button" onClick={() => setIndex(i + 1)} disabled={i === pages.length - 1} aria-label="الصفحة التالية"
-            className="inline-flex min-h-10 items-center gap-1 rounded-full border px-4 disabled:opacity-40" data-testid="button-scan-next">التالية<ChevronLeft size={15} /></button>
+          <button type="button" onClick={() => setIndex(i - 1)} disabled={i === 0} aria-label={tr("الصفحة السابقة")}
+            className="inline-flex min-h-10 items-center gap-1 rounded-full border px-4 disabled:opacity-40" data-testid="button-scan-prev"><ChevronRight size={15} />{tr("السابقة")}</button>
+          <span aria-live="polite" data-testid="text-scan-page-count">{tr("صفحة")}{' '}{num(i + 1)}{' '}{tr("من")}{' '}{num(pages.length)}</span>
+          <button type="button" onClick={() => setIndex(i + 1)} disabled={i === pages.length - 1} aria-label={tr("الصفحة التالية")}
+            className="inline-flex min-h-10 items-center gap-1 rounded-full border px-4 disabled:opacity-40" data-testid="button-scan-next">{tr("التالية")}<ChevronLeft size={15} /></button>
         </div>
       )}
       {unmapped > 0 && (
         <p className="rounded-xl border bg-muted/40 p-3 font-ui text-xs text-muted-foreground" data-testid="text-scan-unmapped">
-          {num(unmapped)} كلمة لم تُحدَّد مواضعها على الصورة بعد، فلن تظهر فيها. هذا نقص في المطابقة الفنية، وليس خطأً منك.
-        </p>
+          {num(unmapped)}{' '}{tr("كلمة لم تُحدَّد مواضعها على الصورة بعد، فلن تظهر فيها. هذا نقص في المطابقة الفنية، وليس خطأً منك.")}</p>
       )}
     </div>
   );

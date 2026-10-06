@@ -1,0 +1,128 @@
+/* Auth frame: sign-in / sign-up. All Clerk tweaks scoped under .mateen-auth. */
+.mateen-auth {
+  --auth-ink: 20 38% 18%;
+  --auth-clay: 27 96% 31%;
+  --auth-parch: 40 52% 92%;
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  overflow-x: hidden;
+}
+.mateen-auth__wash {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(60rem 36rem at 85% -10%, hsl(32 80% 80% / .38), transparent 60%),
+    radial-gradient(40rem 30rem at 0% 110%, hsl(19 40% 60% / .18), transparent 65%);
+}
+.mateen-auth__wash::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(hsl(var(--primary) / .07) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+  mask-image: linear-gradient(to bottom, #000, transparent 70%);
+}
+
+.mateen-auth__top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem 1rem 0; }
+.mateen-auth__home { border-radius: 1rem; padding: .35rem .6rem; transition: background-color .2s ease; }
+.mateen-auth__home:hover { background: hsl(var(--primary) / .06); }
+
+.mateen-auth__grid {
+  flex: 1;
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  display: grid;
+  gap: 1.75rem;
+  padding: 1.25rem .75rem 2.5rem;
+  align-items: center;
+}
+
+/* Welcome column */
+.mateen-auth__welcome { display: flex; flex-direction: column; gap: 1.25rem; padding: 0 .5rem; }
+.mateen-auth__greeting { display: flex; align-items: center; gap: .9rem; }
+.mateen-auth__mascot { width: 64px; height: 64px; }
+.mateen-auth__eyebrow { font-size: .85rem; font-weight: 700; color: hsl(var(--auth-clay)); letter-spacing: .01em; margin: 0; }
+.mateen-auth__title { margin: .15rem 0 0; font-size: 1.35rem; line-height: 1.6; font-weight: 700; color: hsl(var(--auth-ink)); text-wrap: balance; }
+
+.mateen-auth__folio, .mateen-auth__promises { display: none; }
+
+.mateen-auth__folio {
+  position: relative; overflow: hidden; margin: 0;
+  padding: 2.25rem 2.25rem 2rem;
+  border-radius: 1.75rem;
+  background: linear-gradient(160deg, hsl(var(--auth-parch)), hsl(36 45% 88%));
+  border: 1px solid hsl(30 30% 80%);
+  box-shadow: inset 0 0 0 6px hsl(var(--background) / .55), inset 0 0 0 7px hsl(var(--auth-clay) / .18), 0 24px 50px -36px hsl(var(--primary) / .6);
+}
+.mateen-auth__folio-star { position: absolute; left: -70px; bottom: -90px; color: hsl(var(--auth-clay) / .09); pointer-events: none; }
+.mateen-auth__folio-mark {
+  position: absolute; top: 1.1rem; left: 1.25rem;
+  display: grid; place-items: center; width: 2.1rem; height: 2.1rem; border-radius: 999px;
+  font-family: var(--app-font-serif); font-size: 1rem; color: hsl(var(--auth-clay));
+  border: 1px solid hsl(var(--auth-clay) / .35);
+}
+.mateen-auth__hadith { position: relative; margin: 0; font-size: 1.9rem; line-height: 2.05; color: hsl(var(--auth-ink)); text-wrap: balance; }
+.mateen-auth__source { position: relative; margin-top: .9rem; display: flex; align-items: center; gap: .6rem; font-size: .85rem; color: hsl(var(--auth-ink) / .75); }
+.mateen-auth__source::before { content: ''; width: 1.75rem; height: 1px; background: hsl(var(--auth-clay) / .5); }
+
+.mateen-auth__promises { list-style: none; margin: 0; padding: 0; flex-direction: column; gap: .7rem; }
+.mateen-auth__promises li { display: flex; align-items: center; gap: .7rem; font-size: .95rem; color: hsl(var(--foreground) / .85); }
+.mateen-auth__promise-icon {
+  display: grid; place-items: center; flex: none; width: 2rem; height: 2rem; border-radius: .7rem;
+  color: hsl(var(--auth-clay)); background: hsl(var(--auth-clay) / .1);
+}
+
+/* Form column */
+.mateen-auth__form { display: flex; flex-direction: column; align-items: center; min-width: 0; }
+.mateen-auth__form-inner { width: 100%; min-width: 0; }
+.mateen-auth__fineprint { display: none; max-width: 26rem; margin: 1.25rem auto 0; text-align: center; font-family: var(--app-font-serif); font-size: .9rem; line-height: 1.9; color: hsl(var(--muted-foreground)); }
+
+/* The surrounding page follows the saved theme; the form and folio retain paper surfaces. */
+.dark .mateen-auth__title { color: hsl(var(--foreground)); }
+.dark .mateen-auth__eyebrow,
+.dark .mateen-auth__promise-icon { color: hsl(34 85% 68%); }
+
+/* Scoped Clerk refinements (component tree only lives inside this frame) */
+.mateen-auth .cl-cardBox { box-shadow: 0 1px 0 hsl(var(--border)), 0 34px 70px -44px hsl(var(--primary) / .7); }
+.mateen-auth .cl-headerTitle { font-family: var(--app-font-display); font-size: 1.3rem; line-height: 1.6; }
+.mateen-auth .cl-headerSubtitle { line-height: 1.8; }
+.mateen-auth .cl-formFieldInput { transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease; }
+.mateen-auth .cl-formFieldInput:hover { border-color: hsl(var(--auth-clay) / .45); }
+.mateen-auth .cl-formFieldInput:focus { border-color: hsl(var(--auth-clay)); box-shadow: 0 0 0 3px hsl(var(--auth-clay) / .18); background-color: #fffdf8; }
+.mateen-auth .cl-socialButtonsBlockButton { transition: background-color .18s ease, border-color .18s ease; }
+.mateen-auth .cl-socialButtonsBlockButton:hover { background-color: hsl(var(--auth-clay) / .06); border-color: hsl(var(--auth-clay) / .35); }
+.mateen-auth .cl-formButtonPrimary { transition: background-color .18s ease, transform .18s ease; }
+.mateen-auth .cl-formButtonPrimary:focus-visible,
+.mateen-auth .cl-socialButtonsBlockButton:focus-visible,
+.mateen-auth .cl-footerActionLink:focus-visible { outline: 2px solid hsl(var(--auth-clay)); outline-offset: 3px; }
+.mateen-auth .cl-footerActionLink:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .mateen-auth__welcome, .mateen-auth__form { animation: mateen-auth-rise .6s cubic-bezier(.2,.7,.2,1) both; }
+  .mateen-auth__form { animation-delay: .08s; }
+  .mateen-auth .cl-formButtonPrimary:active { transform: translateY(1px); }
+}
+@keyframes mateen-auth-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .mateen-auth__mascot { animation: none; }
+}
+
+@media (min-width: 640px) {
+  .mateen-auth__grid { padding: 2rem 1.5rem 3rem; }
+  .mateen-auth__mascot { width: 76px; height: 76px; }
+  .mateen-auth__title { font-size: 1.6rem; }
+  .mateen-auth__fineprint { display: block; }
+}
+
+@media (min-width: 1024px) {
+  .mateen-auth__top { justify-content: space-between; padding: 1.75rem 2.5rem 0; max-width: 72rem; margin: 0 auto; width: 100%; }
+  .mateen-auth__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 30rem); gap: 4.5rem; padding: 1.5rem 2.5rem 3.5rem; }
+  .mateen-auth__welcome { gap: 1.75rem; padding: 0; max-width: 34rem; }
+  .mateen-auth__folio { display: block; }
+  .mateen-auth__promises { display: flex; }
+  .mateen-auth__mascot { width: 88px; height: 88px; }
+  .mateen-auth__title { font-size: 2rem; }
+}

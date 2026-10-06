@@ -7,7 +7,7 @@ import { spawnSync } from 'node:child_process';
 const temp = await mkdtemp(join(tmpdir(), 'mateen-scholarly-tests-'));
 try {
   const entries = (await readdir(new URL('./src/lib/', import.meta.url)))
-    .filter((name) => name.startsWith('scholarly') && name.endsWith('.test.ts'))
+    .filter((name) => (name.startsWith('scholarly') || name === 'citation-provenance.test.ts') && name.endsWith('.test.ts'))
     .map((name) => new URL(`./src/lib/${name}`, import.meta.url).pathname);
   if (!entries.length) throw new Error('No scholarly regression tests found');
   await build({ entryPoints: entries, bundle: true, platform: 'node', format: 'esm', outdir: temp });

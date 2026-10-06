@@ -31,7 +31,7 @@ try {
   await build({
     entryPoints: [join(root, "tests/answer-text.test.tsx")],
     bundle: true, platform: "node", format: "esm", outfile: answerFile, jsx: "automatic",
-    external: ["react", "react/*", "react-dom/*"],
+    external: ["react", "react/*", "react-dom", "react-dom/*", "@clerk/react", "@tanstack/react-query", "lucide-react"],
   });
   const chatFile = join(temp, "chat-request.test.mjs");
   await build({

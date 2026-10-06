@@ -5,9 +5,12 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { AssistantQuestionInputAnswerMode } from './assistantQuestionInputAnswerMode';
 import type { AssistantQuestionInputTextId } from './assistantQuestionInputTextId';
 
 export interface AssistantQuestionInput {
+  /** Explicit mode; omission keeps legacy unreviewed study behavior. */
+  answerMode?: AssistantQuestionInputAnswerMode;
   /**
      * @minLength 1
      * @maxLength 8000

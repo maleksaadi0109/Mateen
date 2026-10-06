@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Kufam:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+:root {
+  --mateen-assistant-height: 0rem;
+  --background: 41 46% 96%;
+  --foreground: 22 28% 18%;
+  --card: 40 50% 99%;
+  --card-foreground: 22 28% 18%;
+  --border: 30 18% 87%;
+  --primary: 19 28% 33%;
+  --primary-foreground: 41 46% 96%;
+  --secondary: 27 96% 31%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 36 20% 90%;
+  --muted-foreground: 20 15% 45%;
+  --accent: 45 100% 15%;
+  --accent-foreground: 41 46% 96%;
+  --input: 30 18% 87%;
+  --ring: 27 96% 31%;
+  --radius: 1.25rem;
+  --app-font-sans: 'Cairo', sans-serif;
+  --app-font-serif: 'Noto Naskh Arabic', serif;
+  --app-font-display: 'Kufam', sans-serif;
+}
+
+.dark {
+  --background: 24 15% 10%;
+  --foreground: 36 33% 92%;
+  --card: 24 12% 13%;
+  --card-foreground: 36 33% 92%;
+  --border: 24 10% 20%;
+  --primary: 28 35% 65%;
+  --primary-foreground: 24 15% 10%;
+  --secondary: 27 80% 45%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 24 12% 17%;
+  --muted-foreground: 36 20% 65%;
+  --accent: 40 60% 50%;
+  --accent-foreground: 24 15% 10%;
+  --input: 24 10% 20%;
+  --ring: 27 80% 45%;
+}
+.font-arabic { font-family: var(--app-font-serif); }
+.font-display { font-family: var(--app-font-display); }
+.font-ui { font-family: var(--app-font-sans); }
+h1, h2, h3, h4, h5, h6 { font-family: var(--app-font-display); }
+html { direction: rtl; }
+body { font-family: var(--app-font-sans); -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 2px solid hsl(var(--secondary)); outline-offset: 3px; border-radius: 6px; }
+.star-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23994703' stroke-opacity='.22' stroke-width='1'%3E%3Cpath d='M36 6l7.5 12.5L58 14l-4.5 14.5L66 36l-12.5 7.5L58 58l-14.5-4.5L36 66l-7.5-12.5L14 58l4.5-14.5L6 36l12.5-7.5L14 14l14.5 4.5z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 72px 72px;
+}
+.hadith-text { font-family: var(--app-font-serif); line-height: 2.3; }
+.spin-slow { animation: spin 90s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }

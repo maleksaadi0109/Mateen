@@ -74,7 +74,7 @@ test("grading boundary accepts only explicit approved versions with a valid hash
   assert.equal(canUseForGrading({ ...base, payloadHash: "not-a-hash" }), false);
 });
 
-test("content review requires permission, verified email, MFA and secure session", () => {
+test("content review requires permission and verified email, not MFA or second factor", () => {
   const secureAccess = {
     contentReviewer: true,
     verifiedEmail: true,
@@ -84,6 +84,10 @@ test("content review requires permission, verified email, MFA and secure session
   assert.equal(isEligibleContentReviewer(secureAccess), true);
   assert.equal(
     isEligibleContentReviewer({ ...secureAccess, mfaEnabled: false }),
-    false,
+    true,
   );
+  assert.equal(isEligibleContentReviewer({ ...secureAccess, secureSession: false }), true);
+  assert.equal(isEligibleContentReviewer({ ...secureAccess, mfaEnabled: false, secureSession: false }), true);
+  assert.equal(isEligibleContentReviewer({ ...secureAccess, verifiedEmail: false }), false);
+  assert.equal(isEligibleContentReviewer({ ...secureAccess, contentReviewer: false }), false);
 });

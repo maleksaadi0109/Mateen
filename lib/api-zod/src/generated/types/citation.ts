@@ -5,8 +5,24 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { CitationSourceStatusAtAnswer } from './citationSourceStatusAtAnswer';
 
 export interface Citation {
+  snapshotAt?: Date;
+  /** Retrieval eligibility in this corpus only, not claim-level or external scientific/rights approval. */
+  sourceStatusAtAnswer?: CitationSourceStatusAtAnswer;
+  /**
+     * @minimum 1
+     * @nullable
+     */
+  viewerPage?: number | null;
+  /**
+     * Server-allowed public published reference only; never private evidence or signed storage.
+     * @nullable
+     */
+  publicSourceUrl?: string | null;
+  /** @nullable */
+  sourceVersion?: string | null;
   passageId: string;
   sourceId: string;
   sourceTitle: string;

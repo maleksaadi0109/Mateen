@@ -20,11 +20,11 @@ const ownStages = (userId: string, textId: string) => and(eq(learningStagesTable
 // numbers do not mean identical texts; never reinterpret a verse pass as a chapter.
 const progressId = (textId: string) => textId === "tuhfa" ? "tuhfa-chapters" : textId;
 const isPoem = (textId: string) => textId === "tuhfa" || textId === "tuhfa-chapters";
-const recordsFor = (textId: string) => isPoem(textId) ? tuhfaChapterStages.map(learningRecord) : learningRecords;
+export const recordsFor = (textId: string) => isPoem(textId) ? tuhfaChapterStages.map(learningRecord) : learningRecords;
 const progressWhere = (userId: string, textId: string) => textId === "tuhfa"
   ? and(eq(learningStagesTable.userId, userId), or(eq(learningStagesTable.textId, "tuhfa"), eq(learningStagesTable.textId, "tuhfa-chapters")))
   : ownStages(userId, textId);
-function effectiveProgress(rows: (typeof learningStagesTable.$inferSelect)[], textId: string) {
+export function effectiveProgress(rows: (typeof learningStagesTable.$inferSelect)[], textId: string) {
   if (textId !== "tuhfa") return rows;
   return tuhfaText.chapters.map(c => {
     const current = rows.find(r => r.textId === "tuhfa-chapters" && r.stageNumber === c.number);

@@ -43,6 +43,7 @@ export const scholarlyIssueStatus = pgEnum("mateen_scholarly_issue_status", [
 
 export const scholarlySourcesTable = pgTable("mateen_scholarly_sources", {
   id: uuid("id").primaryKey().defaultRandom(),
+  textId: text("text_id"),
   title: text("title").notNull(),
   author: text("author").notNull(),
   edition: text("edition").notNull(),
@@ -50,6 +51,8 @@ export const scholarlySourcesTable = pgTable("mateen_scholarly_sources", {
   legalAuthorization: scholarlyLegalAuthorization("legal_authorization").notNull(),
   authorizationReference: text("authorization_reference").notNull(),
   version: text("version").notNull(),
+  importKey: text("import_key").unique(),
+  preparationMetadata: jsonb("preparation_metadata").$type<Record<string, unknown>>(),
   status: scholarlySourceStatus("status").notNull().default("draft"),
   createdBy: text("created_by").notNull().references(() => profilesTable.clerkId),
   reviewedBy: text("reviewed_by").references(() => profilesTable.clerkId),
@@ -67,6 +70,9 @@ export const scholarlyPassagesTable = pgTable("mateen_scholarly_passages", {
   volume: integer("volume"),
   printedPage: text("printed_page"),
   pdfPage: integer("pdf_page"),
+  sourceUrl: text("source_url"),
+  viewerPage: integer("viewer_page"),
+  preparationMetadata: jsonb("preparation_metadata").$type<Record<string, unknown>>(),
   indexed: boolean("indexed").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
@@ -94,6 +100,8 @@ export const scholarlyQuestionsTable = pgTable("mateen_scholarly_questions", {
   textContext: text("text_context"),
   textId: text("text_id"),
   answer: text("answer"),
+  answerMode: text("answer_mode").notNull().default("legacy"),
+  evaluationId: uuid("evaluation_id"),
   status: text("status").notNull(),
   reason: text("abstention_reason"),
   model: text("model").notNull(),
@@ -109,6 +117,7 @@ export const scholarlyMessagesTable = pgTable("mateen_scholarly_messages", {
   role: scholarlyRole("role").notNull(),
   text: text("text").notNull(),
   citations: jsonb("citations").$type<Array<Record<string, unknown>>>().notNull().default([]),
+  answerMode: text("answer_mode"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 

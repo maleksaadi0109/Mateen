@@ -5,12 +5,14 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { AssistantQuestionAnswerMode } from './assistantQuestionAnswerMode';
 import type { AssistantQuestionStatus } from './assistantQuestionStatus';
 import type { AssistantQuestionTextId } from './assistantQuestionTextId';
 import type { Citation } from './citation';
 import type { TeacherReferralSummary } from './teacherReferralSummary';
 
 export interface AssistantQuestion {
+  answerMode?: AssistantQuestionAnswerMode;
   conversationId: string;
   questionId: string;
   question: string;

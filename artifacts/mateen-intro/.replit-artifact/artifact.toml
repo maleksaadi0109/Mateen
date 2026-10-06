@@ -1,0 +1,29 @@
+kind = "video"
+previewPath = "/mateen-intro/"
+title = "مَتِين — فيديو تعريفي"
+description = "فيلم تعريفي عربي مدته نحو 80 ثانية عن منصة مَتِين، بلقطات حقيقية وتعليق صوتي، دون ادعاءات اعتماد علمي."
+version = "1.0.0"
+videoAspectRatio = "16:9"
+id = "artifacts/mateen-intro"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/mateen-intro/" ]
+localPort = 20391
+
+[services.development]
+run = "pnpm --filter @workspace/mateen-intro run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/mateen-intro", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/mateen-intro/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20391"
+BASE_PATH = "/mateen-intro/"

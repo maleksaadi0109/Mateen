@@ -176,6 +176,9 @@ test("a decision rechecks revocation after its initial access check while waitin
     // the decision transaction must wait, then read the revoked value.
     let blocked = false;
     for (let i = 0; i < 50; i++) {
+      // This observer is inside BEGIN; refresh transaction-cached statistics
+      // before looking for the request that began after the previous poll.
+      await client.query("SELECT pg_stat_clear_snapshot()");
       const waiting = await client.query<{ count: string }>(
         "SELECT count(*) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND wait_event_type = 'Lock' AND query LIKE '%mateen_assessment_reviewer_grants%'",
       );

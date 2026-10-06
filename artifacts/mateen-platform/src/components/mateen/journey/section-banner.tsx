@@ -1,12 +1,14 @@
+import { fmt } from '@/lib/i18n';
+import { tr } from '@/lib/i18n';
 import { num } from '@/lib/mateen';
 
 export default function SectionBanner({ from, to, passed, total }: { from: number; to: number; passed: number; total: number }) {
   return (
-    <li className="list-none py-4" aria-label={`الأحاديث ${num(from)} إلى ${num(to)}`}>
+    <li className="list-none py-4" aria-label={fmt("الأحاديث {a} إلى {b}", "Hadiths {a} to {b}", { a: num(from), b: num(to) })}>
       <div className="flex items-center justify-between gap-3 rounded-2xl bg-primary px-5 py-3 text-primary-foreground shadow-[0_5px_0_hsl(22_35%_20%)]">
         <div>
-          <p className="font-ui text-[11px] font-semibold opacity-75">الأحاديث {num(from)} – {num(to)}</p>
-          <p className="font-display text-base font-bold">{passed === total ? 'منزلة مكتملة' : passed ? 'في الطريق' : 'منزلة قادمة'}</p>
+          <p className="font-ui text-[11px] font-semibold opacity-75">{tr("الأحاديث")}{' '}{num(from)} – {num(to)}</p>
+          <p className="font-display text-base font-bold">{passed === total ? tr("منزلة مكتملة") : passed ? tr("في الطريق") : tr("منزلة قادمة")}</p>
         </div>
         <span className="rounded-full bg-primary-foreground/15 px-3 py-1 font-ui text-xs font-bold">{num(passed)} / {num(total)}</span>
       </div>

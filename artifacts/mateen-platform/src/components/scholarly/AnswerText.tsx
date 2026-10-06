@@ -1,3 +1,4 @@
+import { tr } from '@/lib/i18n';
 /** Render source excerpts as escaped text. Only our two exact external
  * reference URL shapes become links; arbitrary student/model URLs stay text. */
 export function AnswerText({ text, className, testId }: {
@@ -11,9 +12,7 @@ export function AnswerText({ text, className, testId }: {
           <p key={index}>
             <a href={reference[1]} target="_blank" rel="noopener noreferrer"
               className="inline-flex min-h-11 items-center break-words font-ui text-sm font-bold text-secondary underline underline-offset-4"
-              data-testid="link-commentary-reference">
-              فتح موضع المقتطف في المكتبة الشاملة
-            </a>
+              data-testid="link-commentary-reference">{tr("فتح موضع المقتطف في المكتبة الشاملة")}</a>
           </p>
         ) : <p key={index} className="min-w-0 whitespace-pre-wrap break-words">{line || '\u00a0'}</p>;
       })}

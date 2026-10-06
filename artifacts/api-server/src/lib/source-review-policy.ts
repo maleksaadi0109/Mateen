@@ -100,9 +100,7 @@ export function isEligibleContentReviewer(access: {
 }): boolean {
   return (
     access.contentReviewer &&
-    access.verifiedEmail &&
-    access.mfaEnabled &&
-    access.secureSession
+    access.verifiedEmail
   );
 }
 

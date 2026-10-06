@@ -1,3 +1,4 @@
+import { tr } from '@/lib/i18n';
 import { getGetMateenNotificationsQueryKey, useGetMateenNotifications } from '@workspace/api-client-react';
 import { Bell } from 'lucide-react';
 import { Link } from 'wouter';
@@ -12,8 +13,7 @@ export function PortalNotifications({ teacher }: { teacher: boolean }) {
   return (
     <details className="paper-card mb-6 px-5 py-3 font-ui text-sm">
       <summary className="flex cursor-pointer items-center gap-2 font-bold">
-        <Bell size={16} aria-hidden="true" /> آخر تحديثات الإحالات والردود
-      </summary>
+        <Bell size={16} aria-hidden="true" />{' '}{tr("آخر تحديثات الإحالات والردود")}</summary>
       <ul className="mt-3 space-y-3">
         {notifications.data.slice(0, 3).map((notification) => (
           <li key={notification.id} className="border-t pt-3">

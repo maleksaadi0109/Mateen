@@ -1,3 +1,5 @@
+import { fmt } from '@/lib/i18n';
+import { tr } from '@/lib/i18n';
 import { useMemo } from 'react';
 import type { StageOutcome } from '@workspace/api-client-react';
 import { normalizeRecitationWord, type RecitationIssue } from '@/lib/live-recitation';
@@ -7,7 +9,7 @@ import { cn } from '@/lib/utils';
 /** Local snapshot taken from r.finish(): canonical words, committed indices and issues. */
 export type ExamSnapshot = { words: string[]; matched: number[]; issues: RecitationIssue[] };
 
-export const ISSUE_KIND: Record<RecitationIssue['kind'], string> = { substitution: 'استبدال', omission: 'حذف', extra: 'زيادة' };
+export const ISSUE_KIND: Record<RecitationIssue['kind'], string> = { get substitution() { return tr("استبدال"); }, get omission() { return tr("حذف"); }, get extra() { return tr("زيادة"); } };
 
 /** Ordinal among real words (punctuation tokens are skipped), 1-based. */
 function useOrdinals(words: string[]) {
@@ -40,23 +42,24 @@ export function LiveExamBook({ words, revealed, interimIndices, listening, title
   for (let i = 0; i < words.length; i++) if (revealed[i] || interim.has(i)) last = i;
   const shownCount = revealed.reduce((n, v, i) => n + (v && normalizeRecitationWord(words[i]) ? 1 : 0), 0);
   return (
-    <BookFrame title={title} caption={listening ? 'يُكتب ما تسمّعه' : 'التسميع متوقف'} testId="exam-live-book">
-      <p className="sr-only" role="status" aria-live="polite">ظهر {num(shownCount)} كلمة مثبتة.</p>
+    <BookFrame title={title} caption={listening ? tr("يُكتب ما تسمّعه") : tr("التسميع متوقف")} testId="exam-live-book">
+      <p className="sr-only" role="status" aria-live="polite">{tr("ظهر")}{' '}{num(shownCount)}{' '}{tr("كلمة مثبتة.")}</p>
       <p dir="rtl" className="hadith-text min-h-[7.8em] text-[clamp(1.15rem,4.2vw,1.6rem)] leading-[2.6em] text-foreground" style={ruled}>
         {last < 0 && <span className="font-ui text-sm text-muted-foreground">ابدأ التسميع؛ تظهر الكلمات هنا كما تُكتب في الكتاب كلما أثبتها التعرّف.</span>}
         {words.slice(0, last + 1).map((w, i) => {
           if (revealed[i]) return <span key={i} className="animate-in fade-in duration-300 motion-reduce:animate-none">{w} </span>;
-          if (interim.has(i)) return <span key={i} className="text-muted-foreground/70 underline decoration-dotted decoration-secondary/60 underline-offset-8" title="كلمة مؤقتة لم تُثبت">{w} </span>;
-          return <span key={i} aria-label="موضع لم يُثبت" className="mx-1 inline-block w-10 border-b-2 border-dashed border-[hsl(32_30%_70%)] align-middle" />;
+          if (interim.has(i)) return <span key={i} className="text-muted-foreground/70 underline decoration-dotted decoration-secondary/60 underline-offset-8" title={tr("كلمة مؤقتة لم تُثبت")}>{w} </span>;
+          return <span key={i} aria-label={tr("موضع لم يُثبت")} className="mx-1 inline-block w-10 border-b-2 border-dashed border-[hsl(32_30%_70%)] align-middle" />;
         })}
         {listening && <span aria-hidden className="ms-1 inline-block h-[1.1em] w-0.5 animate-pulse bg-secondary align-middle motion-reduce:animate-none" />}
       </p>
-      <p className="mt-3 font-ui text-[11px] text-muted-foreground">الكلمات الباهتة ذات الخط المنقّط مؤقتة حتى يثبتها التعرّف. لا تُعرض الملاحظات أثناء التسميع؛ تظهر كلها بعد الإنهاء.</p>
+      <p className="mt-3 font-ui text-[11px] text-muted-foreground">{tr("الكلمات الباهتة ذات الخط المنقّط مؤقتة حتى يثبتها التعرّف. لا تُعرض الملاحظات أثناء التسميع؛ تظهر كلها بعد الإنهاء.")}</p>
     </BookFrame>
   );
 }
 
 /** Final review: whole canonical text with numbered highlights and a full list of differences. */
+// i18n-canonical: unit is a semantic ID displayed via tr()
 export function ExamReview({ snapshot, outcome, title, compact, unit = 'الحديث' }: { snapshot: ExamSnapshot; outcome: StageOutcome; title: string; compact?: boolean; unit?: 'الحديث' | 'البيت' | 'الباب' }) {
   const { words, matched, issues } = snapshot;
   const ord = useOrdinals(words);
@@ -90,18 +93,18 @@ export function ExamReview({ snapshot, outcome, title, compact, unit = 'الحد
   return (
     <div className="space-y-5" data-testid="exam-review">
       <div className={cn('rounded-2xl border p-4 text-center sm:p-6', outcome.passed ? 'border-secondary/40 bg-secondary/10' : 'border-destructive/30 bg-destructive/5')} role="status">
-        <p className="font-ui text-xs font-bold text-muted-foreground">{outcome.passed ? 'اجتياز — أكثر من ٩٠٪' : !outcome.complete ? 'المقطع غير مكتمل' : 'لم تتجاوز ٩٠٪'}</p>
-        <p className={cn('font-display font-bold text-primary', compact ? 'text-4xl' : 'text-[clamp(2.75rem,10vw,4rem)]')} data-testid="exam-review-percent">{num(outcome.percent)}٪</p>
-        <p className="font-ui text-sm">{num(outcome.matched)} من {num(outcome.total)} كلمة مطابقة · زيادات {num(outcome.extras)} · اختلافات مرصودة {num(model.sorted.length)}</p>
-        <p className="mt-1 font-ui text-[11px] leading-relaxed text-muted-foreground">النسبة والاجتياز من الخادم، محسوبة على {unit} كاملًا مع الزيادات. يُشترط تجاوز ٩٠٪ تمامًا؛ ٩٠٪ وحدها لا تكفي.</p>
+        <p className="font-ui text-xs font-bold text-muted-foreground">{outcome.passed ? tr("اجتياز — أكثر من ٩٠٪") : !outcome.complete ? tr("المقطع غير مكتمل") : tr("لم تتجاوز ٩٠٪")}</p>
+        <p className={cn('font-display font-bold text-primary', compact ? 'text-4xl' : 'text-[clamp(2.75rem,10vw,4rem)]')} data-testid="exam-review-percent">{num(outcome.percent)}{tr("٪")}</p>
+        <p className="font-ui text-sm">{num(outcome.matched)}{' '}{tr("من")}{' '}{num(outcome.total)}{' '}{tr("كلمة مطابقة · زيادات")}{' '}{num(outcome.extras)}{' '}{tr("· اختلافات مرصودة")}{' '}{num(model.sorted.length)}</p>
+        <p className="mt-1 font-ui text-[11px] leading-relaxed text-muted-foreground">{tr("النسبة والاجتياز من الخادم، محسوبة على")}{' '}{tr(unit)}{' '}{tr("كاملًا مع الزيادات. يُشترط تجاوز ٩٠٪ تمامًا؛ ٩٠٪ وحدها لا تكفي.")}</p>
       </div>
 
-      <BookFrame title={title} caption="النص كما في الكتاب" testId="exam-review-book">
+      <BookFrame title={title} caption={tr("النص كما في الكتاب")} testId="exam-review-book">
         <p dir="rtl" className="hadith-text text-[clamp(1.1rem,4vw,1.5rem)] leading-[2.6em]" style={ruled}>
           {words.map((w, i) => {
             const extras = model.extrasBefore.get(i);
             const issue = model.at.get(i);
-            const pre = extras?.map((x) => <span key={`x${x.n}`} className="mx-0.5 rounded-md border border-dashed border-amber-600/60 bg-amber-100/70 px-1 font-ui text-xs text-amber-900 dark:bg-amber-900/30 dark:text-amber-200" title={`زيادة: ${x.issue.heard}`}>+{x.issue.heard}<Chip n={x.n} tone="bg-amber-600 text-white" /></span>);
+            const pre = extras?.map((x) => <span key={`x${x.n}`} className="mx-0.5 rounded-md border border-dashed border-amber-600/60 bg-amber-100/70 px-1 font-ui text-xs text-amber-900 dark:bg-amber-900/30 dark:text-amber-200" title={fmt("زيادة: {a}", "Extra: {a}", { a: x.issue.heard })}>+{x.issue.heard}<Chip n={x.n} tone="bg-amber-600 text-white" /></span>);
             let node: React.ReactNode;
             if (issue?.issue.kind === 'substitution') node = <span className="rounded-md bg-orange-200/70 px-0.5 text-foreground ring-1 ring-orange-500/40 dark:bg-orange-900/40">{w}<Chip n={issue.n} tone="bg-orange-600 text-white" /></span>;
             else if (issue?.issue.kind === 'omission') node = <span className="rounded-md bg-rose-100 px-0.5 text-foreground underline decoration-rose-500 decoration-wavy underline-offset-8 dark:bg-rose-900/30">{w}<Chip n={issue.n} tone="bg-rose-600 text-white" /></span>;
@@ -111,38 +114,38 @@ export function ExamReview({ snapshot, outcome, title, compact, unit = 'الحد
           })}
           {model.extrasBefore.get(words.length)?.map((x) => <span key={`x${x.n}`} className="mx-0.5 rounded-md border border-dashed border-amber-600/60 bg-amber-100/70 px-1 font-ui text-xs text-amber-900">+{x.issue.heard}<Chip n={x.n} tone="bg-amber-600 text-white" /></span>)}
         </p>
-        <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 font-ui text-[11px] text-muted-foreground" aria-label="مفتاح الألوان">
-          <li><span className="me-1 inline-block h-2.5 w-2.5 rounded-sm bg-orange-300 align-middle" />استبدال</li>
-          <li><span className="me-1 inline-block h-2.5 w-2.5 rounded-sm bg-rose-200 align-middle" />حذف</li>
-          <li><span className="me-1 inline-block h-2.5 w-2.5 rounded-sm border border-dashed border-amber-600 bg-amber-100 align-middle" />زيادة مسموعة</li>
-          {model.unreached > 0 && <li><span className="me-1 text-muted-foreground/60">نص باهت</span>لم يُبلغ في التسميع</li>}
+        <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 font-ui text-[11px] text-muted-foreground" aria-label={tr("مفتاح الألوان")}>
+          <li><span className="me-1 inline-block h-2.5 w-2.5 rounded-sm bg-orange-300 align-middle" />{tr("استبدال")}</li>
+          <li><span className="me-1 inline-block h-2.5 w-2.5 rounded-sm bg-rose-200 align-middle" />{tr("حذف")}</li>
+          <li><span className="me-1 inline-block h-2.5 w-2.5 rounded-sm border border-dashed border-amber-600 bg-amber-100 align-middle" />{tr("زيادة مسموعة")}</li>
+          {model.unreached > 0 && <li><span className="me-1 text-muted-foreground/60">{tr("نص باهت")}</span>{tr("لم يُبلغ في التسميع")}</li>}
         </ul>
       </BookFrame>
 
-      {model.unreached > 0 && <p className="rounded-xl border border-dashed p-3 font-ui text-xs leading-relaxed" data-testid="exam-review-incomplete">توقّف التسميع قبل آخر {unit}: {num(model.unreached)} كلمة في آخره لم تُبلغ. هذا الجزء غير مكتمل ولا يُعدّ حذوفات مرصودة، ولذلك لا يظهر في قائمة الاختلافات.</p>}
+      {model.unreached > 0 && <p className="rounded-xl border border-dashed p-3 font-ui text-xs leading-relaxed" data-testid="exam-review-incomplete">{tr("توقّف التسميع قبل آخر")}{' '}{tr(unit)}: {num(model.unreached)}{' '}{tr("كلمة في آخره لم تُبلغ. هذا الجزء غير مكتمل ولا يُعدّ حذوفات مرصودة، ولذلك لا يظهر في قائمة الاختلافات.")}</p>}
 
-      <section aria-label="قائمة الاختلافات" className="space-y-2">
-        <h3 className="font-display text-lg font-bold">الاختلافات بالتفصيل ({num(model.sorted.length)})</h3>
+      <section aria-label={tr("قائمة الاختلافات")} className="space-y-2">
+        <h3 className="font-display text-lg font-bold">{tr("الاختلافات بالتفصيل (")}{num(model.sorted.length)})</h3>
         {model.sorted.length === 0
-          ? <p className="rounded-xl border border-dashed p-4 text-center font-ui text-xs text-muted-foreground" data-testid="exam-review-no-issues">لم تُرصد اختلافات في الجزء الذي سمّعته.</p>
+          ? <p className="rounded-xl border border-dashed p-4 text-center font-ui text-xs text-muted-foreground" data-testid="exam-review-no-issues">{tr("لم تُرصد اختلافات في الجزء الذي سمّعته.")}</p>
           : <ol className="space-y-2">{model.sorted.map((issue, k) => (
             <li key={`${issue.index}-${issue.kind}-${k}`} className="grid gap-2 rounded-xl border bg-card p-3 sm:grid-cols-[auto_1fr] sm:gap-4" data-testid={`exam-issue-${k + 1}`}>
               <span className="grid h-8 w-8 place-items-center rounded-full bg-muted font-ui text-xs font-bold">{num(k + 1)}</span>
               <div className="min-w-0 space-y-1.5">
                 <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-ui text-xs">
                   <b className="text-secondary">{ISSUE_KIND[issue.kind]}</b>
-                  <span className="text-muted-foreground">{issue.kind === 'extra' ? `قبل الكلمة ${num(Math.min(wordNo(issue.index) + (ord[issue.index] ? 0 : 1), ord.reduce((a, b) => Math.max(a, b), 0)))}` : `الكلمة ${num(wordNo(issue.index))}`} من {unit}</span>
+                  <span className="text-muted-foreground">{issue.kind === 'extra' ? fmt("قبل الكلمة {a}", "Before word {a}", { a: num(Math.min(wordNo(issue.index) + (ord[issue.index] ? 0 : 1), ord.reduce((a, b) => Math.max(a, b), 0))) }) : fmt("الكلمة {a}", "Word {a}", { a: num(wordNo(issue.index)) })}{' '}{tr("من")}{' '}{tr(unit)}</span>
                 </p>
                 <p className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
                   {issue.kind !== 'extra' && <span className="hadith-text text-lg"><span className="font-ui text-[10px] text-muted-foreground">المتوقع: </span>{issue.expected}</span>}
                   {issue.kind !== 'omission' && issue.heard && <span className="hadith-text text-lg text-orange-800 dark:text-orange-300"><span className="font-ui text-[10px] text-muted-foreground">المسموع: </span>{issue.heard}</span>}
-                  {issue.kind === 'omission' && <span className="font-ui text-[11px] text-muted-foreground">لم تُسمع هذه الكلمة</span>}
+                  {issue.kind === 'omission' && <span className="font-ui text-[11px] text-muted-foreground">{tr("لم تُسمع هذه الكلمة")}</span>}
                 </p>
                 <p className="hadith-text text-sm leading-loose text-muted-foreground" dir="rtl">{context(issue.index)}</p>
               </div>
             </li>
           ))}</ol>}
-        <p className="font-ui text-[11px] leading-relaxed text-muted-foreground">الاختلافات تقريبية من التعرّف الآلي على الصوت وقد تنتج عن خطأ التعرّف لا عن الحفظ. لا تقييم للنطق أو التشكيل.</p>
+        <p className="font-ui text-[11px] leading-relaxed text-muted-foreground">{tr("الاختلافات تقريبية من التعرّف الآلي على الصوت وقد تنتج عن خطأ التعرّف لا عن الحفظ. لا تقييم للنطق أو التشكيل.")}</p>
       </section>
     </div>
   );

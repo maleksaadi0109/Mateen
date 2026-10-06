@@ -1,3 +1,5 @@
+import { fmt } from '@/lib/i18n';
+import { tr } from '@/lib/i18n';
 import { useEffect, useRef, useState } from 'react';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import workerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
@@ -39,7 +41,7 @@ export default function PdfCertificateView({ source }: { source: string }) {
       const loaded = await task.promise;
       if (active) setDoc(loaded);
     })().catch(() => {
-      if (active) setError('تعذّر قراءة صفحات PDF. يمكنك تنزيل الملف والتحقق منه قبل اتخاذ القرار.');
+      if (active) setError(tr("تعذّر قراءة صفحات PDF. يمكنك تنزيل الملف والتحقق منه قبل اتخاذ القرار."));
     });
     return () => { active = false; destroy?.(); };
   }, [source]);
@@ -72,7 +74,7 @@ export default function PdfCertificateView({ source }: { source: string }) {
     })().catch((err: unknown) => {
       if (active) {
         if (import.meta.env.DEV) console.warn('PDF certificate render failed:', err instanceof Error ? err.message : 'Unknown renderer error');
-        setRendering(false); setError('تعذّر عرض هذه الصفحة. حاول صفحة أخرى أو نزّل الملف.');
+        setRendering(false); setError(tr("تعذّر عرض هذه الصفحة. حاول صفحة أخرى أو نزّل الملف."));
       }
     });
     return () => { active = false; cancel?.(); };
@@ -82,18 +84,18 @@ export default function PdfCertificateView({ source }: { source: string }) {
     <div className="min-w-0 space-y-2" data-testid="pdf-certificate-preview">
       {doc ? <div className="flex flex-wrap items-center justify-between gap-2 font-ui text-xs">
         <div className="flex items-center gap-2">
-          <button type="button" disabled={page <= 1} onClick={() => setPage((n) => n - 1)} className="min-h-10 rounded-full border px-3 disabled:opacity-40">السابق</button>
-          <span>صفحة {num(page)} / {num(doc.numPages)}</span>
-          <button type="button" disabled={page >= doc.numPages} onClick={() => setPage((n) => n + 1)} className="min-h-10 rounded-full border px-3 disabled:opacity-40">التالي</button>
+          <button type="button" disabled={page <= 1} onClick={() => setPage((n) => n - 1)} className="min-h-10 rounded-full border px-3 disabled:opacity-40">{tr("السابق")}</button>
+          <span>{tr("صفحة")}{' '}{num(page)} / {num(doc.numPages)}</span>
+          <button type="button" disabled={page >= doc.numPages} onClick={() => setPage((n) => n + 1)} className="min-h-10 rounded-full border px-3 disabled:opacity-40">{tr("التالي")}</button>
         </div>
         <div className="flex gap-2">
-          <button type="button" disabled={zoom <= 1} onClick={() => setZoom((n) => Math.max(1, n - .5))} className="min-h-10 rounded-full border px-3 disabled:opacity-40">تصغير</button>
-          <button type="button" disabled={zoom >= 3} onClick={() => setZoom((n) => Math.min(3, n + .5))} className="min-h-10 rounded-full border px-3 disabled:opacity-40">تكبير</button>
+          <button type="button" disabled={zoom <= 1} onClick={() => setZoom((n) => Math.max(1, n - .5))} className="min-h-10 rounded-full border px-3 disabled:opacity-40">{tr("تصغير")}</button>
+          <button type="button" disabled={zoom >= 3} onClick={() => setZoom((n) => Math.min(3, n + .5))} className="min-h-10 rounded-full border px-3 disabled:opacity-40">{tr("تكبير")}</button>
         </div>
       </div> : null}
-      {error ? <p role="alert" className="font-ui text-sm text-red-700">{error}</p> : (!doc || rendering) ? <p role="status" className="font-ui text-xs">جارٍ عرض صفحة الشهادة…</p> : null}
+      {error ? <p role="alert" className="font-ui text-sm text-red-700">{error}</p> : (!doc || rendering) ? <p role="status" className="font-ui text-xs">{tr("جارٍ عرض صفحة الشهادة…")}</p> : null}
       <div ref={container} className="h-[55dvh] min-w-0 overflow-auto rounded-xl border bg-muted p-2">
-        <canvas ref={canvas} aria-label={`صفحة ${num(page)} من الشهادة`} className="mx-auto block bg-white shadow-sm" data-testid="pdf-certificate-canvas" />
+        <canvas ref={canvas} aria-label={fmt("صفحة {a} من الشهادة", "Certificate page {a}", { a: num(page) })} className="mx-auto block bg-white shadow-sm" data-testid="pdf-certificate-canvas" />
       </div>
     </div>
   );

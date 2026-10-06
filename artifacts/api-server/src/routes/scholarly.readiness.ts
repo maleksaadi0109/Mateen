@@ -46,9 +46,12 @@ export async function getScholarlyCorpus(): Promise<{
     legalAuthorization: scholarlySourcesTable.legalAuthorization,
     authorizationReference: scholarlySourcesTable.authorizationReference,
     version: scholarlySourcesTable.version,
+    textId: scholarlySourcesTable.textId,
     volume: scholarlyPassagesTable.volume,
     printedPage: scholarlyPassagesTable.printedPage,
     pdfPage: scholarlyPassagesTable.pdfPage,
+    viewerPage: scholarlyPassagesTable.viewerPage,
+    publicSourceUrl: scholarlyPassagesTable.sourceUrl,
   }).from(scholarlyPassagesTable)
     .innerJoin(scholarlySourcesTable, eq(scholarlyPassagesTable.sourceId, scholarlySourcesTable.id))
     .where(and(eq(scholarlyPassagesTable.indexed, true), eq(scholarlySourcesTable.status, "indexed")))
@@ -67,6 +70,7 @@ export async function getScholarlyCorpus(): Promise<{
     legalAuthorization: row.legalAuthorization,
     authorizationReference: row.authorizationReference,
     version: row.version,
+    textId: row.textId,
     volume: row.volume,
     printedPage: row.printedPage,
     pdfPage: row.pdfPage,
@@ -98,6 +102,7 @@ export async function getScholarlyReadiness() {
     corpus,
     providerConfigured: isScholarlyProviderConfigured(model),
     evaluationPassed,
+    evaluationId: evaluation?.id ?? null,
     reviewedSourceCount: sourceIds.size,
     assistantEnabled: evaluationPassed && sourceIds.size > 0 && corpus.complete &&
       isScholarlyProviderConfigured(model),
@@ -113,5 +118,12 @@ export async function getMateenScholarlyReadiness() {
     reviewedSourceCount: state.reviewedSourceCount,
     assistantEnabled: state.assistantEnabled,
     studyAnswersEnabled: state.providerConfigured,
+    sourceBlockers: [
+      ...(state.reviewedSourceCount === 0 ? ["no_sources"] : []),
+      ...(!state.corpus.complete ? ["corpus_incomplete"] : []),
+      ...(!state.providerConfigured ? ["provider_unconfigured"] : []),
+      ...(!state.evaluationPassed ? ["evaluation_required"] : []),
+    ],
+    sourceBooks: [...new Set(state.corpus.passages.map(p => p.textId).filter(id => id === "nawawi" || id === "tuhfa" || id === "usul-thalatha"))],
   });
 }

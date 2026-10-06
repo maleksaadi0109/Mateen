@@ -21,9 +21,8 @@ async function accountSecurity(userId: string, req: Request) {
     | { status?: string }
     | null
     | undefined;
-  const factorAge = (
-    auth as unknown as { factorVerificationAge?: [number | null, number | null] }
-  ).factorVerificationAge;
+   // Retained for access-contract compatibility, not administrative authorization.
+   const factorAge = auth.factorVerificationAge;
   return {
     user,
     verifiedEmail: verification?.status === "verified",
@@ -45,9 +44,8 @@ export async function getReviewAccess(req: Request) {
   }
   const security = await accountSecurity(auth.userId, req);
   return {
-    // Permission discovery is separate from session assurance so a granted
-    // reviewer can see how to secure their session. Sensitive routes still
-    // require hasSecureReviewPermission before reading any protected data.
+    // Discover trusted scopes for the UI; sensitive routes additionally
+    // require verified email. MFA fields remain informational only.
     contentReviewer: !security.user.banned && !security.user.locked &&
       security.user.privateMetadata.mateenContentReviewer === true,
     qualificationReviewer: !security.user.banned && !security.user.locked &&
@@ -157,9 +155,9 @@ export function requireReviewPermission(permission: ReviewPermission) {
         res.status(403).json({ error: "This account is disabled" });
         return;
       }
-      if (!security.verifiedEmail || !security.mfaEnabled || !security.secureSession) {
+      if (!security.verifiedEmail) {
         res.status(403).json({
-          error: "Verified email and an MFA-protected session are required",
+          error: "A verified email is required for administrative review",
         });
         return;
       }

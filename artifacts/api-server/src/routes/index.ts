@@ -10,6 +10,8 @@ import recitationPagesRouter from "./recitation-pages";
 import practiceReportsRouter from "./practice-reports";
 import learningStagesRouter from "./learning-stages";
 import studyActivityRouter from "./study-activity";
+import wordPracticeRouter from "./word-practice";
+import dailyPlanRouter from "./daily-plan";
 
 const router: IRouter = Router();
 router.use(healthRouter);
@@ -17,6 +19,8 @@ router.use(recitationPagesRouter);
 router.use(practiceReportsRouter);
 router.use(learningStagesRouter);
 router.use(studyActivityRouter);
+router.use(wordPracticeRouter);
+router.use(dailyPlanRouter);
 router.use(teacherReviewRouter);
 router.use(sourceReviewRouter);
 router.use(mateenRouter);

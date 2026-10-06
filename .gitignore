@@ -11,6 +11,29 @@ out-tsc
 # dependencies
 node_modules
 
+# Local credentials and the generated Python runtime
+.env
+.env.*
+!.env.example
+.pythonlibs/
+
+# Private source archives, capture exports and local agent work are not public code.
+.agents/
+/attached_assets/*
+!/attached_assets/MateeeeeeeeenLOGO_1790090010886.png
+/deliverables/
+/output/
+/screenshots/
+/*.mp4
+**/.message-draft-tests-*/
+**/.preview-tests-*/
+**/public/screens/
+**/public/captures/
+/artifacts/mateen-intro/public/images/assistant.png
+/artifacts/mateen-intro/public/images/dashboard.png
+/artifacts/mateen-intro/public/images/home.png
+/artifacts/mateen-intro/public/images/journey.png
+
 # IDEs and editors
 /.idea
 .project

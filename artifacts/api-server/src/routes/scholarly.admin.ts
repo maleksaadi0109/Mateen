@@ -41,6 +41,8 @@ import {
 } from "@workspace/db";
 import { and, count, desc, eq, ne } from "drizzle-orm";
 import { Router } from "express";
+import scholarlyImportRouter from "./scholarly.import";
+import scholarlyCollationRouter from "./scholarly.collation";
 import {
   generateNvidiaScholarlyPreview,
   isScholarlyProviderConfigured,
@@ -65,6 +67,8 @@ import {
 } from "./scholarly.shared";
 
 const adminRouter = Router();
+adminRouter.use(scholarlyImportRouter);
+adminRouter.use(scholarlyCollationRouter);
 
 adminRouter.post(
   "/mateen/admin/scholarly/preview",
@@ -141,6 +145,7 @@ async function mapSource(source: typeof scholarlySourcesTable.$inferSelect) {
     .where(eq(scholarlyPassagesTable.sourceId, source.id));
   return {
     id: source.id,
+    textId: source.textId,
     title: source.title,
     author: source.author,
     edition: source.edition,
@@ -170,7 +175,7 @@ adminRouter.post(
     if (!await requireAdmin(req, res)) return;
     if (!hasOnlyKeys(req.body, [
       "title", "author", "edition", "publisher", "legalAuthorization",
-      "authorizationReference", "version",
+      "authorizationReference", "version", "textId",
     ])) {
       res.status(400).json({ error: "Unexpected source metadata fields" });
       return;
@@ -201,6 +206,7 @@ adminRouter.post(
     }
     const [source] = await db.insert(scholarlySourcesTable).values({
       title: input.title.trim(),
+      textId: input.textId ?? null,
       author: input.author.trim(),
       edition: input.edition.trim(),
       publisher: input.publisher?.trim() || null,
@@ -240,6 +246,8 @@ adminRouter.get(
       printedPage: scholarlyPassagesTable.printedPage,
       pdfPage: scholarlyPassagesTable.pdfPage,
       indexed: scholarlyPassagesTable.indexed,
+      sourceUrl: scholarlyPassagesTable.sourceUrl,
+      viewerPage: scholarlyPassagesTable.viewerPage,
     }).from(scholarlyPassagesTable)
       .where(eq(scholarlyPassagesTable.sourceId, source.id))
       .orderBy(scholarlyPassagesTable.createdAt).limit(1001);

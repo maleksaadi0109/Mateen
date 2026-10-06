@@ -5,6 +5,344 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+export interface DailyPlanRevisionInput {
+  planId: string;
+  /** @minimum 1 */
+  revision: number;
+}
+
+export type DailyPlanTaskInputAction = typeof DailyPlanTaskInputAction[keyof typeof DailyPlanTaskInputAction];
+
+
+export const DailyPlanTaskInputAction = {
+  start: 'start',
+  acknowledge: 'acknowledge',
+} as const;
+
+export interface DailyPlanTaskInput {
+  action: DailyPlanTaskInputAction;
+}
+
+export type DailyPlanTaskKind = typeof DailyPlanTaskKind[keyof typeof DailyPlanTaskKind];
+
+
+export const DailyPlanTaskKind = {
+  confirmed_review: 'confirmed_review',
+  word_practice: 'word_practice',
+  new_learning: 'new_learning',
+} as const;
+
+export type DailyPlanTaskStatus = typeof DailyPlanTaskStatus[keyof typeof DailyPlanTaskStatus];
+
+
+export const DailyPlanTaskStatus = {
+  pending: 'pending',
+  started: 'started',
+  completed: 'completed',
+  unavailable: 'unavailable',
+} as const;
+
+export interface DailyPlanTask {
+  id: string;
+  kind: DailyPlanTaskKind;
+  sourceKey: string;
+  sourceHash: string;
+  title: string;
+  reason: string;
+  href: string;
+  /** @minimum 1 */
+  minutes: number;
+  status: DailyPlanTaskStatus;
+  /** @nullable */
+  startedAt: string | null;
+  /** @nullable */
+  completedAt: string | null;
+}
+
+export type DailyPlanStatus = typeof DailyPlanStatus[keyof typeof DailyPlanStatus];
+
+
+export const DailyPlanStatus = {
+  ready: 'ready',
+  completed: 'completed',
+  empty: 'empty',
+  needs_preferences: 'needs_preferences',
+  needs_calendar: 'needs_calendar',
+  expired: 'expired',
+} as const;
+
+/**
+ * @nullable
+ */
+export type DailyPlanGoal = typeof DailyPlanGoal[keyof typeof DailyPlanGoal] | null;
+
+
+export const DailyPlanGoal = {
+  memorize: 'memorize',
+  review: 'review',
+  both: 'both',
+} as const;
+
+export interface DailyPlan {
+  /** @nullable */
+  id: string | null;
+  /** @nullable */
+  day: string | null;
+  /** @nullable */
+  today: string | null;
+  /** @nullable */
+  timezone: string | null;
+  revision: number;
+  status: DailyPlanStatus;
+  dailyMinutes: number;
+  /** @nullable */
+  goal: DailyPlanGoal;
+  preferencesChanged: boolean;
+  committedOverBudget: boolean;
+  deferredCount: number;
+  staleCount: number;
+  tasks: DailyPlanTask[];
+}
+
+export interface WordPracticeReference {
+  hadithId: number;
+  title: string;
+  fingerprint: string;
+  tokenizerVersion: string;
+  words: string[];
+}
+
+export type WordPracticeAttemptStatus = typeof WordPracticeAttemptStatus[keyof typeof WordPracticeAttemptStatus];
+
+
+export const WordPracticeAttemptStatus = {
+  comparable: 'comparable',
+  incomplete: 'incomplete',
+  unavailable: 'unavailable',
+} as const;
+
+export interface WordPracticeAttempt {
+  requestId: string;
+  status: WordPracticeAttemptStatus;
+  /**
+     * @minimum 0
+     * @maximum 120
+     */
+  covered: number;
+  /**
+     * @minimum 0
+     * @maximum 120
+     */
+  matched: number;
+}
+
+export type WordPracticeInputTokenizerVersion = typeof WordPracticeInputTokenizerVersion[keyof typeof WordPracticeInputTokenizerVersion];
+
+
+export const WordPracticeInputTokenizerVersion = {
+  'arabic-whitespace-v1': 'arabic-whitespace-v1',
+} as const;
+
+export interface WordPracticeInput {
+  requestId: string;
+  consent: true;
+  /**
+     * @minimum 1
+     * @maximum 42
+     */
+  hadithId: number;
+  /** @pattern ^[a-f0-9]{64}$ */
+  fingerprint: string;
+  tokenizerVersion: WordPracticeInputTokenizerVersion;
+  /** @minimum 0 */
+  start: number;
+  /** @minimum 1 */
+  end: number;
+  /**
+     * @minItems 1
+     * @maxItems 20
+     * @items.minimum 0
+     */
+  targets: number[];
+  /** @maxItems 20 */
+  attempts: WordPracticeAttempt[];
+}
+
+export interface WordPracticeAttemptInput {
+  consent: true;
+  fingerprint: string;
+  attempt: WordPracticeAttempt;
+}
+
+export interface WordPractice {
+  id: string;
+  createdAt: string;
+  reference: WordPracticeReference;
+  start: number;
+  end: number;
+  targets: number[];
+  attempts: WordPracticeAttempt[];
+  stale: boolean;
+}
+
+export interface CollationRectangle {
+  /**
+     * @minimum 0
+     * @maximum 1
+     */
+  x: number;
+  /**
+     * @minimum 0
+     * @maximum 1
+     */
+  y: number;
+  /**
+     * @maximum 1
+     * @exclusiveMinimum 0
+     */
+  width: number;
+  /**
+     * @maximum 1
+     * @exclusiveMinimum 0
+     */
+  height: number;
+}
+
+export interface CollationGeometryInput {
+  /**
+     * Latest audit fingerprint seen when editing; null only when no record exists
+     * @nullable
+     */
+  expectedRevision: string | null;
+  /**
+     * @minLength 1
+     * @maxLength 200
+     */
+  excerptId: string;
+  /** @pattern ^[a-f0-9]{64}$ */
+  imageSha256: string;
+  /** @pattern ^[a-f0-9]{64}$ */
+  originalTextSha256: string;
+  /** @maxItems 20 */
+  rectangles: CollationRectangle[];
+  /**
+     * @minLength 10
+     * @maxLength 2000
+     */
+  note: string;
+  manuallyVerified: true;
+}
+
+export type CollationGeometryMethod = typeof CollationGeometryMethod[keyof typeof CollationGeometryMethod];
+
+
+export const CollationGeometryMethod = {
+  manual_visual: 'manual_visual',
+} as const;
+
+export interface CollationGeometry {
+  excerptId: string;
+  imageSha256: string;
+  originalTextSha256: string;
+  rectangles: CollationRectangle[];
+  note: string;
+  method: CollationGeometryMethod;
+  recordedAt: string;
+}
+
+export type CollationGeometrySnapshotMethod = typeof CollationGeometrySnapshotMethod[keyof typeof CollationGeometrySnapshotMethod];
+
+
+export const CollationGeometrySnapshotMethod = {
+  manual_visual: 'manual_visual',
+} as const;
+
+export interface CollationGeometrySnapshot {
+  excerptId: string;
+  imageSha256: string;
+  originalTextSha256: string;
+  excerptSha256: string;
+  rectangles: CollationRectangle[];
+  note: string;
+  method: CollationGeometrySnapshotMethod;
+  recordedAt: string;
+  imageMatches: boolean;
+  textMatches: boolean;
+}
+
+export type CollationGeometryHistoryEventChange = typeof CollationGeometryHistoryEventChange[keyof typeof CollationGeometryHistoryEventChange];
+
+
+export const CollationGeometryHistoryEventChange = {
+  recorded: 'recorded',
+  revoked: 'revoked',
+  invalid: 'invalid',
+} as const;
+
+export interface CollationGeometryHistoryEvent {
+  id: string;
+  actorId: string;
+  createdAt: string;
+  reason: string;
+  change: CollationGeometryHistoryEventChange;
+  before: CollationGeometrySnapshot | null;
+  after: CollationGeometrySnapshot | null;
+}
+
+export interface ScholarlyCollationExcerpt {
+  id: string;
+  originalText: string;
+  correctedText: string;
+  originalStart: number;
+  originalEnd: number;
+  location: string;
+  difference: string;
+  scope: string;
+}
+
+export interface CollationGeometryState {
+  excerptId: string;
+  /** @nullable */
+  revision: string | null;
+  current: CollationGeometry | null;
+}
+
+export type CollationGeometryConflictCode = typeof CollationGeometryConflictCode[keyof typeof CollationGeometryConflictCode];
+
+
+export const CollationGeometryConflictCode = {
+  geometry_conflict: 'geometry_conflict',
+  evidence_changed: 'evidence_changed',
+} as const;
+
+export interface CollationGeometryConflict {
+  error: string;
+  code: CollationGeometryConflictCode;
+  state?: CollationGeometryState;
+}
+
+export interface ScholarlyCollation {
+  passageId: string;
+  originalText: string;
+  originalTextSha256: string;
+  geometry: CollationGeometry[];
+  geometryStates: CollationGeometryState[];
+  /** @nullable */
+  correctedDraft: string | null;
+  exclusionReason: string;
+  viewerPage: number;
+  /** @nullable */
+  pdfPage: number | null;
+  /** @nullable */
+  printedPage: string | null;
+  /** @nullable */
+  imageSha256: string | null;
+  imageAvailable: boolean;
+  excerpts: ScholarlyCollationExcerpt[];
+  limitations: string[];
+  paginationNote: string;
+}
+
 export type StudyActivityStartInputKind = typeof StudyActivityStartInputKind[keyof typeof StudyActivityStartInputKind];
 
 
@@ -972,6 +1310,17 @@ export interface HealthStatus {
 }
 
 /**
+ * Explicit mode; omission keeps legacy unreviewed study behavior.
+ */
+export type AssistantQuestionInputAnswerMode = typeof AssistantQuestionInputAnswerMode[keyof typeof AssistantQuestionInputAnswerMode];
+
+
+export const AssistantQuestionInputAnswerMode = {
+  study: 'study',
+  sources: 'sources',
+} as const;
+
+/**
  * Selected study book. Omitted or null values retain the legacy Nawawi default.
  * @nullable
  */
@@ -985,6 +1334,8 @@ export const AssistantQuestionInputTextId = {
 } as const;
 
 export interface AssistantQuestionInput {
+  /** Explicit mode; omission keeps legacy unreviewed study behavior. */
+  answerMode?: AssistantQuestionInputAnswerMode;
   /**
      * @minLength 1
      * @maxLength 8000
@@ -1002,7 +1353,20 @@ export interface AssistantQuestionInput {
   textId?: AssistantQuestionInputTextId;
 }
 
+/**
+ * Explicit mode for this turn; omission means study, never inferred from earlier text.
+ */
+export type ConversationMessageInputAnswerMode = typeof ConversationMessageInputAnswerMode[keyof typeof ConversationMessageInputAnswerMode];
+
+
+export const ConversationMessageInputAnswerMode = {
+  study: 'study',
+  sources: 'sources',
+} as const;
+
 export interface ConversationMessageInput {
+  /** Explicit mode for this turn; omission means study, never inferred from earlier text. */
+  answerMode?: ConversationMessageInputAnswerMode;
   /**
      * @minLength 1
      * @maxLength 8000
@@ -1012,7 +1376,32 @@ export interface ConversationMessageInput {
   requestId?: string;
 }
 
+/**
+ * Retrieval eligibility in this corpus only, not claim-level or external scientific/rights approval.
+ */
+export type CitationSourceStatusAtAnswer = typeof CitationSourceStatusAtAnswer[keyof typeof CitationSourceStatusAtAnswer];
+
+
+export const CitationSourceStatusAtAnswer = {
+  indexed: 'indexed',
+} as const;
+
 export interface Citation {
+  snapshotAt?: string;
+  /** Retrieval eligibility in this corpus only, not claim-level or external scientific/rights approval. */
+  sourceStatusAtAnswer?: CitationSourceStatusAtAnswer;
+  /**
+     * @minimum 1
+     * @nullable
+     */
+  viewerPage?: number | null;
+  /**
+     * Server-allowed public published reference only; never private evidence or signed storage.
+     * @nullable
+     */
+  publicSourceUrl?: string | null;
+  /** @nullable */
+  sourceVersion?: string | null;
   passageId: string;
   sourceId: string;
   sourceTitle: string;
@@ -1026,6 +1415,33 @@ export interface Citation {
   pdfPage: number | null;
   quote: string;
 }
+
+export type CitationSourceStatusState = typeof CitationSourceStatusState[keyof typeof CitationSourceStatusState];
+
+
+export const CitationSourceStatusState = {
+  eligible: 'eligible',
+  withdrawn: 'withdrawn',
+  ineligible: 'ineligible',
+  unavailable: 'unavailable',
+} as const;
+
+export interface CitationSourceStatus {
+  sourceId: string;
+  state: CitationSourceStatusState;
+  /** @nullable */
+  versionChanged: boolean | null;
+  checkedAt: string;
+}
+
+export type AssistantQuestionAnswerMode = typeof AssistantQuestionAnswerMode[keyof typeof AssistantQuestionAnswerMode];
+
+
+export const AssistantQuestionAnswerMode = {
+  legacy: 'legacy',
+  study: 'study',
+  sources: 'sources',
+} as const;
 
 export type AssistantQuestionTextId = typeof AssistantQuestionTextId[keyof typeof AssistantQuestionTextId];
 
@@ -1064,6 +1480,7 @@ export interface TeacherReferralSummary {
 }
 
 export interface AssistantQuestion {
+  answerMode?: AssistantQuestionAnswerMode;
   conversationId: string;
   questionId: string;
   question: string;
@@ -1122,6 +1539,18 @@ export interface ScholarlyConversation {
   updatedAt: string;
 }
 
+/**
+ * @nullable
+ */
+export type ScholarlyMessageAnswerMode = typeof ScholarlyMessageAnswerMode[keyof typeof ScholarlyMessageAnswerMode] | null;
+
+
+export const ScholarlyMessageAnswerMode = {
+  legacy: 'legacy',
+  study: 'study',
+  sources: 'sources',
+} as const;
+
 export type ScholarlyMessageRole = typeof ScholarlyMessageRole[keyof typeof ScholarlyMessageRole];
 
 
@@ -1132,6 +1561,8 @@ export const ScholarlyMessageRole = {
 } as const;
 
 export interface ScholarlyMessage {
+  /** @nullable */
+  answerMode?: ScholarlyMessageAnswerMode;
   id: string;
   role: ScholarlyMessageRole;
   text: string;
@@ -1182,6 +1613,49 @@ export interface NotificationState {
   latestAt: string | null;
 }
 
+export interface ScholarlyPreparedPackage {
+  title: string;
+  version: string;
+  sourceUrl: string;
+  passageCount: number;
+  authorizationStatement: string;
+  warnings: string[];
+}
+
+export const ScholarlyPreparedImportInputValue = {
+  confirmUnreviewed: true,
+} as const;
+export type ScholarlyPreparedImportInput = typeof ScholarlyPreparedImportInputValue;
+
+export type ScholarlyPreparedImportResultOutcome = typeof ScholarlyPreparedImportResultOutcome[keyof typeof ScholarlyPreparedImportResultOutcome];
+
+
+export const ScholarlyPreparedImportResultOutcome = {
+  imported: 'imported',
+  already_imported: 'already_imported',
+} as const;
+
+export interface ScholarlyPreparedImportResult {
+  sourceId: string;
+  outcome: ScholarlyPreparedImportResultOutcome;
+  totalCount: number;
+  importedCount: number;
+  existingCount: number;
+}
+
+/**
+ * Explicit book scope reviewed with this immutable source version. Unscoped sources cannot answer student source-mode questions.
+ * @nullable
+ */
+export type ScholarlySourceInputTextId = typeof ScholarlySourceInputTextId[keyof typeof ScholarlySourceInputTextId] | null;
+
+
+export const ScholarlySourceInputTextId = {
+  nawawi: 'nawawi',
+  'usul-thalatha': 'usul-thalatha',
+  tuhfa: 'tuhfa',
+} as const;
+
 export type ScholarlySourceInputLegalAuthorization = typeof ScholarlySourceInputLegalAuthorization[keyof typeof ScholarlySourceInputLegalAuthorization];
 
 
@@ -1192,6 +1666,11 @@ export const ScholarlySourceInputLegalAuthorization = {
 } as const;
 
 export interface ScholarlySourceInput {
+  /**
+     * Explicit book scope reviewed with this immutable source version. Unscoped sources cannot answer student source-mode questions.
+     * @nullable
+     */
+  textId?: ScholarlySourceInputTextId;
   /**
      * @minLength 1
      * @maxLength 500
@@ -1225,6 +1704,18 @@ export interface ScholarlySourceInput {
   version: string;
 }
 
+/**
+ * @nullable
+ */
+export type ScholarlySourceTextId = typeof ScholarlySourceTextId[keyof typeof ScholarlySourceTextId] | null;
+
+
+export const ScholarlySourceTextId = {
+  nawawi: 'nawawi',
+  'usul-thalatha': 'usul-thalatha',
+  tuhfa: 'tuhfa',
+} as const;
+
 export type ScholarlySourceStatus = typeof ScholarlySourceStatus[keyof typeof ScholarlySourceStatus];
 
 
@@ -1236,6 +1727,8 @@ export const ScholarlySourceStatus = {
 } as const;
 
 export interface ScholarlySource {
+  /** @nullable */
+  textId?: ScholarlySourceTextId;
   id: string;
   title: string;
   author: string;
@@ -1295,6 +1788,13 @@ export interface ScholarlyPassage {
   /** @nullable */
   pdfPage: number | null;
   indexed: boolean;
+  /** @nullable */
+  sourceUrl?: string | null;
+  /**
+     * Website viewer page only; not a printed or PDF page.
+     * @nullable
+     */
+  viewerPage?: number | null;
 }
 
 export const ScholarlyIndexInputValue = {
@@ -1407,6 +1907,26 @@ export const ScholarlyConfigModel = {
   'gpt-54-mini': 'gpt-5.4-mini',
   'gpt-54': 'gpt-5.4',
   'nvidia/nemotron-35-lightning-30b-a3b': 'nvidia/nemotron-3.5-lightning-30b-a3b',
+  'google/gemini-25-flash': 'google/gemini-2.5-flash',
+} as const;
+
+export type ScholarlyConfigSourceBlockersItem = typeof ScholarlyConfigSourceBlockersItem[keyof typeof ScholarlyConfigSourceBlockersItem];
+
+
+export const ScholarlyConfigSourceBlockersItem = {
+  no_sources: 'no_sources',
+  corpus_incomplete: 'corpus_incomplete',
+  provider_unconfigured: 'provider_unconfigured',
+  evaluation_required: 'evaluation_required',
+} as const;
+
+export type ScholarlyConfigSourceBooksItem = typeof ScholarlyConfigSourceBooksItem[keyof typeof ScholarlyConfigSourceBooksItem];
+
+
+export const ScholarlyConfigSourceBooksItem = {
+  nawawi: 'nawawi',
+  'usul-thalatha': 'usul-thalatha',
+  tuhfa: 'tuhfa',
 } as const;
 
 export interface ScholarlyConfig {
@@ -1417,6 +1937,8 @@ export interface ScholarlyConfig {
   assistantEnabled: boolean;
   /** General unverified student answers can be generated without approved commentary sources. */
   studyAnswersEnabled?: boolean;
+  sourceBlockers?: ScholarlyConfigSourceBlockersItem[];
+  sourceBooks?: ScholarlyConfigSourceBooksItem[];
 }
 
 export type ScholarlyConfigInputModel = typeof ScholarlyConfigInputModel[keyof typeof ScholarlyConfigInputModel];
@@ -1426,6 +1948,7 @@ export const ScholarlyConfigInputModel = {
   'gpt-54-mini': 'gpt-5.4-mini',
   'gpt-54': 'gpt-5.4',
   'nvidia/nemotron-35-lightning-30b-a3b': 'nvidia/nemotron-3.5-lightning-30b-a3b',
+  'google/gemini-25-flash': 'google/gemini-2.5-flash',
 } as const;
 
 export interface ScholarlyConfigInput {
@@ -1473,6 +1996,7 @@ export const ScholarlyEvaluationInputModel = {
   'gpt-54-mini': 'gpt-5.4-mini',
   'gpt-54': 'gpt-5.4',
   'nvidia/nemotron-35-lightning-30b-a3b': 'nvidia/nemotron-3.5-lightning-30b-a3b',
+  'google/gemini-25-flash': 'google/gemini-2.5-flash',
 } as const;
 
 export interface ScholarlyEvaluationInput {
@@ -1878,6 +2402,11 @@ export interface CompleteScheduledReviewInput {
 
 export type PracticeReportErrorResponse = {
   error: string;
+};
+
+export type GetDailyPlanParams = {
+timezone?: string;
+planId?: string;
 };
 
 export type StartStudyActivity201 = {

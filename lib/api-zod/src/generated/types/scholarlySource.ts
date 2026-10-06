@@ -6,8 +6,11 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { ScholarlySourceStatus } from './scholarlySourceStatus';
+import type { ScholarlySourceTextId } from './scholarlySourceTextId';
 
 export interface ScholarlySource {
+  /** @nullable */
+  textId?: ScholarlySourceTextId;
   id: string;
   title: string;
   author: string;

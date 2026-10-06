@@ -154,6 +154,7 @@ async function makeDraft(tx: Parameters<Parameters<typeof db.transaction>[0]>[0]
 }
 
 router.get("/mateen/review-access", async (req, res) => {
+  res.setHeader("Cache-Control", "private, no-store");
   res.json(GetReviewAccessResponse.parse(await getReviewAccess(req)));
 });
 
@@ -741,6 +742,7 @@ router.get(
   "/mateen/admin/teachers",
   requireReviewPermission("qualification"),
   async (_req, res) => {
+    res.setHeader("Cache-Control", "private, no-store");
     const reviews = await db
       .select({
         userId: teacherReviewsTable.userId,
@@ -904,8 +906,11 @@ router.get("/mateen/admin/audit", async (req, res) => {
     return;
   }
   const access = await getReviewAccess(req);
-  if ((!access.contentReviewer && !access.qualificationReviewer) ||
-      !access.verifiedEmail || !access.mfaEnabled || !access.secureSession) {
+  if (!access.verifiedEmail) {
+    appError(res, 403, "A verified email is required for administrative review");
+    return;
+  }
+  if (!access.contentReviewer && !access.qualificationReviewer) {
     appError(res, 403, "A review permission is required");
     return;
   }

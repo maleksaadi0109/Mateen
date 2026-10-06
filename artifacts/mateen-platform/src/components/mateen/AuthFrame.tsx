@@ -1,26 +1,58 @@
+import { tr } from '@/lib/i18n';
+import { LocaleSwitch } from '@/components/mateen/LocaleSwitch';
 import { type ReactNode } from 'react';
 import { Link } from 'wouter';
+import { BookOpen, ScrollText, ShieldCheck } from 'lucide-react';
 import { Logo, StarMark } from '@/components/mateen/bits';
+import BookMascot from '@/components/mateen/book-mascot';
+import './auth-frame.css';
+
+const promises = [
+  { icon: ScrollText, get text() { return tr("متون موثّقة بمصادرها، تُقرأ كما كُتبت."); } },
+  { icon: BookOpen, get text() { return tr("خطة دراسة تبدأ من حيث توقفت."); } },
+  { icon: ShieldCheck, get text() { return tr("حسابك خاص بك، وتقدّمك محفوظ."); } },
+];
 
 export function AuthFrame({ children }: { children: ReactNode }) {
   return (
-    <div className="grid min-h-[100dvh] bg-background lg:grid-cols-[1fr_1.1fr]">
-      <div className="relative hidden overflow-hidden bg-primary p-14 text-primary-foreground lg:flex lg:flex-col lg:justify-between">
-        <div className="star-pattern absolute inset-0 opacity-60" />
-        <StarMark size={520} className="spin-slow absolute -bottom-40 -left-40 text-primary-foreground/10" />
-        <Link href="/" className="relative z-10 w-fit rounded-2xl bg-background px-5 py-3"><Logo className="h-12" /></Link>
-        <div className="relative z-10 max-w-md">
-          <p className="hadith-text text-3xl leading-[2.1]">إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى</p>
-          <p className="mt-4 font-ui text-sm opacity-80">من الأربعين النووية، الحديث الأول</p>
-          <p className="mt-10 font-arabic text-lg leading-loose opacity-90">فضاء لدراسة المتون على نصوص موثّقة بمصادرها، بلا وعود لا تتحقق.</p>
-        </div>
-      </div>
-      <div className="flex items-center justify-center px-4 py-10">
-        <div className="w-full">
-          <Link href="/" className="mx-auto mb-6 block w-fit lg:hidden"><Logo className="h-12" /></Link>
-          {children}
-        </div>
-      </div>
+    <div className="mateen-auth" data-testid="auth-frame">
+      <div className="mateen-auth__wash" aria-hidden="true" />
+      <header className="mateen-auth__top">
+        <Link href="/" className="mateen-auth__home" data-testid="link-auth-home" aria-label={tr("العودة إلى صفحة مَتِين الرئيسية")}>
+          <Logo className="h-10 sm:h-11" />
+        </Link>
+        <LocaleSwitch />
+      </header>
+
+      <main className="mateen-auth__grid">
+        <section className="mateen-auth__welcome" aria-labelledby="auth-welcome-title">
+          <div className="mateen-auth__greeting">
+            <BookMascot size={88} mood="cheer" pose="wave" className="mateen-auth__mascot" />
+            <div>
+              <p className="mateen-auth__eyebrow">{tr("أهلاً بك في مَتِين")}</p>
+              <h1 id="auth-welcome-title" className="mateen-auth__title">{tr("رفيقك الهادئ إلى المتون")}</h1>
+            </div>
+          </div>
+
+          <figure className="mateen-auth__folio">
+            <StarMark size={260} className="mateen-auth__folio-star" />
+            <span className="mateen-auth__folio-mark" aria-hidden="true">{tr("١")}</span>
+            <blockquote lang="ar" dir="rtl" className="hadith-text mateen-auth__hadith">إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى</blockquote>
+            <figcaption className="mateen-auth__source">{tr("من الأربعين النووية، الحديث الأول")}</figcaption>
+          </figure>
+
+          <ul className="mateen-auth__promises">
+            {promises.map(({ icon: Icon, text }) => (
+              <li key={text}><span className="mateen-auth__promise-icon"><Icon size={16} strokeWidth={2.2} /></span>{text}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="mateen-auth__form" aria-label={tr("نموذج الحساب")}>
+          <div className="mateen-auth__form-inner">{children}</div>
+          <p className="mateen-auth__fineprint">{tr("فضاء لدراسة المتون على نصوص موثّقة بمصادرها، بلا وعود لا تتحقق.")}</p>
+        </section>
+      </main>
     </div>
   );
 }

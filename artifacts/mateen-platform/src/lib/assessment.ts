@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { AssessmentAttemptStatus } from '@workspace/api-client-react';
 
 const KEY = 'mateen:exam-session';
@@ -33,8 +34,8 @@ export function mutationIdFor(cache: Map<string, string>, sequence: number, text
 export function newMutationId() { return crypto.randomUUID(); }
 
 export const STATUS_LABEL: Record<AssessmentAttemptStatus, string> = {
-  in_progress: 'جارٍ', paused_connection: 'متوقف لانقطاع الاتصال', submitted: 'بانتظار المراجعة البشرية',
-  technical_review: 'مراجعة تقنية', passed: 'اجتاز', failed: 'لم يجتز',
+  get in_progress() { return tr("جارٍ"); }, get paused_connection() { return tr("متوقف لانقطاع الاتصال"); }, get submitted() { return tr("بانتظار المراجعة البشرية"); },
+  get technical_review() { return tr("مراجعة تقنية"); }, get passed() { return tr("اجتاز"); }, get failed() { return tr("لم يجتز"); },
 };
 export const isFinal = (s: AssessmentAttemptStatus) => s === 'passed' || s === 'failed';
 export const isPending = (s: AssessmentAttemptStatus) => s === 'submitted' || s === 'technical_review';
@@ -45,8 +46,8 @@ export function clock(sec: number) {
 }
 export function errorMessage(e: unknown, fallback: string) {
   const status = (e as { status?: number })?.status;
-  if (status === 409) return 'هذا الاختبار مفتوح في نافذة أخرى أو تغيّرت حالته. أغلق النافذة الأخرى ثم أعد المحاولة.';
-  if (status === 429) return 'محاولات كثيرة. انتظر قليلاً.';
+  if (status === 409) return tr("هذا الاختبار مفتوح في نافذة أخرى أو تغيّرت حالته. أغلق النافذة الأخرى ثم أعد المحاولة.");
+  if (status === 429) return tr("محاولات كثيرة. انتظر قليلاً.");
   return fallback;
 }
 

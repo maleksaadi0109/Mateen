@@ -6,6 +6,9 @@ export const getPracticeReportWords = async () => ({ issues: [], total: 0, hasMo
 export const savePracticeReport = async () => { throw new Error('Unexpected report write in study progress test'); };
 export const getPracticeReport = async () => { throw new Error('Unexpected report read in study progress test'); };
 export const deletePracticeReport = async () => { throw new Error('Unexpected report delete in study progress test'); };
+export const getWordPracticeReference = async () => { throw new Error('Unexpected word practice read in study progress test'); };
+export const saveWordPractice = async () => { throw new Error('Saved positions must not create word exercises'); };
+export const saveWordPracticeAttempt = async () => { throw new Error('Saved positions must not create practice attempts'); };
 import { useMutation, useQuery } from '@tanstack/react-query';
 import hadiths from '../../../api-server/src/data/nawawi.json';
 
